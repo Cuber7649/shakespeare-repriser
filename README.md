@@ -2,7 +2,7 @@
 
 Transform modern English into Shakespearean prose with the click of a button.
 
-![Shakespeare Text Repriser](screenshot.png)
+![Shakespeare Text Repriser](./Screenshot.png)
 
 ## Features
 
@@ -25,15 +25,17 @@ Transform modern English into Shakespearean prose with the click of a button.
 3. Click **Repraise It!**
 4. Copy the Shakespearean output
 
-## Try it
+## Examples
 
-```
-Hello, I am happy to see you today. I think the weather is nice and I want to go for a walk.
-```
+| Input                                                              | Shakespearean Output                                                                     |
+| ------------------------------------------------------------------ | ---------------------------------------------------------------------------------------- |
+| `hello how are you today`                                          | Hark! Hail, how dost thou fare this day?                                                 |
+| `I am so happy and excited to see my friend`                       | Verily, I am most merry and filled with mirth to behold my good fellow.                  |
+| `omg that is so cool i wanna go to the party tonight`              | Forsooth! That is most excellent and mine heart desireth to hie to the revelry this eve. |
+| `why are you so angry with me`                                     | Wherefore art thou so wrathful with me?                                                  |
+| `I think the weather is nice today. Maybe I should go for a walk.` | Methinks the firmament is most righteous this day. Perchance I ought to trudge abroad.   |
 
-Becomes something like:
-
-> Hark! Hail, art merry to behold thee this day. Methinks the firmament is most righteous and mine heart doth long to hie for a trudge.
+> **Note:** Output varies each time thanks to random interjections, metaphors, and Shakespeare quotes.
 
 ## License
 
