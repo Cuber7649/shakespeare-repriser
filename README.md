@@ -18,6 +18,10 @@ Transform modern English into Shakespearean prose with the click of a button.
 - **Copy to clipboard** — works on both local files and HTTPS
 - **Zero dependencies** — single HTML file, runs entirely in the browser
 
+## Online Testing
+
+- https://cuber7649.github.io/shakespeare-repriser/shakespeare.html
+
 ## Usage
 
 1. Open `shakespeare.html` in any modern browser
