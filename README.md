@@ -1,15 +1,19 @@
 # Text Repriser Collection
 
-Transform modern English into six literary and historical styles — or reverse
-stylized text back to modern English — right in the browser. Each page is fully
-self-contained (its own word data, CSS, and JS) with zero dependencies.
+A collection of single-page web apps that rewrite modern English into six
+literary and historical styles — plus a reverse dictionary that converts
+stylized text back to modern English. Everything runs client-side in the
+browser. Each page is fully self-contained (bundled word data, CSS, and
+JavaScript) with zero dependencies.
 
-## View it online
+![Shakespeare Text Repriser](./Screenshot.png)
 
-Live site: **https://cuber7649.github.io/shakespeare-repriser/**
+## Live Demo
 
-| Page | Link |
-| ---- | ---- |
+Hosted with GitHub Pages: **https://cuber7649.github.io/shakespeare-repriser/**
+
+| Style | Link |
+| ----- | ---- |
 | Shakespeare | https://cuber7649.github.io/shakespeare-repriser/shakespeare.html |
 | Pirate | https://cuber7649.github.io/shakespeare-repriser/pirate.html |
 | Victorian | https://cuber7649.github.io/shakespeare-repriser/victorian.html |
@@ -18,47 +22,49 @@ Live site: **https://cuber7649.github.io/shakespeare-repriser/**
 | Norse | https://cuber7649.github.io/shakespeare-repriser/norse.html |
 | Unscramble | https://cuber7649.github.io/shakespeare-repriser/unscramble.html |
 
-![Shakespeare Text Repriser](./Screenshot.png)
+## Styles
 
-## Pages
-
-| Page | Theme | What it does |
-| ---- | ----- | ------------ |
-| `shakespeare.html` | Elizabethan England | "how are you" → "how dost thou fare" |
+| Page | Style | Example |
+| ---- | ----- | ------- |
+| `shakespeare.html` | Elizabethan English | "how are you" → "how dost thou fare" |
 | `pirate.html` | Golden Age of Piracy | "you are my friend" → "ye be my matey" |
-| `victorian.html` | Victorian England | "really" → "truly", "you are" → "one is" |
+| `victorian.html` | Victorian English | "really" → "truly"; "you are" → "one is" |
 | `chaucer.html` | Middle English | "you are happy" → "thou art blisful" |
-| `yoda.html` | Jedi Master speech | Object-subject-verb inversions |
-| `norse.html` | Vikings & Norse myth | "you are happy" → "ye are merry" |
-| `unscramble.html` | Reverse dictionary | "thou art" → "you are", 800+ entries |
+| `yoda.html` | Jedi Master speech | Object–subject–verb inversions |
+| `norse.html` | Vikings and Norse myth | "you are happy" → "ye are merry" |
+| `unscramble.html` | Reverse dictionary | "thou art" → "you are" (800+ entries) |
 
 ## Features
 
-- **Hundreds of word replacements per page** — verbs, adjectives, nouns, and more, themed per style
-- **Sentence-level transforms** — "I want to" → "my heart hungereth to" (Norse), "I be yearning to" (Pirate)
-- **Contraction handling** — "don't" → "thou dost nat" (Chaucer), "ye do not" (Norse)
-- **Random quotes** — Shakespeare, Austen, Hávamál, pirate sayings, Jedi wisdom
-- **Themed insults** — "ye scurvy dog", "thou cherl", "you insufferable bounder" (family-friendly)
-- **Dramatic asides & stage directions** — "[The longship sets sail.]", "(aside: Hmm, much to learn, you still have.)"
-- **Metaphors & similes** — "as fierce as a berserker", "as wild as the open sea"
-- **Sentence inversion** — flips word order for emphasis
-- **Style-switcher navigation** — hop between styles from any page
-- **Ctrl+Enter hotkey** — transform without touching the mouse
-- **Copy to clipboard** — works on both local files and HTTPS
-- **Unscrambler** — strips openings, asides, and stage directions, then reverses 800+ dictionary entries (including multi-word phrases)
+- **Themed word replacement** — hundreds of verbs, adjectives, nouns, and phrases per style
+- **Sentence-level transforms** — e.g. "I want to" becomes "my heart hungereth to" (Norse) or "I be yearning to" (Pirate)
+- **Contraction handling** — e.g. "don't" becomes "thou dost nat" (Chaucer) or "ye do not" (Norse)
+- **Random quotations** — Shakespeare, Austen, the Hávamál, pirate sayings, and Jedi wisdom
+- **Themed insults** — e.g. "ye scurvy dog", "thou cherl", "you insufferable bounder"
+- **Dramatic asides and stage directions** — e.g. "[The longship sets sail.]"
+- **Metaphors and similes** — e.g. "as fierce as a berserker", "as wild as the open sea"
+- **Sentence inversion** — reordered syntax for emphasis
+- **Style-switcher navigation** — move between styles from any page
+- **Keyboard shortcut** — press Ctrl+Enter to transform
+- **Copy to clipboard** — supported on local files and HTTPS
+- **Unscrambler** — removes openings, asides, and stage directions, then reverses 800+ dictionary entries, including multi-word phrases
+- **Responsive layout** — verified from mobile to desktop viewports
+- **Family-friendly content** — all word lists audited; no profanity, slurs, or explicit material
 
-## Usage
+## Getting Started
 
-1. Open any page in a modern browser (start with `shakespeare.html`)
-2. Type modern English into the input box
-3. Click the transform button (or press **Ctrl+Enter**)
-4. Copy the output
+No build step or installation is required.
+
+1. Open any page in a modern browser (start with `shakespeare.html`, or use the live demo above).
+2. Enter modern English text in the input field.
+3. Click the transform button, or press **Ctrl+Enter**.
+4. Copy the result with the **Copy to Clipboard** button.
 5. To reverse stylized text, paste it into `unscramble.html` and click **Unscramble!**
 
 ## Examples
 
-| Input | Page | Output |
-| ----- | ---- | ------ |
+| Input | Style | Output |
+| ----- | ----- | ------ |
 | `hello how are you today` | Shakespeare | Hail how dost thou fare this day |
 | `hello how are you today` | Pirate | Ahoy how be ye today |
 | `hello how are you today` | Chaucer | Hail how fareth thou today |
@@ -70,7 +76,30 @@ Live site: **https://cuber7649.github.io/shakespeare-repriser/**
 | `you are brave` | Yoda | Are you brave |
 | `thou art happy` | Unscramble | you are happy |
 
-> **Note:** Output varies each run thanks to random openings, inversions, metaphors, and quotes. All content is family-friendly.
+> Note: output varies between runs due to randomized openings, inversions, metaphors, and quotations.
+
+## Project Structure
+
+```text
+shakespeare-repriser/
+├── shakespeare.html   # Elizabethan style (original page)
+├── pirate.html        # Pirate style
+├── victorian.html     # Victorian style
+├── chaucer.html       # Middle English style
+├── yoda.html          # Yoda speech style
+├── norse.html         # Norse style
+├── unscramble.html    # Reverse dictionary
+├── README.md
+└── Screenshot.png
+```
+
+Each `.html` file is a standalone app: open it directly in a browser or serve the directory with any static file server. There are no shared runtime files.
+
+## Browser Support
+
+Works in all modern browsers (Chrome, Edge, Firefox, Safari), on desktop and mobile.
+An internet connection is only needed for the Google Fonts stylesheets; the apps
+fall back to system serif fonts when offline.
 
 ## License
 
