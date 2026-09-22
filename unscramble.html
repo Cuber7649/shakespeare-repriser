@@ -699,6 +699,7 @@ function unscramble(){
   r=r.replace(/\s+/g,' ');
   r=r.replace(/^\s+/,'');
   r=r.replace(/\s+$/,'');
+  r=r.replace(/(^\s*|[.!?]+\s+)([a-z])/g,function(m,p1,p2){return p1+p2.toUpperCase();});
 
   outputEl.textContent=r;
   outputEl.classList.add('active');

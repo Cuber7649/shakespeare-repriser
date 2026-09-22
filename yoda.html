@@ -1051,7 +1051,6 @@ const verbs = [
   [/\bget\b/gi,"procure"],[/\bgets\b/gi,"procureth"],[/\bgot\b/gi,"procured"],
   [/\bput\b/gi,"place"],[/\bputs\b/gi,"placeth"],[/\bplaced\b/gi,"set"],
   [/\bmake\b/gi,"forge"],[/\bmakes\b/gi,"forgeth"],[/\bmade\b/gi,"forged"],
-  [/\bdo\b/gi,"perform"],[/\bdid\b/gi,"performed"],
   [/\bwork\b/gi,"toil"],[/\bworked\b/gi,"toiled"],[/\bworking\b/gi,"toiling"],
   [/\bplay\b/gi,"frolic"],[/\bplaying\b/gi,"frolicking"],[/\bplayed\b/gi,"frolicked"],
   [/\bwait\b/gi,"tarry"],[/\bwaited\b/gi,"tarried"],[/\bwaiting\b/gi,"tarrying"],
@@ -1095,9 +1094,8 @@ const verbs = [
   [/\bseem\b/gi,"appear"],[/\bseemed\b/gi,"appeared"],
   [/\bbecome\b/gi,"grow"],[/\bbecame\b/gi,"grew"],
   [/\bremain\b/gi,"tarry"],[/\bremained\b/gi,"tarried"],
-  [/\bneed\b/gi,"require"],[/\bneeds\b/gi,"requireth"],
+  [/\bneeds\b/gi,"requireth"],
   [/\bwant\b/gi,"desire"],[/\bwants\b/gi,"desireth"],[/\bwanted\b/gi,"desired"],
-  [/\blike\b/gi,"find pleasing"],[/\blikes\b/gi,"findeth pleasing"],[/\bliked\b/gi,"found pleasing"],
   [/\bdislike\b/gi,"disapprove of"],
   // Force-specific verbs
   [/\bmediate\b/gi,"meditate"],[/\bmediated\b/gi,"meditated"],[/\bmediating\b/gi,"meditating"],];
@@ -1146,9 +1144,9 @@ const contractions = [
 const sentenceTransforms = [
   [/\bi want to\b/gi,"want to, I do"],
   [/\bi'd like to\b/gi,"would like to, I"],
-  [/\bi need to\b/gi,"need to, I do"],
+  [/\bi need to\b/gi,"must, I"],
   [/\bi have to\b/gi,"have to, I must"],
-  [/\bi've got to\b/gi,"got to, I have"],
+  [/\bi've got to\b/gi,"must, I have"],
   [/\bi'm going to\b/gi,"going to, I am"],
   [/\bi will\b/gi,"I will"],[/\bi can\b/gi,"I can"],
   [/\bi can't\b/gi,"cannot, I"],
