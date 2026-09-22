@@ -47,10 +47,6 @@ Live site: **https://cuber7649.github.io/shakespeare-repriser/**
 - **Copy to clipboard** — works on both local files and HTTPS
 - **Unscrambler** — strips openings, asides, and stage directions, then reverses 800+ dictionary entries (including multi-word phrases)
 
-## Online Testing
-
-- https://cuber7649.github.io/shakespeare-repriser/shakespeare.html
-
 ## Usage
 
 1. Open any page in a modern browser (start with `shakespeare.html`)
