@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unscramble the Text</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=UnifrakturMaguntia&display=swap" rel="stylesheet">
+<style>
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    min-height: 100vh;
+    background: #1a1209;
+    color: #3d2b1f;
+    overflow-x: hidden;
+  }
+
+  /* Parchment background layers */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 20% 50%, rgba(255,220,160,0.08) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 20%, rgba(200,160,100,0.06) 0%, transparent 50%),
+      radial-gradient(ellipse at 50% 80%, rgba(180,140,80,0.05) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    position: relative;
+    z-index: 1;
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 20px 24px 40px;
+  }
+
+  /* ====== HEADER ====== */
+  .header {
+    text-align: center;
+    padding: 40px 20px 30px;
+    position: relative;
+  }
+
+  .quill {
+    font-size: 3.5rem;
+    display: block;
+    margin-bottom: 8px;
+    filter: drop-shadow(0 2px 8px rgba(0,0,0,0.3));
+    animation: quillBob 3s ease-in-out infinite;
+  }
+
+  @keyframes quillBob {
+    0%, 100% { transform: translateY(0) rotate(-5deg); }
+    50% { transform: translateY(-6px) rotate(5deg); }
+  }
+
+  h1 {
+    font-family: 'Cinzel', serif;
+    font-weight: 900;
+    font-size: 2.2rem;
+    color: #d4a056;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.4), 0 0 30px rgba(212,160,86,0.15);
+    letter-spacing: 0.08em;
+    line-height: 1.2;
+  }
+
+  .subtitle {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 1.15rem;
+    color: #b8956a;
+    margin-top: 6px;
+    letter-spacing: 0.04em;
+  }
+
+  /* Decorative divider */
+  .divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin: 24px 0;
+    color: #8b6d4a;
+    font-size: 1rem;
+    opacity: 0.7;
+  }
+  .divider::before, .divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #8b6d4a, transparent);
+  }
+
+  /* ====== INPUT CARD ====== */
+  .card {
+    background: linear-gradient(145deg, #faf3e6, #f0e4cc, #e8d9b8);
+    border: 2px solid #c4a265;
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 20px;
+    box-shadow:
+      0 4px 20px rgba(0,0,0,0.25),
+      inset 0 1px 0 rgba(255,255,255,0.4),
+      inset 0 -1px 0 rgba(0,0,0,0.05);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #8b6d4a, #d4a056, #8b6d4a);
+  }
+
+  .card-label {
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: #8b6d4a;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .card-label .icon { font-size: 1.1rem; }
+
+  textarea {
+    width: 100%;
+    height: 150px;
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 1.15rem;
+    line-height: 1.6;
+    padding: 14px 16px;
+    border: 1.5px solid #c4a265;
+    border-radius: 8px;
+    background: rgba(255,252,245,0.7);
+    color: #3d2b1f;
+    resize: vertical;
+    overflow-wrap: break-word;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    outline: none;
+  }
+
+  textarea:focus {
+    border-color: #d4a056;
+    box-shadow: 0 0 0 3px rgba(212,160,86,0.2), 0 2px 12px rgba(0,0,0,0.08);
+  }
+
+  textarea::placeholder {
+    color: #b8956a;
+    font-style: italic;
+  }
+
+  .char-count {
+    text-align: right;
+    font-size: 0.8rem;
+    color: #a08a6a;
+    margin-top: 6px;
+    font-style: italic;
+  }
+
+  /* ====== BUTTON ====== */
+  .btn-row {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin: 20px 0;
+  }
+
+  .btn {
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    font-size: 1.05rem;
+    letter-spacing: 0.06em;
+    padding: 14px 36px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn-primary {
+    background: linear-gradient(145deg, #d4a056, #b8862e);
+    color: #1a1209;
+    box-shadow: 0 4px 16px rgba(180,120,40,0.4), inset 0 1px 0 rgba(255,255,255,0.3);
+  }
+
+  .btn-primary:hover {
+    background: linear-gradient(145deg, #e0b066, #c8963e);
+    box-shadow: 0 6px 24px rgba(180,120,40,0.5), inset 0 1px 0 rgba(255,255,255,0.4);
+    transform: translateY(-2px);
+  }
+
+  .btn-primary:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(180,120,40,0.3);
+  }
+
+  .btn-secondary {
+    background: transparent;
+    color: #b8956a;
+    border: 1.5px solid #8b6d4a;
+    padding: 14px 24px;
+  }
+
+  .btn-secondary:hover {
+    background: rgba(184,149,106,0.1);
+    border-color: #b8956a;
+  }
+
+  .btn .quill-icon {
+    display: inline-block;
+    margin-right: 6px;
+    transition: transform 0.3s;
+  }
+
+  .btn:hover .quill-icon {
+    transform: rotate(-15deg) scale(1.1);
+  }
+
+  /* Sparkle effect on button */
+  .btn-primary::after {
+    content: '';
+    position: absolute;
+    top: -50%; left: -50%;
+    width: 200%; height: 200%;
+    background: conic-gradient(from 0deg, transparent, rgba(255,255,255,0.1), transparent);
+    animation: btnSparkle 4s linear infinite;
+    pointer-events: none;
+  }
+
+  @keyframes btnSparkle {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  /* ====== OUTPUT CARD ====== */
+  .output-card {
+    background: linear-gradient(145deg, #fffcf5, #f8f0de, #f2e8ce);
+    border: 2px solid #c4a265;
+    border-radius: 12px;
+    padding: 24px;
+    position: relative;
+    box-shadow:
+      0 4px 20px rgba(0,0,0,0.25),
+      inset 0 1px 0 rgba(255,255,255,0.5),
+      inset 0 -1px 0 rgba(0,0,0,0.03);
+    overflow: hidden;
+  }
+
+  .output-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #8b6d4a, #d4a056, #8b6d4a);
+  }
+
+  /* Corner decorations */
+  .output-card::after {
+    content: '';
+    position: absolute;
+    bottom: 8px; right: 8px;
+    width: 60px; height: 60px;
+    background: radial-gradient(circle at bottom right, rgba(212,160,86,0.1) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  #output {
+    min-height: 120px;
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
+    font-style: italic;
+    line-height: 1.8;
+    font-size: 1.2rem;
+    color: #3d2b1f;
+    position: relative;
+    z-index: 1;
+  }
+
+  #output:empty::before {
+    content: 'Your words shall appear here, awaiting transformation...';
+    color: #b8956a;
+    font-style: italic;
+  }
+
+  .output-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(196,162,101,0.3);
+  }
+
+  .btn-copy {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.9rem;
+    padding: 10px 18px;
+    background: rgba(184,149,106,0.15);
+    border: 1px solid rgba(184,149,106,0.4);
+    border-radius: 6px;
+    color: #8b6d4a;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .btn-copy:hover {
+    background: rgba(184,149,106,0.25);
+    border-color: #b8956a;
+  }
+
+  .btn-copy.copied {
+    background: rgba(80,160,80,0.15);
+    border-color: rgba(80,160,80,0.4);
+    color: #3a7a3a;
+  }
+
+  /* ====== FOOTER ====== */
+  .footer {
+    text-align: center;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(139,109,74,0.3);
+    color: #8b6d4a;
+    font-style: italic;
+    font-size: 0.95rem;
+    opacity: 0.7;
+  }
+
+  .footer .quill-small { font-size: 1.2rem; margin: 0 4px; }
+
+  /* ====== FLOATING DECORATIONS ====== */
+  .float-quill {
+    position: fixed;
+    font-size: 2rem;
+    opacity: 0.06;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .float-quill:nth-child(1) { top: 10%; left: 5%; transform: rotate(-30deg); animation: floatA 8s ease-in-out infinite; }
+  .float-quill:nth-child(2) { top: 30%; right: 4%; transform: rotate(20deg); animation: floatB 10s ease-in-out infinite; }
+  .float-quill:nth-child(3) { bottom: 20%; left: 3%; transform: rotate(45deg); animation: floatA 12s ease-in-out infinite reverse; }
+  .float-quill:nth-child(4) { bottom: 10%; right: 6%; transform: rotate(-15deg); animation: floatB 9s ease-in-out infinite reverse; }
+
+  @keyframes floatA {
+    0%, 100% { transform: translateY(0) rotate(-30deg); }
+    50% { transform: translateY(-20px) rotate(-25deg); }
+  }
+  @keyframes floatB {
+    0%, 100% { transform: translateY(0) rotate(20deg); }
+    50% { transform: translateY(15px) rotate(25deg); }
+  }
+
+  /* ====== RESPONSIVE ====== */
+  @media (max-width: 600px) {
+    .container { padding: 12px 14px 30px; }
+    h1 { font-size: 1.5rem; }
+    .subtitle { font-size: 1rem; }
+    .card, .output-card { padding: 16px; }
+    textarea { height: 120px; font-size: 1.05rem; }
+    #output { font-size: 1.05rem; }
+    .btn { padding: 12px 24px; font-size: 0.95rem; }
+    .btn-row { flex-direction: column; align-items: stretch; }
+  }
+
+  /* ====== ANIMATIONS ====== */
+  .card, .output-card {
+    animation: cardIn 0.6s ease-out both;
+  }
+  .output-card { animation-delay: 0.15s; }
+
+  @keyframes cardIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  #output {
+    animation: none;
+  }
+
+  #output.active {
+    animation: outputGlow 0.5s ease-out;
+  }
+
+  @keyframes outputGlow {
+    0% { box-shadow: 0 0 0 0 rgba(212,160,86,0.4); }
+    50% { box-shadow: 0 0 20px 4px rgba(212,160,86,0.2); }
+    100% { box-shadow: none; }
+  }
+
+  /* Ink drip decoration on output card */
+  .ink-drip {
+    position: absolute;
+    top: 3px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40px;
+    height: 12px;
+    background: radial-gradient(ellipse at top, rgba(212,160,86,0.3), transparent);
+    border-radius: 0 0 50% 50%;
+  }
+
+  /* Style Switcher */
+  .style-switcher {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    margin-bottom: 18px;
+    flex-wrap: wrap;
+  }
+  .style-switcher a {
+    padding: 6px 14px;
+    border-radius: 20px;
+    text-decoration: none;
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    border: 2px solid rgba(212,160,86,0.3);
+    background: rgba(255,248,230,0.5);
+    color: #5a3e1b;
+    transition: all 0.3s ease;
+  }
+  .style-switcher a:hover {
+    background: rgba(212,160,86,0.2);
+    border-color: rgba(212,160,86,0.6);
+    transform: translateY(-1px);
+  }
+  .style-switcher a.active {
+    background: rgba(212,160,86,0.3);
+    border-color: rgba(212,160,86,0.8);
+    color: #3a2510;
+    box-shadow: 0 0 8px rgba(212,160,86,0.3);
+  }
+
+</style>
+</head>
+<body>
+
+<!-- Floating decorative quills -->
+<div class="float-quill">&#128396;</div>
+<div class="float-quill">&#128396;</div>
+<div class="float-quill">&#128396;</div>
+<div class="float-quill">&#128396;</div>
+
+<div class="style-switcher">
+    <a href="./shakespeare.html">Shakespeare</a>
+    <a href="./pirate.html">Pirate</a>
+    <a href="./victorian.html">Victorian</a>
+    <a href="./chaucer.html">Chaucer</a>
+    <a href="./yoda.html">Yoda</a>
+    <a href="./norse.html">Norse</a>
+    <a href="./unscramble.html" class="active">Unscramble</a>
+  </div>
+
+<div class="container">
+  <header class="header">
+    <span class="quill">&#9876;</span>
+    <h1>Unscramble the Text</h1>
+    <p class="subtitle">Reverse your stylized words back to modern English</p>
+  </header>
+
+  <div class="divider">&#10045; The Quill Reversed &#10045;</div>
+
+  <div class="card">
+    <div class="card-label"><span class="icon">&#9998;</span> Stylized Text</div>
+    <textarea id="input" placeholder="Paste your stylized words here..."></textarea>
+    <div class="char-count"><span id="charCount">0</span> characters inscribed</div>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn btn-primary" onclick="unscramble()">
+      <span class="quill-icon">&#9876;</span> Unscramble!
+    </button>
+    <button class="btn btn-secondary" onclick="clearAll()">
+      Clear
+    </button>
+  </div>
+
+  <div class="output-card">
+    <div class="ink-drip"></div>
+    <div class="card-label"><span class="icon">&#128214;</span> Modern English</div>
+    <div id="output"></div>
+    <div class="output-actions">
+      <button class="btn-copy" onclick="copyOutput()" id="copyBtn">
+        <span>&#128203;</span> Copy to Clipboard
+      </button>
+    </div>
+  </div>
+
+  <div class="footer">
+    <span class="quill-small">&#9876;</span>
+    Crafted with ink &amp; devotion
+    <span class="quill-small">&#9876;</span>
+  </div>
+</div>
+
+<script>
+var D={"abacus": "computer","absolutely astonished": "surprised","absorb": "learn","acheven": "finish","acquire": "buy","adore": "love","adrad": "afraid","adversary": "enemy","afeared": "fearful","affection": "love","afflicted": "sick","agitated": "angry","ahoy": "hello","all souls": "everyone","ally": "friend","alwey": "always","ancient": "old","anon": "soon","any soul": "anyone","appreciate": "like","apprise": "tell","apprised": "told","aqua": "water","arrive": "come","arrr": "ok","art": "are","ascend": "climb","assail": "attack","assailen": "attack","assayen": "try","astonished": "surprised","at that time": "then","at this moment": "now","at this present moment": "now","attempt": "try","awaken": "wake","awakened": "woke","axe": "ask","aye": "yes","balance": "peace","bar": "close","barrier": "shield","batten down": "close","been": "are","befuddled": "confused","begin": "start","behold": "see","beholdeth": "sees","beholds": "sees","beings": "people","berserker": "soldier","beseech": "ask","besotted": "tipsy","bestow": "give","bestowed": "gave","beverage": "drink","bewildered": "confused","bidden": "wait","bide": "wait","bienen": "buy","bigynne": "start","biholde": "watch","bilden": "build","blade": "sword","blaze": "fire","blisful": "happy","board and plunder": "attack","boke": "book","boldness": "courage","breeze": "wind","brine": "water","brother": "mate","bryghte": "bright","bryngen": "bring","buccaneer": "man","buccaneers": "men","buckeler": "shield","buckler": "shield","burgh": "city","buried treasure": "hide","burrow": "hide","bury": "hide","cacchen": "catch","calculating machine": "computer","calm seas": "peace","cannae": "cannot","cannon fire": "fire","canst": "can","canst not": "cannot","capture": "catch","cast gaze upon": "looked","cast yer eye": "look","casten": "throw","caytyf": "cowardly","cease": "stop","certainly": "sure","cesen": "stop","champion": "hero","charge": "run","chaungen": "change","cheerio": "goodbye","cherish": "love","churl": "dude","claim victory": "win","clarify": "explain","clasp": "hold","come aboard": "come","comely": "beautiful","comen": "come","cometh": "come","commence": "start","companion": "mate","complete": "finish","conceal": "hide","conclude": "finish","concur": "agree","confounded": "confused","connection": "love","construct": "create","consume": "drink","contemplate": "consider","contrée": "country","converse": "talk","corage": "courage","courageous": "brave","covet": "want","craven": "cowardly","create": "make","credits": "money","crew": "people","currency": "money","cutlass": "sword","dam": "mother","dark": "bad","darkness": "anger","declare": "say","declared": "said","declareren": "explain","decline": "refuse","defenden": "defend","demolish": "destroy","depart": "leave","departed": "left","departen": "leave","descend": "fall","desire": "want","despise": "dislike","destinee": "fate","destiny": "fate","destitute": "poor","destroien": "destroy","destruyen": "destroy","desyren": "want","develop": "grow","devotion": "love","difficult": "hard","diminutive": "short","discover": "find","discovered": "found","dispose of": "sell","ditty": "song","do nat": "do not","doon": "do","doth": "does","doth not": "do not","doubloons": "money","downcast": "sad","drained": "exhausted","drawen": "pull","dread": "fear","dreadfully poor": "bad","dreden": "fear","droid": "computer","drunken": "tipsy","drynke": "drink","drynken": "drink","duel": "fight","dwell": "live","dwelle": "live","dwelling": "home","ediffien": "build","elucidate": "explain","employ": "use","endeavour": "try","ere": "before","erect": "build","erthe": "earth","eten": "eat","evermore": "always","existence": "life","extremely prosperous": "rich","fader": "father","fair": "beautiful","faire": "beautiful","fall in battle": "die","fancy": "like","fare thee well": "goodbye","farewel": "goodbye","farewell": "goodbye","fasten": "close","fearful": "afraid","fearless": "brave","feast": "eat","feast upon": "eat","feeble": "weak","fellow": "dude","fere": "mate","fetch": "bring","fetched": "brought","fine": "good","firmament": "sky","flame": "fire","flourish": "grow","foe": "enemy","folk": "people","folwen": "follow","foode": "food","for": "because","for all eternity": "forever","for all time": "always","forge": "make","forged": "made","forgive me": "excuse me","forthwith": "immediately","fortitude": "courage","foul": "bad","founden": "found","frend": "friend","friend": "mate","frigid": "cold","furious": "angry","fynden": "find","gaze": "look","gaze upon": "look","gentleman": "man","gentlemen": "men","geten": "get","gold": "money","gon": "walk","good day": "hello","gramercy": "thanks","grasp": "hold","grateful i am": "thanks","greetings": "hello","grievous": "hard","grog": "drink","grypen": "grab","guide": "lead","hail": "hello","hall": "house","han": "have","harbour": "city","hardtack": "food","hardy": "brave","hark": "hey","harsh": "hard","hast": "have","hasten": "run","hasten you must": "run","haten": "dislike","hath": "has","haul": "pull","hayl": "hello","hearkened": "listened","hearkens": "hears","heave": "lift","heavens": "sky","heven": "lift","hie": "go","hieth": "goes","hmm": "hey","hold faith": "believe","hold thy tongue": "shut up","holde": "hold","holocron": "book","homeland": "country","homestead": "home","homeworld": "home","hurl": "throw","hyden": "hide","i am most grateful": "thank you","i am sory": "sorry","i be": "I am","i be thanking ye": "thank you","i beseech thy pardon": "sorry","i do beg your pardon": "sorry","i pray thy pardon": "excuse me","i say": "hey","i seek your pardon": "sorry","i thank the gods": "thank you","i thank thee": "thank you","i thanke yow": "thank you","i yow preye": "please","icy": "cold","idle": "lazy","if it pleases ye": "please","if the gods will it": "please","if you would be so kind": "please","imbibe": "drink","in sooth": "actually","in the fullness of time": "eventually","in those days": "then","incensed": "angry","indeed": "yes","indolent": "lazy","infirm": "ill","inform": "tell","informed": "told","inquire": "ask","inquired": "asked","instruct": "teach","instructed": "taught","instrument": "weapon","intoxicated": "tipsy","invariably": "always","investigate": "search","irate": "angry","ire": "anger","jolly": "happy","journey": "travel","joyful": "happy","kan": "can","kan nat": "cannot","keep watch": "watch","knave": "dude","knyght": "soldier","labor": "work","labour": "work","lady": "woman","land ho!": "earth","large": "fat","lass": "woman","leap": "jump","leden": "lead","lerne": "learn","let slip from mind": "forget","liberated": "free","lightsaber": "sword","liquid": "water","litul": "short","loaded with gold": "rich","lofty": "tall","logbook": "book","loken": "look","long for": "miss","longboat": "car","longen": "miss","longhouse": "house","longship": "car","loven": "like","luminous": "bright","lyf": "life","maiden": "woman","maintain": "believe","make haste": "run","maken": "make","many thanks": "thanks","march": "go","marches": "goes","mate": "dude","may the force be with you": "goodbye","me hearty": "friend","mead": "drink","melody": "music","mend": "fix","merely": "just","merry": "happy","metropolis": "city","midgard": "earth","mighty": "strong","moder": "mother","modest": "short","moneye": "money","mooten": "need","most": "very","most becoming": "beautiful","most courageous": "brave","most delighted": "happy","most difficult": "hard","most displeased": "angry","most excellent": "good","most imposing": "tall","most luminous": "bright","most peculiar": "strange","most perplexed": "confused","most powerful": "strong","most proud": "proud","most sagacious": "wise","motorcar": "car","move": "walk","much obliged": "thanks","mysterious": "strange","nation": "country","naught": "nothing","navigate": "lead","nay": "no","net": "catch","nevere": "never","nigh": "almost","no soul": "nobody","noble": "good","not at all": "no","nourishment": "food","oath-breaker": "enemy","observe": "watch","observe with interest": "watch","observed": "said","observes": "sees","obtain": "get","ocean": "sea","officer": "soldier","old lady": "mother","old man": "father","olde": "old","one": "you","ones": "men","oneself": "yourself","opnen": "open","raps": "maybe","paraventure": "excuse me","pardon": "excuse me","pardon me": "excuse me","partake of": "eat","peculiar": "strange","peddle": "sell","pees": "peace","penniless": "poor","peradventure": "maybe","perambulate": "walk","perceive": "see","perceives": "sees","perchance": "maybe","perform": "do","perhaps": "maybe","perish": "die","perishen": "die","pine": "miss","pine for": "miss","pirate": "soldier","place": "put","planet": "earth","ponder": "think","port": "home","portly": "fat","povere": "poor","powerful": "strong","preserve": "save","prevail": "win","prithee": "please","proceed": "go","proceeds": "goes","proclaim": "say","proclaimed": "said","procure": "get","protect": "defend","proud as a peacock": "proud","proude": "proud","pursue": "follow","quaff": "drink","quaff grog": "drink","question": "ask","quite ancient": "old","quite apprehensive": "afraid","quite portly": "fat","radiant": "bright","raise": "build","rather craven": "cowardly","rather destitute": "poor","rather diminutive": "short","rather fatigued": "tired","rather inebriated": "tipsy","rather slender": "thin","ready": "prepare","ready the cannons": "prepare","ready yourself": "prepare","realm": "country","reckon": "think","reckoneth": "thinks","recline": "sit","recollect": "remember","recount": "tell","recounted": "told","redien": "prepare","regret i do": "sorry","reject": "dislike","relate": "tell","related": "told","relish": "like","remain": "stay","remain aboard": "stay","remark": "say","remarkably swift": "fast","remarked": "said","repair": "fix","reply": "answer","require": "need","residence": "house","resolve": "decide","respond": "answer","rest": "sit","revelry": "dance","riche": "rich","righteous": "good","rise": "stand","risen": "stand","rune-stone": "computer","runestone": "computer","ryght wel": "ok","saga": "book","sagacious": "wise","sage": "wise","saven": "save","say i will": "say","scour": "search","scour the seas": "search","scurvy dog": "enemy","scuttle": "destroy","seasick": "sick","seek": "search","seen": "see","seeth": "sees","seize": "grab","seke": "sick","select": "choose","sellen": "sell","send to davy jones": "kill","serchen": "search","set": "put","set sail": "go","sets sail": "goes","setten": "put","settlement": "city","seyde": "said","seye": "say","shal": "will","shall": "will","shetten": "close","shield-brother": "mate","shield-maiden": "woman","ship": "house","shipe": "boat","shipmate": "mate","shouldst": "should","shove": "push","shoven": "push","shut": "close","sire": "father","sitten": "sit","skal": "thanks","slay": "kill","slayen": "kill","slender": "thin","slepen": "sleep","sluggisch": "lazy","sluggish": "slow","slumber": "sleep","slumbered": "slept","smash": "destroy","smeten": "hit","smite": "hit","snare": "catch","snatch": "grab","so be it": "ok","soar": "fly","soared": "flew","some soul": "someone","somewhat indisposed": "sick","soothly": "sure","sorrowful": "sad","sory": "sad","speak": "say","speeder": "car","spent": "exhausted","spente": "exhausted","spies": "sees","spoke": "said","spy": "see","starship": "ship","stash": "put","steel": "weapon","stout": "fat","straunge": "strange","strength": "courage","stride": "walk","stride the plank": "walk","strike": "hit","stroll": "walk","stronghold": "city","sufficient": "enough","sustenance": "food","swear": "believe","swear on me honour": "believe","swerd": "sword","sweren": "answer","swift": "fast","system": "country","tarry": "wait","techen": "teach","telle": "tell","terrain": "earth","terribly frigid": "cold","terribly melancholy": "sad","terribly sluggish": "slow","thanne": "then","the cold drink": "water","the dawn": "morning","the deep": "sea","the dusk": "evening","the eve": "night","the heavens": "sky","the hour": "time","the morrow": "tomorrow","the ocean": "sea","the tides": "fate","the voyage": "life","the winds": "wind","thine": "yours","thinken": "think","this day": "today","this eve": "tonight","this very moment": "now","thou": "you","thou art": "you are","three sheets to the wind": "tipsy","thy": "your","thyself": "yourself","till": "until","toil": "work","toiled": "worked","tolde": "told","tome": "book","tool": "weapon","trade": "sell","trade winds": "wind","trail": "follow","tranquillity": "peace","transform": "change","traverse": "walk","treacherous": "hard","treasure map": "computer","treasure of the heart": "love","tristen": "believe","triumph": "win","triumphed": "won","trouthe": "good","trowen": "think","truce": "peace","trudge": "walk","trudge the deck": "walk","trudged": "walked","trust in": "believe","tug": "pull","unbar": "open","uncertain": "confused","uncovered": "found","under the weather": "ill","unearth": "reveal","unearthed": "found","unfasten": "open","unfettered": "free","unfurl": "open","unwell": "sick","usen": "use","utilize": "use","utterly spent": "exhausted","valiant": "brave","valour": "courage","vanquish": "destroy","verily": "really","very well": "ok","vessel": "ship","vessel of commerce": "ship","vow": "promise","vowed": "promised","wagon": "car","wakken": "wake","walk the plank": "die","warrior": "man","warriors": "men","wast": "was","watch carefully": "watch","waxen": "grow","wealthy": "rich","weary": "tired","weery": "tired","wend": "go","wenden": "go","wendeth": "goes","weppen": "weapon","werken": "work","wert": "were","whence": "where","wherefore": "why","whilst": "while","wield": "use","winnen": "win","wise": "good","with pleasure": "sure","womman": "woman","wonderly": "surprised","wouldst": "would","wound": "hurt","wounden": "hurt","wrath": "anger","wrath of the sea": "anger","wrooth": "angry","wroth": "angry","wynde": "wind","wyrd": "fate","ye be": "you are","ye been": "you are","yea": "yes","yer": "your","yers": "yours","yerself": "yourself","yeven": "give","yo ho": "hey","young person": "child","young scallywag": "child","youngling": "child","youres": "yours","youreself": "yourself","youthful": "young","yowr": "your","'tis": "it is","'twas": "it was","'twas mine own folly": "my bad","'twixt": "between","beggin' yer pardon": "sorry","cap'n": "hero","don't": "do not","i'm": "I am","ne'er": "never","one's": "your","one's own": "yours","p'raps": "maybe","be": "sit","ye": "you","lo": "hey","shalt": "will","departed from this mortal coil": "dead","departed from this mortalitee": "dead","sleeping with the fishes": "dead","fallen and feasting in valhalla": "dead","passed on from this life": "dead","hath y-passed from this lyf": "dead","at one with the force": "dead","ye are": "you are","ye have": "you have","ye shall": "you will","ye should": "you should","ye can": "you can","ye would": "you would","ye had": "you had","ye do": "you do","ye did": "you did","ye will": "you will","ye have not": "you have not","ye shall not": "you will not","ye should not": "you should not","ye would not": "you would not","ye had not": "you had not","ye do not": "you do not","ye did not": "you did not","ye are not": "you are not","ye cannot": "you cannot","my heart hungereth to": "i want to","my heart desireth to": "i would like to","i must needs": "i need to","what say ye": "what do you think","what mean ye": "what do you mean","do ye not": "don't you","can ye": "can you","shall ye": "will you","would ye": "would you","how fare ye": "how are you","how fareth your day": "how is it going","fare well until we meet again": "see you later","fare well this eventide": "good night","i pray your pardon": "excuse me","hold your tongue": "shut up","the fault is mine": "my bad","i ask your pardon": "sorry","i thank ye, kinsman": "thank you","grant me this": "please","fare well": "goodbye","ye are loathsome to me": "i hate you","lend me your strength, kinsman": "help me","i ask your pardon, by the runes": "i am sorry","feel in my bones": "feel","feels in my bones": "feels","felt most deeply": "felt","thow art": "you are","thow hast": "you have","thow shalt": "you will","thow woldest": "you would","the day before": "yesterday","the day gone by": "yesterday","before long": "soon","in truth": "honestly","very wonderful": "wonderfully","sense the tide": "feel","senses the tide": "feels","felt the tide": "felt","sense": "feel","voyage": "travel","voyaged": "traveled","feelen": "feel","travayle": "travel","tomorwe": "tomorrow","wol": "will","perceive within oneself": "feel","perceives within oneself": "feels","perceived within oneself": "felt","most agreeable": "happy","one is": "you are","one has": "you have","one does": "you do","one is not": "you are not","one has not": "you have not","one does not": "you do not"};
+var inputEl=document.getElementById('input'),
+    outputEl=document.getElementById('output'),
+    charCountEl=document.getElementById('charCount'),
+    copyBtn=document.getElementById('copyBtn');
+
+inputEl.addEventListener('input',function(){
+  charCountEl.textContent=inputEl.value.length;
+});
+
+// Ctrl+Enter hotkey
+inputEl.addEventListener('keydown', function(e) {
+  if (e.ctrlKey && e.key === 'Enter') {
+    e.preventDefault();
+    unscramble();
+  }
+});
+
+
+function clearAll(){
+  inputEl.value='';
+  charCountEl.textContent='0';
+  outputEl.innerHTML='';
+  outputEl.classList.remove('active');
+  copyBtn.className='btn-copy';copyBtn.innerHTML='<span>&#128203;</span> Copy to Clipboard';
+}
+
+function copyOutput(){
+  var t=outputEl.textContent;
+  if(!t)return;
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(t).then(function(){
+      copyBtn.classList.add('copied');copyBtn.textContent='Copied!';
+      setTimeout(function(){copyBtn.classList.remove('copied');copyBtn.textContent='Copy'},2000);
+    });
+  }else{
+    var a=document.createElement('textarea');
+    a.value=t;a.style.position='fixed';a.style.opacity='0';
+    document.body.appendChild(a);a.select();document.execCommand('copy');
+    document.body.removeChild(a);
+    copyBtn.classList.add('copied');copyBtn.textContent='Copied!';
+    setTimeout(function(){copyBtn.classList.remove('copied');copyBtn.textContent='Copy'},2000);
+  }
+}
+
+function unscramble(){
+  var text=inputEl.value.trim();
+  if(!text)return;
+  var r=text;
+
+  r=r.replace(/\[Exit.*?\]/gi,'');
+  r=r.replace(/\[A flourish.*?\]/gi,'');
+  r=r.replace(/\[They fight.*?\]/gi,'');
+  r=r.replace(/\[Thunder.*?\]/gi,'');
+  r=r.replace(/\[He draws.*?\]/gi,'');
+  r=r.replace(/\[She swoons.*?\]/gi,'');
+  r=r.replace(/\[Exeunt.*?\]/gi,'');
+  r=r.replace(/\[He falls.*?\]/gi,'');
+  r=r.replace(/\[Music plays.*?\]/gi,'');
+  r=r.replace(/\[He doth.*?\]/gi,'');
+  r=r.replace(/\(aside:[\s\S]*?\)/gi,'');
+  r=r.replace(/\(pray,? mark this\)/gi,'');
+  r=r.replace(/\(and so it goes\)/gi,'');
+  r=r.replace(/\(as the stars decree\)/gi,'');
+  r=r.replace(/\(let it be known\)/gi,'');
+  r=r.replace(/\(and thus we stand\)/gi,'');
+  r=r.replace(/\(perchance to dream\)/gi,'');
+  r=r.replace(/\(the heart speaks\)/gi,'');
+  r=r.replace(/\(thus fate would have it\)/gi,'');
+  r=r.replace(/\(ere long\)/gi,'');
+  r=r.replace(/\(in this I am resolute\)/gi,'');
+  r=r.replace(/\(so speaks my heart\)/gi,'');
+  r=r.replace(/\(and nothing more\)/gi,'');
+  r=r.replace(/\[The ship rocks violently\.\]/gi,'');
+  r=r.replace(/\[A cannon booms in the distance\.\]/gi,'');
+  r=r.replace(/\[The crew raises the Jolly Roger\.\]/gi,'');
+  r=r.replace(/\[A parrot lands on the captain's shoulder\.\]/gi,'');
+  r=r.replace(/\[The anchor drops with a splash\.\]/gi,'');
+  r=r.replace(/\[The sails catch the wind\.\]/gi,'');
+  r=r.replace(/\[A sword fight erupts on deck\.\]/gi,'');
+  r=r.replace(/\[The treasure chest is opened\.\]/gi,'');
+  r=r.replace(/\[The ship sets sail into the sunset\.\]/gi,'');
+  r=r.replace(/\[Rum is passed around the deck\.\]/gi,'');
+  r=r.replace(/\[A horn sounds\.\]/gi,'');
+  r=r.replace(/\[The longship sets sail\.\]/gi,'');
+  r=r.replace(/\[Thunder rumbles\.\]/gi,'');
+  r=r.replace(/\[The Valkyries descend\.\]/gi,'');
+  r=r.replace(/\[A great feast begins\.\]/gi,'');
+  r=r.replace(/\[The runes are cast\.\]/gi,'');
+  r=r.replace(/\[The wolves howl in the distance\.\]/gi,'');
+  r=r.replace(/\[The mead horn is raised\.\]/gi,'');
+  r=r.replace(/\[The sword is drawn\.\]/gi,'');
+  r=r.replace(/\[The ravens take flight\.\]/gi,'');
+  r=r.replace(/\[The ship's oars strike the water\.\]/gi,'');
+  r=r.replace(/\[A saga is recited\.\]/gi,'');
+  r=r.replace(/\[The warriors raise their axes\.\]/gi,'');
+  r=r.replace(/\[The Northern Lights blaze\.\]/gi,'');
+  r=r.replace(/\[The Bifrost bridges the worlds\.\]/gi,'');
+  r=r.replace(/\[He raises his lightsaber\.\]/gi,'');
+  r=r.replace(/\[The Force awakens\.\]/gi,'');
+  r=r.replace(/\[He extends his hand, using the Force\.\]/gi,'');
+  r=r.replace(/\[The lightsaber hums to life\.\]/gi,'');
+  r=r.replace(/\[He meditates, reaching out with the Force\.\]/gi,'');
+  r=r.replace(/\[A Jedi and a Sith face off\.\]/gi,'');
+  r=r.replace(/\[The dark side clouds everything\.\]/gi,'');
+  r=r.replace(/\[He leaps across the chasm using the Force\.\]/gi,'');
+  r=r.replace(/\[The Force flows through him\.\]/gi,'');
+  r=r.replace(/\[He closes his eyes and senses the Force\.\]/gi,'');
+  r=r.replace(/\[She fans herself vigorously\.\]/gi,'');
+  r=r.replace(/\[He adjusts his cravat with great dignity\.\]/gi,'');
+  r=r.replace(/\[A butler enters with a silver tray\.\]/gi,'');
+  r=r.replace(/\[She rises from her chair with great deliberation\.\]/gi,'');
+  r=r.replace(/\[He bows with exaggerated formality\.\]/gi,'');
+  r=r.replace(/\[A telephone rings in the hall\.\]/gi,'');
+  r=r.replace(/\[She pours tea with precise movements\.\]/gi,'');
+  r=r.replace(/\[He clears his throat most pompously\.\]/gi,'');
+  r=r.replace(/\[The clock strikes twelve\.\]/gi,'');
+  r=r.replace(/\[She exits with great dignity\.\]/gi,'');
+  r=r.replace(/\[Heere bigynneth the Maydens tale\.\]/gi,'');
+  r=r.replace(/\[Oure Hoste gan to swere as were he wood\.\]/gi,'');
+  r=r.replace(/\(by Davy Jones' locker\)/gi,'');
+  r=r.replace(/\(shiver me timbers\)/gi,'');
+  r=r.replace(/\(as the tide turns\)/gi,'');
+  r=r.replace(/\(I dare say\)/gi,'');
+  r=r.replace(/\(how remarkable\)/gi,'');
+  r=r.replace(/\(upon my honour\)/gi,'');
+  r=r.replace(/\(forsooth\)/gi,'');
+  r=r.replace(/\(in good faith\)/gi,'');
+  r=r.replace(/\(by my trouthe\)/gi,'');
+  r=r.replace(/\(hmm\)/gi,'');
+  r=r.replace(/\(strong with the Force\)/gi,'');
+  r=r.replace(/\(patience you must have\)/gi,'');
+
+  var openings=/^(Hark!?|Marry!|Forsooth!|Zounds!|Prithee,? attend!|Fie!|Alas!|Gadzooks!|Verily!|Indeed!|Certes!|Sooth!|Lo!|Attend!|Hearken!|Heere bigynneth!|Loo!|By my fay!|Noot I nat!|Trowe ye nat!|Bihold!|Soothly!|For al the world!|I pray yow!|By Saint Gerveys!|By my throt!|A,? ha!|By corage!|I dar wel seyn!|For trewely!|Ahoy!|Arrr!|Shiver me timbers!|Yo ho ho!|Blimey!|Avast ye!|Thunder an'? typhoons!|Me hearty!|Well blow me down!|By the powers!|Huzzah!|Aye aye!|Land ho!|Hoist the colours!|All hands on deck!|Mark my words!|Yo ho!|Suffer me swab!|Great Scott!|By Neptune'?s beard!|Swab the deck!|I daresay!|Quite right!|Capital!|Splendid!|My word!|How extraordinary!|Upon my soul!|I say!|Well I never!|Most peculiar!|Indeed,? quite!|Quite so!|I must protest!|Rather!|Terribly!|Most decidedly!|Pray tell|Good heavens|My dear fellow|My dear chap|I say,? look here|By Jove|Upon my honour|I must confess|If I may say so|With the greatest respect|Hmmmm!|Hrrrrm!|Yes,? hrrrm!|Strong the Force is!|Careful you must be!|Much to learn,? you still have!|Powerful you have become!|Feel the Force!|Trust in the Force!|Hrrrrm,? indeed!|Patience you must have!|Hail!|By Odin!|Skal!|Hear me!|By Thor!|Lo!|By the gods!|By the Allfather!|Mark my words!|By Freya!|Listen well!|By the hammer!|Hark!|By Valhalla!|Hearken!|By the Norns!|Behold!|By the runes!|Know this!|By the World Tree!|By Asgard!|What ho!|Know this!)\s*/i;
+  r=r.replace(openings,'');
+
+  r=r.replace(/,\s*(forsooth|marry|by my troth|in good sooth|as I live|mark thou|prithee|by the stars|upon mine honour|as the fates|by this hand|by all that|an it please|in sooth|by Jove|by the mass|blimey|arrr|by the seven seas|shiver me|by Blackbeard|swab the deck|by the powers|blow me down|Yo ho ho|by Davy Jones|by thunder|scurvy dog|ahoy matey|by the kraken|dead men|blast yer|by Jolly Roger|blow the man|by the bilge|you know|I dare say|if you don't mind|quite frankly|between you and me|I must say|as it were|for want of|in all honesty|by all accounts|to tell the truth|it must be said|with due deference|if I may be so bold|one must observe|as a matter of fact|certes|soothly|for-sooth|trewely|I dar wel seyn|in good trouthe|al the world|if I may soothly|whan that|and thanne|forthi|natheless|in feith|by my troth|trewely I seye|for-why|anoon|right anon|natwithstonding|wherfore|and therfore|right as I trowe|forthwithal|in al wyse|over al|by al myghty|hrrrmm|hmmmm|yes yes|strong the force|powerful you are|wise this is|know this I|care you must|strong you are|listen you must|think you do not|hrrrmm hrrrmm|important this is|powerful this is|much to learn|feel the Force|by Odin|by the gods|by Thor|by the Allfather|by Freya|by the runes|by Valhalla|by the World Tree|by the Norns|by the thunder|by the lightning|by the shield wall|by the Valkyries|by the mead hall|by the ancient stones|by the winds|by the seas|by the mountains|by the old ways)\s*,/gi,',');
+  r=r.replace(/,,+/g,',');
+  r=r.replace(/,\s*\./g,'.');
+  r=r.replace(/\.\s*\./g,'.');
+
+  // Multi-word dictionary lookup using sliding window over word tokens
+  // (whitespace is tokenized separately so spans count real words, not gaps)
+  var toks=r.match(/\S+|\s+/g)||[];
+  var result=[];
+  var i=0;
+  while(i<toks.length){
+    if(/^\s+$/.test(toks[i])){result.push(toks[i]);i++;continue;}
+    var matched=false;
+    // Try matching 5,4,3,2 word sequences
+    for(var span=5;span>=2;span--){
+      var idx=[];
+      for(var k=i;k<toks.length&&idx.length<span;k++){
+        if(!/^\s+$/.test(toks[k]))idx.push(k);
+      }
+      if(idx.length<span)continue;
+      var phrase='';
+      for(var n=0;n<idx.length;n++){
+        if(n>0)phrase+=' ';
+        phrase+=toks[idx[n]];
+      }
+      var low=phrase.toLowerCase().replace(/[.,!?;:]+$/,'');
+      var pm=phrase.match(/([.,!?;:]+)$/);
+      if(D[low]){
+        result.push(D[low]+(pm?pm[1]:''));
+        i=idx[idx.length-1]+1;
+        matched=true;
+        break;
+      }
+    }
+    if(!matched){
+      var w=toks[i];
+      var lw=w.toLowerCase();
+      if(D[lw]){result.push(D[lw]);}
+      else{
+        var stripped=lw.replace(/[.,!?;:]+$/,'');
+        var pm2=lw.match(/([.,!?;:]+)$/);
+        if(D[stripped]){result.push(D[stripped]+(pm2?pm2[1]:''));}
+        else{result.push(w);}
+      }
+      i++;
+    }
+  }
+  r=result.join('');
+
+  r=r.replace(/\s+/g,' ');
+  r=r.replace(/^\s+/,'');
+  r=r.replace(/\s+$/,'');
+
+  outputEl.textContent=r;
+  outputEl.classList.add('active');
+  outputEl.style.whiteSpace='pre-wrap';
+  copyBtn.classList.add('active');
+}
+
+
+
+
+
+
+</script>
+</body>
+</html>

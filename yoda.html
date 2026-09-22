@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Shakespeare Text Repriser</title>
+<title>Yoda Text Repriser</title>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=UnifrakturMaguntia&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -11,8 +11,8 @@
   body {
     font-family: 'Cormorant Garamond', Georgia, serif;
     min-height: 100vh;
-    background: #1a1209;
-    color: #3d2b1f;
+    background: #0a1408;
+    color: #1a2a18;
     overflow-x: hidden;
   }
 
@@ -61,7 +61,7 @@
     font-family: 'Cinzel', serif;
     font-weight: 900;
     font-size: 2.2rem;
-    color: #d4a056;
+    color: #4ac44a;
     text-shadow: 0 2px 4px rgba(0,0,0,0.4), 0 0 30px rgba(212,160,86,0.15);
     letter-spacing: 0.08em;
     line-height: 1.2;
@@ -71,7 +71,7 @@
     font-family: 'Cormorant Garamond', serif;
     font-style: italic;
     font-size: 1.15rem;
-    color: #b8956a;
+    color: #5a8a5a;
     margin-top: 6px;
     letter-spacing: 0.04em;
   }
@@ -83,7 +83,7 @@
     justify-content: center;
     gap: 12px;
     margin: 24px 0;
-    color: #8b6d4a;
+    color: #3a6a3a;
     font-size: 1rem;
     opacity: 0.7;
   }
@@ -96,8 +96,8 @@
 
   /* ====== INPUT CARD ====== */
   .card {
-    background: linear-gradient(145deg, #faf3e6, #f0e4cc, #e8d9b8);
-    border: 2px solid #c4a265;
+    background: linear-gradient(145deg, #e8f4e6, #d8ecd2, #c8e2c2);
+    border: 2px solid #80b880;
     border-radius: 12px;
     padding: 24px;
     margin-bottom: 20px;
@@ -123,7 +123,7 @@
     font-size: 0.85rem;
     text-transform: uppercase;
     letter-spacing: 0.12em;
-    color: #8b6d4a;
+    color: #3a6a3a;
     margin-bottom: 10px;
     display: flex;
     align-items: center;
@@ -139,10 +139,10 @@
     font-size: 1.15rem;
     line-height: 1.6;
     padding: 14px 16px;
-    border: 1.5px solid #c4a265;
+    border: 1.5px solid #80b880;
     border-radius: 8px;
     background: rgba(255,252,245,0.7);
-    color: #3d2b1f;
+    color: #1a2a18;
     resize: vertical;
     overflow-wrap: break-word;
     transition: border-color 0.3s, box-shadow 0.3s;
@@ -150,12 +150,12 @@
   }
 
   textarea:focus {
-    border-color: #d4a056;
+    border-color: #4ac44a;
     box-shadow: 0 0 0 3px rgba(212,160,86,0.2), 0 2px 12px rgba(0,0,0,0.08);
   }
 
   textarea::placeholder {
-    color: #b8956a;
+    color: #5a8a5a;
     font-style: italic;
   }
 
@@ -208,14 +208,14 @@
 
   .btn-secondary {
     background: transparent;
-    color: #b8956a;
+    color: #5a8a5a;
     border: 1.5px solid #8b6d4a;
     padding: 14px 24px;
   }
 
   .btn-secondary:hover {
     background: rgba(184,149,106,0.1);
-    border-color: #b8956a;
+    border-color: #5a8a5a;
   }
 
   .btn .quill-icon {
@@ -246,8 +246,8 @@
 
   /* ====== OUTPUT CARD ====== */
   .output-card {
-    background: linear-gradient(145deg, #fffcf5, #f8f0de, #f2e8ce);
-    border: 2px solid #c4a265;
+    background: linear-gradient(145deg, #f0f8ee, #e4f0e0, #d8e8d2);
+    border: 2px solid #80b880;
     border-radius: 12px;
     padding: 24px;
     position: relative;
@@ -283,14 +283,14 @@
     font-style: italic;
     line-height: 1.8;
     font-size: 1.2rem;
-    color: #3d2b1f;
+    color: #1a2a18;
     position: relative;
     z-index: 1;
   }
 
   #output:empty::before {
-    content: 'Thy words shall appear here, awaiting transformation...';
-    color: #b8956a;
+    content: 'Appear here, your words shall...';
+    color: #5a8a5a;
     font-style: italic;
   }
 
@@ -310,7 +310,7 @@
     background: rgba(184,149,106,0.15);
     border: 1px solid rgba(184,149,106,0.4);
     border-radius: 6px;
-    color: #8b6d4a;
+    color: #3a6a3a;
     cursor: pointer;
     transition: all 0.2s;
     display: flex;
@@ -320,7 +320,7 @@
 
   .btn-copy:hover {
     background: rgba(184,149,106,0.25);
-    border-color: #b8956a;
+    border-color: #5a8a5a;
   }
 
   .btn-copy.copied {
@@ -335,7 +335,7 @@
     margin-top: 30px;
     padding-top: 20px;
     border-top: 1px solid rgba(139,109,74,0.3);
-    color: #8b6d4a;
+    color: #3a6a3a;
     font-style: italic;
     font-size: 0.95rem;
     opacity: 0.7;
@@ -457,11 +457,11 @@
 <div class="float-quill">&#128396;</div>
 
   <div class="style-switcher">
-    <a href="./shakespeare.html" class="active">Shakespeare</a>
+    <a href="./shakespeare.html">Shakespeare</a>
     <a href="./pirate.html">Pirate</a>
     <a href="./victorian.html">Victorian</a>
     <a href="./chaucer.html">Chaucer</a>
-    <a href="./yoda.html">Yoda</a>
+    <a href="./yoda.html" class="active">Yoda</a>
     <a href="./norse.html">Norse</a>
     <a href="./unscramble.html">Unscramble</a>
   </div>
@@ -469,21 +469,21 @@
 <div class="container">
   <header class="header">
     <span class="quill">&#128396;</span>
-    <h1>Shakespeare Text Repriser</h1>
-    <p class="subtitle">Transform thy modern tongue into the Queen's English</p>
+    <h1>Yoda Text Repriser</h1>
+    <p class="subtitle">Transform your words, you must</p>
   </header>
 
-  <div class="divider">&#10045; Anno Domini MDLXIV &#10045;</div>
+  <div class="divider">&#10045; The Force Awakens MDLXXVII &#10045;</div>
 
   <div class="card">
     <div class="card-label"><span class="icon">&#9998;</span> Modern English</div>
-    <textarea id="input" placeholder="Type thy modern words here, good merchant..."></textarea>
+    <textarea id="input" placeholder="Type your words here, you must..."></textarea>
     <div class="char-count"><span id="charCount">0</span> characters inscribed</div>
   </div>
 
   <div class="btn-row">
-    <button class="btn btn-primary" onclick="shakespearify()">
-      <span class="quill-icon">&#128396;</span> Repraise It!
+    <button class="btn btn-primary" onclick="yodaify()">
+      <span class="quill-icon">&#128396;</span> Transform, you must!
     </button>
     <button class="btn btn-secondary" onclick="clearAll()">
       Clear
@@ -492,7 +492,7 @@
 
   <div class="output-card">
     <div class="ink-drip"></div>
-    <div class="card-label"><span class="icon">&#128214;</span> Shakespearean Output</div>
+    <div class="card-label"><span class="icon">&#128214;</span> Jedi Output</div>
     <div id="output"></div>
     <div class="output-actions">
       <button class="btn-copy" onclick="copyOutput()" id="copyBtn">
@@ -521,7 +521,7 @@ inputEl.addEventListener('input', () => {
 inputEl.addEventListener('keydown', (e) => {
   if (e.ctrlKey && e.key === 'Enter') {
     e.preventDefault();
-    shakespearify();
+    yodaify();
   }
 });
 
@@ -579,305 +579,398 @@ const chance = p => Math.random() < p;
 // OPENING EXCLAMATIONS & INTERJECTIONS
 // ============================================================
 const openings = [
-  "Hark!", "Marry!", "Forsooth!", "Zounds!", "Prithee, attend!",
-  "Fie!", "Alas!", "Odds bodkins!", "By my troth!", "Gadzooks!",
-  "What ho!", "Verily!", "Indeed!", "Certes!", "Sooth!",
-  "Hear me!", "Mark well!", "Lo!", "Attend!", "Know this!",
-  "I prithee!", "By the stars!", "As I live!", "Upon mine honour!",
-  "O gentle soul!", "Hearken!", "Nay, but listen!",
-  "By heaven!", "In faith!", "Good sooth!",
-  "Now look thee!", "What light!", "Pray, mark!",
-  "I beseech thee!", "By this light!", "How now!",
-  "What cheer!", "Well encountered!", "God a mercy!",
-  "Marry, come up!", "Fie upon't!", "Out upon it!",
-  "Tut!", "Pish!", "Tush!", " fie for shame!",
-  "By'r lady!", "Sancta Maria!", "Odds my life!",
-  "What blood!", "What devil!", "Angels and ministers of grace!",
-  "What a plague!", "S'heart!", "O remarkable!",
+  "Hmm...", "Strong with the Force you are!", "Yes, yes!", "Patience!",
+  "Fear not!", "Hmm, yes!", "Honor your feelings, you must.",
+  "Much to learn, you still have!", "Powerful you are becoming.",
+  "Troubling, this is.", "Sense the Force, you can!",
+  "Trust your feelings, you must!", "A Jedi craves not adventure.",
+  "Difficult, the dark side is.", "Calm, you must remain.",
+  "See through the Force, you can!", "Great, your power is!",
+  "Listen well, you must!", "Strong in the Force, you are!",
+  "Sense something, I do!", "Guide you, the Force will.",
+  "Wise you are, young one!", "Feel the Force around you.",
+  "Control it, you must!", "Dangerous, this path is.",
+  "Guide your actions, the Force will.", "Dark the future is.",
+  "Powerful, the dark side is.", "Clouded, your mind is.",
+  "Shadows consume you, they will.", "Master the Force, you must.",
+  "Fear is the path to the dark side.", "Anger leads to hate.",
+  "Hate leads to suffering.", "Suffering leads to the dark side.",
+  "Pass on what you have learned.", "Judge me by my size, do you?",
+  "Mind what you have learned.", "Size matters not.",
+  "Do or do not, there is no try.",
+  "You must unlearn what you have learned.",
+  "Always with you, what cannot be done.",
+  "A Jedi uses the Force for knowledge and defense, never for attack.",
+  "When you look at the dark side, careful you must be.",
+  "Luminous beings are we, not this crude matter.",
+  "Wars not make one great.",
+  "The greatest teacher, failure is.",
+  "Ha! Great warrior? Wars not make one great!",
+  "That is why you fail.",
+  "Already know you that which you need.",
+  "Strong you are with the Force.",
+  "Feel the Force flowing through you.",
+  "Clear your mind must be.",
+  "Powerful you have become, Dooku.",
+  "Much anger in you, I sense.",
+  "Control, control, you must learn control!"
 ];
 
 const midInsertions = [
-  ", forsooth,", ", marry,", ", by my troth,", ", in good sooth,",
-  ", as I live and breathe,", ", mark thou,", ", prithee,",
-  ", by the stars above,", ", upon mine honour,",
-  ", and so it shall be,", ", as the fates decree,",
-  ", as sure as dawn doth break,", ", as sure as night doth fall,",
-  ", by this hand,", ", as I am a gentleman,",
-  ", by all that's holy,", ", an it please thee,",
-  ", as the world goes,", ", in sooth,",
-  ", by Jove!", ", in terms of truth,",
-  ", by the mass,", ", as sure as I stand here,",
-  ", by Heaven's light,", ", if truth be told,",
-  ", by the rood,", ", ere the sun doth set,",
-  ", by sweet Charity,", ", as I have a soul,",
-  ", by this good light,", ", in honest truth,",
+  ", young one,", ", hmm,", ", yes,", ", indeed,",
+  ", strong with the Force, you are,", ", I sense,",
+  ", yes, yes,", ", powerful, this is,", ", wise, you are becoming,",
+  ", a Jedi must be,", ", through the Force,",
+  ", fear not,", ", patient, you must be,",
+  ", much to learn, you still have,", ", sense the Force, you can,",
+  ", hmm, yes,", ", strong with the Force,",
+  ", young apprentice,", ", by the Force,",
+  ", interesting, this is,", ", a great disturbance in the Force,",
+  ", curious, this is,", ", trust the Force,",
+  ", believe in the Force, you must,", ", the Force is strong with you,",
+  ", dangerous, this is,", ", dangerous, it is,",
+  ", feel the Force, you must,", ", calm, you must remain,",
+  ", strong, the Force is with you,", ", powerful, you are becoming,",
+  ", young Skywalker,", ", care, you must,",
+  ", difficult, this is,", ", difficult, the dark side is,",
+  ", hmmm,", ", yes, hmmm,"
 ];
 
 // ============================================================
-// SHAKESPEAREAN QUOTES (partial, for random insertion)
+// JEDI SAYINGS (partial, for random insertion)
 // ============================================================
 const quotes = [
-  "To be, or not to be, that is the question.",
-  "What's in a name? That which we call a rose by any other name would smell as sweet.",
-  "The lady doth protest too much, methinks.",
-  "All that glitters is not gold.",
-  "Brevity is the soul of wit.",
-  "We are such stuff as dreams are made on.",
-  "Love looks not with the eyes, but with the mind.",
-  "The course of true love never did run smooth.",
-  "Though she be but little, she is fierce.",
-  "This above all: to thine own self be true.",
-  "Good night, good night! Parting is such sweet sorrow.",
-  "If music be the food of love, play on.",
-  "All the world's a stage, and all the men and women merely players.",
-  "Nothing will come of nothing.",
-  "Stars, hide your fires; let not light see my black and deep desires.",
-  "Is this a dagger which I see before me?",
-  "Out, damned spot! Out, I say!",
-  "Tomorrow, and tomorrow, and tomorrow.",
-  "Life's but a walking shadow, a poor player.",
-  "The evil that men do lives after them.",
-  "Et tu, Brute?",
-  "Friends, Romans, countrymen, lend me your ears.",
-  "Cry 'Havoc!' and let slip the dogs of war.",
-  "Once more unto the breach, dear friends.",
-  "We few, we happy few, we band of brothers.",
-  "If you prick us, do we not bleed?",
-  "The quality of mercy is not strained.",
-  "Kill all the lawyers.",
-  "Uneasy lies the head that wears a crown.",
-  "Brave new world, that has such people in it.",
-  "O, beware, my lord, of jealousy!",
-  "To thine own self be true.",
-  "What a piece of work is a man!",
-  "There are more things in heaven and earth, Horatio.",
-  "The lady's not for burning.",
-  "By the pricking of my thumbs, something wicked this way comes.",
-  "Double, double toil and trouble.",
-  "Fair is foul, and foul is fair.",
-  "What, ho! awake!",
-  "Now is the winter of our discontent.",
-  "Heart of my heart, were man more near!",
+  "Do or do not, there is no try.",
+  "Fear is the path to the dark side.",
+  "Fear leads to anger. Anger leads to hate. Hate leads to suffering.",
+  "Always with you, what cannot be done.",
+  "Luminous beings are we, not this crude matter.",
+  "The greatest teacher, failure is.",
+  "Strong in the Force, you are.",
+  "Do, or do not. There is no try.",
+  "You must unlearn what you have learned.",
+  "Judge me by my size, do you?",
+  "Wars not make one great.",
+  "Pass on what you have learned.",
+  "The Force will be with you. Always.",
+  "It is your destiny.",
+  "I find your lack of faith disturbing.",
+  "Size matters not. Look at me. Judge me by my size, do you?",
+  "I am a Jedi, like my father before me.",
+  "The dark side of the Force is a pathway to many abilities some consider to be unnatural.",
+  "In my experience, there is no such thing as luck.",
+  "For over a thousand generations, the Jedi were the guardians of peace and justice.",
+  "The Force is strong with this one.",
+  "Why do I get the feeling you are going to be the death of me?",
+  "Never tell me the odds!",
+  "I've got a bad feeling about this.",
+  "That is no moon. It is a space station.",
+  "It's a trap!",
+  "I know.",
+  "I am your father.",
+  "The Force will be with you, always.",
+  "Your eyes can deceive you; don't trust them.",
+  "Be mindful of the living Force.",
+  "Concentrate on the moment. Feel, don't think.",
+  "Your allegiance to the dark side, I can sense.",
+  "Much anger in you, I sense.",
+  "When you look at the dark side, careful you must be.",
+  "Twisted by the dark side, young Skywalker has become.",
+  "Control, control, you must learn control!",
+  "If you end your training now, if you choose the quick and easy path, Darth Vader you will become.",
+  "Once you start down the dark path, forever will it dominate your destiny.",
+  "The dark side is quicker, easier, more seductive.",
+  "You are beaten. It is useless to resist.",
+  "Luke, you can destroy the Emperor. He has foreseen this.",
+  "Life creates it, makes it grow.",
+  "A Jedi uses the Force for knowledge and defense, never for attack.",
+  "Named must be your fear before banish it you can.",
+  "Qui-Gon believed in something more, something the Council couldn't see.",
+  "You will find I am most forgiving.",
+  "The Force is an energy field created by all living things.",
+  "That is why you fail.",
+  "When 900 years old you reach, look as good you will not.",
+  "Eeeehhhh! ... Help you I can, yes!",
+  "Mind what you have learned. Save you it can.",
+  "You must do what you feel is right, of course.",
+  "Begin your training, we will.",
+  "Good relations with the Wookiees, I have.",
+  "Around survivors, a perimeter create!",
+  "Truly wonderful, the mind of a child is.",
+  "Adventure. Excitement. A Jedi craves not these things.",
+  "Always two there are, no more, no less. A master and an apprentice.",
+  "Smaller in number are we, but larger in mind.",
+  "Clear your mind must be, if you are to find the villains behind this plot.",
+  "Your path you must decide.",
+  "In a dark place we find ourselves, and a little more knowledge lights our way.",
+  "Many of the truths that we cling to depend on our point of view.",
+  "Already know you that which you need.",
+  "Always in motion is the future.",
+  "Much to learn you still have.",
+  "If no mistake you have made, losing you are. A different game you should play.",
+  "A teacher Yoda is. Yoda teaches like drunkards drink, like killers kill.",
+  "Train yourself to let go of everything you fear to lose.",
+  "The dark side clouds everything. Impossible to see the future is.",
+  "To be Jedi is to face the truth, and choose.",
+  "You will find only what you bring in.",
+  "You do have your moments. Not many, but you do have them."
 ];
 
 // ============================================================
-// SHAKESPEAREAN METAPHORS / SIMILES
+// FORCE METAPHORS / SIMILES
 // ============================================================
 const metaphors = [
-  "as bright as the morning sun",
-  "as cold as winter's bitter breath",
-  "as fleeting as a summer's dream",
-  "as constant as the northern star",
-  "as fierce as raging seas",
-  "as gentle as the spring rain",
-  "as dark as Erebus itself",
-  "as swift as Mercury's winged sandals",
-  "as fair as Helen of Troy",
-  "as proud as Lucifer's fallen host",
-  "as mute as the grave",
-  "as silent as the tomb",
-  "as blind as justice",
-  "as deaf as adders",
-  "as venomous as the asp",
-  "as patient as the hourglass",
-  "as bold as Caesar's shadow",
-  "as hollow as a drum",
-  "as hollow as a politician's promise",
-  "as sharp as a serpent's tooth",
-  "as frail as autumn leaves",
-  "as endless as the sea",
-  "as fickle as the moon",
-  "as stubborn as a mule of Andalusia",
-  "as proud as a peacock in full plumage",
-  "as slippery as an eel in oil",
-  "as gentle as a dove",
-  "as fierce as a tiger robed in silk",
-  "as precious as rubies from the Orient",
-  "as ephemeral as morning dew",
-  "as heavy as leaden sorrow",
-  "as light as Ariel's whisper",
+  "as strong as the Force",
+  "as wise as Master Yoda",
+  "as swift as a lightsaber strike",
+  "as deep as the Force itself",
+  "as bright as the light side",
+  "as dark as the dark side",
+  "as powerful as a Jedi Master",
+  "as calm as a meditation session",
+  "as fierce as a Sith Lord",
+  "as steady as the living Force",
+  "as ancient as the Jedi Order",
+  "as enduring as the Force",
+  "as relentless as the dark side",
+  "as radiant as the light side",
+  "as patient as Master Yoda",
+  "as humble as a Jedi apprentice",
+  "as sharp as a lightsaber blade",
+  "as graceful as a Force leap",
+  "as fierce as a Sith rage",
+  "as serene as a Jedi temple",
+  "as mysterious as the Force",
+  "as unstoppable as a Jedi in focus",
+  "as enduring as the Sith legacy",
+  "as quick as a lightsaber duel",
+  "as focused as a Jedi in battle",
+  "as restless as the dark side",
+  "as devoted as a Jedi to the Force",
+  "as balanced as the Force itself",
+  "as ancient as the Republic",
+  "as far-reaching as the Force",
+  "as determined as a Sith",
+  "as calm as a Naboo sunset",
+  "as turbulent as the Clone Wars"
 ];
 
 // ============================================================
-// ELIZABETHAN INSULTS
+// JEDI REBUKES
 // ============================================================
 const insults = [
-  "thou errant knave", "thou mangy worm", "thou pilgarlic",
-  "thou knob of a dunghill", "thou churl", "thou clotpole",
-  "thou bacon-faced miscreant", "thou bootless (lack)wit",
-  "thou brass-eared fool", "thou dizzy-headed fopdoodle",
-  "thou lily-livered gudgeon", "thou mouldy miscreant",
-  "thou scurvy canker-blossom", "thou cantankerous old",
-  "thou scut", "thou stubble-checked villain",
-  "thou unwashed clerk", "thou bladder-headed knave",
-  "thou brazen basket", "thou ill-nurtured",
-  "thou reeky mischief-maker", "thou pottle-deep sot",
-  "thou pribbling plume-plucked maltworm",
-  "thou coarser than a toad under a harrow",
-  "thou odiferous",
+  "foolish young one", "naive", "weak", "unwise", "blind to the Force",
+  "a fool you are", "pathetic", "lost in the dark side",
+  "weak with the Force", "foolish, you are",
+  "great warrior, ha!", "weak-minded", "blind to the truth",
+  "foolish, this is", "strong in the dark side, you think",
+  "foolish Padawan", "mindless brute",
+  "a disgrace to the Sith you are", "inferior, you are",
+  "crude and foolish", "a simpleton",
+  "laughable, your power is", "helpless you are",
+  "weak your resolve is", "ignorant of the Force, you remain",
+  "pathetic young one", "a mere apprentice",
+  "shallow and weak", "dense, you are",
+  "powerless", "lost to the dark side"
 ];
 
 // ============================================================
 // DRAMATIC ASIDES & STAGE DIRECTIONS
 // ============================================================
 const asides = [
-  "\n  (aside: O, what a fool am I!)\n",
-  "\n  (aside: Would that it were not so!)\n",
-  "\n  (aside: I pray, let none hear this!)\n",
-  "\n  (aside: This fellow speaks most wisely.)\n",
-  "\n  (aside: How my heart doth ache!)\n",
-  "\n  (aside: I shall remember this!)\n",
-  "\n  (aside: Patience, good heart!)\n",
-  "\n  (aside: Peace! Not a word more!)\n",
+  "\n  (aside: Hmm, much to learn, you still have.)\n",
+  "\n  (aside: Strong with the Force, this one is.)\n",
+  "\n  (aside: Trust in the Force, you must.)\n",
+  "\n  (aside: Patience, young one, patience.)\n",
+  "\n  (aside: The dark side I sense in you.)\n",
+  "\n  (aside: Fear is the path to the dark side.)\n",
+  "\n  (aside: A Jedi must have the deepest commitment.)\n",
+  "\n  (aside: Sense much fear in you, I do.)\n"
 ];
 
 const stageDirections = [
-  "\n  [Exit, pursued by a bear.]\n",
-  "\n  [A flourish of trumpets.]\n",
-  "\n  [They fight and exeunt.]\n",
-  "\n  [Thunder and lightning. Enter the witches.]\n",
-  "\n  [He draws his sword.]\n",
-  "\n  [She swoons.]\n",
-  "\n  [Exeunt omnes.]\n",
-  "\n  [He falls upon his sword.]\n",
-  "\n  [Music plays softly.]\n",
-  "\n  [He doth salute thee.]\n",
+  "\n  [He raises his lightsaber.]\n",
+  "\n  [The Force awakens.]\n",
+  "\n  [He extends his hand, using the Force.]\n",
+  "\n  [The lightsaber hums to life.]\n",
+  "\n  [He meditates, reaching out with the Force.]\n",
+  "\n  [A Jedi and a Sith face off.]\n",
+  "\n  [The dark side clouds everything.]\n",
+  "\n  [He leaps across the chasm using the Force.]\n",
+  "\n  [The Force flows through him.]\n",
+  "\n  [He closes his eyes and senses the Force.]\n"
 ];
 
 // ============================================================
 // INVERSION PATTERNS (SVO -> VSO or emphasis)
 // ============================================================
 const inversions = [
-  [/\bI (am|art|is|are|was|were)\b/g, (m, v) => { let map = {"am":"am","art":"art","is":"'tis","are":"art","was":"wast","were":"wert"}; return (map[v] || v) + " I"; }],
-  [/\bhe (is|was|has|does|will|can|should|would)\b/g, (m, v) => v+" he"],
-  [/\bshe (is|was|has|does|will|can|should|would)\b/g, (m, v) => v+" she"],
-  [/\bwe (are|were|have|had|will|can|should|would)\b/g, (m, v) => v+" we"],
-  [/\bthey (are|were|have|had|will|can|should|would)\b/g, (m, v) => v+" they"],
+  [/\bI (am|is|are|was|were|have|has|can|will|shall|would|should|could|might|do|does|did)\b/g, (m, v) => v + " I"],
+  [/\bhe (is|was|has|can|will|shall|would|should|could|might|do|does|did)\b/g, (m, v) => v + " he"],
+  [/\bshe (is|was|has|can|will|shall|would|should|could|might|do|does|did)\b/g, (m, v) => v + " she"],
+  [/\bwe (are|were|have|had|can|will|shall|would|should|could|might|do|does|did)\b/g, (m, v) => v + " we"],
+  [/\bthey (are|were|have|had|can|will|shall|would|should|could|might|do|does|did)\b/g, (m, v) => v + " they"],
+  [/\byou (are|were|have|has|can|will|shall|would|should|could|might|do|does|did)\b/g, (m, v) => v + " you"],
+  [/\bit (is|was|has|can|will|shall|would|should|could|might|do|does|did)\b/g, (m, v) => v + " it"],
+  [/\bI am\b/g, "am I"],
+  [/\byou are\b/g, "are you"],
+  [/\bhe is\b/g, "is he"],
+  [/\bshe is\b/g, "is she"],
+  [/\bwe are\b/g, "are we"],
+  [/\bthey are\b/g, "are they"],
+  [/\bI was\b/g, "was I"],
+  [/\byou were\b/g, "were you"],
+  [/\bI have\b/g, "have I"],
+  [/\byou have\b/g, "have you"],
+  [/\bI will\b/g, "will I"],
+  [/\byou will\b/g, "will you"],
+  [/\bI can\b/g, "can I"],
+  [/\byou can\b/g, "can you"],
+  [/\bI would\b/g, "would I"],
+  [/\byou would\b/g, "would you"],
+  [/\bI should\b/g, "should I"],
+  [/\byou should\b/g, "should you"],
+  [/\bI must\b/g, "must I"],
+  [/\byou must\b/g, "must you"],
+  [/\bdo not\b/g, "do not"],
+  [/\bI do not\b/g, "do not I"],
+  [/\byou do not\b/g, "do not you"],
+  [/\bdoes not\b/g, "does not"],
+  [/\bI do not know\b/g, "know, I do not"],
+  [/\byou do not know\b/g, "know, you do not"],
+  [/\bI do not have\b/g, "have, I do not"],
+  [/\byou do not have\b/g, "have, you do not"],
+  [/\bI think\b/g, "think, I do"],
+  [/\byou think\b/g, "think, you do"],
+  [/\bI feel\b/g, "feel, I do"],
+  [/\byou feel\b/g, "feel, you do"],
+  [/\bI know\b/g, "know, I do"],
+  [/\byou know\b/g, "know, you do"],
+  [/\bI see\b/g, "see, I do"],
+  [/\byou see\b/g, "see, you do"],
+  [/\bI want\b/g, "want, I do"],
+  [/\byou want\b/g, "want, you do"],
+  [/\bI need\b/g, "need, I do"],
+  [/\byou need\b/g, "need, you do"],
+  [/\bI believe\b/g, "believe, I do"],
+  [/\byou believe\b/g, "believe, you do"],
+  [/\bI hope\b/g, "hope, I do"],
+  [/\byou hope\b/g, "hope, you do"],
+  [/\bI like\b/g, "like, I do"],
+  [/\byou like\b/g, "like, you do"],
+  [/\bI love\b/g, "love, I do"],
+  [/\byou love\b/g, "love, you do"],
+  [/\bI hate\b/g, "hate, I do"],
+  [/\byou hate\b/g, "hate, you do"],
+  [/\bI am not\b/g, "not, I am"],
+  [/\byou are not\b/g, "not, you are"],
+  [/\bhe is not\b/g, "not, he is"],
+  [/\bshe is not\b/g, "not, she is"],
+  [/\bit is not\b/g, "not, it is"],
+  [/\bwe are not\b/g, "not, we are"],
+  [/\bthey are not\b/g, "not, they are"],
+  [/\bI will not\b/g, "not, I will"],
+  [/\byou will not\b/g, "not, you will"],
+  [/\bI cannot\b/g, "cannot I"],
+  [/\byou cannot\b/g, "cannot you"],
+  [/\bI have been\b/g, "been, I have"],
+  [/\byou have been\b/g, "been, you have"],
+  [/\bI had been\b/g, "been, I had"],
+  [/\byou had been\b/g, "been, you had"],
+  [/\bI will be\b/g, "be, I will"],
+  [/\byou will be\b/g, "be, you will"],
+  [/\bI would be\b/g, "be, I would"],
+  [/\byou would be\b/g, "be, you would"],
+  [/\bI should be\b/g, "be, I should"],
+  [/\byou should be\b/g, "be, you should"],
+  [/\bI can be\b/g, "be, I can"],
+  [/\byou can be\b/g, "be, you can"],
+  [/\bI must be\b/g, "be, I must"],
+  [/\byou must be\b/g, "be, you must"],
+  [/\bI might be\b/g, "be, I might"],
+  [/\byou might be\b/g, "be, you might"],
+  [/\bI could be\b/g, "be, I could"],
+  [/\byou could be\b/g, "be, you could"],
+  [/\bgoing to\b/g, "about to"],
+  [/\bI am going to\b/g, "going, I am to"],
+  [/\byou are going to\b/g, "going, you are to"]
 ];
 
 // ============================================================
 // ALLITERATIVE PHRASES (random insertion)
 // ============================================================
 const alliterations = [
-  "with might and main",
-  "with fire and fury",
-  "through storm and strife",
-  "by day and by dark",
-  "with heart and hand",
-  "by word and by will",
-  "through pain and peril",
-  "in thought and in truth",
-  "with grace and with grandeur",
-  "by force and by fair means",
-  "through trial and through torment",
-  "with song and with sorrow",
-  "by blood and by bond",
-  "in peace and in plenty",
-  "with pride and with purpose",
+  "with force and fury",
+  "through peace and power",
+  "by day and by destiny",
+  "with might and with mastery",
+  "through trial and through truth",
+  "by will and by wisdom",
+  "with hope and with honour",
+  "through storm and through strength",
+  "by bond and by bravery",
+  "in thought and in trust",
+  "with grace and with greatness",
+  "by faith and by force",
+  "through calm and through courage",
+  "with heart and with haste",
+  "by word and by willpower",
+  "in peace and in power",
+  "with soul and with strength",
+  "by force and by faith",
+  "through trust and through truth",
+  "by light and by love"
 ];
 
 // ============================================================
 // NEGATIVES
 // ============================================================
 const negatives = {
-  "do not":"doth not","does not":"doth not","doesn't":"doth not",
-  "don't":"doth not","did not":"did not",
-  "can't":"canst not","will not":"shall not","won't":"shall not",
-  "would not":"wouldst not","wouldn't":"wouldst not",
-  "should not":"shouldst not","shouldn't":"shouldst not",
-  "is not":"'tis not","isn't":"'tis not",
-  "are not":"art not","aren't":"art not",
-  "was not":"wast not","were not":"wert not",
-  "has not":"hath not","hasn't":"hath not",
-  "have not":"have not","haven't":"have not",
-  "had not":"hadst not","hadn't":"hadst not",
-  "must not":"must not","mustn't":"must not",
-  "need not":"need not","needn't":"need not",
-  "could not":"could not","couldn't":"could not",
-  "might not":"might not","mightn't":"might not",
-  "let's":"let us",
+  "do not":"do not", "does not":"does not", "doesn't":"does not",
+  "don't":"do not", "did not":"did not",
+  "can't":"cannot", "will not":"will not", "won't":"will not",
+  "would not":"would not", "wouldn't":"would not",
+  "should not":"should not", "shouldn't":"should not",
+  "is not":"is not", "isn't":"is not",
+  "are not":"are not", "aren't":"are not",
+  "was not":"was not", "were not":"were not",
+  "has not":"has not", "hasn't":"has not",
+  "have not":"have not", "haven't":"have not",
+  "had not":"had not", "hadn't":"had not",
+  "must not":"must not", "mustn't":"must not",
+  "need not":"need not", "needn't":"need not",
+  "could not":"could not", "couldn't":"could not",
+  "might not":"might not", "mightn't":"might not",
+  "let's":"let us"
 };
 
 // ============================================================
 // PRONOUNS
 // ============================================================
 const pronouns = [
-  [/\byou\b/gi,"thou"], [/\byour\b/gi,"thy"], [/\byours\b/gi,"thine"],
-  [/\byourself\b/gi,"thyself"], [/\byourselves\b/gi,"yourselves"],
 ];
 
 // ============================================================
 // VERB FORMS
 // ============================================================
 const verbForms = [
-  [/\bare\b/gi,"art"], [/\bit is\b/gi,"'tis"], [/\bit's\b/gi,"'tis"], [/\bis\b/gi,"'tis"],
-  [/\bwas\b/gi,"wast"], [/\bwere\b/gi,"wert"],
-  [/\bhas\b/gi,"hath"], [/\bhave\b/gi,"hath"], [/\bhad\b/gi,"hadst"],
-  [/\bdoes\b/gi,"doth"], [/\bdid\b/gi,"did"],
-  [/\bcan\b/gi,"canst"], [/\bcannot\b/gi,"cannot"],
-  [/\bwill\b/gi,"shall"], [/\bwould\b/gi,"wouldst"],
-  [/\bshould\b/gi,"shouldst"], [/\bmust\b/gi,"must"],
 ];
 
 // ============================================================
 // COMMON WORDS
 // ============================================================
 const commonWords = [
-  [/\bmaybe\b/gi,"perchance"],[/\bperhaps\b/gi,"perchance"],
-  [/\bbefore\b/gi,"ere"],[/\bbetween\b/gi,"'twixt"],
-  [/\bwhere\b/gi,"whence"],[/\bwhy\b/gi,"wherefore"],[/\bbecause\b/gi,"for"],
-  [/\bwhile\b/gi,"whilst"],[/\buntil\b/gi,"till"],
-  [/\bhowever\b/gi,"howbeit"],[/\balso\b/gi,"likewise"],
-  [/\btoo\b/gi,"as well"],[/\bvery\b/gi,"most"],[/\breally\b/gi,"verily"],
-  [/\bactually\b/gi,"in sooth"],[/\bbasically\b/gi,"in essence"],
-  [/\bjust\b/gi,"merely"],[/\balmost\b/gi,"nigh"],
-  [/\benough\b/gi,"sufficient"],[/\babout\b/gi,"concerning"],
-  [/\bthrough\b/gi,"throughout"],[/\binto\b/gi,"unto"],[/\bonto\b/gi,"upon"],
-  [/\bbelow\b/gi,"beneath"],[/\bnear\b/gi,"nigh unto"],
-  [/\boutside\b/gi,"without"],[/\binside\b/gi,"within"],
-  [/\bmany\b/gi,"many a"],[/\bnothing\b/gi,"naught"],
-  [/\beverything\b/gi,"all that exists"],
-  [/\bsomeone\b/gi,"some soul"],[/\banyone\b/gi,"any soul"],
-  [/\beveryone\b/gi,"all souls"],[/\bnobody\b/gi,"no soul"],
-  [/\bnow\b/gi,"at this moment"],[/\bthen\b/gi,"at that time"],
-  [/\bagain\b/gi,"once more"],[/\balready\b/gi,"ere now"],
-  [/\bsoon\b/gi,"anon"],[/\blater\b/gi,"anon"],
-  [/\btonight\b/gi,"this eve"],[/\btoday\b/gi,"this day"],
-  [/\btomorrow\b/gi,"the morrow"],[/\byesterday\b/gi,"yestereve"],
-  [/\bright now\b/gi,"at this very hour"],
-  [/\blong ago\b/gi,"in ages past"],[/\bnever\b/gi,"ne'er"],
-  [/\balways\b/gi,"evermore"],[/\bforever\b/gi,"for all eternity"],
-  [/\bprobably\b/gi,"in all likelihood"],
-  [/\bcertainly\b/gi,"without question"],
-  [/\bdefinitely\b/gi,"without doubt"],
-  [/\babsolutely\b/gi,"most assuredly"],
-  [/\bthankfully\b/gi,"by good fortune"],
-  [/\bunfortunately\b/gi,"alas"],
-  [/\bhonestly\b/gi,"in sooth"],[/\bfrankly\b/gi,"to speak plainly"],
-  [/\bseriously\b/gi,"in earnest"],
-  [/\bkind of\b/gi,"in a manner"],[/\bsort of\b/gi,"after a fashion"],
-  [/\bof course\b/gi,"naturally"],
-  [/\bby the way\b/gi,"it hath come to pass"],
-  [/\bin fact\b/gi,"in truth"],
-  [/\bat least\b/gi,"at the very least"],
-  [/\binstead of\b/gi,"in lieu of"],
-  [/\bbecause of\b/gi,"by reason of"],
-  [/\bin spite of\b/gi,"notwithstanding"],
-  [/\baccording to\b/gi,"as saith"],
-  [/\bin addition\b/gi,"moreover"],
-  [/\bas well as\b/gi,"as well as"],
-  [/\brather\b/gi,"in good sooth"],
-  [/\bquite\b/gi,"passing"],
-  [/\bpretty\b/gi,"most"],
-  [/\bentirely\b/gi,"wholly"],
-  [/\bcompletely\b/gi,"utterly"],
-  [/\babsolutely\b/gi,"most assuredly"],
-  [/\bterribly\b/gi,"most grievously"],
-  [/\bwonderfully\b/gi,"most wondrously"],
-  [/\bincredibly\b/gi,"past all belief"],
-  [/\bsuddenly\b/gi,"on a sudden"],
-  [/\bimmediately\b/gi,"forthwith"],
-  [/\beventually\b/gi,"in the fullness of time"],
+  [/maybe\b/gi,"perhaps"],
+  [/too\b/gi,"as well"],[/really\b/gi,"truly"],
+  [/actually\b/gi,"in truth"],[/basically\b/gi,"in essence"],
+  [/nobody\b/gi,"no one"],
+  [/honestly\b/gi,"truly"],[/frankly\b/gi,"to speak plainly"],
+  [/kind of\b/gi,"sort of"],[/sort of\b/gi,"sort of"],
+  [/in fact\b/gi,"in truth"],
+  [/in spite of\b/gi,"despite"],
+  [/in addition\b/gi,"moreover"],
+  [/quite\b/gi,"passing"],[/pretty\b/gi,"most"],
+  [/wonderfully\b/gi,"very wonderful"]
 ];
 
 // ============================================================
@@ -885,79 +978,48 @@ const commonWords = [
 // ============================================================
 const verbs = [
   // movement
-  [/\bgo\b/gi,"hie"],[/\bgoing\b/gi,"hieing"],[/\bgoes\b/gi,"hieth"],
-  [/\bcome\b/gi,"cometh"],[/\bcoming\b/gi,"coming"],
-  [/\brun\b/gi,"make haste"],[/\brunning\b/gi,"making haste"],[/\bruns\b/gi,"maketh haste"],[/\bran\b/gi,"made haste"],
-  [/\bwalk\b/gi,"trudge"],[/\bwalking\b/gi,"trudging"],[/\bwalked\b/gi,"trudged"],
-  [/\bfly\b/gi,"soar"],[/\bflew\b/gi,"soared"],[/\bflying\b/gi,"soaring"],
   [/\bjump\b/gi,"leap"],[/\bjumped\b/gi,"leapt"],
-  [/\bclimb\b/gi,"ascend"],[/\bclimbed\b/gi,"ascended"],
-  [/\bfall\b/gi,"descend"],[/\bfell\b/gi,"descended"],
-  [/\bmove\b/gi,"traverse"],[/\bmoved\b/gi,"traversed"],
-  [/\btravel\b/gi,"journey"],[/\btraveled\b/gi,"journeyed"],
-  [/\bdrive\b/gi,"steer"],[/\brode\b/gi,"rode upon"],
-  [/\bswim\b/gi,"navigate the waters"],
   // communication
   [/\btalk\b/gi,"speak"],[/\btalking\b/gi,"speaking"],
-  [/\bchatter\b/gi,"babble"],[/\bmumble\b/gi,"utter softly"],
-  [/\bshout\b/gi,"proclaim loudly"],[/\bscream\b/gi,"cry out"],
-  [/\bwhisper\b/gi,"murmur softly"],
+  [/\bchatter\b/gi,"babble"],[/\bmumble\b/gi,"mutter"],
+  [/\bshout\b/gi,"proclaim"],[/\bscream\b/gi,"cry out"],
+  [/\bwhisper\b/gi,"murmur"],
   [/\blooking at\b/gi,"gazing upon"],
   [/\blook\b/gi,"behold"],[/\blooks\b/gi,"beholdeth"],[/\blooked\b/gi,"beheld"],
-  [/\bsee\b/gi,"behold"],[/\bseen\b/gi,"beheld"],
   [/\bwatch\b/gi,"observe"],[/\bwatching\b/gi,"observing"],[/\bwatched\b/gi,"observed"],
-  [/\bstare\b/gi,"gaze intently"],[/\bstared\b/gi,"gazed intently"],
+  [/\bstare\b/gi,"gaze"],[/\bstared\b/gi,"gazed"],
   [/\bnotice\b/gi,"perceive"],[/\bnoticed\b/gi,"perceived"],
-  // thought / feeling
-  [/\bthink\b/gi,"reckon"],[/\bthinking\b/gi,"reckoning"],[/\bthinks\b/gi,"reckoneth"],[/\bthought\b/gi,"reckoned"],
-  [/\bknow\b/gi,"know full well"],[/\bknows\b/gi,"knoweth full well"],[/\bknew\b/gi,"knew full well"],
+  // thought / feeling[/\bknows\b/gi,"knoweth"],
   [/\bunderstand\b/gi,"comprehend"],[/\bunderstood\b/gi,"comprehended"],
   [/\brealize\b/gi,"perceive"],[/\brealized\b/gi,"perceived"],
-  [/\bbelieve\b/gi,"hold faith"],[/\bbelieved\b/gi,"held faith"],
   [/\bremember\b/gi,"recollect"],[/\bremembered\b/gi,"recollected"],
-  [/\bforget\b/gi,"let slip from memory"],[/\bforgot\b/gi,"let slip from memory"],
   [/\bimagine\b/gi,"conceive"],[/\bimagined\b/gi,"conceived"],
-  [/\bwish\b/gi,"long for"],[/\bwished\b/gi,"longed for"],
-  [/\bhope\b/gi,"pray"],[/\bhoped\b/gi,"prayed"],
-  [/\bfeel\b/gi,"doth feel"],[/\bfeels\b/gi,"feeleth"],[/\bfelt\b/gi,"felt most deeply"],
+  [/\bfeel\b/gi,"sense"],[/\bfeels\b/gi,"senses"],
   // emotion verbs
-  [/\blove\b/gi,"adore"],[/\bloves\b/gi,"adoreth"],[/\bloved\b/gi,"adored"],
-  [/\bhate\b/gi,"despise"],[/\bhates\b/gi,"despiseth"],[/\bhated\b/gi,"despised"],
   [/\benjoy\b/gi,"relish"],[/\benjoyed\b/gi,"relished"],
   [/\bmiss\b/gi,"pine for"],[/\bmissed\b/gi,"pined for"],
-  [/\bcare\b/gi,"hold dear"],[/\bcared\b/gi,"held dear"],
   [/\bworry\b/gi,"fret"],[/\bworried\b/gi,"fretted"],
   [/\bfear\b/gi,"dread"],[/\bfeared\b/gi,"dreaded"],
   [/\bsurprise\b/gi,"astonish"],[/\bsurprised\b/gi,"astonished"],
   [/\bconfuse\b/gi,"confound"],[/\bconfused\b/gi,"confounded"],
   [/\bannoy\b/gi,"vex"],[/\bannoyed\b/gi,"vexed"],
   [/\bdisappoint\b/gi,"dishearten"],[/\bdisappointed\b/gi,"disheartened"],
-  [/\btrust\b/gi,"place faith in"],[/\btrusted\b/gi,"placed faith in"],
   [/\brespect\b/gi,"honour"],[/\brespected\b/gi,"honoured"],
   [/\badmire\b/gi,"esteem"],[/\badmired\b/gi,"esteemed"],
   [/\bregret\b/gi,"lament"],[/\bregretted\b/gi,"lamented"],
   [/\bsucceed\b/gi,"prevail"],[/\bsucceeded\b/gi,"prevailed"],
-  [/\bfail\b/gi,"come to nought"],[/\bfailed\b/gi,"came to nought"],
   // action verbs
-  [/\bsay\b/gi,"proclaim"],[/\bsaid\b/gi,"proclaimed"],[/\bsays\b/gi,"proclaimeth"],
-  [/\btell\b/gi,"relate"],[/\btold\b/gi,"related"],[/\btells\b/gi,"relateth"],
-  [/\bask\b/gi,"beseech"],[/\basked\b/gi,"beseeched"],[/\basks\b/gi,"beseecheth"],
   [/\banswer\b/gi,"reply"],[/\banswered\b/gi,"replied"],
-  [/\bexplain\b/gi,"elucidate"],[/\bexplained\b/gi,"elucidated"],
   [/\bcomplain\b/gi,"lament"],[/\bcomplained\b/gi,"lamented"],
   [/\bagree\b/gi,"concur"],[/\bagreed\b/gi,"concurred"],
   [/\brefuse\b/gi,"decline"],[/\brefused\b/gi,"declined"],
   [/\baccept\b/gi,"embrace"],[/\baccepted\b/gi,"embraced"],
-  [/\bchoose\b/gi,"select"],[/\bchose\b/gi,"selected"],
-  [/\bdecide\b/gi,"resolve"],[/\bdecided\b/gi,"resolved"],
   [/\bconsider\b/gi,"contemplate"],[/\bconsidered\b/gi,"contemplated"],
   [/\bsuggest\b/gi,"propose"],[/\bsuggested\b/gi,"proposed"],
   [/\badvise\b/gi,"counsel"],[/\badvised\b/gi,"counselled"],
   [/\bpromise\b/gi,"vow"],[/\bpromised\b/gi,"vowed"],
-  [/\bfight\b/gi,"do battle"],[/\bfought\b/gi,"did battle"],
   [/\bdefend\b/gi,"protect"],[/\bdefended\b/gi,"protected"],
   [/\battack\b/gi,"assail"],[/\battacked\b/gi,"assailed"],
-  [/\bdestroy\b/gi,"ruin"],[/\bdestroyed\b/gi,"ruined"],
   [/\bcreate\b/gi,"fashion"],[/\bcreated\b/gi,"fashioned"],
   [/\bbuild\b/gi,"erect"],[/\bbuilt\b/gi,"erected"],
   [/\bfix\b/gi,"mend"],[/\bfixed\b/gi,"mended"],
@@ -971,10 +1033,8 @@ const verbs = [
   [/\bfollow\b/gi,"trail"],[/\bfollowed\b/gi,"trailed"],
   [/\blead\b/gi,"guide"],[/\bled\b/gi,"guided"],
   [/\bteach\b/gi,"instruct"],[/\btaught\b/gi,"instructed"],
-  [/\blearn\b/gi,"absorb"],[/\blearned\b/gi,"absorbed"],
   [/\bwin\b/gi,"triumph"],[/\bwon\b/gi,"triumphed"],
   [/\blose\b/gi,"be vanquished"],[/\blost\b/gi,"was vanquished"],
-  [/\btry\b/gi,"endeavour"],[/\btrying\b/gi,"endeavouring"],[/\btried\b/gi,"endeavoured"],
   [/\bstop\b/gi,"cease"],[/\bstopped\b/gi,"ceased"],
   [/\bcontinue\b/gi,"persist"],[/\bcontinued\b/gi,"persisted"],
   [/\bstart\b/gi,"commence"],[/\bstarted\b/gi,"commenced"],
@@ -997,11 +1057,9 @@ const verbs = [
   [/\bwait\b/gi,"tarry"],[/\bwaited\b/gi,"tarried"],[/\bwaiting\b/gi,"tarrying"],
   [/\bstay\b/gi,"remain"],[/\bstayed\b/gi,"remained"],
   [/\bleave\b/gi,"depart"],[/\bleft\b/gi,"departed"],
-  [/\breturn\b/gi,"come again"],[/\breturned\b/gi,"came again"],
   [/\bhide\b/gi,"conceal"],[/\bhid\b/gi,"concealed"],[/\bhidden\b/gi,"concealed"],
   [/\breveal\b/gi,"unveil"],[/\brevealed\b/gi,"unveiled"],
   [/\bdiscover\b/gi,"uncover"],[/\bdiscovered\b/gi,"uncovered"],
-  [/\bfind\b/gi,"come upon"],[/\bfound\b/gi,"came upon"],
   [/\bsearch\b/gi,"seek"],[/\bsearched\b/gi,"sought"],
   [/\bgather\b/gi,"assemble"],[/\bgathered\b/gi,"assembled"],
   [/\bclean\b/gi,"purify"],[/\bcleaned\b/gi,"purified"],
@@ -1030,9 +1088,9 @@ const verbs = [
   [/\blift\b/gi,"elevate"],[/\blifted\b/gi,"elevated"],
   [/\bthrow\b/gi,"hurl"],[/\bthrew\b/gi,"hurled"],
   [/\bhit\b/gi,"smite"],[/\bhurt\b/gi,"wound"],
-  [/\bkill\b/gi,"slay"],[/\bkilled\b/gi,"slain"],
+  [/\bkill\b/gi,"defeat"],[/\bkilled\b/gi,"defeated"],
   [/\bdie\b/gi,"perish"],[/\bdies\b/gi,"perisheth"],[/\bdied\b/gi,"perished"],
-  [/\bdead\b/gi,"departed from this mortal coil"],
+  [/\bdead\b/gi,"at one with the Force"],
   [/\blive\b/gi,"dwell"],[/\blived\b/gi,"dwelt"],[/\bliving\b/gi,"dwelling"],
   [/\bseem\b/gi,"appear"],[/\bseemed\b/gi,"appeared"],
   [/\bbecome\b/gi,"grow"],[/\bbecame\b/gi,"grew"],
@@ -1041,241 +1099,118 @@ const verbs = [
   [/\bwant\b/gi,"desire"],[/\bwants\b/gi,"desireth"],[/\bwanted\b/gi,"desired"],
   [/\blike\b/gi,"find pleasing"],[/\blikes\b/gi,"findeth pleasing"],[/\bliked\b/gi,"found pleasing"],
   [/\bdislike\b/gi,"disapprove of"],
-  [/\bmiss\b/gi,"pine for"],[/\bmissed\b/gi,"pined for"],
-];
+  // Force-specific verbs
+  [/\bmediate\b/gi,"meditate"],[/\bmediated\b/gi,"meditated"],[/\bmediating\b/gi,"meditating"],];
 
 // ============================================================
 // ADJECTIVES
 // ============================================================
 const adjectives = [
-  [/\bhappy\b/gi,"merry"],[/\bhappier\b/gi,"more merry"],[/\bhappiest\b/gi,"most merry"],[/\bhappiness\b/gi,"merriment"],
-  [/\bglad\b/gi,"filled with mirth"],[/\bjoyful\b/gi,"jubilant"],[/\bcheerful\b/gi,"of good cheer"],
-  [/\bsad\b/gi,"woeful"],[/\bsadder\b/gi,"more woeful"],[/\bsaddest\b/gi,"most woeful"],[/\bsadness\b/gi,"woefulness"],
-  [/\bunhappy\b/gi,"woeful"],[/\bdepressed\b/gi,"melancholy of spirit"],
-  [/\bdejected\b/gi,"low in spirits"],[/\bheartbroken\b/gi,"stricken with grief"],
-  [/\bangry\b/gi,"wrathful"],[/\bmad\b/gi,"wrathful"],[/\bfurious\b/gi,"possessed of great fury"],
-  [/\bafraid\b/gi,"afeared"],[/\bscared\b/gi,"afeared"],[/\bfrightened\b/gi,"stricken with dread"],
-  [/\bterrified\b/gi,"paralysed with dread"],[/\banxious\b/gi,"filled with trepidation"],
-  [/\bnervous\b/gi,"of trembling disposition"],[/\bworried\b/gi,"troubled in mind"],
-  [/\bbored\b/gi,"weary"],[/\btired\b/gi,"weary"],[/\bexhausted\b/gi,"spent and weary"],
-  [/\bsleepy\b/gi,"heavy of eyelid"],
-  [/\bconfused\b/gi,"perplexed"],[/\bbewildered\b/gi,"utterly confounded"],
-  [/\bsurprised\b/gi,"taken aback"],[/\bshocked\b/gi,"thunderstruck"],
-  [/\bamazed\b/gi,"filled with wonder"],
-  [/\bjealous\b/gi,"consumed by envy"],[/\benvious\b/gi,"green with envy"],
-  [/\bproud\b/gi,"puffed with pride"],[/\bconceited\b/gi,"vain of countenance"],
-  [/\bshy\b/gi,"of modest bearing"],[/\bbashful\b/gi,"of coy disposition"],
-  [/\bbrave\b/gi,"valiant"],[/\bcourageous\b/gi,"of stout heart"],
-  [/\bfearless\b/gi,"dauntless"],[/\bcowardly\b/gi,"craven"],
-  [/\bweak\b/gi,"feeble"],[/\bstrong\b/gi,"mighty"],[/\bpowerful\b/gi,"potent"],
-  [/\bdrunk\b/gi,"besotted with wine"],[/\bintoxicated\b/gi,"in cups"],
-  [/\blazy\b/gi,"slothful"],[/\bbusy\b/gi,"much occupied"],
-  [/\bfree\b/gi,"unfettered"],[/\btrapped\b/gi,"ensnared"],
-  [/\bsick\b/gi,"afflicted"],[/\bill\b/gi,"infirm"],
-  [/\bwell\b/gi,"in good health"],[/\bhealthy\b/gi,"hale and hearty"],
-  [/\bbeautiful\b/gi,"fair"],[/\bgorgeous\b/gi,"most fair"],[/\bpretty\b/gi,"comely"],
-  [/\butgly\b/gi,"most foul of visage"],[/\bhideous\b/gi,"of monstrous aspect"],
-  [/\bthin\b/gi,"slender"],[/\bfat\b/gi,"of ample girth"],
-  [/\btall\b/gi,"of great height"],[/\bshort\b/gi,"of modest stature"],
-  [/\byoung\b/gi,"youthful"],[/\bold\b/gi,"ancient"],
-  [/\bnew\b/gi,"newly forged"],[/\bfresh\b/gi,"of recent making"],
-  [/\bfast\b/gi,"swift of foot"],[/\bslow\b/gi,"sluggardly"],
-  [/\bquick\b/gi,"fleet of foot"],[/\beasy\b/gi,"a trifle"],
-  [/\bhard\b/gi,"most grievous"],[/\bdifficult\b/gi,"most arduous"],
-  [/\bsimple\b/gi,"plain"],[/\bcomplex\b/gi,"most labyrinthine"],
-  [/\bgood\b/gi,"most righteous"],[/\bgreat\b/gi,"most excellent"],
-  [/\bbad\b/gi,"most foul"],[/\bterrible\b/gi,"most abominable"],
-  [/\bwonderful\b/gi,"most wondrous"],[/\bfantastic\b/gi,"most fantastical"],
-  [/\blarge\b/gi,"of great magnitude"],[/\bsmall\b/gi,"diminutive"],
-  [/\bbig\b/gi,"of great stature"],[/\btiny\b/gi,"most diminutive"],
-  [/\bhuge\b/gi,"of colossal stature"],[/\blittle\b/gi,"of small measure"],
-  [/\bstrange\b/gi,"most peculiar"],[/\bweird\b/gi,"most uncanny"],
-  [/\bclean\b/gi,"immaculate"],[/\bdirty\b/gi,"most fouled"],
-  [/\bwet\b/gi,"drenched"],[/\bdry\b/gi,"parched"],
-  [/\bcold\b/gi,"most frigid"],[/\bhot\b/gi,"most fervent"],
-  [/\bwarm\b/gi,"of gentle warmth"],[/\bsoft\b/gi,"gentle"],
-  [/\bloud\b/gi,"of great din"],[/\bquiet\b/gi,"of hushed tone"],
-  [/\bsweet\b/gi,"of honeyed tongue"],[/\bbitter\b/gi,"most acrid"],
-  [/\bdark\b/gi,"of deep shadow"],[/\bbright\b/gi,"radiant"],
-  [/\bheavy\b/gi,"of great weight"],[/\blight\b/gi,"luminous"],
-  [/\brich\b/gi,"prosperous"],[/\bpoor\b/gi,"destitute"],
-  [/\bwise\b/gi,"of great sagacity"],[/\bfoolish\b/gi,"most witless"],
-  [/\bsmart\b/gi,"of keen intellect"],[/\bstupid\b/gi,"most witless"],
-  [/\bkind\b/gi,"benevolent"],[/\bmean\b/gi,"most contemptible"],
-  [/\bnice\b/gi,"most agreeable"],[/\brude\b/gi,"most discourteous"],
-  [/\bhonest\b/gi,"most honourable"],[/\bloyal\b/gi,"most steadfast"],
-  [/\bfaithful\b/gi,"most devoted"],
 ];
 
 // ============================================================
 // NOUNS
 // ============================================================
 const nouns = [
-  [/\bman\b/gi,"gentleman"],[/\bmen\b/gi,"gentlemen"],
-  [/\bwoman\b/gi,"fair lady"],[/\bwomen\b/gi,"fair ladies"],
-  [/\bgirl\b/gi,"maiden"],[/\bboy\b/gi,"lad"],
-  [/\bchild\b/gi,"young one"],[/\bchildren\b/gi,"young ones"],
-  [/\bbaby\b/gi,"babe"],[/\bpeople\b/gi,"souls"],
-  [/\bperson\b/gi,"soul"],[/\bguy\b/gi,"fellow"],[/\bdude\b/gi,"knave"],
-  [/\bmate\b/gi,"companion"],[/\benemy\b/gi,"adversary"],[/\bfoe\b/gi,"mortal foe"],
-  [/\bhero\b/gi,"champion"],[/\bvillain\b/gi,"scoundrel"],
-  [/\bking\b/gi,"sovereign"],[/\bqueen\b/gi,"fair queen"],
-  [/\bprince\b/gi,"noble prince"],[/\bprincess\b/gi,"fair princess"],
-  [/\bsoldier\b/gi,"warrior"],[/\bsoldiers\b/gi,"warriors"],
-  [/\barmy\b/gi,"host"],[/\bwar\b/gi,"conflict"],[/\bpeace\b/gi,"tranquility"],
-  [/\bsword\b/gi,"blade"],[/\bshield\b/gi,"buckler"],
-  [/\bfriend\b/gi,"good fellow"],[/\bfriends\b/gi,"good fellows"],
-  [/\bteacher\b/gi,"master of learning"],
-  [/\bstudent\b/gi,"young scholar"],[/\bdoctor\b/gi,"physician"],
-  [/\bfather\b/gi,"sire"],[/\bmother\b/gi,"dam"],
-  [/\bson\b/gi,"kinsman"],[/\bdaughter\b/gi,"kinswoman"],
-  [/\bfamily\b/gi,"kin"],[/\bhouse\b/gi,"dwelling"],[/\bhome\b/gi,"hearth"],
-  [/\bcastle\b/gi,"noble keep"],[/\bdoor\b/gi,"gate"],[/\broom\b/gi,"chamber"],
-  [/\bgarden\b/gi,"pleasaunce"],[/\bcity\b/gi,"great city"],
-  [/\bvillage\b/gi,"hamlet"],[/\bcountry\b/gi,"realm"],
-  [/\bworld\b/gi,"realm"],[/\bearth\b/gi,"fair earth"],
-  [/\bmoney\b/gi,"coin"],[/\bcar\b/gi,"steed of iron"],
-  [/\bphone\b/gi,"enchanted mirror"],[/\bcomputer\b/gi,"thinking machine"],
-  [/\binternet\b/gi,"ethereal web"],[/\bbook\b/gi,"tome"],
-  [/\bmusic\b/gi,"melodious strain"],[/\bsong\b/gi,"ditty"],
-  [/\bdance\b/gi,"revel"],[/\bparty\b/gi,"revelry"],
-  [/\bwedding\b/gi,"nuptials"],[/\bfuneral\b/gi,"obsequies"],
-  [/\bfood\b/gi,"sustenance"],[/\bmeal\b/gi,"repast"],
-  [/\bbread\b/gi,"daily bread"],[/\bwine\b/gi,"sacred wine"],
-  [/\bbeer\b/gi,"ale"],[/\bcoffee\b/gi,"black elixir"],
-  [/\btable\b/gi,"board"],[/\bchair\b/gi,"seat of repose"],
-  [/\bbed\b/gi,"resting couch"],[/\blamp\b/gi,"lantern"],
-  [/\bcandle\b/gi,"taper"],[/\bmirror\b/gi,"looking glass"],
-  [/\bclothes\b/gi,"garments"],[/\bhat\b/gi,"chapeau"],
-  [/\bshoes\b/gi,"sandals"],[/\bdress\b/gi,"gown"],
-  [/\bship\b/gi,"vessel"],[/\bplane\b/gi,"sky chariot"],
-  [/\bstar\b/gi,"celestial orb"],[/\bstars\b/gi,"celestial orbs"],
-  [/\bsun\b/gi,"golden sun"],[/\bmoon\b/gi,"fair moon"],
-  [/\bsky\b/gi,"the firmament"],[/\bcloud\b/gi,"vapour"],
-  [/\brain\b/gi,"tempest's tears"],[/\bsnow\b/gi,"winter's white cloak"],
-  [/\bwind\b/gi,"zephyr"],[/\bstorm\b/gi,"tempest"],
-  [/\bfire\b/gi,"blazing flame"],[/\bflame\b/gi,"tongue of fire"],
-  [/\bmountain\b/gi,"towering peak"],[/\bvalley\b/gi,"verdant dale"],
-  [/\bforest\b/gi,"sylvan grove"],[/\btree\b/gi,"noble oak"],
-  [/\bflower\b/gi,"gentle bloom"],[/\brose\b/gi,"fair rose"],
-  [/\briver\b/gi,"winding stream"],[/\bsea\b/gi,"the briny deep"],
-  [/\blake\b/gi,"still waters"],[/\bisland\b/gi,"isle"],
-  [/\bgrass\b/gi,"verdant carpet"],[/\brock\b/gi,"stone"],
-  [/\bsound\b/gi,"sound"],[/\bnoise\b/gi,"clamour"],
-  [/\bsilence\b/gi,"stillness"],[/\bvoice\b/gi,"voice"],
-  [/\bword\b/gi,"utterance"],[/\bstory\b/gi,"tale"],
-  [/\btruth\b/gi,"verity"],[/\blie\b/gi,"falsehood"],
-  [/\bsecret\b/gi,"mystery"],[/\bquestion\b/gi,"inquiry"],
-  [/\banswer\b/gi,"reply"],[/\bproblem\b/gi,"conundrum"],
-  [/\bidea\b/gi,"notion"],[/\bthought\b/gi,"notion"],
-  [/\bplan\b/gi,"stratagem"],[/\bgoal\b/gi,"objective"],
-  [/\bdream\b/gi,"vision"],[/\bnightmare\b/gi,"spectre"],
-  [/\bfuture\b/gi,"what is to come"],[/\bpast\b/gi,"bygone days"],
-  [/\btime\b/gi,"the passing hour"],[/\bhistory\b/gi,"chronicle"],
-  [/\bfate\b/gi,"destiny"],[/\bluck\b/gi,"fortune"],
-  [/\bfreedom\b/gi,"liberty"],[/\blaw\b/gi,"decree"],
-  [/\bjustice\b/gi,"equity"],[/\bpower\b/gi,"might"],
-  [/\bstrength\b/gi,"vigour"],[/\bcourage\b/gi,"valour"],
-  [/\banger\b/gi,"wrath"],[/\bpatience\b/gi,"fortitude"],
-  [/\bkindness\b/gi,"benevolence"],[/\bmercy\b/gi,"clemency"],
-  [/\blove\b/gi,"devotion"],[/\bpassion\b/gi,"ardour"],
-  [/\bmarriage\b/gi,"holy matrimony"],
-  [/\blife\b/gi,"existence"],[/\bdeath\b/gi,"demise"],
-  [/\bhealth\b/gi,"well-being"],[/\billness\b/gi,"malady"],
-  [/\bpain\b/gi,"anguish"],[/\bjoy\b/gi,"bliss"],
-  [/\bsorrow\b/gi,"grief"],[/\bdespair\b/gi,"abject misery"],
-  [/\bhope\b/gi,"expectation"],[/\bfaith\b/gi,"belief"],
-  [/\bknowledge\b/gi,"wisdom"],[/\bscience\b/gi,"natural philosophy"],
-  [/\bart\b/gi,"fine art"],[/\bpoetry\b/gi,"verse"],
-  [/\bsoul\b/gi,"spirit"],[/\bmind\b/gi,"reason"],
-  [/\bheart\b/gi,"heart"],[/\bbody\b/gi,"frame"],
-  [/\bblood\b/gi,"crimson tide"],[/\bhead\b/gi,"pate"],
-  [/\bface\b/gi,"countenance"],[/\bhair\b/gi,"locks"],
-  [/\btears\b/gi,"briny tears"],[/\bsmile\b/gi,"grin"],
-  [/\blaugh\b/gi,"guffaw"],[/\bkiss\b/gi,"smooch"],
-  [/\bembrace\b/gi,"hold"],
+  [/child\b/gi,"young one"],[/children\b/gi,"young ones"],
+  [/baby\b/gi,"babe"],
+  [/mate\b/gi,"companion"],
+  [/sword\b/gi,"blade"],[/book\b/gi,"tome"]
 ];
 
 // ============================================================
 // CONTRACTIONS
 // ============================================================
 const contractions = [
-  [/\bi'm\b/gi,"I am"],[/\byou're\b/gi,"thou art"],
+  [/\bi'm\b/gi,"I am"],[/\byou're\b/gi,"you are"],
   [/\bhe's\b/gi,"he is"],[/\bshe's\b/gi,"she is"],
-  [/\bit's\b/gi,"'tis"],[/\bwe're\b/gi,"we are"],[/\bthey're\b/gi,"they are"],
-  [/\bi've\b/gi,"I have"],[/\byou've\b/gi,"thou hast"],
+  [/\bit's\b/gi,"it is"],[/\bwe're\b/gi,"we are"],[/\bthey're\b/gi,"they are"],
+  [/\bi've\b/gi,"I have"],[/\byou've\b/gi,"you have"],
   [/\bwe've\b/gi,"we have"],[/\bthey've\b/gi,"they have"],
-  [/\bi'll\b/gi,"I shall"],[/\byou'll\b/gi,"thou shalt"],
-  [/\bhe'll\b/gi,"he shall"],[/\bshe'll\b/gi,"she shall"],
-  [/\bit'll\b/gi,"'twill"],[/\bwe'll\b/gi,"we shall"],[/\bthey'll\b/gi,"they shall"],
-  [/\bi'd\b/gi,"I would"],[/\byou'd\b/gi,"thou wouldst"],
+  [/\bi'll\b/gi,"I will"],[/\byou'll\b/gi,"you will"],
+  [/\bhe'll\b/gi,"he will"],[/\bshe'll\b/gi,"she will"],
+  [/\bit'll\b/gi,"it will"],[/\bwe'll\b/gi,"we will"],[/\bthey'll\b/gi,"they will"],
+  [/\bi'd\b/gi,"I would"],[/\byou'd\b/gi,"you would"],
   [/\bhe'd\b/gi,"he would"],[/\bshe'd\b/gi,"she would"],
   [/\bwe'd\b/gi,"we would"],[/\bthey'd\b/gi,"they would"],
   [/\bthat's\b/gi,"that is"],[/\bwho's\b/gi,"who is"],
   [/\bwhat's\b/gi,"what is"],[/\bhere's\b/gi,"here is"],[/\bthere's\b/gi,"there is"],
-  [/\bgonna\b/gi,"about to"],[/\bwanna\b/gi,"desire to"],
-  [/\bkinda\b/gi,"somewhat"],[/\bsorta\b/gi,"after a fashion"],
-  [/\btryna\b/gi,"endeavouring to"],
+  [/\bgonna\b/gi,"going to"],[/\bwanna\b/gi,"want to"],
+  [/\bkinda\b/gi,"sort of"],[/\bsorta\b/gi,"sort of"],
+  [/\btryna\b/gi,"trying to"]
 ];
 
 // ============================================================
 // SENTENCE TRANSFORMS
 // ============================================================
 const sentenceTransforms = [
-  [/\bi want to\b/gi,"mine heart doth long to"],
-  [/\bi'd like to\b/gi,"mine heart desireth to"],
-  [/\bi need to\b/gi,"'tis meet that I"],
-  [/\bi have to\b/gi,"I must needs"],
-  [/\bi've got to\b/gi,"I am compelled to"],
-  [/\bi'm going to\b/gi,"I shall"],
-  [/\bi will\b/gi,"I shall"],[/\bi can\b/gi,"I am able to"],
-  [/\bi can't\b/gi,"I am unable to"],[/\bi can not\b/gi,"I am unable to"],
-  [/\bi should\b/gi,"I ought to"],[/\bi shouldn't\b/gi,"I ought not to"],
-  [/\bi would\b/gi,"I would fain"],[/\bi wouldn't\b/gi,"I would not"],
-  [/\bi might\b/gi,"I might perchance"],[/\bi may\b/gi,"I mayhap"],
-  [/\bwhat do you think\b/gi,"what sayeth thou"],
-  [/\bwhat do you mean\b/gi,"what meaneth thou"],
-  [/\bdon't you\b/gi,"doth thou not"],
-  [/\bcan you\b/gi,"canst thou"],[/\bwill you\b/gi,"shalt thou"],
-  [/\bwould you\b/gi,"wouldst thou"],
-  [/\byou should\b/gi,"thou shouldst"],[/\byou shouldn't\b/gi,"thou shouldst not"],
-  [/\byou can\b/gi,"thou canst"],[/\byou can't\b/gi,"thou canst not"],
-  [/\byou will\b/gi,"thou shalt"],[/\byou won't\b/gi,"thou shalt not"],
-  [/\byou would\b/gi,"thou wouldst"],[/\byou wouldn't\b/gi,"thou wouldst not"],
-  [/\byou have\b/gi,"thou hast"],[/\byou haven't\b/gi,"thou hast not"],
-  [/\byou had\b/gi,"thou hadst"],[/\byou hadn't\b/gi,"thou hadst not"],
-  [/\byou do\b/gi,"thou dost"],[/\byou don't\b/gi,"thou dost not"],
-  [/\byou did\b/gi,"thou didst"],[/\byou didn't\b/gi,"thou didst not"],
-  [/\byou are\b/gi,"thou art"],[/\byou aren't\b/gi,"thou art not"],
-  [/\bhow are you\b/gi,"how dost thou fare"],
-  [/\bhow's it going\b/gi,"how fareth thy day"],
+  [/\bi want to\b/gi,"want to, I do"],
+  [/\bi'd like to\b/gi,"would like to, I"],
+  [/\bi need to\b/gi,"need to, I do"],
+  [/\bi have to\b/gi,"have to, I must"],
+  [/\bi've got to\b/gi,"got to, I have"],
+  [/\bi'm going to\b/gi,"going to, I am"],
+  [/\bi will\b/gi,"I will"],[/\bi can\b/gi,"I can"],
+  [/\bi can't\b/gi,"cannot, I"],
+  [/\bi can not\b/gi,"cannot, I"],
+  [/\bi should\b/gi,"should I"],
+  [/\bi shouldn't\b/gi,"should not, I"],
+  [/\bi would\b/gi,"would, I"],
+  [/\bi wouldn't\b/gi,"would not, I"],
+  [/\bi might\b/gi,"might, I"],
+  [/\bi may\b/gi,"may, I"],
+  [/\bwhat do you think\b/gi,"think, what do you"],
+  [/\bwhat do you mean\b/gi,"mean, what do you"],
+  [/\bdon't you\b/gi,"do not you"],
+  [/\bcan you\b/gi,"can you"],[/\bwill you\b/gi,"will you"],
+  [/\bwould you\b/gi,"would you"],
+  [/\byou should\b/gi,"should you"],
+  [/\byou shouldn't\b/gi,"should not you"],
+  [/\byou can\b/gi,"can you"],
+  [/\byou can't\b/gi,"cannot you"],
+  [/\byou will\b/gi,"will you"],
+  [/\byou won't\b/gi,"will not you"],
+  [/\byou would\b/gi,"would you"],
+  [/\byou wouldn't\b/gi,"would not you"],
+  [/\byou have\b/gi,"have you"],
+  [/\byou haven't\b/gi,"have not you"],
+  [/\byou had\b/gi,"had you"],
+  [/\byou hadn't\b/gi,"had not you"],
+  [/\byou do\b/gi,"do you"],
+  [/\byou don't\b/gi,"do not you"],
+  [/\byou did\b/gi,"did you"],
+  [/\byou didn't\b/gi,"did not you"],
+  [/\byou are\b/gi,"are you"],
+  [/\byou aren't\b/gi,"are not you"],
+  [/\bhow are you\b/gi,"how are you"],
+  [/\bhow's it going\b/gi,"how goes it"],
   [/\bwhat's up\b/gi,"what news"],
-  [/\bhow do you do\b/gi,"well met"],
-  [/\bnice to meet you\b/gi,"'tis a pleasure to make thy acquaintance"],
-  [/\bsee you later\b/gi,"fare thee well until we meet again"],
-  [/\bgood night\b/gi,"fare thee well this eventide"],
-  [/\bgood morning\b/gi,"a most fair morrow to thee"],
-  [/\bgood evening\b/gi,"a most pleasant eventide to thee"],
-  [/\bexcuse me\b/gi,"I pray thy pardon"],
+  [/\bhow do you do\b/gi,"how do you do"],
+  [/\bnice to meet you\b/gi,"pleased to meet you, I am"],
+  [/\bsee you later\b/gi,"see you, I will"],
+  [/\bgood night\b/gi,"good night, it is"],
+  [/\bgood morning\b/gi,"good morning, it is"],
+  [/\bgood evening\b/gi,"good evening, it is"],
+  [/\bexcuse me\b/gi,"pardon me"],
   [/\bmy name is\b/gi,"I am called"],
-  [/\bmy name's\b/gi,"mine name is"],
+  [/\bmy name's\b/gi,"I am"],
   [/\bi am\b/gi,"I am"],
   [/\bhe is\b/gi,"he is"],[/\bshe is\b/gi,"she is"],
-  [/\bit is\b/gi,"'tis"],[/\bwe are\b/gi,"we are"],
+  [/\bit is\b/gi,"it is"],[/\bwe are\b/gi,"we are"],
   [/\bthey are\b/gi,"they are"],
   [/\bthat is\b/gi,"that is"],[/\bthis is\b/gi,"this is"],
-  [/\bshut up\b/gi,"hold thy tongue"],
-  [/\bmy bad\b/gi,"'twas mine own folly"],
-  [/\bsorry\b/gi,"I beseech thy pardon"],
-  [/\bthank you\b/gi,"I thank thee, kind soul"],
-  [/\bthanks\b/gi,"many thanks"],
-  [/\byes\b/gi,"aye"],[/\bno\b/gi,"nay"],
+  [/\bshut up\b/gi,"be silent, you must"],
+  [/\bmy bad\b/gi,"my fault, it is"],
+  [/\bsorry\b/gi,"apologize, I do"],
+  [/\bthank you\b/gi,"grateful, I am"],
+  [/\bthanks\b/gi,"thanks"],
+  [/\byes\b/gi,"yes"],[/\bno\b/gi,"no"],
   [/\bok\b/gi,"very well"],[/\bokay\b/gi,"very well"],
-  [/\bsure\b/gi,"with pleasure"],[/\bnope\b/gi,"nay verily"],
-  [/\byeah\b/gi,"aye"],[/\byup\b/gi,"aye"],
-  [/\bplease\b/gi,"prithee"],
-  [/\bhello\b/gi,"hail"],[/\bhi\b/gi,"hail"],[/\bhey\b/gi,"hark"],
-  [/\bgoodbye\b/gi,"fare thee well"],[/\bbye\b/gi,"fare thee well"],
+  [/\bsure\b/gi,"of course"],[/\bnope\b/gi,"no"],
+  [/\byeah\b/gi,"yes"],[/\byup\b/gi,"yes"],
+  [/\bplease\b/gi,"please"],
+  [/\bhello\b/gi,"hello"],[/\bhi\b/gi,"hello"],[/\bhey\b/gi,"hey"],
+  [/\bgoodbye\b/gi,"goodbye"],[/\bbye\b/gi,"goodbye"]
 ];
 
 // ============================================================
@@ -1287,7 +1222,7 @@ function maybeAddAlliteration(text) {
   if (words.length < 4) return text;
   let idx = Math.floor(Math.random() * (words.length - 2));
   let phrase = pick(alliterations);
-  words.splice(idx + 1, 0, phrase);
+  words.splice(idx + 1, 0, "," + phrase + ",");
   return words.join(" ");
 }
 
@@ -1303,24 +1238,20 @@ function maybeAddMetaphor(text) {
 }
 
 // ============================================================
-// HELPER: insert a random Shakespeare quote
+// HELPER: insert a random Jedi saying
 // ============================================================
 function maybeInsertQuote(text) {
   if (!chance(0.04)) return text;
-  return text + " " + pick(quotes);
+  var q = ['Hmm...', 'Strong with the Force you are!', 'Yes, yes!', 'Patience!', 'Fear not!'];
+  return text + " " + q[Math.floor(Math.random() * q.length)];
 }
 
 // ============================================================
-// HELPER: insert an Elizabethan insult
+// HELPER: insert a Jedi rebuke
 // ============================================================
 function maybeInsertInsult(text) {
   if (!chance(0.05)) return text;
-  let insult = pick(insults);
-  let match = text.toLowerCase().match(/\bthou\b/);
-  if (match) {
-    let thouIdx = match.index;
-    return text.substring(0, thouIdx + 4) + ", " + insult + "," + text.substring(thouIdx + 4);
-  }
+  var insult = pick(insults);
   return text + ", " + insult + "!";
 }
 
@@ -1356,15 +1287,15 @@ function maybeInvert(text) {
 }
 
 // ============================================================
-// HELPER: add "methinks" or "forsooth" to some sentences
+// HELPER: add Yoda-style filler phrases to some sentences
 // ============================================================
 function maybeAddFiller(text) {
   if (!chance(0.15)) return text;
-  let fillers = ["methinks", "in good sooth", "verily", "forsooth", "by my troth", "in faith", "as I live"];
-  let words = text.split(/\s+/);
+  var fillers = ['hmm', 'yes yes', 'powerful', 'wise', 'strong'];
+  var words = text.split(/\s+/);
   if (words.length < 3) return text;
-  let idx = Math.floor(Math.random() * Math.min(3, words.length));
-  words.splice(idx + 1, 0, pick(fillers));
+  var idx = Math.floor(Math.random() * Math.min(3, words.length));
+  words.splice(idx + 1, 0, fillers[Math.floor(Math.random() * fillers.length)]);
   return words.join(" ");
 }
 
@@ -1373,26 +1304,21 @@ function maybeAddFiller(text) {
 // ============================================================
 function maybeAddParenthetical(text) {
   if (!chance(0.06)) return text;
-  let parentheticals = [
-    "(pray, mark this)", "(and so it goes)", "(as the stars decree)",
-    "(let it be known)", "(and thus we stand)", "(perchance to dream)",
-    "(the heart speaks)", "(thus fate would have it)", "(ere long)",
-    "(in this I am resolute)", "(so speaks my heart)", "(and nothing more)",
-  ];
-  let words = text.split(/\s+/);
+  var parentheticals = ['(hmm)', '(strong with the Force)', '(patience you must have)'];
+  var words = text.split(/\s+/);
   if (words.length < 5) return text;
-  let idx = Math.floor(Math.random() * (words.length - 2)) + 1;
-  words.splice(idx, 0, pick(parentheticals));
+  var idx = Math.floor(Math.random() * (words.length - 2)) + 1;
+  words.splice(idx, 0, parentheticals[Math.floor(Math.random() * parentheticals.length)]);
   return words.join(" ");
 }
 
 // ============================================================
 // MAIN FUNCTION
 // ============================================================
-function shakespearify() {
+function yodaify() {
   let text = inputEl.value;
   if (!text.trim()) {
-    outputEl.textContent = "Pray, enter some text, good merchant.";
+    outputEl.textContent = "Enter text, you must. Hmm.";
     return;
   }
 
@@ -1454,12 +1380,12 @@ function shakespearify() {
   text = text.replace(/\.\s*\./g, ".");
   text = text.replace(/!\s*!/g, "!");
   text = text.replace(/\?\s*\?/g, "?");
-  text = text.replace(/'tis 'tis/g, "'tis");
-  text = text.replace(/art art/g, "art");
-  text = text.replace(/hath hath/g, "hath");
-  text = text.replace(/doth doth/g, "doth");
-  text = text.replace(/thou thou/g, "thou");
-  text = text.replace(/the the/g, "the");
+  
+  
+  
+  
+  
+  
   text = text.replace(/\bi\b/g, "I");
 
   // Capitalise first letter of each sentence

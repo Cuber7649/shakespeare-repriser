@@ -1,22 +1,51 @@
-# Shakespeare Text Repriser
+# Text Repriser Collection
 
-Transform modern English into Shakespearean prose with the click of a button.
+Transform modern English into six literary and historical styles — or reverse
+stylized text back to modern English — right in the browser. Each page is fully
+self-contained (its own word data, CSS, and JS) with zero dependencies.
+
+## View it online
+
+Live site: **https://cuber7649.github.io/shakespeare-repriser/**
+
+| Page | Link |
+| ---- | ---- |
+| Shakespeare | https://cuber7649.github.io/shakespeare-repriser/shakespeare.html |
+| Pirate | https://cuber7649.github.io/shakespeare-repriser/pirate.html |
+| Victorian | https://cuber7649.github.io/shakespeare-repriser/victorian.html |
+| Chaucer | https://cuber7649.github.io/shakespeare-repriser/chaucer.html |
+| Yoda | https://cuber7649.github.io/shakespeare-repriser/yoda.html |
+| Norse | https://cuber7649.github.io/shakespeare-repriser/norse.html |
+| Unscramble | https://cuber7649.github.io/shakespeare-repriser/unscramble.html |
 
 ![Shakespeare Text Repriser](./Screenshot.png)
 
+## Pages
+
+| Page | Theme | What it does |
+| ---- | ----- | ------------ |
+| `shakespeare.html` | Elizabethan England | "how are you" → "how dost thou fare" |
+| `pirate.html` | Golden Age of Piracy | "you are my friend" → "ye be my matey" |
+| `victorian.html` | Victorian England | "really" → "truly", "you are" → "one is" |
+| `chaucer.html` | Middle English | "you are happy" → "thou art blisful" |
+| `yoda.html` | Jedi Master speech | Object-subject-verb inversions |
+| `norse.html` | Vikings & Norse myth | "you are happy" → "ye are merry" |
+| `unscramble.html` | Reverse dictionary | "thou art" → "you are", 800+ entries |
+
 ## Features
 
-- **500+ word replacements** — verbs, adjectives, nouns, emotions, nature, body parts, food, technology
-- **Sentence-level transforms** — "I want to" → "mine heart doth long to"
-- **Contraction handling** — "don't" → "doth not", "can't" → "canst not"
-- **Random Shakespeare quotes** — sprinkled in for dramatic effect
-- **Elizabethan insults** — "thou bacon-faced miscreant"
-- **Dramatic asides & stage directions** — "[Exit, pursued by a bear.]"
-- **Metaphors & similes** — "as swift as Mercury's winged sandals"
+- **Hundreds of word replacements per page** — verbs, adjectives, nouns, and more, themed per style
+- **Sentence-level transforms** — "I want to" → "my heart hungereth to" (Norse), "I be yearning to" (Pirate)
+- **Contraction handling** — "don't" → "thou dost nat" (Chaucer), "ye do not" (Norse)
+- **Random quotes** — Shakespeare, Austen, Hávamál, pirate sayings, Jedi wisdom
+- **Themed insults** — "ye scurvy dog", "thou cherl", "you insufferable bounder" (family-friendly)
+- **Dramatic asides & stage directions** — "[The longship sets sail.]", "(aside: Hmm, much to learn, you still have.)"
+- **Metaphors & similes** — "as fierce as a berserker", "as wild as the open sea"
 - **Sentence inversion** — flips word order for emphasis
-- **Parchment-themed UI** — animated quill, gold accents, smooth transitions
+- **Style-switcher navigation** — hop between styles from any page
+- **Ctrl+Enter hotkey** — transform without touching the mouse
 - **Copy to clipboard** — works on both local files and HTTPS
-- **Zero dependencies** — single HTML file, runs entirely in the browser
+- **Unscrambler** — strips openings, asides, and stage directions, then reverses 800+ dictionary entries (including multi-word phrases)
 
 ## Online Testing
 
@@ -24,22 +53,28 @@ Transform modern English into Shakespearean prose with the click of a button.
 
 ## Usage
 
-1. Open `shakespeare.html` in any modern browser
-2. Type modern English text into the input box
-3. Click **Repraise It!**
-4. Copy the Shakespearean output
+1. Open any page in a modern browser (start with `shakespeare.html`)
+2. Type modern English into the input box
+3. Click the transform button (or press **Ctrl+Enter**)
+4. Copy the output
+5. To reverse stylized text, paste it into `unscramble.html` and click **Unscramble!**
 
 ## Examples
 
-| Input                                                              | Shakespearean Output                                                                     |
-| ------------------------------------------------------------------ | ---------------------------------------------------------------------------------------- |
-| `hello how are you today`                                          | Hark! Hail, how dost thou fare this day?                                                 |
-| `I am so happy and excited to see my friend`                       | Verily, I am most merry and filled with mirth to behold my good fellow.                  |
-| `omg that is so cool i wanna go to the party tonight`              | Forsooth! That is most excellent and mine heart desireth to hie to the revelry this eve. |
-| `why are you so angry with me`                                     | Wherefore art thou so wrathful with me?                                                  |
-| `I think the weather is nice today. Maybe I should go for a walk.` | Methinks the firmament is most righteous this day. Perchance I ought to trudge abroad.   |
+| Input | Page | Output |
+| ----- | ---- | ------ |
+| `hello how are you today` | Shakespeare | Hail how dost thou fare this day |
+| `hello how are you today` | Pirate | Ahoy how be ye today |
+| `hello how are you today` | Chaucer | Hail how fareth thou today |
+| `hello how are you today` | Norse | Hail how fare ye this day |
+| `I am so happy to see my friend` | Pirate | I be so jolly to spy my matey |
+| `I am so happy to see my friend` | Chaucer | I am so blisful to seigh my freend |
+| `we will travel tomorrow and find the treasure` | Victorian | We will journey the morrow and come upon the treasure |
+| `we will travel tomorrow and find the treasure` | Norse | We will journey the morrow and come upon the treasure |
+| `you are brave` | Yoda | Are you brave |
+| `thou art happy` | Unscramble | you are happy |
 
-> **Note:** Output varies each time thanks to random interjections, metaphors, and Shakespeare quotes.
+> **Note:** Output varies each run thanks to random openings, inversions, metaphors, and quotes. All content is family-friendly.
 
 ## License
 
