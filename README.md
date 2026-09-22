@@ -10,17 +10,17 @@ JavaScript) with zero dependencies.
 
 ## Live Demo
 
-Hosted with GitHub Pages: **https://cuber7649.github.io/shakespeare-repriser/**
+Hosted with GitHub Pages: **[Live site](https://cuber7649.github.io/shakespeare-repriser/)**
 
 | Style | Link |
 | ----- | ---- |
-| Shakespeare | https://cuber7649.github.io/shakespeare-repriser/shakespeare.html |
-| Pirate | https://cuber7649.github.io/shakespeare-repriser/pirate.html |
-| Victorian | https://cuber7649.github.io/shakespeare-repriser/victorian.html |
-| Chaucer | https://cuber7649.github.io/shakespeare-repriser/chaucer.html |
-| Yoda | https://cuber7649.github.io/shakespeare-repriser/yoda.html |
-| Norse | https://cuber7649.github.io/shakespeare-repriser/norse.html |
-| Unscramble | https://cuber7649.github.io/shakespeare-repriser/unscramble.html |
+| Shakespeare | [Open](https://cuber7649.github.io/shakespeare-repriser/shakespeare.html) |
+| Pirate | [Open](https://cuber7649.github.io/shakespeare-repriser/pirate.html) |
+| Victorian | [Open](https://cuber7649.github.io/shakespeare-repriser/victorian.html) |
+| Chaucer | [Open](https://cuber7649.github.io/shakespeare-repriser/chaucer.html) |
+| Yoda | [Open](https://cuber7649.github.io/shakespeare-repriser/yoda.html) |
+| Norse | [Open](https://cuber7649.github.io/shakespeare-repriser/norse.html) |
+| Unscramble | [Open](https://cuber7649.github.io/shakespeare-repriser/unscramble.html) |
 
 ## Styles
 
