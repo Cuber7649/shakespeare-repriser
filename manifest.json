@@ -1,13 +1,19 @@
 {
   "name": "Text Repriser Collection",
   "short_name": "Repriser",
-  "description": "Rewrite modern English into six historical and literary styles: Shakespeare, Pirate, Victorian, Chaucer, Yoda and Norse.",
+  "description": "Rewrite modern English into six historical and literary styles, and draw a random roast, compliment or quote in any of them.",
+  "id": "./index.html",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
   "orientation": "any",
   "background_color": "#2b2d42",
   "theme_color": "#2b2d42",
+  "categories": [
+    "entertainment",
+    "productivity",
+    "utilities"
+  ],
   "icons": [
     {
       "src": "./icon-192.png",
@@ -26,6 +32,34 @@
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Random roast, compliment or quote",
+      "short_name": "Random",
+      "description": "Draw a line in any voice and make a quote card of it",
+      "url": "./random.html",
+      "icons": [
+        {
+          "src": "./icon-192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Unscramble stylized text",
+      "short_name": "Unscramble",
+      "description": "Turn Shakespeare, Chaucer or Norse back into modern English",
+      "url": "./unscramble.html",
+      "icons": [
+        {
+          "src": "./icon-192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
     }
   ]
 }
