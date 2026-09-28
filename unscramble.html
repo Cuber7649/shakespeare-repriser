@@ -311,6 +311,19 @@
     border-top: 1px solid rgba(196,162,101,0.3);
   }
 
+  /* Available to assistive tech, not shown on screen. */
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border: 0;
+  }
+
   .btn-copy {
     font-family: 'Cormorant Garamond', serif;
     font-size: 0.9rem;
@@ -410,6 +423,20 @@
     100% { box-shadow: none; }
   }
 
+  /* ====== REDUCED MOTION ====== */
+  /* `animation: none` rather than a 0.01ms duration: cardIn uses fill-mode
+     `both`, so a short duration would still hold opacity 0 during its delay. */
+  @media (prefers-reduced-motion: reduce) {
+    .quill,
+    .float-quill,
+    .card,
+    .output-card,
+    .btn-primary::after,
+    #output.active {
+      animation: none !important;
+    }
+  }
+
   /* Ink drip decoration on output card */
   .ink-drip {
     position: absolute;
@@ -466,6 +493,7 @@
 <div class="float-quill">&#128396;</div>
 
 <div class="style-switcher">
+    <a href="./index.html">All Styles</a>
     <a href="./shakespeare.html">Shakespeare</a>
     <a href="./pirate.html">Pirate</a>
     <a href="./victorian.html">Victorian</a>
@@ -485,7 +513,7 @@
   <div class="divider">&#10045; The Quill Reversed &#10045;</div>
 
   <div class="card">
-    <div class="card-label"><span class="icon">&#9998;</span> Stylized Text</div>
+    <label class="card-label" for="input"><span class="icon">&#9998;</span> Stylized Text</label>
     <textarea id="input" placeholder="Paste your stylized words here..."></textarea>
     <div class="char-count"><span id="charCount">0</span> characters inscribed</div>
   </div>
@@ -502,11 +530,12 @@
   <div class="output-card">
     <div class="ink-drip"></div>
     <div class="card-label"><span class="icon">&#128214;</span> Modern English</div>
-    <div id="output"></div>
+    <div id="output" aria-live="polite" aria-atomic="true"></div>
     <div class="output-actions">
       <button class="btn-copy" onclick="copyOutput()" id="copyBtn">
         <span>&#128203;</span> Copy to Clipboard
       </button>
+      <span class="visually-hidden" id="copyStatus" role="status"></span>
     </div>
   </div>
 
@@ -522,7 +551,8 @@ var D={"abacus": "computer","absolutely astonished": "surprised","absorb": "lear
 var inputEl=document.getElementById('input'),
     outputEl=document.getElementById('output'),
     charCountEl=document.getElementById('charCount'),
-    copyBtn=document.getElementById('copyBtn');
+    copyBtn=document.getElementById('copyBtn'),
+    copyStatusEl=document.getElementById('copyStatus');
 
 inputEl.addEventListener('input',function(){
   charCountEl.textContent=inputEl.value.length;
@@ -551,7 +581,8 @@ function copyOutput(){
   if(navigator.clipboard&&navigator.clipboard.writeText){
     navigator.clipboard.writeText(t).then(function(){
       copyBtn.classList.add('copied');copyBtn.textContent='Copied!';
-      setTimeout(function(){copyBtn.classList.remove('copied');copyBtn.textContent='Copy'},2000);
+      copyStatusEl.textContent='Copied to clipboard';
+      setTimeout(function(){copyBtn.classList.remove('copied');copyBtn.textContent='Copy';copyStatusEl.textContent='';},2000);
     });
   }else{
     var a=document.createElement('textarea');
@@ -559,7 +590,8 @@ function copyOutput(){
     document.body.appendChild(a);a.select();document.execCommand('copy');
     document.body.removeChild(a);
     copyBtn.classList.add('copied');copyBtn.textContent='Copied!';
-    setTimeout(function(){copyBtn.classList.remove('copied');copyBtn.textContent='Copy'},2000);
+    copyStatusEl.textContent='Copied to clipboard';
+    setTimeout(function(){copyBtn.classList.remove('copied');copyBtn.textContent='Copy';copyStatusEl.textContent='';},2000);
   }
 }
 

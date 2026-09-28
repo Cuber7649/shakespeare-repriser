@@ -310,6 +310,19 @@
     border-top: 1px solid rgba(196,162,101,0.3);
   }
 
+  /* Available to assistive tech, not shown on screen. */
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border: 0;
+  }
+
   .btn-copy {
     font-family: 'Cormorant Garamond', serif;
     font-size: 0.9rem;
@@ -409,6 +422,20 @@
     100% { box-shadow: none; }
   }
 
+  /* ====== REDUCED MOTION ====== */
+  /* `animation: none` rather than a 0.01ms duration: cardIn uses fill-mode
+     `both`, so a short duration would still hold opacity 0 during its delay. */
+  @media (prefers-reduced-motion: reduce) {
+    .quill,
+    .float-quill,
+    .card,
+    .output-card,
+    .btn-primary::after,
+    #output.active {
+      animation: none !important;
+    }
+  }
+
   /* Ink drip decoration on output card */
   .ink-drip {
     position: absolute;
@@ -464,6 +491,7 @@
 <div class="float-quill">&#128396;</div>
 
   <div class="style-switcher">
+    <a href="./index.html">All Styles</a>
     <a href="./shakespeare.html">Shakespeare</a>
     <a href="./pirate.html" class="active">Pirate</a>
     <a href="./victorian.html">Victorian</a>
@@ -483,7 +511,7 @@
   <div class="divider">&#10045; ARRRRRGH MDLXXXVIII &#10045;</div>
 
   <div class="card">
-    <div class="card-label"><span class="icon">&#9998;</span> Modern English</div>
+    <label class="card-label" for="input"><span class="icon">&#9998;</span> Modern English</label>
     <textarea id="input" placeholder="Type yer words here, matey..."></textarea>
     <div class="char-count"><span id="charCount">0</span> characters inscribed</div>
   </div>
@@ -500,11 +528,12 @@
   <div class="output-card">
     <div class="ink-drip"></div>
     <div class="card-label"><span class="icon">&#128214;</span> Pirate Output</div>
-    <div id="output"></div>
+    <div id="output" aria-live="polite" aria-atomic="true"></div>
     <div class="output-actions">
       <button class="btn-copy" onclick="copyOutput()" id="copyBtn">
         <span>&#128203;</span> Copy to Clipboard
       </button>
+      <span class="visually-hidden" id="copyStatus" role="status"></span>
     </div>
   </div>
 
@@ -520,6 +549,7 @@
 const inputEl = document.getElementById('input');
 const outputEl = document.getElementById('output');
 const charCountEl = document.getElementById('charCount');
+const copyStatusEl = document.getElementById('copyStatus');
 inputEl.addEventListener('input', () => {
   charCountEl.textContent = inputEl.value.length;
 });
@@ -549,9 +579,11 @@ function copyOutput() {
   function showCopied() {
     btn.classList.add('copied');
     btn.innerHTML = '<span>&#10003;</span> Copied!';
+    copyStatusEl.textContent = 'Copied to clipboard';
     setTimeout(() => {
       btn.classList.remove('copied');
       btn.innerHTML = '<span>&#128203;</span> Copy to Clipboard';
+      copyStatusEl.textContent = '';
     }, 2000);
   }
   if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -579,8 +611,23 @@ function copyOutput() {
   }
 }
 
-const pick = arr => arr[Math.floor(Math.random() * arr.length)];
-const chance = p => Math.random() < p;
+const _randomSeed = Math.random;
+let _rngState = (_randomSeed() * 0x100000000) >>> 0;
+
+function seedRandom(seed) {
+  _rngState = (seed >>> 0) || 0x9E3779B9;
+}
+
+function rand() {
+  _rngState = (_rngState + 0x6D2B79F5) >>> 0;
+  let t = _rngState;
+  t = Math.imul(t ^ (t >>> 15), t | 1);
+  t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+  return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+}
+
+const pick = arr => arr[Math.floor(rand() * arr.length)];
+const chance = p => rand() < p;
 
 // ============================================================
 // OPENING EXCLAMATIONS & INTERJECTIONS
@@ -807,7 +854,7 @@ const verbForms = [
 // COMMON WORDS
 // ============================================================
 const commonWords = [
-  [/\bmaybe\b/gi,"perhaps"],[/\bperhaps\b/gi,"maybe"],
+  [/\bmaybe\b/gi,"perhaps"],[/\bperhaps\b/gi,"perchance"],
   [/\bbefore\b/gi,"afore"],[/\bbetween\b/gi,"betwixt"],
   [/\bbecause\b/gi,"'cause"],
   [/\buntil\b/gi,"till"],
@@ -1240,15 +1287,121 @@ const sentenceTransforms = [
 ];
 
 // ============================================================
+// REPLACEMENT ENGINE
+// ============================================================
+// One left-to-right pass with longest-match-wins. Replacements are never
+// rescanned, so a rule cannot rewrite text an earlier rule just produced.
+
+const _WORD_CHAR = /[A-Za-z0-9_]/;
+const _TOKEN_CHAR = /[A-Za-z0-9_'’-]/;
+const _PURE_LITERAL = /^\\b([A-Za-z0-9_'’ \t-]+)\\b$/;
+
+let _ruleIndex = null;
+
+function addRule(buckets, phrase, rep, rank) {
+  const lower = phrase.toLowerCase();
+  const key = lower.split(/[ \t]/)[0];
+  if (!buckets.has(key)) buckets.set(key, []);
+  buckets.get(key).push({ lower, rep, rank });
+}
+
+function buildRuleIndex() {
+  const dicts = [
+    sentenceTransforms, contractions, negatives, pronouns,
+    verbForms, commonWords, verbs, adjectives, nouns,
+  ];
+  const buckets = new Map();
+  const fallbacks = [];
+  let rank = 0;
+
+  for (const dict of dicts) {
+    const pairs = Array.isArray(dict) ? dict : Object.entries(dict);
+    for (const [pat, rep] of pairs) {
+      if (typeof pat === 'string') {
+        addRule(buckets, pat, rep, rank++);
+      } else {
+        const m = _PURE_LITERAL.exec(pat.source);
+        if (m) {
+          addRule(buckets, m[1], rep, rank++);
+        } else {
+          fallbacks.push({
+            re: new RegExp(pat.source, pat.flags.replace(/[gy]/g, '') + 'y'),
+            rep,
+          });
+        }
+      }
+    }
+  }
+
+  // Longest first. The sort is stable, so equal-length rules stay in rank
+  // order and the earliest dictionary wins a tie, as the old pass order did.
+  for (const arr of buckets.values()) {
+    arr.sort((a, b) => b.lower.length - a.lower.length);
+  }
+  return { buckets, fallbacks };
+}
+
+function replaceAll(text) {
+  if (!_ruleIndex) _ruleIndex = buildRuleIndex();
+  const lower = text.toLowerCase();
+  const n = text.length;
+  let out = '';
+  let i = 0;
+
+  while (i < n) {
+    let j = i;
+    while (j < n && _TOKEN_CHAR.test(text[j])) j++;
+    if (j === i) {
+      out += text[i];
+      i++;
+      continue;
+    }
+
+    let best = null;
+    const bucket = _ruleIndex.buckets.get(lower.slice(i, j));
+    if (bucket) {
+      for (const rule of bucket) {
+        const end = i + rule.lower.length;
+        if (end > n || !lower.startsWith(rule.lower, i)) continue;
+        if (i > 0 && _WORD_CHAR.test(text[i - 1])) continue;
+        if (end < n && _WORD_CHAR.test(text[end])) continue;
+        if (!best || rule.lower.length > best.len) {
+          best = { len: rule.lower.length, rep: rule.rep };
+        }
+      }
+    }
+
+    if (!best) {
+      for (const fb of _ruleIndex.fallbacks) {
+        fb.re.lastIndex = i;
+        const hit = fb.re.exec(text);
+        if (hit && hit[0].length > 0 && (!best || hit[0].length > best.len)) {
+          best = { len: hit[0].length, rep: fb.rep };
+        }
+      }
+    }
+
+    if (best) {
+      out += best.rep;
+      i += best.len;
+    } else {
+      out += text.slice(i, j);
+      i = j;
+    }
+  }
+  return out;
+}
+
+// ============================================================
 // HELPER: pick a random number of words from text and apply alliteration
 // ============================================================
 function maybeAddAlliteration(text) {
   if (!chance(0.08)) return text;
   let words = text.split(/\s+/);
   if (words.length < 4) return text;
-  let idx = Math.floor(Math.random() * (words.length - 2));
+  let idx = Math.floor(rand() * (words.length - 2));
   let phrase = pick(alliterations);
-  words.splice(idx + 1, 0, "," + phrase + ",");
+  words.splice(idx + 1, 0, ", " + phrase + ",");
   return words.join(" ");
 }
 
@@ -1260,7 +1413,8 @@ function maybeAddMetaphor(text) {
   let commaIdx = text.indexOf(',');
   if (commaIdx < 0 || commaIdx > text.length - 10) return text;
   let metaphor = "like " + pick(metaphors);
-  return text.substring(0, commaIdx + 1) + " " + metaphor + "," + text.substring(commaIdx + 1);
+  let after = text.substring(commaIdx + 1).replace(/^\s+/, "");
+  return text.substring(0, commaIdx + 1) + " " + metaphor + "," + (after ? " " + after : "");
 }
 
 // ============================================================
@@ -1269,7 +1423,7 @@ function maybeAddMetaphor(text) {
 function maybeInsertQuote(text) {
   if (!chance(0.04)) return text;
   var q = ['Arrr!', 'Ahoy!', 'Yo ho ho!', 'Avast ye!', "By Davy Jones' locker!"];
-  return text + " " + q[Math.floor(Math.random() * q.length)];
+  return text + " " + q[Math.floor(rand() * q.length)];
 }
 
 // ============================================================
@@ -1320,8 +1474,8 @@ function maybeAddFiller(text) {
   var fillers = ['arr', 'by the powers', 'avast', 'yo ho', 'scurvy'];
   var words = text.split(/\s+/);
   if (words.length < 3) return text;
-  var idx = Math.floor(Math.random() * Math.min(3, words.length));
-  words.splice(idx + 1, 0, fillers[Math.floor(Math.random() * fillers.length)]);
+  var idx = Math.floor(rand() * Math.min(3, words.length));
+  words.splice(idx + 1, 0, fillers[Math.floor(rand() * fillers.length)]);
   return words.join(" ");
 }
 
@@ -1333,8 +1487,8 @@ function maybeAddParenthetical(text) {
   var parentheticals = ["(by Davy Jones' locker)", '(shiver me timbers)', '(as the tide turns)'];
   var words = text.split(/\s+/);
   if (words.length < 5) return text;
-  var idx = Math.floor(Math.random() * (words.length - 2)) + 1;
-  words.splice(idx, 0, parentheticals[Math.floor(Math.random() * parentheticals.length)]);
+  var idx = Math.floor(rand() * (words.length - 2)) + 1;
+  words.splice(idx, 0, parentheticals[Math.floor(rand() * parentheticals.length)]);
   return words.join(" ");
 }
 
@@ -1356,20 +1510,8 @@ function pirateify() {
     s = s.trim();
     if (!s) continue;
 
-    // Apply sentence-level transforms first (longest matches)
-    for (const [pat, rep] of sentenceTransforms) s = s.replace(pat, rep);
-    for (const [pat, rep] of contractions) s = s.replace(pat, rep);
-    for (const [neg, rep] of Object.entries(negatives)) {
-      let re = new RegExp("\\b" + neg.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + "\\b", "gi");
-      s = s.replace(re, rep);
-    }
-
-    for (const [pat, rep] of pronouns) s = s.replace(pat, rep);
-    for (const [pat, rep] of verbForms) s = s.replace(pat, rep);
-    for (const [pat, rep] of commonWords) s = s.replace(pat, rep);
-    for (const [pat, rep] of verbs) s = s.replace(pat, rep);
-    for (const [pat, rep] of adjectives) s = s.replace(pat, rep);
-    for (const [pat, rep] of nouns) s = s.replace(pat, rep);
+    // Single left-to-right pass, longest match wins
+    s = replaceAll(s);
 
     // Advanced transformations
     s = maybeInvert(s);
@@ -1386,7 +1528,8 @@ function pirateify() {
     if (chance(0.20)) {
       let cIdx = s.indexOf(',');
       if (cIdx > 0 && cIdx < s.length - 5) {
-        s = s.substring(0, cIdx) + pick(midInsertions) + s.substring(cIdx + 1);
+        let after = s.substring(cIdx + 1).replace(/^\s+/, "");
+        s = s.substring(0, cIdx) + pick(midInsertions) + (after ? " " + after : "");
       }
     }
 
