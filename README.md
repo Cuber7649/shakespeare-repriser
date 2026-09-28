@@ -15,7 +15,6 @@ Hosted with GitHub Pages: **[Live site](https://cuber7649.github.io/shakespeare-
 | Page | Link |
 | ----- | ---- |
 | Dashboard (all styles at once) | [Open](https://cuber7649.github.io/shakespeare-repriser/index.html) |
-| Random (roast, compliment or quote) | [Open](https://cuber7649.github.io/shakespeare-repriser/random.html) |
 | Shakespeare | [Open](https://cuber7649.github.io/shakespeare-repriser/shakespeare.html) |
 | Pirate | [Open](https://cuber7649.github.io/shakespeare-repriser/pirate.html) |
 | Victorian | [Open](https://cuber7649.github.io/shakespeare-repriser/victorian.html) |
@@ -38,7 +37,6 @@ it from `manifest.json`, and iOS users can use Share → Add to Home Screen.
 | `yoda.html` | Jedi Master speech | "you are brave" → "Are you brave" (object–subject–verb) |
 | `norse.html` | Vikings and Norse myth | "you are happy" → "Ye are merry" |
 | `unscramble.html` | Reverse dictionary | "thou art" → "You are" (821 entries) |
-| `random.html` | Roast, compliment or quote, in any voice | 18 combinations; make a quote card of any draw |
 
 ## Features
 
@@ -52,8 +50,7 @@ it from `manifest.json`, and iOS users can use Share → Add to Home Screen.
 - **Sentence inversion** — reordered syntax for emphasis
 - **Style-switcher navigation** — move between styles from any page
 - **Side-by-side dashboard** — one input, all six styles at once, on `index.html`
-- **Random picker** — choose a roast, a compliment or a quote *and* one of the six voices on `random.html`, giving 18 combinations, or set either axis to *Any*. Draws never repeat twice running. 153 roasts, 234 quotes and 72 compliments to draw from.
-- **Quote card export** — turn any style's output, or any random draw, into a shareable 1080×1350 PNG, previewed before you save it. Asides and stage directions are stripped so only the speech appears. On the dashboard and the random picker.
+- **Quote card export** — turn any style's output into a shareable 1080×1350 PNG, previewed before you save it. Asides and stage directions are stripped so only the speech appears.
 - **Installable web app** — `manifest.json` plus generated icons, no backend
 - **Keyboard shortcut** — press Ctrl+Enter to transform
 - **Copy to clipboard** — supported on local files and HTTPS, with an announced confirmation
@@ -102,7 +99,6 @@ No build step or installation is required.
 ```text
 shakespeare-repriser/
 ├── index.html         # Dashboard: all six styles side by side (generated)
-├── random.html        # Random picker: roast, compliment or quote in any voice (generated)
 ├── shakespeare.html   # Elizabethan style (original page)
 ├── pirate.html        # Pirate style
 ├── victorian.html     # Victorian style
@@ -110,7 +106,6 @@ shakespeare-repriser/
 ├── yoda.html          # Yoda speech style
 ├── norse.html         # Norse style
 ├── unscramble.html    # Reverse dictionary
-├── compliments.js     # The 72 picker compliments, inlined into random.html
 ├── manifest.json      # Web app manifest, for installability
 ├── icon-180.png       # App icons (generated)
 ├── icon-192.png
@@ -122,18 +117,13 @@ shakespeare-repriser/
 Each `.html` file is a standalone app: open it directly in a browser or serve the
 directory with any static file server. There are no shared runtime files.
 
-Three files here are **generated** rather than hand-written:
+Two files here are **generated** rather than hand-written:
 
 - **`index.html`** — the side-by-side dashboard. It is the one page that needs
   every dictionary in a single file, so it is built from the six style pages by
   copying each page's dictionaries, engine, helpers and transform function
   verbatim. That keeps this repository free of shared runtime files while making
   it impossible for the dashboard to drift from the individual pages.
-- **`random.html`** — the random picker, built the same way: each style's roasts
-  and quotes are copied verbatim out of that style's page, so the picker cannot
-  drift either. Its compliments are authored rather than derived, so they live in
-  `compliments.js` at the root and are inlined from there — that keeps the 72
-  reviewed lines recoverable without adding a runtime dependency to the page.
 - **`icon-*.png` and `manifest.json`** — drawn programmatically, so there is no
   image editor in the loop and the icons are square and maskable-safe.
 

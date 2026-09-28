@@ -612,7 +612,6 @@
 
   <div class="style-switcher">
     <a href="./index.html" class="active">All Styles</a>
-<a href="./random.html">Random</a>
 <a href="./shakespeare.html">Shakespeare</a>
 <a href="./pirate.html">Pirate</a>
 <a href="./victorian.html">Victorian</a>
@@ -6628,17 +6627,14 @@ function downloadCard(canvas, filename) {
 
 // Shared quote-card preview modal wiring.
 //
-// Why this is a module rather than copy-pasted into each generated page: the
-// dashboard and the random picker both offer "Make Card", and the two had
-// already started to drift when the dashboard version was inlined. One source,
-// inlined by both builders, keeps them identical.
-//
-// Markup is tools/card-modal.html and styles are tools/card-modal.css, both read
-// and inlined by the builders. Ids, class names and behaviour are unchanged from
-// the version that shipped, so tools/smoke-dashboard.mjs needed no edits.
+// Kept in its own module rather than inlined into the generator that uses it, so
+// the markup, styles and behaviour live in one place. Its markup is
+// tools/card-modal.html and its styles are tools/card-modal.css, both read and
+// inlined by the build. Ids, class names and behaviour are unchanged from the
+// version that shipped, so tools/smoke-dashboard.mjs needed no edits.
 //
 // `themes`/`render`/`download` are injected so this also runs under
-// tools/smoke-dashboard.mjs and tools/smoke-random.mjs with fakes.
+// tools/smoke-dashboard.mjs with fakes.
 
 function initCardUI(opts) {
   opts = opts || {};
@@ -6768,7 +6764,8 @@ function initCardUI(opts) {
   });
 
   // ---------- quote card ----------
-  // Wiring lives in tools/cardui.js, shared with random.html.
+  // Wiring lives in tools/cardui.js, shared with any other page that offers
+  // "Make Card".
   const cardUI = initCardUI({ emptyMessage: 'Transform some text first' });
   const closeCard = cardUI.close;
 
