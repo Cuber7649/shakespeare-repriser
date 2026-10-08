@@ -1,8 +1,7 @@
 # Text Repriser Collection
 
 A collection of single-page web apps that rewrite modern English into six
-literary and historical styles — plus a reverse dictionary that converts
-stylized text back to modern English. Everything runs client-side in the
+literary and historical styles. Everything runs client-side in the
 browser. Each page is fully self-contained (bundled word data, CSS, and
 JavaScript) with zero dependencies.
 
@@ -21,7 +20,6 @@ Hosted with GitHub Pages: **[Live site](https://cuber7649.github.io/shakespeare-
 | Chaucer | [Open](https://cuber7649.github.io/shakespeare-repriser/chaucer.html) |
 | Yoda | [Open](https://cuber7649.github.io/shakespeare-repriser/yoda.html) |
 | Norse | [Open](https://cuber7649.github.io/shakespeare-repriser/norse.html) |
-| Unscramble | [Open](https://cuber7649.github.io/shakespeare-repriser/unscramble.html) |
 
 The site is installable: browsers that support web apps will offer to install
 it from `manifest.json`, and iOS users can use Share → Add to Home Screen.
@@ -34,9 +32,8 @@ it from `manifest.json`, and iOS users can use Share → Add to Home Screen.
 | `pirate.html` | Golden Age of Piracy | "you are my friend" → "Ye be my matey" |
 | `victorian.html` | Victorian English | "really" → "Truly"; "you are" → "One is" |
 | `chaucer.html` | Middle English | "you are happy" → "Thou art blisful" |
-| `yoda.html` | Jedi Master speech | "you are brave" → "Are you brave" (object–subject–verb) |
+| `yoda.html` | Jedi Master speech | "you are brave" → "Are you brave"; "I love the bright sun" → "The bright sun, I love" (object–subject–verb) |
 | `norse.html` | Vikings and Norse myth | "you are happy" → "Ye are merry" |
-| `unscramble.html` | Reverse dictionary | "thou art" → "You are" (821 entries) |
 
 ## Features
 
@@ -50,11 +47,13 @@ it from `manifest.json`, and iOS users can use Share → Add to Home Screen.
 - **Sentence inversion** — reordered syntax for emphasis
 - **Style-switcher navigation** — move between styles from any page
 - **Side-by-side dashboard** — one input, all six styles at once, on `index.html`
-- **Quote card export** — turn any style's output into a shareable 1080×1350 PNG, previewed before you save it. Asides and stage directions are stripped so only the speech appears.
+- **Quote card export** — turn any style's output into a shareable 1080×1350 PNG, previewed before you save it. Asides and stage directions are stripped so only the speech appears. Long text shrinks to fit the card (never below a readable size), and the preview warns you when it had to shrink a lot or when the end was cut short. Open it from the dashboard or from the Make Card button beside Copy and Save on every style page.
+- **Saved quotes** — keep a list of quotes you like: Save stores the output in
+  your browser (shared by the dashboard and every style page), the list sits
+  under the results, and each row can be deleted
 - **Installable web app** — `manifest.json` plus generated icons, no backend
 - **Keyboard shortcut** — press Ctrl+Enter to transform
 - **Copy to clipboard** — supported on local files and HTTPS, with an announced confirmation
-- **Unscrambler** — removes openings, asides, and stage directions, then reverses 821 dictionary entries, including multi-word phrases
 - **Responsive layout** — verified from mobile to desktop viewports
 - **Screen-reader support** — live regions announce results and copy confirmations; every input has a real label
 - **Reduced-motion support** — all decorative animation stops when the OS asks for it
@@ -69,7 +68,6 @@ No build step or installation is required.
 2. Enter modern English text in the input field.
 3. Click the transform button, or press **Ctrl+Enter**.
 4. Copy the result with the **Copy to Clipboard** button.
-5. To reverse stylized text, paste it into `unscramble.html` and click **Unscramble!**
 
 > `index.html` is a generated file. Editing it directly will be overwritten the
 > next time the dashboard is rebuilt; change a style page instead.
@@ -87,7 +85,9 @@ No build step or installation is required.
 | `we will travel tomorrow and find the treasure` | Victorian | We will journey the morrow and come upon the treasure |
 | `we will travel tomorrow and find the treasure` | Norse | We will journey the morrow and come upon the treasure |
 | `you are brave` | Yoda | Are you brave |
-| `thou art happy` | Unscramble | You are happy |
+| `I like pie` | Yoda | Pie, I like |
+| `he whispered a terrible secret` | Yoda | A terrible secret, he whispered |
+| `the old king ruled the land` | Yoda | The land, the old king ruled |
 
 > These are single runs. Output varies each time — openings, interjections,
 > metaphors, alliterations, asides and stage directions are all rolled at
@@ -105,13 +105,14 @@ shakespeare-repriser/
 ├── chaucer.html       # Middle English style
 ├── yoda.html          # Yoda speech style
 ├── norse.html         # Norse style
-├── unscramble.html    # Reverse dictionary
 ├── manifest.json      # Web app manifest, for installability
 ├── icon-180.png       # App icons (generated)
 ├── icon-192.png
 ├── icon-512.png
+├── package.json       # build and test commands (no dependencies)
 ├── README.md
-└── Screenshot.png
+├── Screenshot.png
+└── tools/             # build + test tooling (not shipped to the browser)
 ```
 
 Each `.html` file is a standalone app: open it directly in a browser or serve the
@@ -127,9 +128,16 @@ Two files here are **generated** rather than hand-written:
 - **`icon-*.png` and `manifest.json`** — drawn programmatically, so there is no
   image editor in the loop and the icons are square and maskable-safe.
 
-The generator and test scripts are kept outside this repository. If you change a
-style page, the dashboard needs rebuilding; the build tooling is not published
-here, so get in touch if you need it.
+The generator and test scripts live in [`tools/`](./tools/README.md), with a
+README of their own. If you change a style page, rebuild the dashboard with the
+one command below and run the suite before committing:
+
+```bash
+npm run build   # regenerate index.html from the six style pages
+npm test        # run the whole suite (build + 17 checks, ~90s)
+```
+
+There are no dependencies — `npm install` is never needed.
 
 ## Browser Support
 

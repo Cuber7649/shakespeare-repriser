@@ -1,0 +1,68 @@
+  /* ====== SAVED QUOTES ====== */
+  .saved-quotes {
+    background: linear-gradient(145deg, #fffcf5, #f8f0de, #f2e8ce);
+    border: 2px solid #c4a265;
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-top: 18px;
+    position: relative;
+    box-shadow:
+      0 4px 20px rgba(0,0,0,0.25),
+      inset 0 1px 0 rgba(255,255,255,0.5);
+  }
+
+  .saved-quotes-empty {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    color: #b8956a;
+    margin: 4px 0 0;
+  }
+
+  .saved-quotes-list {
+    list-style: none;
+    margin: 4px 0 0;
+    padding: 0;
+  }
+
+  .saved-quotes-item {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    padding: 9px 0;
+    border-top: 1px solid rgba(196,162,101,0.3);
+  }
+
+  .saved-quotes-text {
+    flex: 1;
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 1.02rem;
+    line-height: 1.5;
+    color: #3d2b1f;
+    overflow-wrap: break-word;
+  }
+
+  .saved-quotes-style {
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    color: #8a6a3a;
+    white-space: nowrap;
+  }
+
+  .saved-quotes-del {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.85rem;
+    padding: 5px 11px;
+    background: rgba(184,149,106,0.15);
+    border: 1px solid rgba(184,149,106,0.4);
+    border-radius: 6px;
+    color: #8b6d4a;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .saved-quotes-del:hover {
+    background: rgba(150,60,60,0.12);
+    border-color: rgba(150,60,60,0.45);
+    color: #8a3a3a;
+  }

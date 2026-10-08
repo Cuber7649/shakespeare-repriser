@@ -431,7 +431,8 @@
     .card,
     .output-card,
     .btn-primary::after,
-    #output.active {
+    #output.active,
+    #cardModal .modal-box {
       animation: none !important;
     }
   }
@@ -480,6 +481,138 @@
     color: #3a2510;
     box-shadow: 0 0 8px rgba(212,160,86,0.3);
   }
+  /* ====== QUOTE CARD MODAL ====== */
+  #cardModal {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: rgba(20, 14, 8, 0.82);
+  }
+  #cardModal[hidden] { display: none; }
+  .modal-box {
+    background: linear-gradient(145deg, #fdf6e3 0%, #f4e8cd 100%);
+    border: 2px solid rgba(196,162,101,0.7);
+    border-radius: 12px;
+    padding: 20px;
+    max-width: 560px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.5);
+    animation: cardModalIn 0.24s ease-out;
+  }
+  @keyframes cardModalIn {
+    from { opacity: 0; transform: translateY(14px) scale(0.98); }
+    to { opacity: 1; transform: none; }
+  }
+  .modal-box h2 {
+    font-family: 'Cinzel', serif;
+    font-size: 1.15rem;
+    color: #3a2510;
+    margin: 0 0 4px;
+  }
+  .modal-note {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    color: #8a6a3a;
+    font-size: 0.9rem;
+    margin: 0 0 14px;
+  }
+  #cardPreview {
+    display: block;
+    width: 100%;
+    height: auto;
+    border: 1px solid rgba(196,162,101,0.5);
+    border-radius: 6px;
+    background: #f4e8cd;
+  }
+  .modal-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    margin-top: 16px;
+  }
+  .modal-actions .btn { padding: 10px 20px; font-size: 0.95rem; }
+  .modal-warn {
+    font-family: 'Cormorant Garamond', serif;
+    color: #a04a2a;
+    font-size: 0.9rem;
+    margin: 10px 0 0;
+  }
+  .modal-warn[hidden] { display: none; }
+
+  /* ====== SAVED QUOTES ====== */
+  .saved-quotes {
+    background: linear-gradient(145deg, #fffcf5, #f8f0de, #f2e8ce);
+    border: 2px solid #c4a265;
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-top: 18px;
+    position: relative;
+    box-shadow:
+      0 4px 20px rgba(0,0,0,0.25),
+      inset 0 1px 0 rgba(255,255,255,0.5);
+  }
+
+  .saved-quotes-empty {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    color: #b8956a;
+    margin: 4px 0 0;
+  }
+
+  .saved-quotes-list {
+    list-style: none;
+    margin: 4px 0 0;
+    padding: 0;
+  }
+
+  .saved-quotes-item {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    padding: 9px 0;
+    border-top: 1px solid rgba(196,162,101,0.3);
+  }
+
+  .saved-quotes-text {
+    flex: 1;
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 1.02rem;
+    line-height: 1.5;
+    color: #3d2b1f;
+    overflow-wrap: break-word;
+  }
+
+  .saved-quotes-style {
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    color: #8a6a3a;
+    white-space: nowrap;
+  }
+
+  .saved-quotes-del {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.85rem;
+    padding: 5px 11px;
+    background: rgba(184,149,106,0.15);
+    border: 1px solid rgba(184,149,106,0.4);
+    border-radius: 6px;
+    color: #8b6d4a;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .saved-quotes-del:hover {
+    background: rgba(150,60,60,0.12);
+    border-color: rgba(150,60,60,0.45);
+    color: #8a3a3a;
+  }
 </style>
 </head>
 <body>
@@ -499,7 +632,6 @@
     <a href="./chaucer.html">Chaucer</a>
     <a href="./yoda.html">Yoda</a>
     <a href="./norse.html">Norse</a>
-    <a href="./unscramble.html">Unscramble</a>
   </div>
 
 <div class="container">
@@ -531,12 +663,25 @@
     <div class="card-label"><span class="icon">&#128214;</span> Shakespearean Output</div>
     <div id="output" aria-live="polite" aria-atomic="true"></div>
     <div class="output-actions">
+      <button class="btn-copy" id="makeCardBtn" data-card="shakespeare">
+        <span>&#9786;</span> Make Card
+      </button>
       <button class="btn-copy" onclick="copyOutput()" id="copyBtn">
         <span>&#128203;</span> Copy to Clipboard
+      </button>
+      <button class="btn-copy" data-save="Shakespeare" data-save-target="output">
+        <span>&#128278;</span> Save
       </button>
       <span class="visually-hidden" id="copyStatus" role="status"></span>
     </div>
   </div>
+
+  <section class="saved-quotes" id="savedQuotes">
+  <div class="card-label"><span class="icon">&#128218;</span> Saved Quotes</div>
+  <p class="saved-quotes-empty" id="savedQuotesEmpty">Nothing saved yet.</p>
+  <ul class="saved-quotes-list" id="savedQuotesList"></ul>
+  <span class="visually-hidden" id="savedQuotesStatus" role="status"></span>
+</section>
 
   <div class="footer">
     <span class="quill-small">&#128396;</span>
@@ -544,6 +689,21 @@
     <span class="quill-small">&#128396;</span>
   </div>
 </div>
+
+<div id="cardModal" hidden>
+  <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="cardModalTitle">
+    <h2 id="cardModalTitle">Quote card</h2>
+    <p class="modal-note" id="cardModalNote">Preparing&hellip;</p>
+    <canvas id="cardPreview" width="1080" height="1350" role="img" aria-label="Preview of the generated quote card"></canvas>
+    <p class="modal-warn" id="cardModalWarn" hidden>Your text is too long for the card, so the end has been cut short.</p>
+    <div class="modal-actions">
+      <button class="btn btn-secondary" id="cardClose">Close</button>
+      <button class="btn btn-primary" id="cardDownload">Download PNG</button>
+    </div>
+  </div>
+</div>
+
+<span class="visually-hidden" id="cardStatus" role="status"></span>
 
 <script>
 // Character counter
@@ -1622,6 +1782,772 @@ function shakespearify() {
   void outputEl.offsetWidth; // trigger reflow
   outputEl.classList.add('active');
 }
+// Saved quotes: a localStorage-backed list of saved outputs, shared by the
+// dashboard and the six style pages.
+//
+// The pages are standalone -- no shared runtime files -- so this file is pasted
+// VERBATIM into all seven of them. tools/test-savedquotes.mjs fails the build if
+// any copy drifts: it compares against browserSource() of this file, so the
+// CommonJS tail below is the one part that never reaches a page.
+//
+// Storage is best-effort. file:// browsing and privacy modes can refuse
+// localStorage outright, so every access is guarded and, when storage is
+// refused, the list lives for the session only and the UI says so.
+
+var SQ_KEY = 'repriser.savedQuotes';
+var SQ_MAX = 50;
+var SQ_EXCERPT = 90;
+var SQ_UNAVAILABLE = 'Saving is unavailable in this browser';
+
+// The list itself: [{ text, style, at }], newest first. Storage mirrors it and
+// is never the source of truth for an in-flight change.
+var sqItems = [];
+var sqAvailable = true;
+var sqUI = null;
+
+function sqEscape(value) {
+  return String(value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+function sqExcerpt(text, limit) {
+  var flat = String(text).replace(/\s+/g, ' ').trim();
+  if (flat.length <= limit) return flat;
+  return flat.slice(0, limit - 1).replace(/\s+\S*$/, '') + '\u2026';
+}
+
+// localStorage throws in Safari's private mode and in some file:// contexts,
+// and reading the property itself can throw, so the whole probe is guarded.
+function sqStore() {
+  try {
+    var store = (typeof window !== 'undefined' && window.localStorage) ||
+      (typeof localStorage !== 'undefined' ? localStorage : null);
+    if (!store) return null;
+    var probe = '__repriser_probe__';
+    store.setItem(probe, '1');
+    store.removeItem(probe);
+    return store;
+  } catch (e) {
+    return null;
+  }
+}
+
+// Trims, de-duplicates on text and enforces SQ_MAX, in that order. The key is
+// prefixed so a quote that happens to be called "constructor" still dedupes.
+function sqNormalise(items) {
+  var seen = {};
+  var out = [];
+  for (var i = 0; i < items.length && out.length < SQ_MAX; i++) {
+    var item = items[i];
+    if (!item || typeof item.text !== 'string') continue;
+    var text = item.text.replace(/\s+/g, ' ').trim();
+    if (!text) continue;
+    var key = '@' + text;
+    if (seen[key]) continue;
+    seen[key] = true;
+    out.push({
+      text: text,
+      style: typeof item.style === 'string' && item.style ? item.style : 'Quote',
+      at: typeof item.at === 'number' ? item.at : 0,
+    });
+  }
+  return out;
+}
+
+function sqWrite(items) {
+  var store = sqStore();
+  if (!store) {
+    sqAvailable = false;
+    return false;
+  }
+  try {
+    store.setItem(SQ_KEY, JSON.stringify(items));
+    sqAvailable = true;
+    return true;
+  } catch (e) {
+    sqAvailable = false;
+    return false;
+  }
+}
+
+// Reads storage and normalises what it finds. Corrupt or wrong-shaped JSON is
+// not fatal: it is overwritten with an empty list, so the page starts clean
+// instead of failing on every load.
+function sqRead() {
+  var store = sqStore();
+  if (!store) {
+    sqAvailable = false;
+    return [];
+  }
+  var raw = null;
+  try {
+    raw = store.getItem(SQ_KEY);
+  } catch (e) {
+    sqAvailable = false;
+    return [];
+  }
+  sqAvailable = true;
+  if (!raw) return [];
+  var parsed;
+  try {
+    parsed = JSON.parse(raw);
+  } catch (e) {
+    sqWrite([]);
+    return [];
+  }
+  if (!Array.isArray(parsed)) {
+    sqWrite([]);
+    return [];
+  }
+  var items = sqNormalise(parsed);
+  if (items.length !== parsed.length) sqWrite(items);
+  return items;
+}
+
+function sqSay(message) {
+  if (sqUI && sqUI.elements.status) {
+    sqUI.elements.status.textContent = message || '';
+  }
+}
+
+function sqRender() {
+  if (!sqUI || !sqUI.elements.list) return;
+  var rows = [];
+  for (var i = 0; i < sqItems.length; i++) {
+    var item = sqItems[i];
+    rows.push(
+      '<li class="saved-quotes-item">' +
+        '<span class="saved-quotes-text">' + sqEscape(sqExcerpt(item.text, SQ_EXCERPT)) + '</span>' +
+        '<span class="saved-quotes-style">' + sqEscape(item.style) + '</span>' +
+        '<button type="button" class="saved-quotes-del" data-index="' + i + '">Delete</button>' +
+      '</li>'
+    );
+  }
+  sqUI.elements.list.innerHTML = rows.join('');
+  if (sqUI.elements.empty) sqUI.elements.empty.hidden = sqItems.length > 0;
+}
+
+function sqIndexOf(text) {
+  for (var i = 0; i < sqItems.length; i++) {
+    if (sqItems[i].text === text) return i;
+  }
+  return -1;
+}
+
+function sqSaveQuote(text, style) {
+  var clean = String(text || '').replace(/\s+/g, ' ').trim();
+  if (!clean) {
+    sqSay('Transform some text first');
+    return false;
+  }
+  if (sqIndexOf(clean) >= 0) {
+    sqSay('That quote is already saved');
+    return false;
+  }
+  var next = [{ text: clean, style: style || 'Quote', at: Date.now() }].concat(sqItems);
+  sqItems = sqNormalise(next);
+  var stored = sqWrite(sqItems);
+  sqRender();
+  sqSay(stored ? 'Quote saved' : SQ_UNAVAILABLE);
+  return true;
+}
+
+function sqRemove(index) {
+  if (typeof index !== 'number' || index < 0 || index >= sqItems.length) return false;
+  sqItems.splice(index, 1);
+  sqWrite(sqItems);
+  sqRender();
+  sqSay('Quote deleted');
+  return true;
+}
+
+// Reading storage back into the list. Exposed because it is the path that has
+// to survive a corrupted or over-long entry, and it is also how another tab
+// picks up changes made elsewhere.
+function sqReload() {
+  sqItems = sqRead();
+  sqRender();
+  if (!sqAvailable) sqSay(SQ_UNAVAILABLE);
+  return sqItems.length;
+}
+
+function initSavedQuotes() {
+  if (sqUI) return sqUI;
+  sqItems = sqRead();
+  sqUI = {
+    elements: { list: null, empty: null, status: null },
+    add: sqSaveQuote,
+    remove: sqRemove,
+    all: function () { return sqItems.slice(); },
+    size: function () { return sqItems.length; },
+    reload: sqReload,
+    render: sqRender,
+    message: sqSay,
+    available: function () { return sqAvailable; },
+  };
+
+  if (typeof document !== 'undefined' && document.getElementById) {
+    sqUI.elements.list = document.getElementById('savedQuotesList');
+    sqUI.elements.empty = document.getElementById('savedQuotesEmpty');
+    sqUI.elements.status = document.getElementById('savedQuotesStatus');
+  }
+
+  // One Save button per output on the dashboard, one per page on the style
+  // pages; data-save carries the label and data-save-target the element to read,
+  // so this file stays identical everywhere.
+  if (typeof document !== 'undefined' && typeof document.querySelectorAll === 'function') {
+    var buttons = document.querySelectorAll('[data-save]');
+    for (var i = 0; i < buttons.length; i++) {
+      (function (btn) {
+        btn.addEventListener('click', function () {
+          var target = btn.getAttribute('data-save-target') || 'output';
+          var label = btn.getAttribute('data-save') || 'Quote';
+          var source = document.getElementById(target);
+          if (sqSaveQuote(source ? source.textContent : '', label)) {
+            btn.innerHTML = '<span>&#10003;</span> Saved';
+            btn.classList.add('copied');
+            if (typeof setTimeout === 'function') {
+              setTimeout(function () {
+                btn.innerHTML = '<span>&#128278;</span> Save';
+                btn.classList.remove('copied');
+              }, 2000);
+            }
+          }
+        });
+      })(buttons[i]);
+    }
+  }
+
+  // The list owns its own Delete buttons, so one delegated listener covers
+  // every row, including rows added after this ran.
+  var list = sqUI.elements.list;
+  if (list && list.addEventListener) {
+    list.addEventListener('click', function (e) {
+      var node = e && e.target;
+      if (!node || !node.getAttribute) return;
+      var index = node.getAttribute('data-index');
+      if (index === null || index === undefined) return;
+      sqRemove(parseInt(index, 10));
+    });
+  }
+
+  sqRender();
+  if (!sqAvailable) sqSay(SQ_UNAVAILABLE);
+  return sqUI;
+}
+
+// Runs on load in every page; skipped when the file is required under Node,
+// where there is no document to wire up.
+var savedQuotes = (typeof document !== 'undefined') ? initSavedQuotes() : null;
+// Quote card: strip stage business, lay out text, draw to canvas, export PNG.
+//
+// This file is the single source of truth. build-dashboard.mjs inlines it into
+// the generated index.html verbatim; tools/test-quotecard.mjs loads this same
+// file in a sandbox. Plain script (no module syntax) so both work.
+
+const CARD_W = 1080;
+const CARD_H = 1350;
+const CARD_PAD = 96;
+// Content zone between the top ornament and the footer rule. The quote is
+// balanced inside this, not the whole card, so it sits optically centred.
+const CARD_TEXT_TOP = 210;
+const CARD_TEXT_BOTTOM = 1140;
+const CARD_FONT_MIN = 30;
+const CARD_FONT_MAX = 120;
+// At or below this size the text still fits, but it is no longer comfortable to
+// read: the preview says so instead of silently shipping a wall of small type.
+const CARD_FONT_LONG = 60;
+const CARD_LABEL_RULE_Y = 1188;
+const CARD_ACCENT = '#d4a056';
+const CARD_ACCENT_SOFT = 'rgba(212,160,86,0.55)';
+const CARD_INK = '#3d2b1f';
+const CARD_LABEL_INK = '#8a6a3a';
+const CARD_QUOTE_FONT = '"Cormorant Garamond", Georgia, serif';
+const CARD_LABEL_FONT = 'Cinzel, Georgia, serif';
+
+// Parchment tints copied from each style page's .card gradient.
+const CARD_THEMES = {
+  shakespeare: { label: 'Shakespeare', from: '#faf3e6', mid: '#f0e4cc', to: '#e8d9b8' },
+  pirate:      { label: 'Pirate',      from: '#e8f0e6', mid: '#d8e8d4', to: '#c8dcc2' },
+  victorian:   { label: 'Victorian',   from: '#f4eef8', mid: '#e8e0f0', to: '#dcd2e8' },
+  chaucer:     { label: 'Chaucer',     from: '#f8f2e0', mid: '#f0e8d0', to: '#e8dec0' },
+  yoda:        { label: 'Yoda',        from: '#e8f4e6', mid: '#d8ecd2', to: '#c8e2c2' },
+  norse:       { label: 'Norse',       from: '#f0eaf8', mid: '#e4dcf0', to: '#d8d0e8' },
+};
+
+// Removes asides and stage directions, then tidies the whitespace they leave
+// behind. Deliberately generic: a pattern approach matches any phrase added
+// later, where a hardcoded literal list would silently miss it.
+function stripStageBusiness(text) {
+  return String(text)
+    .replace(/\[[^\]]*\]/g, '')
+    .replace(/\(aside:[^)]*\)/gi, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+// Greedy word wrap for one paragraph. A single word wider than the column is
+// hard-split by character so it can never overflow.
+function wrapParagraph(para, measure, maxWidth, font) {
+  const out = [];
+  for (const rawLine of String(para).split('\n')) {
+    const line = rawLine.trim();
+    if (!line) continue;
+
+    const words = line.split(/\s+/).filter(Boolean);
+    let cur = '';
+    for (let word of words) {
+      let candidate = cur ? cur + ' ' + word : word;
+      if (measure(candidate, font) <= maxWidth) {
+        cur = candidate;
+        continue;
+      }
+      if (cur) {
+        out.push(cur);
+        cur = '';
+      }
+      while (measure(word, font) > maxWidth && word.length > 1) {
+        let cut = word.length;
+        while (cut > 1 && measure(word.slice(0, cut), font) > maxWidth) cut--;
+        out.push(word.slice(0, cut));
+        word = word.slice(cut);
+      }
+      cur = word;
+    }
+    if (cur) out.push(cur);
+  }
+  return out;
+}
+
+/**
+ * Pure layout. `measure(text, font) -> width` is injected so this is testable
+ * in Node with no canvas.
+ *
+ * Fits the whole quote group, not just the text block: drawCard centres the
+ * opening mark, the lines and the closing mark together, so the budget must
+ * reserve that mark stack or a full card pushes text up into the top ornament.
+ *
+ * @returns {{lines: string[], font: number, lineHeight: number,
+ *            truncated: boolean, warning: null|'long'|'cut'}}
+ */
+function layoutCard(text, measure, opts) {
+  const o = opts || {};
+  const maxWidth = o.maxWidth != null ? o.maxWidth : CARD_W - CARD_PAD * 2;
+  const maxHeight = o.maxHeight != null ? o.maxHeight
+    : CARD_TEXT_BOTTOM - CARD_TEXT_TOP;
+  const minFont = o.minFont != null ? o.minFont : CARD_FONT_MIN;
+  const maxFont = o.maxFont != null ? o.maxFont : CARD_FONT_MAX;
+
+  // Display type needs proportionally tighter leading than body copy.
+  const ratioFor = (font) => (font >= 100 ? 1.14 : font >= 72 ? 1.2 : font >= 48 ? 1.3 : 1.42);
+
+  const body = stripStageBusiness(text);
+  if (!body) {
+    return {
+      lines: [], font: maxFont, lineHeight: maxFont * ratioFor(maxFont),
+      truncated: false, warning: null,
+    };
+  }
+
+  // The mark stack drawCard adds around the text: opening mark height, its gap
+  // below, the closing gap and the closing mark height.
+  const markStack = (font) => font * (0.46 + 0.26 + 0.08 + 0.4);
+  const budgetFor = (font) => Math.max(1,
+    Math.floor((maxHeight - markStack(font)) / (font * ratioFor(font))));
+
+  const wrapAt = (font) => wrapParagraph(body, measure, maxWidth, font);
+  const fits = (font) => wrapAt(font).length <= budgetFor(font);
+
+  // Largest size that fits, by binary search: short quotes therefore render
+  // large and fill the card, long ones shrink before anything is dropped.
+  let font = maxFont;
+  let lines;
+  if (fits(font)) {
+    lines = wrapAt(font);
+  } else {
+    let lo = minFont;
+    let hi = font;
+    while (lo < hi) {
+      const mid = Math.ceil((lo + hi) / 2);
+      if (fits(mid)) lo = mid;
+      else hi = mid - 1;
+    }
+    font = lo;
+    lines = wrapAt(font);
+  }
+
+  // Still too tall at the minimum size: drop the overflow and mark the cut.
+  // CARD_FONT_MIN is the readability floor — the text is never shrunk past it,
+  // so the honest options are a small type size or an explicit ellipsis.
+  const ratio = ratioFor(font);
+  const budget = budgetFor(font);
+  let truncated = false;
+  if (lines.length > budget) {
+    lines = lines.slice(0, budget);
+    let last = lines[budget - 1] || '';
+    while (last.length > 1 && measure(last + '…', font) > maxWidth) {
+      last = last.slice(0, -1);
+    }
+    lines[budget - 1] = last.replace(/\s+$/, '') + '…';
+    truncated = true;
+  }
+
+  return { lines, font, lineHeight: font * ratio, truncated, warning: cardWarning({ font, truncated }) };
+}
+
+/**
+ * What the preview should tell the user about this layout.
+ *   'cut' - text was longer than the card can hold even at the floor size
+ *   'long'- everything fit, but only by shrinking to an uncomfortable size
+ *   null  - fits comfortably
+ */
+function cardWarning(layout) {
+  if (!layout) return null;
+  if (layout.truncated) return 'cut';
+  if (layout.font <= CARD_FONT_LONG) return 'long';
+  return null;
+}
+
+// Canvas primitives only, so nothing external is loaded and the canvas is never
+// tainted (text, fills and strokes), which keeps toBlob/export working.
+function drawCard(ctx, layout, theme, opts) {
+  const o = opts || {};
+  const W = o.width || CARD_W;
+  const H = o.height || CARD_H;
+  const L = W - CARD_PAD;
+  const cy = H / 2;
+
+  // Parchment, lit from the upper left.
+  const bg = ctx.createLinearGradient(0, 0, W * 0.55, H);
+  bg.addColorStop(0, theme.from);
+  bg.addColorStop(0.55, theme.mid);
+  bg.addColorStop(1, theme.to);
+  ctx.fillStyle = bg;
+  ctx.fillRect(0, 0, W, H);
+
+  // Very light vignette: enough to warm the corners, not so much that it reads
+  // as a spotlight behind the text.
+  const vig = ctx.createRadialGradient(cy, cy * 0.9, W * 0.42, cy, cy, H * 0.72);
+  vig.addColorStop(0, 'rgba(255,255,255,0.05)');
+  vig.addColorStop(0.7, 'rgba(0,0,0,0)');
+  vig.addColorStop(1, 'rgba(74,52,28,0.10)');
+  ctx.fillStyle = vig;
+  ctx.fillRect(0, 0, W, H);
+
+  // Gold frame plus a hairline inner rule.
+  ctx.strokeStyle = CARD_ACCENT;
+  ctx.lineWidth = 5;
+  ctx.strokeRect(26, 26, W - 52, H - 52);
+  ctx.lineWidth = 1.25;
+  ctx.strokeRect(44, 44, W - 88, H - 88);
+
+  // Top ornament: a rule broken by a small diamond.
+  const oy = 150;
+  ctx.strokeStyle = CARD_ACCENT_SOFT;
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  ctx.moveTo(CARD_PAD + 40, oy);
+  ctx.lineTo(cy - 24, oy);
+  ctx.moveTo(cy + 24, oy);
+  ctx.lineTo(L - 40, oy);
+  ctx.stroke();
+  ctx.fillStyle = CARD_ACCENT;
+  ctx.beginPath();
+  ctx.moveTo(cy, oy - 11);
+  ctx.lineTo(cy + 11, oy);
+  ctx.lineTo(cy, oy + 11);
+  ctx.lineTo(cy - 11, oy);
+  ctx.closePath();
+  ctx.fill();
+
+  // Quote group: an oversized opening quote, the text, then a matching closing
+  // quote. Both are part of the measured group, so the composition balances as
+  // one unit rather than leaving a dead band above or below the text.
+  const zoneH = CARD_TEXT_BOTTOM - CARD_TEXT_TOP;
+  const blockH = layout.lines.length * layout.lineHeight;
+  const markSize = Math.round(layout.font * 1.5);
+  const markH = layout.font * 0.46;
+  const markGap = layout.font * 0.26;
+  const closeGap = layout.font * 0.08;
+  const closeH = layout.font * 0.4;
+  const groupH = markH + markGap + blockH + closeGap + closeH;
+  const top = CARD_TEXT_TOP + (zoneH - groupH) / 2 - groupH * 0.03;
+  const textTop = top + markH + markGap;
+
+  ctx.textAlign = 'left';
+  ctx.textBaseline = 'top';
+
+  // U+201C / U+201D already carry the correct opening and closing shapes, so
+  // no rotation is needed.
+  ctx.fillStyle = 'rgba(196,140,52,0.62)';
+  ctx.font = '400 ' + markSize + 'px ' + CARD_QUOTE_FONT;
+  ctx.fillText('“', CARD_PAD - 6, top);
+
+  ctx.fillStyle = CARD_INK;
+  ctx.font = 'italic 400 ' + layout.font + 'px ' + CARD_QUOTE_FONT;
+  for (let i = 0; i < layout.lines.length; i++) {
+    ctx.fillText(layout.lines[i], CARD_PAD, textTop + i * layout.lineHeight);
+  }
+
+  ctx.fillStyle = 'rgba(196,140,52,0.62)';
+  ctx.font = '400 ' + markSize + 'px ' + CARD_QUOTE_FONT;
+  ctx.textAlign = 'right';
+  ctx.fillText('”', L, textTop + blockH + closeGap);
+
+  // Footer: a hairline above a letterspaced style name.
+  ctx.strokeStyle = CARD_ACCENT_SOFT;
+  ctx.lineWidth = 1.25;
+  ctx.beginPath();
+  ctx.moveTo(CARD_PAD, CARD_LABEL_RULE_Y);
+  ctx.lineTo(L, CARD_LABEL_RULE_Y);
+  ctx.stroke();
+
+  ctx.fillStyle = CARD_LABEL_INK;
+  ctx.textBaseline = 'alphabetic';
+  ctx.textAlign = 'left';
+  ctx.font = '700 26px ' + CARD_LABEL_FONT;
+  // Canvas has no letter-spacing in older engines, so track the caps by hand.
+  drawTracked(ctx, theme.label.toUpperCase(), CARD_PAD, CARD_LABEL_RULE_Y + 48, 9);
+
+  return {
+    font: layout.font, lineHeight: layout.lineHeight,
+    truncated: layout.truncated, warning: layout.warning,
+  };
+}
+
+// Manual letter spacing, so the label reads as a considered small-caps line
+// rather than a bare word in the corner.
+function drawTracked(ctx, text, x, y, track) {
+  let cx = x;
+  for (let i = 0; i < text.length; i++) {
+    const ch = text[i];
+    ctx.fillText(ch, cx, y);
+    cx += ctx.measureText(ch).width + track;
+  }
+  return cx - track - x;
+}
+
+// Fonts must be resolved before drawing or canvas silently substitutes a
+// fallback serif. Resolves to null rather than rejecting when offline.
+function ensureCardFonts() {
+  if (typeof document === 'undefined' || !document.fonts) return Promise.resolve(null);
+  const wanted = [
+    'italic 400 48px "Cormorant Garamond"',
+    '700 26px Cinzel',
+  ];
+  return Promise.all(
+    wanted.map(function (spec) {
+      try { return document.fonts.load(spec); } catch (e) { return Promise.resolve([]); }
+    })
+  )
+    .then(function () { return document.fonts.ready; })
+    .then(function () { return true; })
+    .catch(function () { return null; });
+}
+
+const CARD_DPR_CAP = 2;
+
+function makeCardCanvas() {
+  const canvas = document.createElement('canvas');
+  // Capped at 2: the card is nominally 1080x1350, so a 2x buffer is already
+  // double that and stays sharp, while a 3x buffer is 13.1M pixels (~50MB) for
+  // detail that every viewer and social platform discards anyway. The cap keeps
+  // the export viable on high-density phones.
+  const dpr = Math.min(CARD_DPR_CAP, Math.max(1, window.devicePixelRatio || 1));
+  canvas.width = CARD_W * dpr;
+  canvas.height = CARD_H * dpr;
+  canvas.style.width = '100%';
+  canvas.style.height = 'auto';
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+  return { canvas: canvas, ctx: ctx, dpr: dpr };
+}
+
+function renderCard(text, styleId) {
+  const theme = CARD_THEMES[styleId] || CARD_THEMES.shakespeare;
+  return ensureCardFonts().then(function () {
+    const made = makeCardCanvas();
+    // measureText reflects whatever ctx.font is currently set to, and the canvas
+    // default is "10px sans-serif". Setting the font here rather than relying on
+    // drawCard means every measurement is taken at the size it will be drawn at;
+    // otherwise nothing wraps and every line silently overflows the card.
+    const measure = function (s, f) {
+      made.ctx.font = 'italic 400 ' + f + 'px ' + CARD_QUOTE_FONT;
+      return made.ctx.measureText(s).width;
+    };
+    const layout = layoutCard(text, measure, {});
+    const meta = drawCard(made.ctx, layout, theme, {});
+    return { canvas: made.canvas, layout: layout, theme: theme, meta: meta };
+  });
+}
+
+// The anchor must be in the document before click() and the object URL must
+// outlive the call, or Firefox and Safari cancel the download.
+function downloadCard(canvas, filename) {
+  return new Promise(function (resolve, reject) {
+    canvas.toBlob(function (blob) {
+      if (!blob) { reject(new Error('canvas produced no blob')); return; }
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+      resolve(blob.size);
+    }, 'image/png');
+  });
+}
+
+
+// Shared quote-card preview modal wiring.
+//
+// Kept in its own module rather than inlined into the generator that uses it, so
+// the markup, styles and behaviour live in one place. Its markup is
+// tools/card-modal.html and its styles are tools/card-modal.css, both read and
+// inlined by the build. Ids, class names and behaviour are unchanged from the
+// version that shipped, so tools/smoke-dashboard.mjs needed no edits.
+//
+// `themes`/`render`/`download` are injected so this also runs under
+// tools/smoke-dashboard.mjs with fakes.
+
+function initCardUI(opts) {
+  opts = opts || {};
+  var themes = opts.themes || (typeof CARD_THEMES !== 'undefined' ? CARD_THEMES : null);
+  var render = opts.render || renderCard;
+  var download = opts.download || downloadCard;
+  var filenameFor = opts.filenameFor ||
+    function (styleId) { return 'repriser-' + (styleId || 'card') + '-card.png'; };
+  var emptyMessage = opts.emptyMessage || 'Transform some text first';
+
+  var modal = document.getElementById('cardModal');
+  var preview = document.getElementById('cardPreview');
+  var noteEl = document.getElementById('cardModalNote');
+  var warnEl = document.getElementById('cardModalWarn');
+  var cardStatusEl = document.getElementById('cardStatus');
+  var closeBtn = document.getElementById('cardClose');
+  var downloadBtn = document.getElementById('cardDownload');
+
+  var lastFocus = null;
+  var lastCard = null;
+  var lastStyleId = null;
+
+  function focusables() {
+    return Array.prototype.slice.call(
+      modal.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])')
+    ).filter(function (el) { return !el.disabled && el.offsetParent !== null; });
+  }
+
+  function open(styleId, text, fromEl) {
+    if (!text || !text.trim()) {
+      cardStatusEl.textContent = emptyMessage;
+      return;
+    }
+    lastFocus = fromEl || null;
+    lastStyleId = styleId;
+    var theme = (themes && themes[styleId]) || (themes && themes.shakespeare) ||
+      { label: 'Quote' };
+    noteEl.textContent = 'Drawing a ' + theme.label.toLowerCase() + ' card';
+    warnEl.hidden = true;
+    modal.hidden = false;
+    closeBtn.focus();
+
+    render(text, styleId).then(function (r) {
+      var ctx = preview.getContext('2d');
+      ctx.clearRect(0, 0, preview.width, preview.height);
+      ctx.drawImage(r.canvas, 0, 0, preview.width, preview.height);
+      var warning = r.meta.warning;
+      warnEl.hidden = !warning;
+      if (warning === 'cut') {
+        warnEl.textContent = 'Your text is too long for the card, so the end has been cut short.';
+        noteEl.textContent = 'Cut short to fit ' + r.meta.font + 'px text';
+      } else if (warning === 'long') {
+        warnEl.textContent = 'Your text is long, so it has been shrunk to ' +
+          r.meta.font + 'px to fit the card.';
+        noteEl.textContent = r.meta.font + 'px text, shrunk to fit';
+      } else {
+        noteEl.textContent = r.meta.font + 'px text';
+      }
+      lastCard = r;
+      cardStatusEl.textContent = warning === 'cut'
+        ? theme.label + ' quote card ready, text cut short'
+        : theme.label + ' quote card ready';
+    }).catch(function () {
+      noteEl.textContent = 'Could not draw the card';
+      cardStatusEl.textContent = 'Could not draw the card';
+    });
+  }
+
+  function close() {
+    if (modal.hidden) return;
+    modal.hidden = true;
+    lastCard = null;
+    if (lastFocus && lastFocus.focus) lastFocus.focus();
+    lastFocus = null;
+  }
+
+  function isOpen() { return !modal.hidden; }
+
+  closeBtn.addEventListener('click', close);
+  modal.addEventListener('click', function (e) { if (e.target === modal) close(); });
+
+  document.addEventListener('keydown', function (e) {
+    if (modal.hidden) return;
+    if (e.key === 'Escape') { close(); return; }
+    if (e.key !== 'Tab') return;
+    var items = focusables();
+    if (!items.length) return;
+    var first = items[0];
+    var last = items[items.length - 1];
+    if (e.shiftKey && document.activeElement === first) { last.focus(); e.preventDefault(); }
+    else if (!e.shiftKey && document.activeElement === last) { first.focus(); e.preventDefault(); }
+  });
+
+  downloadBtn.addEventListener('click', function () {
+    if (!lastCard) return;
+    download(lastCard.canvas, filenameFor(lastStyleId))
+      .then(function (size) {
+        cardStatusEl.textContent = 'Card downloaded, ' + Math.round(size / 1024) + ' kilobytes';
+      }).catch(function () {
+        cardStatusEl.textContent = 'The card could not be saved';
+      });
+  });
+
+  return { open: open, close: close, isOpen: isOpen };
+}
+
+
+// Make Card wiring for the six individual style pages.
+//
+// Pasted VERBATIM into all six style pages after tools/quotecard.js and
+// tools/cardui.js, so the pages stay standalone and the copies cannot drift:
+// tools/test-cardpages.mjs fails the build if any page's block differs from
+// this file. The dashboard keeps its own copy of this wiring in
+// tools/build-dashboard.mjs because it has one button per style reading
+// out-<id>, where a style page has one button reading #output.
+
+var cardPageUI = null;
+
+function initCardPage() {
+  if (cardPageUI) return cardPageUI;
+  if (typeof document === 'undefined' || !document.getElementById) return null;
+  var btn = document.getElementById('makeCardBtn');
+  if (!btn || typeof btn.addEventListener !== 'function') return null;
+  cardPageUI = initCardUI({ emptyMessage: 'Transform some text first' });
+  btn.addEventListener('click', function () {
+    var out = document.getElementById('output');
+    var id = btn.getAttribute ? btn.getAttribute('data-card') : null;
+    cardPageUI.open(id, out ? out.textContent : '', btn);
+  });
+  return cardPageUI;
+}
+
+var cardPage = (typeof document !== 'undefined') ? initCardPage() : null;
+
 </script>
 </body>
 </html>

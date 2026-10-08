@@ -1,0 +1,63 @@
+  /* ====== QUOTE CARD MODAL ====== */
+  #cardModal {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: rgba(20, 14, 8, 0.82);
+  }
+  #cardModal[hidden] { display: none; }
+  .modal-box {
+    background: linear-gradient(145deg, #fdf6e3 0%, #f4e8cd 100%);
+    border: 2px solid rgba(196,162,101,0.7);
+    border-radius: 12px;
+    padding: 20px;
+    max-width: 560px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.5);
+    animation: cardModalIn 0.24s ease-out;
+  }
+  @keyframes cardModalIn {
+    from { opacity: 0; transform: translateY(14px) scale(0.98); }
+    to { opacity: 1; transform: none; }
+  }
+  .modal-box h2 {
+    font-family: 'Cinzel', serif;
+    font-size: 1.15rem;
+    color: #3a2510;
+    margin: 0 0 4px;
+  }
+  .modal-note {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    color: #8a6a3a;
+    font-size: 0.9rem;
+    margin: 0 0 14px;
+  }
+  #cardPreview {
+    display: block;
+    width: 100%;
+    height: auto;
+    border: 1px solid rgba(196,162,101,0.5);
+    border-radius: 6px;
+    background: #f4e8cd;
+  }
+  .modal-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    margin-top: 16px;
+  }
+  .modal-actions .btn { padding: 10px 20px; font-size: 0.95rem; }
+  .modal-warn {
+    font-family: 'Cormorant Garamond', serif;
+    color: #a04a2a;
+    font-size: 0.9rem;
+    margin: 10px 0 0;
+  }
+  .modal-warn[hidden] { display: none; }

@@ -472,6 +472,138 @@
     color: #3a2510;
     box-shadow: 0 0 8px rgba(212,160,86,0.3);
   }
+  /* ====== QUOTE CARD MODAL ====== */
+  #cardModal {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: rgba(20, 14, 8, 0.82);
+  }
+  #cardModal[hidden] { display: none; }
+  .modal-box {
+    background: linear-gradient(145deg, #fdf6e3 0%, #f4e8cd 100%);
+    border: 2px solid rgba(196,162,101,0.7);
+    border-radius: 12px;
+    padding: 20px;
+    max-width: 560px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.5);
+    animation: cardModalIn 0.24s ease-out;
+  }
+  @keyframes cardModalIn {
+    from { opacity: 0; transform: translateY(14px) scale(0.98); }
+    to { opacity: 1; transform: none; }
+  }
+  .modal-box h2 {
+    font-family: 'Cinzel', serif;
+    font-size: 1.15rem;
+    color: #3a2510;
+    margin: 0 0 4px;
+  }
+  .modal-note {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    color: #8a6a3a;
+    font-size: 0.9rem;
+    margin: 0 0 14px;
+  }
+  #cardPreview {
+    display: block;
+    width: 100%;
+    height: auto;
+    border: 1px solid rgba(196,162,101,0.5);
+    border-radius: 6px;
+    background: #f4e8cd;
+  }
+  .modal-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    margin-top: 16px;
+  }
+  .modal-actions .btn { padding: 10px 20px; font-size: 0.95rem; }
+  .modal-warn {
+    font-family: 'Cormorant Garamond', serif;
+    color: #a04a2a;
+    font-size: 0.9rem;
+    margin: 10px 0 0;
+  }
+  .modal-warn[hidden] { display: none; }
+
+  /* ====== SAVED QUOTES ====== */
+  .saved-quotes {
+    background: linear-gradient(145deg, #fffcf5, #f8f0de, #f2e8ce);
+    border: 2px solid #c4a265;
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-top: 18px;
+    position: relative;
+    box-shadow:
+      0 4px 20px rgba(0,0,0,0.25),
+      inset 0 1px 0 rgba(255,255,255,0.5);
+  }
+
+  .saved-quotes-empty {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    color: #b8956a;
+    margin: 4px 0 0;
+  }
+
+  .saved-quotes-list {
+    list-style: none;
+    margin: 4px 0 0;
+    padding: 0;
+  }
+
+  .saved-quotes-item {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    padding: 9px 0;
+    border-top: 1px solid rgba(196,162,101,0.3);
+  }
+
+  .saved-quotes-text {
+    flex: 1;
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 1.02rem;
+    line-height: 1.5;
+    color: #3d2b1f;
+    overflow-wrap: break-word;
+  }
+
+  .saved-quotes-style {
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    color: #8a6a3a;
+    white-space: nowrap;
+  }
+
+  .saved-quotes-del {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.85rem;
+    padding: 5px 11px;
+    background: rgba(184,149,106,0.15);
+    border: 1px solid rgba(184,149,106,0.4);
+    border-radius: 6px;
+    color: #8b6d4a;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .saved-quotes-del:hover {
+    background: rgba(150,60,60,0.12);
+    border-color: rgba(150,60,60,0.45);
+    color: #8a3a3a;
+  }
 
   /* ====== DASHBOARD ====== */
   .grid {
@@ -560,9 +692,9 @@
     max-height: 90vh;
     overflow-y: auto;
     box-shadow: 0 12px 40px rgba(0,0,0,0.5);
-    animation: cardIn 0.24s ease-out;
+    animation: cardModalIn 0.24s ease-out;
   }
-  @keyframes cardIn {
+  @keyframes cardModalIn {
     from { opacity: 0; transform: translateY(14px) scale(0.98); }
     to { opacity: 1; transform: none; }
   }
@@ -618,7 +750,6 @@
 <a href="./chaucer.html">Chaucer</a>
 <a href="./yoda.html">Yoda</a>
 <a href="./norse.html">Norse</a>
-<a href="./unscramble.html">Unscramble</a>
   </div>
 
 <div class="container">
@@ -659,6 +790,9 @@
           <button class="btn-copy" data-copy="shakespeare">
             <span>&#128203;</span> Copy
           </button>
+          <button class="btn-copy" data-save="Shakespeare" data-save-target="out-shakespeare">
+            <span>&#128278;</span> Save
+          </button>
         </div>
       </section>
       <section class="mini">
@@ -673,6 +807,9 @@
           </button>
           <button class="btn-copy" data-copy="pirate">
             <span>&#128203;</span> Copy
+          </button>
+          <button class="btn-copy" data-save="Pirate" data-save-target="out-pirate">
+            <span>&#128278;</span> Save
           </button>
         </div>
       </section>
@@ -689,6 +826,9 @@
           <button class="btn-copy" data-copy="victorian">
             <span>&#128203;</span> Copy
           </button>
+          <button class="btn-copy" data-save="Victorian" data-save-target="out-victorian">
+            <span>&#128278;</span> Save
+          </button>
         </div>
       </section>
       <section class="mini">
@@ -703,6 +843,9 @@
           </button>
           <button class="btn-copy" data-copy="chaucer">
             <span>&#128203;</span> Copy
+          </button>
+          <button class="btn-copy" data-save="Chaucer" data-save-target="out-chaucer">
+            <span>&#128278;</span> Save
           </button>
         </div>
       </section>
@@ -719,6 +862,9 @@
           <button class="btn-copy" data-copy="yoda">
             <span>&#128203;</span> Copy
           </button>
+          <button class="btn-copy" data-save="Yoda" data-save-target="out-yoda">
+            <span>&#128278;</span> Save
+          </button>
         </div>
       </section>
       <section class="mini">
@@ -734,9 +880,19 @@
           <button class="btn-copy" data-copy="norse">
             <span>&#128203;</span> Copy
           </button>
+          <button class="btn-copy" data-save="Norse" data-save-target="out-norse">
+            <span>&#128278;</span> Save
+          </button>
         </div>
       </section>
   </div>
+
+<section class="saved-quotes" id="savedQuotes">
+  <div class="card-label"><span class="icon">&#128218;</span> Saved Quotes</div>
+  <p class="saved-quotes-empty" id="savedQuotesEmpty">Nothing saved yet.</p>
+  <ul class="saved-quotes-list" id="savedQuotesList"></ul>
+  <span class="visually-hidden" id="savedQuotesStatus" role="status"></span>
+</section>
 
   <div class="footer">
     <span class="quill-small">&#128396;</span>
@@ -752,7 +908,7 @@
     <h2 id="cardModalTitle">Quote card</h2>
     <p class="modal-note" id="cardModalNote">Preparing&hellip;</p>
     <canvas id="cardPreview" width="1080" height="1350" role="img" aria-label="Preview of the generated quote card"></canvas>
-    <p class="modal-warn" id="cardModalWarn" hidden>Text was too long to fit, so it has been cut short.</p>
+    <p class="modal-warn" id="cardModalWarn" hidden>Your text is too long for the card, so the end has been cut short.</p>
     <div class="modal-actions">
       <button class="btn btn-secondary" id="cardClose">Close</button>
       <button class="btn btn-primary" id="cardDownload">Download PNG</button>
@@ -5223,6 +5379,91 @@ function maybeAddParenthetical(text) {
   return words.join(" ");
 }
 
+function frontObject(sentence) {
+  var body = sentence;
+  var tail = '';
+  var tm = body.match(/([.!?]+)$/);
+  if (tm) {
+    tail = tm[1];
+    body = body.slice(0, -tail.length);
+  }
+  if (/[,.:;?!]/.test(body) || /[?!]/.test(tail)) return sentence;
+
+  var AUX = ('am is are was were have has had do does did will shall can could ' +
+    'may might must should would ought').split(' ');
+  var DET = ('the a an this that these those some any each every no another ' +
+    'my your his her its our their either neither').split(' ');
+  var PRON = ('i you he she it we they me him her us them mine yours hers ours ' +
+    'theirs myself yourself himself herself itself ourselves yourselves themselves').split(' ');
+  var PREP = ('in on at to for with by from of about into over under after before ' +
+    'between through during without within along across behind beyond near past ' +
+    'toward towards upon until since than like up down off out around against ' +
+    'among ahead instead').split(' ');
+  var CONJ = ('and but or nor so yet because although while when if unless that ' +
+    'who which what where').split(' ');
+  var ADV = ('quickly slowly quietly loudly gently carefully badly hardly immediately ' +
+    'finally suddenly recently often always never sometimes usually really very ' +
+    'too just again away back already still maybe perhaps together alone fast hard ' +
+    'straight almost only even quite rather actually today tonight tomorrow ' +
+    'yesterday here there now then soon early late well ever once twice else hence ' +
+    'thus therefore anyway somehow somewhere').split(' ');
+  // The suffixes here are deliberately few: -y and -ish would swallow verbs
+  // like "play" and "flourish", so the common irregulars are listed instead.
+  var ADJ = ('big small old new young good bad happy sad angry tired brave bright ' +
+    'dark red blue green white black strong weak rich poor kind nice sweet terrible ' +
+    'horrible wonderful strange quiet loud clean dirty short tall long high low warm ' +
+    'cold hot cool little large wide deep fine true false real sure ready free ' +
+    'busy safe proud calm clever foolish gentle mighty cute pretty ugly soft fresh ' +
+    'silly funny crazy lazy easy messy dirty dusty rusty sunny cloudy stormy windy ' +
+    'icy wealthy healthy lonely empty tasty juicy smelly').split(' ');
+  var FUNC = AUX.concat(DET, PRON, PREP, CONJ);
+
+  var words = body.split(/\s+/).filter(function (w) { return w; });
+  if (words.length < 3) return sentence;
+  var lower = words.map(function (w) { return w.toLowerCase().replace(/[^a-z']/g, ''); });
+  var isAdj = function (w) {
+    return ADJ.indexOf(w) >= 0 || /(ful|ous|ive|able|ible|less|ical)$/.test(w);
+  };
+  var isAdv = function (w) { return ADV.indexOf(w) >= 0 || /ly$/.test(w); };
+  var bad = function (list, w) { return list.indexOf(w) >= 0; };
+
+  // Longest plausible subject first, so "the angry dog" wins over "the angry".
+  // A determiner needs its noun (so len 1 is out), a pronoun stands alone
+  // (so len > 1 is out), and nothing may end on a function word, adverb or
+  // adjective — those mean we have cut the subject in the wrong place.
+  for (var len = Math.min(3, words.length - 2); len >= 1; len--) {
+    var first = lower[0];
+    var last = lower[len - 1];
+    var subjectOk;
+    if (bad(DET, first)) {
+      subjectOk = len > 1 && !bad(FUNC, last) && !isAdv(last) && !isAdj(last);
+    } else if (bad(PRON, first)) {
+      subjectOk = len === 1;
+    } else {
+      subjectOk = !bad(FUNC, first) && !isAdv(first) &&
+        (len > 1 || !isAdj(first)) &&
+        !bad(FUNC, last) && !isAdv(last) && !isAdj(last);
+    }
+    if (!subjectOk) continue;
+
+    // Auxiliaries belong to the inversion patterns; "like" is only a verb
+    // right after a pronoun ("I like pie"), never a preposition there.
+    var verb = lower[len];
+    var verbOk = verb === 'like'
+      ? bad(PRON, first)
+      : !bad(FUNC, verb) && !isAdv(verb) && !isAdj(verb);
+    if (!verbOk) continue;
+
+    // A parse was found; the object guard decides, then we commit.
+    var objFirst = lower[len + 1];
+    if (bad(PREP, objFirst) || isAdv(objFirst)) return sentence;
+
+    var obj = words.slice(len + 1).join(' ');
+    return obj + ', ' + words.slice(0, len).join(' ') + ' ' + words[len] + tail;
+  }
+  return sentence;
+}
+
   const inputEl = { value: '' };
   const outputEl = {
     textContent: '', offsetWidth: 0,
@@ -5246,6 +5487,9 @@ function yodaify() {
 
     // Single left-to-right pass, longest match wins
     s = replaceAll(s);
+
+    // Front the object of a simple SVO statement, then the rest
+    s = frontObject(s);
 
     // Advanced transformations
     s = maybeInvert(s);
@@ -6324,6 +6568,9 @@ const CARD_TEXT_TOP = 210;
 const CARD_TEXT_BOTTOM = 1140;
 const CARD_FONT_MIN = 30;
 const CARD_FONT_MAX = 120;
+// At or below this size the text still fits, but it is no longer comfortable to
+// read: the preview says so instead of silently shipping a wall of small type.
+const CARD_FONT_LONG = 60;
 const CARD_LABEL_RULE_Y = 1188;
 const CARD_ACCENT = '#d4a056';
 const CARD_ACCENT_SOFT = 'rgba(212,160,86,0.55)';
@@ -6343,8 +6590,8 @@ const CARD_THEMES = {
 };
 
 // Removes asides and stage directions, then tidies the whitespace they leave
-// behind. Deliberately generic: unscramble.html strips these with ~40 hardcoded
-// literal regexes, which silently misses any phrase added later.
+// behind. Deliberately generic: a pattern approach matches any phrase added
+// later, where a hardcoded literal list would silently miss it.
 function stripStageBusiness(text) {
   return String(text)
     .replace(/\[[^\]]*\]/g, '')
@@ -6389,7 +6636,13 @@ function wrapParagraph(para, measure, maxWidth, font) {
 /**
  * Pure layout. `measure(text, font) -> width` is injected so this is testable
  * in Node with no canvas.
- * @returns {{lines: string[], font: number, lineHeight: number, truncated: boolean}}
+ *
+ * Fits the whole quote group, not just the text block: drawCard centres the
+ * opening mark, the lines and the closing mark together, so the budget must
+ * reserve that mark stack or a full card pushes text up into the top ornament.
+ *
+ * @returns {{lines: string[], font: number, lineHeight: number,
+ *            truncated: boolean, warning: null|'long'|'cut'}}
  */
 function layoutCard(text, measure, opts) {
   const o = opts || {};
@@ -6404,25 +6657,45 @@ function layoutCard(text, measure, opts) {
 
   const body = stripStageBusiness(text);
   if (!body) {
-    return { lines: [], font: maxFont, lineHeight: maxFont * ratioFor(maxFont), truncated: false };
+    return {
+      lines: [], font: maxFont, lineHeight: maxFont * ratioFor(maxFont),
+      truncated: false, warning: null,
+    };
   }
 
-  const budgetFor = (font) => Math.max(1, Math.floor(maxHeight / (font * ratioFor(font))));
+  // The mark stack drawCard adds around the text: opening mark height, its gap
+  // below, the closing gap and the closing mark height.
+  const markStack = (font) => font * (0.46 + 0.26 + 0.08 + 0.4);
+  const budgetFor = (font) => Math.max(1,
+    Math.floor((maxHeight - markStack(font)) / (font * ratioFor(font))));
 
-  // Largest size that fits, stepping down. Short quotes therefore render large
-  // and fill the card instead of stranding a couple of small lines.
+  const wrapAt = (font) => wrapParagraph(body, measure, maxWidth, font);
+  const fits = (font) => wrapAt(font).length <= budgetFor(font);
+
+  // Largest size that fits, by binary search: short quotes therefore render
+  // large and fill the card, long ones shrink before anything is dropped.
   let font = maxFont;
-  let lines = wrapParagraph(body, measure, maxWidth, font);
-  let truncated = false;
-
-  while (font > minFont && lines.length > budgetFor(font)) {
-    font -= 1;
-    lines = wrapParagraph(body, measure, maxWidth, font);
+  let lines;
+  if (fits(font)) {
+    lines = wrapAt(font);
+  } else {
+    let lo = minFont;
+    let hi = font;
+    while (lo < hi) {
+      const mid = Math.ceil((lo + hi) / 2);
+      if (fits(mid)) lo = mid;
+      else hi = mid - 1;
+    }
+    font = lo;
+    lines = wrapAt(font);
   }
 
   // Still too tall at the minimum size: drop the overflow and mark the cut.
+  // CARD_FONT_MIN is the readability floor — the text is never shrunk past it,
+  // so the honest options are a small type size or an explicit ellipsis.
   const ratio = ratioFor(font);
   const budget = budgetFor(font);
+  let truncated = false;
   if (lines.length > budget) {
     lines = lines.slice(0, budget);
     let last = lines[budget - 1] || '';
@@ -6433,7 +6706,20 @@ function layoutCard(text, measure, opts) {
     truncated = true;
   }
 
-  return { lines, font, lineHeight: font * ratio, truncated };
+  return { lines, font, lineHeight: font * ratio, truncated, warning: cardWarning({ font, truncated }) };
+}
+
+/**
+ * What the preview should tell the user about this layout.
+ *   'cut' - text was longer than the card can hold even at the floor size
+ *   'long'- everything fit, but only by shrinking to an uncomfortable size
+ *   null  - fits comfortably
+ */
+function cardWarning(layout) {
+  if (!layout) return null;
+  if (layout.truncated) return 'cut';
+  if (layout.font <= CARD_FONT_LONG) return 'long';
+  return null;
 }
 
 // Canvas primitives only, so nothing external is loaded and the canvas is never
@@ -6537,7 +6823,10 @@ function drawCard(ctx, layout, theme, opts) {
   // Canvas has no letter-spacing in older engines, so track the caps by hand.
   drawTracked(ctx, theme.label.toUpperCase(), CARD_PAD, CARD_LABEL_RULE_Y + 48, 9);
 
-  return { font: layout.font, lineHeight: layout.lineHeight, truncated: layout.truncated };
+  return {
+    font: layout.font, lineHeight: layout.lineHeight,
+    truncated: layout.truncated, warning: layout.warning,
+  };
 }
 
 // Manual letter spacing, so the label reads as a considered small-caps line
@@ -6681,12 +6970,22 @@ function initCardUI(opts) {
       var ctx = preview.getContext('2d');
       ctx.clearRect(0, 0, preview.width, preview.height);
       ctx.drawImage(r.canvas, 0, 0, preview.width, preview.height);
-      warnEl.hidden = !r.meta.truncated;
-      noteEl.textContent = r.meta.truncated
-        ? 'Cut short to fit ' + r.meta.font + 'px text'
-        : r.meta.font + 'px text';
+      var warning = r.meta.warning;
+      warnEl.hidden = !warning;
+      if (warning === 'cut') {
+        warnEl.textContent = 'Your text is too long for the card, so the end has been cut short.';
+        noteEl.textContent = 'Cut short to fit ' + r.meta.font + 'px text';
+      } else if (warning === 'long') {
+        warnEl.textContent = 'Your text is long, so it has been shrunk to ' +
+          r.meta.font + 'px to fit the card.';
+        noteEl.textContent = r.meta.font + 'px text, shrunk to fit';
+      } else {
+        noteEl.textContent = r.meta.font + 'px text';
+      }
       lastCard = r;
-      cardStatusEl.textContent = theme.label + ' quote card ready';
+      cardStatusEl.textContent = warning === 'cut'
+        ? theme.label + ' quote card ready, text cut short'
+        : theme.label + ' quote card ready';
     }).catch(function () {
       noteEl.textContent = 'Could not draw the card';
       cardStatusEl.textContent = 'Could not draw the card';
@@ -6730,6 +7029,267 @@ function initCardUI(opts) {
 
   return { open: open, close: close, isOpen: isOpen };
 }
+
+// Saved quotes: a localStorage-backed list of saved outputs, shared by the
+// dashboard and the six style pages.
+//
+// The pages are standalone -- no shared runtime files -- so this file is pasted
+// VERBATIM into all seven of them. tools/test-savedquotes.mjs fails the build if
+// any copy drifts: it compares against browserSource() of this file, so the
+// CommonJS tail below is the one part that never reaches a page.
+//
+// Storage is best-effort. file:// browsing and privacy modes can refuse
+// localStorage outright, so every access is guarded and, when storage is
+// refused, the list lives for the session only and the UI says so.
+
+var SQ_KEY = 'repriser.savedQuotes';
+var SQ_MAX = 50;
+var SQ_EXCERPT = 90;
+var SQ_UNAVAILABLE = 'Saving is unavailable in this browser';
+
+// The list itself: [{ text, style, at }], newest first. Storage mirrors it and
+// is never the source of truth for an in-flight change.
+var sqItems = [];
+var sqAvailable = true;
+var sqUI = null;
+
+function sqEscape(value) {
+  return String(value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+function sqExcerpt(text, limit) {
+  var flat = String(text).replace(/\s+/g, ' ').trim();
+  if (flat.length <= limit) return flat;
+  return flat.slice(0, limit - 1).replace(/\s+\S*$/, '') + '\u2026';
+}
+
+// localStorage throws in Safari's private mode and in some file:// contexts,
+// and reading the property itself can throw, so the whole probe is guarded.
+function sqStore() {
+  try {
+    var store = (typeof window !== 'undefined' && window.localStorage) ||
+      (typeof localStorage !== 'undefined' ? localStorage : null);
+    if (!store) return null;
+    var probe = '__repriser_probe__';
+    store.setItem(probe, '1');
+    store.removeItem(probe);
+    return store;
+  } catch (e) {
+    return null;
+  }
+}
+
+// Trims, de-duplicates on text and enforces SQ_MAX, in that order. The key is
+// prefixed so a quote that happens to be called "constructor" still dedupes.
+function sqNormalise(items) {
+  var seen = {};
+  var out = [];
+  for (var i = 0; i < items.length && out.length < SQ_MAX; i++) {
+    var item = items[i];
+    if (!item || typeof item.text !== 'string') continue;
+    var text = item.text.replace(/\s+/g, ' ').trim();
+    if (!text) continue;
+    var key = '@' + text;
+    if (seen[key]) continue;
+    seen[key] = true;
+    out.push({
+      text: text,
+      style: typeof item.style === 'string' && item.style ? item.style : 'Quote',
+      at: typeof item.at === 'number' ? item.at : 0,
+    });
+  }
+  return out;
+}
+
+function sqWrite(items) {
+  var store = sqStore();
+  if (!store) {
+    sqAvailable = false;
+    return false;
+  }
+  try {
+    store.setItem(SQ_KEY, JSON.stringify(items));
+    sqAvailable = true;
+    return true;
+  } catch (e) {
+    sqAvailable = false;
+    return false;
+  }
+}
+
+// Reads storage and normalises what it finds. Corrupt or wrong-shaped JSON is
+// not fatal: it is overwritten with an empty list, so the page starts clean
+// instead of failing on every load.
+function sqRead() {
+  var store = sqStore();
+  if (!store) {
+    sqAvailable = false;
+    return [];
+  }
+  var raw = null;
+  try {
+    raw = store.getItem(SQ_KEY);
+  } catch (e) {
+    sqAvailable = false;
+    return [];
+  }
+  sqAvailable = true;
+  if (!raw) return [];
+  var parsed;
+  try {
+    parsed = JSON.parse(raw);
+  } catch (e) {
+    sqWrite([]);
+    return [];
+  }
+  if (!Array.isArray(parsed)) {
+    sqWrite([]);
+    return [];
+  }
+  var items = sqNormalise(parsed);
+  if (items.length !== parsed.length) sqWrite(items);
+  return items;
+}
+
+function sqSay(message) {
+  if (sqUI && sqUI.elements.status) {
+    sqUI.elements.status.textContent = message || '';
+  }
+}
+
+function sqRender() {
+  if (!sqUI || !sqUI.elements.list) return;
+  var rows = [];
+  for (var i = 0; i < sqItems.length; i++) {
+    var item = sqItems[i];
+    rows.push(
+      '<li class="saved-quotes-item">' +
+        '<span class="saved-quotes-text">' + sqEscape(sqExcerpt(item.text, SQ_EXCERPT)) + '</span>' +
+        '<span class="saved-quotes-style">' + sqEscape(item.style) + '</span>' +
+        '<button type="button" class="saved-quotes-del" data-index="' + i + '">Delete</button>' +
+      '</li>'
+    );
+  }
+  sqUI.elements.list.innerHTML = rows.join('');
+  if (sqUI.elements.empty) sqUI.elements.empty.hidden = sqItems.length > 0;
+}
+
+function sqIndexOf(text) {
+  for (var i = 0; i < sqItems.length; i++) {
+    if (sqItems[i].text === text) return i;
+  }
+  return -1;
+}
+
+function sqSaveQuote(text, style) {
+  var clean = String(text || '').replace(/\s+/g, ' ').trim();
+  if (!clean) {
+    sqSay('Transform some text first');
+    return false;
+  }
+  if (sqIndexOf(clean) >= 0) {
+    sqSay('That quote is already saved');
+    return false;
+  }
+  var next = [{ text: clean, style: style || 'Quote', at: Date.now() }].concat(sqItems);
+  sqItems = sqNormalise(next);
+  var stored = sqWrite(sqItems);
+  sqRender();
+  sqSay(stored ? 'Quote saved' : SQ_UNAVAILABLE);
+  return true;
+}
+
+function sqRemove(index) {
+  if (typeof index !== 'number' || index < 0 || index >= sqItems.length) return false;
+  sqItems.splice(index, 1);
+  sqWrite(sqItems);
+  sqRender();
+  sqSay('Quote deleted');
+  return true;
+}
+
+// Reading storage back into the list. Exposed because it is the path that has
+// to survive a corrupted or over-long entry, and it is also how another tab
+// picks up changes made elsewhere.
+function sqReload() {
+  sqItems = sqRead();
+  sqRender();
+  if (!sqAvailable) sqSay(SQ_UNAVAILABLE);
+  return sqItems.length;
+}
+
+function initSavedQuotes() {
+  if (sqUI) return sqUI;
+  sqItems = sqRead();
+  sqUI = {
+    elements: { list: null, empty: null, status: null },
+    add: sqSaveQuote,
+    remove: sqRemove,
+    all: function () { return sqItems.slice(); },
+    size: function () { return sqItems.length; },
+    reload: sqReload,
+    render: sqRender,
+    message: sqSay,
+    available: function () { return sqAvailable; },
+  };
+
+  if (typeof document !== 'undefined' && document.getElementById) {
+    sqUI.elements.list = document.getElementById('savedQuotesList');
+    sqUI.elements.empty = document.getElementById('savedQuotesEmpty');
+    sqUI.elements.status = document.getElementById('savedQuotesStatus');
+  }
+
+  // One Save button per output on the dashboard, one per page on the style
+  // pages; data-save carries the label and data-save-target the element to read,
+  // so this file stays identical everywhere.
+  if (typeof document !== 'undefined' && typeof document.querySelectorAll === 'function') {
+    var buttons = document.querySelectorAll('[data-save]');
+    for (var i = 0; i < buttons.length; i++) {
+      (function (btn) {
+        btn.addEventListener('click', function () {
+          var target = btn.getAttribute('data-save-target') || 'output';
+          var label = btn.getAttribute('data-save') || 'Quote';
+          var source = document.getElementById(target);
+          if (sqSaveQuote(source ? source.textContent : '', label)) {
+            btn.innerHTML = '<span>&#10003;</span> Saved';
+            btn.classList.add('copied');
+            if (typeof setTimeout === 'function') {
+              setTimeout(function () {
+                btn.innerHTML = '<span>&#128278;</span> Save';
+                btn.classList.remove('copied');
+              }, 2000);
+            }
+          }
+        });
+      })(buttons[i]);
+    }
+  }
+
+  // The list owns its own Delete buttons, so one delegated listener covers
+  // every row, including rows added after this ran.
+  var list = sqUI.elements.list;
+  if (list && list.addEventListener) {
+    list.addEventListener('click', function (e) {
+      var node = e && e.target;
+      if (!node || !node.getAttribute) return;
+      var index = node.getAttribute('data-index');
+      if (index === null || index === undefined) return;
+      sqRemove(parseInt(index, 10));
+    });
+  }
+
+  sqRender();
+  if (!sqAvailable) sqSay(SQ_UNAVAILABLE);
+  return sqUI;
+}
+
+// Runs on load in every page; skipped when the file is required under Node,
+// where there is no document to wire up.
+var savedQuotes = (typeof document !== 'undefined') ? initSavedQuotes() : null;
 
 
 (function () {

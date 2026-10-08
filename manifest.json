@@ -33,20 +33,5 @@
       "type": "image/png",
       "purpose": "maskable"
     }
-  ],
-  "shortcuts": [
-    {
-      "name": "Unscramble stylized text",
-      "short_name": "Unscramble",
-      "description": "Turn Shakespeare, Chaucer or Norse back into modern English",
-      "url": "./unscramble.html",
-      "icons": [
-        {
-          "src": "./icon-192.png",
-          "sizes": "192x192",
-          "type": "image/png"
-        }
-      ]
-    }
   ]
 }

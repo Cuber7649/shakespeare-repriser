@@ -1,0 +1,14 @@
+<div id="cardModal" hidden>
+  <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="cardModalTitle">
+    <h2 id="cardModalTitle">Quote card</h2>
+    <p class="modal-note" id="cardModalNote">Preparing&hellip;</p>
+    <canvas id="cardPreview" width="1080" height="1350" role="img" aria-label="Preview of the generated quote card"></canvas>
+    <p class="modal-warn" id="cardModalWarn" hidden>Your text is too long for the card, so the end has been cut short.</p>
+    <div class="modal-actions">
+      <button class="btn btn-secondary" id="cardClose">Close</button>
+      <button class="btn btn-primary" id="cardDownload">Download PNG</button>
+    </div>
+  </div>
+</div>
+
+<span class="visually-hidden" id="cardStatus" role="status"></span>
