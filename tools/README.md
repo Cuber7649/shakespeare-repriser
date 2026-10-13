@@ -7,7 +7,7 @@ Everything that generates or verifies the site. Zero dependencies: plain Node wi
 
 ```bash
 npm run build   # regenerate index.html from the six style pages
-npm test        # run the whole suite (build + 17 checks, ~90s)
+npm test        # run the whole suite (build + 18 checks, ~90s)
 ```
 
 `npm install` is never needed — there are no dependencies. Any individual script
@@ -28,6 +28,7 @@ also runs directly, e.g. `node tools/verify-dashboard.mjs`.
 | `test-savedquotes.mjs` | The saved-quotes block pasted byte-identically into all 7 pages; save, delete, cap and corruption behaviour |
 | `test-engine.mjs` | Compares the single-pass engine against the old chain |
 | `test-content.mjs` | Family-friendly word lists, no servitude roasts, no duplicates |
+| `test-yoda.mjs` | Object fronting, infinitive fronting, the strict object guard, seeded seed-42 outputs |
 | `test-manifest.mjs` | Installability criteria, declared icon sizes vs real PNG bytes, launcher shortcuts (optional) |
 | `test-reproducible.mjs` | Generated output is pure LF and rebuilds byte-identically |
 | `test-links.mjs` | Every local href resolves; all pages share one switcher |

@@ -36,7 +36,7 @@ const STYLES = [
   { id: 'pirate', label: 'Pirate', href: 'pirate.html', entry: 'pirateify', icon: '&#9875;' },
   { id: 'victorian', label: 'Victorian', href: 'victorian.html', entry: 'victorianify', icon: '&#128187;' },
   { id: 'chaucer', label: 'Chaucer', href: 'chaucer.html', entry: 'chaucerify', icon: '&#128220;' },
-  { id: 'yoda', label: 'Yoda', href: 'yoda.html', entry: 'yodaify', icon: '&#128161;', helpers: [...HELPERS, 'frontObject'] },
+  { id: 'yoda', label: 'Yoda', href: 'yoda.html', entry: 'yodaify', icon: '&#128161;', helpers: [...HELPERS, 'frontObject', 'frontInfinitive'] },
   { id: 'norse', label: 'Norse', href: 'norse.html', entry: 'norseify', icon: '&#9876;' },
 ];
 

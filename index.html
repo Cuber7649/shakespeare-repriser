@@ -5018,7 +5018,7 @@ const verbs = [
   [/\blead\b/gi,"guide"],[/\bled\b/gi,"guided"],
   [/\bteach\b/gi,"instruct"],[/\btaught\b/gi,"instructed"],
   [/\bwin\b/gi,"triumph"],[/\bwon\b/gi,"triumphed"],
-  [/\blose\b/gi,"be vanquished"],[/\blost\b/gi,"was vanquished"],
+  [/\blose\b/gi,"be vanquished"],
   [/\bstop\b/gi,"cease"],[/\bstopped\b/gi,"ceased"],
   [/\bcontinue\b/gi,"persist"],[/\bcontinued\b/gi,"persisted"],
   [/\bstart\b/gi,"commence"],[/\bstarted\b/gi,"commenced"],
@@ -5039,7 +5039,7 @@ const verbs = [
   [/\bplay\b/gi,"frolic"],[/\bplaying\b/gi,"frolicking"],[/\bplayed\b/gi,"frolicked"],
   [/\bwait\b/gi,"tarry"],[/\bwaited\b/gi,"tarried"],[/\bwaiting\b/gi,"tarrying"],
   [/\bstay\b/gi,"remain"],[/\bstayed\b/gi,"remained"],
-  [/\bleave\b/gi,"depart"],[/\bleft\b/gi,"departed"],
+  [/\bleft\b/gi,"departed"],
   [/\bhide\b/gi,"conceal"],[/\bhid\b/gi,"concealed"],[/\bhidden\b/gi,"concealed"],
   [/\breveal\b/gi,"unveil"],[/\brevealed\b/gi,"unveiled"],
   [/\bdiscover\b/gi,"uncover"],[/\bdiscovered\b/gi,"uncovered"],
@@ -5079,7 +5079,7 @@ const verbs = [
   [/\bbecome\b/gi,"grow"],[/\bbecame\b/gi,"grew"],
   [/\bremain\b/gi,"tarry"],[/\bremained\b/gi,"tarried"],
   [/\bneeds\b/gi,"requireth"],
-  [/\bwant\b/gi,"desire"],[/\bwants\b/gi,"desireth"],[/\bwanted\b/gi,"desired"],
+  [/\bwants\b/gi,"desireth"],[/\bwanted\b/gi,"desired"],
   [/\bdislike\b/gi,"disapprove of"],
   // Force-specific verbs
   [/\bmediate\b/gi,"meditate"],[/\bmediated\b/gi,"meditated"],[/\bmediating\b/gi,"meditating"],];
@@ -5110,7 +5110,6 @@ const contractions = [
   [/\btryna\b/gi,"trying to"]
 ];
 const sentenceTransforms = [
-  [/\bi want to\b/gi,"want to, I do"],
   [/\bi'd like to\b/gi,"would like to, I"],
   [/\bi need to\b/gi,"must, I"],
   [/\bi have to\b/gi,"have to, I must"],
@@ -5454,14 +5453,28 @@ function frontObject(sentence) {
       : !bad(FUNC, verb) && !isAdv(verb) && !isAdj(verb);
     if (!verbOk) continue;
 
-    // A parse was found; the object guard decides, then we commit.
-    var objFirst = lower[len + 1];
-    if (bad(PREP, objFirst) || isAdv(objFirst)) return sentence;
+    // A parse was found; the object guard decides, then we commit. The whole
+    // object phrase is checked, not just its first word: "chased the cat up
+    // the tree" hides a prepositional phrase inside the object, and a lone
+    // noun ("she runs") leaves nothing to front.
+    var objWords = lower.slice(len + 1);
+    if (objWords.length === 0 || objWords.length > 4) return sentence;
+    if (objWords.some(function (w) { return bad(PREP, w) || isAdv(w); })) return sentence;
 
     var obj = words.slice(len + 1).join(' ');
     return obj + ', ' + words.slice(0, len).join(' ') + ' ' + words[len] + tail;
   }
   return sentence;
+}
+
+function frontInfinitive(sentence) {
+  var m = sentence.match(/^(I|you|we|they) (want|wish|need|hope) to ((?:\w+)(?: \w+){0,4})([.!?]?)$/i);
+  if (!m) return sentence;
+  // The subject lands mid-sentence, so normalise its case: "I" stays "I",
+  // everything else goes lower ("You need to leave" -> "..., you need.").
+  var subj = /^i$/i.test(m[1]) ? 'I' : m[1].toLowerCase();
+  var verb = m[2].toLowerCase(), phrase = m[3], end = m[4] || '.';
+  return 'To ' + phrase + ', ' + subj + ' ' + verb + end;
 }
 
   const inputEl = { value: '' };
@@ -5485,29 +5498,39 @@ function yodaify() {
     s = s.trim();
     if (!s) continue;
 
+    // Reorder the user's own words first, so the parser and the word table
+    // see the words that were typed. Everything added below is prepended or
+    // appended after this point, so inserted text is never reordered.
+    let reordered = frontObject(s);
+    const wasFronted = reordered !== s;
+    if (!wasFronted) reordered = frontInfinitive(s);
+    const wasReordered = reordered !== s;
+
     // Single left-to-right pass, longest match wins
-    s = replaceAll(s);
+    s = replaceAll(reordered);
 
-    // Front the object of a simple SVO statement, then the rest
-    s = frontObject(s);
+    // These land on the first comma or inside the sentence; a reordered
+    // sentence already carries a comma that marks its fronted phrase.
+    if (!wasReordered) {
+      s = maybeInvert(s);
+      s = maybeAddMetaphor(s);
+      s = maybeAddAlliteration(s);
+    }
 
-    // Advanced transformations
-    s = maybeInvert(s);
-    s = maybeAddFiller(s);
-    s = maybeAddMetaphor(s);
-    s = maybeAddAlliteration(s);
-    s = maybeAddParenthetical(s);
-    s = maybeInsertInsult(s);
-
-    // Opening exclamation (~35%)
+    // Opening interjection (~35%), kept: it is one of Yoda's habits.
     if (chance(0.35)) s = pick(openings) + " " + s;
 
-    // Mid-sentence insertion (~20%)
-    if (chance(0.20)) {
-      let cIdx = s.indexOf(',');
-      if (cIdx > 0 && cIdx < s.length - 5) {
-        let after = s.substring(cIdx + 1).replace(/^\s+/, "");
-        s = s.substring(0, cIdx) + pick(midInsertions) + (after ? " " + after : "");
+    // A rebuke and a mid-sentence insertion only ride along with longer
+    // sentences; on short input they are pure noise, and the insertion
+    // lands on the first comma - which may be the fronted phrase's own.
+    if (s.length >= 40) {
+      s = maybeInsertInsult(s);
+      if (!wasReordered && chance(0.20)) {
+        let cIdx = s.indexOf(',');
+        if (cIdx > 0 && cIdx < s.length - 5) {
+          let after = s.substring(cIdx + 1).replace(/^\s+/, "");
+          s = s.substring(0, cIdx) + pick(midInsertions) + (after ? " " + after : "");
+        }
       }
     }
 
@@ -5516,10 +5539,13 @@ function yodaify() {
 
   text = result.join(" ");
 
-  // Post-processing on full text
+  // Post-processing on full text. Short inputs keep their ending: an aside or
+  // stage direction would double the output for a five-word sentence.
   text = maybeInsertQuote(text);
-  text = maybeAddAside(text);
-  text = maybeAddStageDirection(text);
+  if (text.length >= 60) {
+    text = maybeAddAside(text);
+    text = maybeAddStageDirection(text);
+  }
 
   // Cleanups
   text = text.replace(/\s+([.,!?;:])/g, "$1");

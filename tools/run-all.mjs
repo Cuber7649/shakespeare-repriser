@@ -22,6 +22,7 @@ const STEPS = [
   ['test-savedquotes', ['test-savedquotes.mjs']],
   ['test-manifest', ['test-manifest.mjs']],
   ['test-content', ['test-content.mjs']],
+  ['test-yoda', ['test-yoda.mjs']],
   ['test-reproducible', ['test-reproducible.mjs']],
   ['test-links', ['test-links.mjs']],
   ['verify-dashboard', ['verify-dashboard.mjs']],
