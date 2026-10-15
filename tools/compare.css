@@ -1,0 +1,76 @@
+  /* ====== COMPARE ====== */
+  .cmp {
+    margin-top: 14px;
+    padding: 14px 16px;
+    background: rgba(255,252,245,0.75);
+    border: 1px solid rgba(196,162,101,0.45);
+    border-radius: 10px;
+  }
+
+  .cmp-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  /* Side by side only where there is room: the full-width output cards on
+     wide screens. The dashboard's narrow mini cards always stack. */
+  @media (min-width: 720px) {
+    .output-card .cmp-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .cmp-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #8a6a3a;
+    margin-bottom: 6px;
+  }
+
+  .cmp-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.02rem;
+    line-height: 1.55;
+    color: #3d2b1f;
+    overflow-wrap: break-word;
+  }
+
+  .cmp-para {
+    margin: 0 0 8px;
+  }
+
+  .cmp-para:last-child {
+    margin-bottom: 0;
+  }
+
+  .cmp-para-plain {
+    font-style: italic;
+    color: #6b5a44;
+  }
+
+  .cmp-text del {
+    background: rgba(160,60,60,0.14);
+    color: #7a3030;
+    text-decoration: none;
+    border-radius: 3px;
+    padding: 0 2px;
+  }
+
+  .cmp-text ins {
+    background: rgba(60,120,60,0.16);
+    color: #2c5a2c;
+    text-decoration: underline;
+    border-radius: 3px;
+    padding: 0 2px;
+  }
+
+  .cmp-note {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 0.92rem;
+    color: #8a6a3a;
+    margin: 10px 0 0;
+  }

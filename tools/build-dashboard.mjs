@@ -135,6 +135,8 @@ const cardModalCss = readFileSync(join(ROOT, 'tools', 'card-modal.css'), 'utf8')
 const savedQuotesJs = browserSource(
   readFileSync(join(ROOT, 'tools', 'savedquotes.js'), 'utf8'));
 const savedQuotesHtml = readFileSync(join(ROOT, 'tools', 'savedquotes.html'), 'utf8').trimEnd();
+const compareJs = browserSource(
+  readFileSync(join(ROOT, 'tools', 'compare.js'), 'utf8'));
 
 // Transformation settings, pasted into every page from tools/options.js. Its
 // stylesheet rides along via baseCss (built from shakespeare.html). The JS is
@@ -240,6 +242,9 @@ const cards = STYLES.map((s) => `      <section class="mini">
           <button class="btn-copy" data-save="${s.label}" data-save-target="out-${s.id}">
             <span>&#128278;</span> Save
           </button>
+          <button class="btn-copy" data-compare="out-${s.id}">
+            <span>&#8644;</span> Compare
+          </button>
         </div>
       </section>`).join('\n');
 
@@ -329,6 +334,7 @@ ${modules}
 ${quotecard}
 ${cardui}
 ${savedQuotesJs}
+${compareJs}
 ${optionsJs}
 
 (function () {
