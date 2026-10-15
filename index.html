@@ -1770,22 +1770,9 @@ function maybeAddParenthetical(text) {
   return words.join(" ");
 }
 
-  const inputEl = { value: '' };
-  const outputEl = {
-    textContent: '', offsetWidth: 0,
-    classList: { remove() {}, add() {} },
-  };
-
-function shakespearify() {
-  let text = inputEl.value;
-  if (!text.trim()) {
-    outputEl.textContent = "Pray, enter some text, good merchant.";
-    return;
-  }
-
-  // Split into sentences
-  let sentences = text.match(/[^.!?]*[.!?]+|[^.!?]+/g) || [text];
-  let result = [];
+function transformParagraph(para) {
+  let sentences = para.match(/[^.!?]*[.!?]+|[^.!?]+/g) || [para];
+  let kept = [];
 
   for (let s of sentences) {
     s = s.trim();
@@ -1814,10 +1801,36 @@ function shakespearify() {
       }
     }
 
-    result.push(s);
+    kept.push(s);
   }
 
-  text = result.join(" ");
+  return kept.join(" ");
+}
+
+  const inputEl = { value: '' };
+  const outputEl = {
+    textContent: '', offsetWidth: 0,
+    classList: { remove() {}, add() {} },
+  };
+
+function shakespearify() {
+  let text = inputEl.value;
+  if (!text.trim()) {
+    outputEl.textContent = "Pray, enter some text, good merchant.";
+    return;
+  }
+
+  // Split into paragraphs (blank lines preserved as separators)
+  let paragraphs = text.split(/\n{2,}/);
+  let result = [];
+
+  for (let para of paragraphs) {
+    let out = transformParagraph(para);
+    if (out) result.push(out);
+  }
+
+  // Rejoin paragraphs with the same separator (blank line)
+  text = result.join("\n\n");
 
   // Post-processing on full text
   text = maybeInsertQuote(text);
@@ -2659,22 +2672,9 @@ function maybeAddParenthetical(text) {
   return words.join(" ");
 }
 
-  const inputEl = { value: '' };
-  const outputEl = {
-    textContent: '', offsetWidth: 0,
-    classList: { remove() {}, add() {} },
-  };
-
-function pirateify() {
-  let text = inputEl.value;
-  if (!text.trim()) {
-    outputEl.textContent = "Arrr! Give me some words, matey!";
-    return;
-  }
-
-  // Split into sentences
-  let sentences = text.match(/[^.!?]*[.!?]+|[^.!?]+/g) || [text];
-  let result = [];
+function transformParagraph(para) {
+  let sentences = para.match(/[^.!?]*[.!?]+|[^.!?]+/g) || [para];
+  let kept = [];
 
   for (let s of sentences) {
     s = s.trim();
@@ -2703,10 +2703,36 @@ function pirateify() {
       }
     }
 
-    result.push(s);
+    kept.push(s);
   }
 
-  text = result.join(" ");
+  return kept.join(" ");
+}
+
+  const inputEl = { value: '' };
+  const outputEl = {
+    textContent: '', offsetWidth: 0,
+    classList: { remove() {}, add() {} },
+  };
+
+function pirateify() {
+  let text = inputEl.value;
+  if (!text.trim()) {
+    outputEl.textContent = "Arrr! Give me some words, matey!";
+    return;
+  }
+
+  // Split into paragraphs (blank lines preserved as separators)
+  let paragraphs = text.split(/\n{2,}/);
+  let result = [];
+
+  for (let para of paragraphs) {
+    let out = transformParagraph(para);
+    if (out) result.push(out);
+  }
+
+  // Rejoin paragraphs with the same separator (blank line)
+  text = result.join("\n\n");
 
   // Post-processing on full text
   text = maybeInsertQuote(text);
@@ -3559,22 +3585,9 @@ function maybeAddParenthetical(text) {
   return words.join(" ");
 }
 
-  const inputEl = { value: '' };
-  const outputEl = {
-    textContent: '', offsetWidth: 0,
-    classList: { remove() {}, add() {} },
-  };
-
-function victorianify() {
-  let text = inputEl.value;
-  if (!text.trim()) {
-    outputEl.textContent = "Good heavens! Please enter some text, my dear fellow.";
-    return;
-  }
-
-  // Split into sentences
-  let sentences = text.match(/[^.!?]*[.!?]+|[^.!?]+/g) || [text];
-  let result = [];
+function transformParagraph(para) {
+  let sentences = para.match(/[^.!?]*[.!?]+|[^.!?]+/g) || [para];
+  let kept = [];
 
   for (let s of sentences) {
     s = s.trim();
@@ -3603,10 +3616,36 @@ function victorianify() {
       }
     }
 
-    result.push(s);
+    kept.push(s);
   }
 
-  text = result.join(" ");
+  return kept.join(" ");
+}
+
+  const inputEl = { value: '' };
+  const outputEl = {
+    textContent: '', offsetWidth: 0,
+    classList: { remove() {}, add() {} },
+  };
+
+function victorianify() {
+  let text = inputEl.value;
+  if (!text.trim()) {
+    outputEl.textContent = "Good heavens! Please enter some text, my dear fellow.";
+    return;
+  }
+
+  // Split into paragraphs (blank lines preserved as separators)
+  let paragraphs = text.split(/\n{2,}/);
+  let result = [];
+
+  for (let para of paragraphs) {
+    let out = transformParagraph(para);
+    if (out) result.push(out);
+  }
+
+  // Rejoin paragraphs with the same separator (blank line)
+  text = result.join("\n\n");
 
   // Post-processing on full text
   text = maybeInsertQuote(text);
@@ -4514,22 +4553,9 @@ function maybeAddParenthetical(text) {
   return words.join(" ");
 }
 
-  const inputEl = { value: '' };
-  const outputEl = {
-    textContent: '', offsetWidth: 0,
-    classList: { remove() {}, add() {} },
-  };
-
-function chaucerify() {
-  let text = inputEl.value;
-  if (!text.trim()) {
-    outputEl.textContent = "Heere bigynneth! Pray, enter some words, good yeoman.";
-    return;
-  }
-
-  // Split into sentences
-  let sentences = text.match(/[^.!?]*[.!?]+|[^.!?]+/g) || [text];
-  let result = [];
+function transformParagraph(para) {
+  let sentences = para.match(/[^.!?]*[.!?]+|[^.!?]+/g) || [para];
+  let kept = [];
 
   for (let s of sentences) {
     s = s.trim();
@@ -4558,10 +4584,36 @@ function chaucerify() {
       }
     }
 
-    result.push(s);
+    kept.push(s);
   }
 
-  text = result.join(" ");
+  return kept.join(" ");
+}
+
+  const inputEl = { value: '' };
+  const outputEl = {
+    textContent: '', offsetWidth: 0,
+    classList: { remove() {}, add() {} },
+  };
+
+function chaucerify() {
+  let text = inputEl.value;
+  if (!text.trim()) {
+    outputEl.textContent = "Heere bigynneth! Pray, enter some words, good yeoman.";
+    return;
+  }
+
+  // Split into paragraphs (blank lines preserved as separators)
+  let paragraphs = text.split(/\n{2,}/);
+  let result = [];
+
+  for (let para of paragraphs) {
+    let out = transformParagraph(para);
+    if (out) result.push(out);
+  }
+
+  // Rejoin paragraphs with the same separator (blank line)
+  text = result.join("\n\n");
 
   // Post-processing on full text
   text = maybeInsertQuote(text);
@@ -5378,6 +5430,56 @@ function maybeAddParenthetical(text) {
   return words.join(" ");
 }
 
+function transformParagraph(para) {
+  let sentences = para.match(/[^.!?]*[.!?]+|[^.!?]+/g) || [para];
+  let kept = [];
+
+  for (let s of sentences) {
+    s = s.trim();
+    if (!s) continue;
+
+    // Reorder the user's own words first, so the parser and the word table
+    // see the words that were typed. Everything added below is prepended or
+    // appended after this point, so inserted text is never reordered.
+    let reordered = frontObject(s);
+    const wasFronted = reordered !== s;
+    if (!wasFronted) reordered = frontInfinitive(s);
+    const wasReordered = reordered !== s;
+
+    // Single left-to-right pass, longest match wins
+    s = replaceAll(reordered);
+
+    // These land on the first comma or inside the sentence; a reordered
+    // sentence already carries a comma that marks its fronted phrase.
+    if (!wasReordered) {
+      s = maybeInvert(s);
+      s = maybeAddMetaphor(s);
+      s = maybeAddAlliteration(s);
+    }
+
+    // Opening interjection (~35%), kept: it is one of Yoda's habits.
+    if (chance(0.35)) s = pick(openings) + " " + s;
+
+    // A rebuke and a mid-sentence insertion only ride along with longer
+    // sentences; on short input they are pure noise, and the insertion
+    // lands on the first comma - which may be the fronted phrase's own.
+    if (s.length >= 40) {
+      s = maybeInsertInsult(s);
+      if (!wasReordered && chance(0.20)) {
+        let cIdx = s.indexOf(',');
+        if (cIdx > 0 && cIdx < s.length - 5) {
+          let after = s.substring(cIdx + 1).replace(/^\s+/, "");
+          s = s.substring(0, cIdx) + pick(midInsertions) + (after ? " " + after : "");
+        }
+      }
+    }
+
+    kept.push(s);
+  }
+
+  return kept.join(" ");
+}
+
 function frontObject(sentence) {
   var body = sentence;
   var tail = '';
@@ -5490,54 +5592,17 @@ function yodaify() {
     return;
   }
 
-  // Split into sentences
-  let sentences = text.match(/[^.!?]*[.!?]+|[^.!?]+/g) || [text];
+  // Split into paragraphs (blank lines preserved as separators)
+  let paragraphs = text.split(/\n{2,}/);
   let result = [];
 
-  for (let s of sentences) {
-    s = s.trim();
-    if (!s) continue;
-
-    // Reorder the user's own words first, so the parser and the word table
-    // see the words that were typed. Everything added below is prepended or
-    // appended after this point, so inserted text is never reordered.
-    let reordered = frontObject(s);
-    const wasFronted = reordered !== s;
-    if (!wasFronted) reordered = frontInfinitive(s);
-    const wasReordered = reordered !== s;
-
-    // Single left-to-right pass, longest match wins
-    s = replaceAll(reordered);
-
-    // These land on the first comma or inside the sentence; a reordered
-    // sentence already carries a comma that marks its fronted phrase.
-    if (!wasReordered) {
-      s = maybeInvert(s);
-      s = maybeAddMetaphor(s);
-      s = maybeAddAlliteration(s);
-    }
-
-    // Opening interjection (~35%), kept: it is one of Yoda's habits.
-    if (chance(0.35)) s = pick(openings) + " " + s;
-
-    // A rebuke and a mid-sentence insertion only ride along with longer
-    // sentences; on short input they are pure noise, and the insertion
-    // lands on the first comma - which may be the fronted phrase's own.
-    if (s.length >= 40) {
-      s = maybeInsertInsult(s);
-      if (!wasReordered && chance(0.20)) {
-        let cIdx = s.indexOf(',');
-        if (cIdx > 0 && cIdx < s.length - 5) {
-          let after = s.substring(cIdx + 1).replace(/^\s+/, "");
-          s = s.substring(0, cIdx) + pick(midInsertions) + (after ? " " + after : "");
-        }
-      }
-    }
-
-    result.push(s);
+  for (let para of paragraphs) {
+    let out = transformParagraph(para);
+    if (out) result.push(out);
   }
 
-  text = result.join(" ");
+  // Rejoin paragraphs with the same separator (blank line)
+  text = result.join("\n\n");
 
   // Post-processing on full text. Short inputs keep their ending: an aside or
   // stage direction would double the output for a five-word sentence.
@@ -6484,22 +6549,9 @@ function maybeAddParenthetical(text) {
   return words.join(" ");
 }
 
-  const inputEl = { value: '' };
-  const outputEl = {
-    textContent: '', offsetWidth: 0,
-    classList: { remove() {}, add() {} },
-  };
-
-function norseify() {
-  let text = inputEl.value;
-  if (!text.trim()) {
-    outputEl.textContent = "Speak, warrior! Give me words to carve in runes!";
-    return;
-  }
-
-  // Split into sentences
-  let sentences = text.match(/[^.!?]*[.!?]+|[^.!?]+/g) || [text];
-  let result = [];
+function transformParagraph(para) {
+  let sentences = para.match(/[^.!?]*[.!?]+|[^.!?]+/g) || [para];
+  let kept = [];
 
   for (let s of sentences) {
     s = s.trim();
@@ -6528,10 +6580,36 @@ function norseify() {
       }
     }
 
-    result.push(s);
+    kept.push(s);
   }
 
-  text = result.join(" ");
+  return kept.join(" ");
+}
+
+  const inputEl = { value: '' };
+  const outputEl = {
+    textContent: '', offsetWidth: 0,
+    classList: { remove() {}, add() {} },
+  };
+
+function norseify() {
+  let text = inputEl.value;
+  if (!text.trim()) {
+    outputEl.textContent = "Speak, warrior! Give me words to carve in runes!";
+    return;
+  }
+
+  // Split into paragraphs (blank lines preserved as separators)
+  let paragraphs = text.split(/\n{2,}/);
+  let result = [];
+
+  for (let para of paragraphs) {
+    let out = transformParagraph(para);
+    if (out) result.push(out);
+  }
+
+  // Rejoin paragraphs with the same separator (blank line)
+  text = result.join("\n\n");
 
   // Post-processing on full text
   text = maybeInsertQuote(text);

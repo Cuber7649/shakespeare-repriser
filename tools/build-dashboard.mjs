@@ -28,7 +28,7 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const HELPERS = [
   'maybeAddAlliteration', 'maybeAddMetaphor', 'maybeInsertQuote', 'maybeInsertInsult',
   'maybeAddAside', 'maybeAddStageDirection', 'maybeInvert', 'maybeAddFiller',
-  'maybeAddParenthetical',
+  'maybeAddParenthetical', 'transformParagraph',
 ];
 
 const STYLES = [

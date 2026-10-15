@@ -1665,18 +1665,11 @@ function maybeAddParenthetical(text) {
 }
 
 // ============================================================
-// MAIN FUNCTION
+// HELPER: run the full pipeline over one paragraph
 // ============================================================
-function victorianify() {
-  let text = inputEl.value;
-  if (!text.trim()) {
-    outputEl.textContent = "Good heavens! Please enter some text, my dear fellow.";
-    return;
-  }
-
-  // Split into sentences
-  let sentences = text.match(/[^.!?]*[.!?]+|[^.!?]+/g) || [text];
-  let result = [];
+function transformParagraph(para) {
+  let sentences = para.match(/[^.!?]*[.!?]+|[^.!?]+/g) || [para];
+  let kept = [];
 
   for (let s of sentences) {
     s = s.trim();
@@ -1705,10 +1698,33 @@ function victorianify() {
       }
     }
 
-    result.push(s);
+    kept.push(s);
   }
 
-  text = result.join(" ");
+  return kept.join(" ");
+}
+
+// ============================================================
+// MAIN FUNCTION
+// ============================================================
+function victorianify() {
+  let text = inputEl.value;
+  if (!text.trim()) {
+    outputEl.textContent = "Good heavens! Please enter some text, my dear fellow.";
+    return;
+  }
+
+  // Split into paragraphs (blank lines preserved as separators)
+  let paragraphs = text.split(/\n{2,}/);
+  let result = [];
+
+  for (let para of paragraphs) {
+    let out = transformParagraph(para);
+    if (out) result.push(out);
+  }
+
+  // Rejoin paragraphs with the same separator (blank line)
+  text = result.join("\n\n");
 
   // Post-processing on full text
   text = maybeInsertQuote(text);

@@ -7,7 +7,7 @@ Everything that generates or verifies the site. Zero dependencies: plain Node wi
 
 ```bash
 npm run build   # regenerate index.html from the six style pages
-npm test        # run the whole suite (build + 18 checks, ~90s)
+npm test        # run the whole suite (build + 19 checks, ~90s)
 ```
 
 `npm install` is never needed — there are no dependencies. Any individual script

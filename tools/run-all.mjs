@@ -17,6 +17,7 @@ const STEPS = [
   ['check-readme', ['check-readme.mjs']],
   ['readme-features', ['readme-features.mjs']],
   ['test-engine', ['test-engine.mjs']],
+  ['test-transform', ['test-transform.mjs']],
   ['test-quotecard', ['test-quotecard.mjs']],
   ['test-cardpages', ['test-cardpages.mjs']],
   ['test-savedquotes', ['test-savedquotes.mjs']],
