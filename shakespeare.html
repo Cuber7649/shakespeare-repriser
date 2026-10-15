@@ -545,6 +545,87 @@
   }
   .modal-warn[hidden] { display: none; }
 
+  /* ====== TRANSFORMATION SETTINGS ====== */
+  .options-panel {
+    background: linear-gradient(145deg, #fdf6e3, #f6ecd2, #efe0bc);
+    border: 2px solid #c4a265;
+    border-radius: 12px;
+    padding: 16px 20px 14px;
+    margin: 0 0 18px;
+    box-shadow:
+      0 3px 14px rgba(0,0,0,0.18),
+      inset 0 1px 0 rgba(255,255,255,0.4);
+  }
+  .options-panel > legend {
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: #8b6d4a;
+    padding: 0 6px;
+  }
+  .options-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+  .options-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 600;
+    font-size: 1rem;
+    color: #5c4530;
+  }
+  .options-select {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 1rem;
+    padding: 5px 10px;
+    border: 1.5px solid #c4a265;
+    border-radius: 6px;
+    background: rgba(255,252,245,0.8);
+    color: #3d2b1f;
+    cursor: pointer;
+  }
+  .options-select:focus {
+    border-color: #d4a056;
+    box-shadow: 0 0 0 3px rgba(212,160,86,0.2);
+    outline: none;
+  }
+  .options-checks {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 18px;
+    margin-bottom: 12px;
+  }
+  .options-check {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1rem;
+    color: #5c4530;
+    cursor: pointer;
+    user-select: none;
+  }
+  .options-check input {
+    width: 15px;
+    height: 15px;
+    accent-color: #8b6d4a;
+    cursor: pointer;
+  }
+  .options-check input:focus-visible {
+    outline: 2px solid #d4a056;
+    outline-offset: 2px;
+  }
+  .options-footer {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-top: 1px solid rgba(196,162,101,0.35);
+    padding-top: 10px;
+  }
+
   /* ====== SAVED QUOTES ====== */
   .saved-quotes {
     background: linear-gradient(145deg, #fffcf5, #f8f0de, #f2e8ce);
@@ -675,6 +756,28 @@
       <span class="visually-hidden" id="copyStatus" role="status"></span>
     </div>
   </div>
+
+  <fieldset class="options-panel" id="optionsPanel">
+    <legend>Transformation settings</legend>
+    <div class="options-row">
+      <label class="options-label" for="optIntensity">Intensity</label>
+      <select id="optIntensity" class="options-select">
+        <option value="light">Light</option>
+        <option value="balanced" selected>Balanced</option>
+        <option value="dramatic">Dramatic</option>
+      </select>
+    </div>
+    <div class="options-checks">
+      <label class="options-check"><input type="checkbox" id="optOpenings" checked> Opening phrases</label>
+      <label class="options-check"><input type="checkbox" id="optMetaphors" checked> Metaphors and similes</label>
+      <label class="options-check"><input type="checkbox" id="optAsides" checked> Stage directions and asides</label>
+      <label class="options-check"><input type="checkbox" id="optInvert" checked> Sentence inversion</label>
+    </div>
+    <div class="options-footer">
+      <button type="button" class="btn-copy" id="optResetBtn">Reset settings</button>
+      <span class="visually-hidden" id="optStatus" role="status"></span>
+    </div>
+  </fieldset>
 
   <section class="saved-quotes" id="savedQuotes">
   <div class="card-label"><span class="icon">&#128218;</span> Saved Quotes</div>
@@ -1709,7 +1812,9 @@ function maybeAddParenthetical(text) {
 // ============================================================
 // HELPER: run the full pipeline over one paragraph
 // ============================================================
-function transformParagraph(para) {
+function transformParagraph(para, opts) {
+  var light = opts.intensity === 'light';
+  var chScale = light ? 0.5 : opts.intensity === 'dramatic' ? 1.5 : 1;
   let sentences = para.match(/[^.!?]*[.!?]+|[^.!?]+/g) || [para];
   let kept = [];
 
@@ -1720,19 +1825,21 @@ function transformParagraph(para) {
     // Single left-to-right pass, longest match wins
     s = replaceAll(s);
 
-    // Advanced transformations
-    s = maybeInvert(s);
-    s = maybeAddFiller(s);
-    s = maybeAddMetaphor(s);
-    s = maybeAddAlliteration(s);
-    s = maybeAddParenthetical(s);
-    s = maybeInsertInsult(s);
+    // Advanced transformations, gated by the options object.
+    if (opts.invert) s = maybeInvert(s);
+    if (!light) s = maybeAddFiller(s);
+    if (opts.metaphors) {
+      s = maybeAddMetaphor(s);
+      s = maybeAddAlliteration(s);
+    }
+    if (!light) s = maybeAddParenthetical(s);
+    if (!light) s = maybeInsertInsult(s);
 
-    // Opening exclamation (~35%)
-    if (chance(0.35)) s = pick(openings) + " " + s;
+    // Opening exclamation (~35%), scaled by intensity.
+    if (opts.openings && chance(0.35 * chScale)) s = pick(openings) + " " + s;
 
-    // Mid-sentence insertion (~20%)
-    if (chance(0.20)) {
+    // Mid-sentence insertion (~20%), skipped under Light.
+    if (!light && chance(0.20 * chScale)) {
       let cIdx = s.indexOf(',');
       if (cIdx > 0 && cIdx < s.length - 5) {
         let after = s.substring(cIdx + 1).replace(/^\s+/, "");
@@ -1755,13 +1862,15 @@ function shakespearify() {
     outputEl.textContent = "Pray, enter some text, good merchant.";
     return;
   }
+  var opts = getTransformOptions();
+  var light = opts.intensity === 'light';
 
   // Split into paragraphs (blank lines preserved as separators)
   let paragraphs = text.split(/\n{2,}/);
   let result = [];
 
   for (let para of paragraphs) {
-    let out = transformParagraph(para);
+    let out = transformParagraph(para, opts);
     if (out) result.push(out);
   }
 
@@ -1769,9 +1878,11 @@ function shakespearify() {
   text = result.join("\n\n");
 
   // Post-processing on full text
-  text = maybeInsertQuote(text);
-  text = maybeAddAside(text);
-  text = maybeAddStageDirection(text);
+  if (!light) text = maybeInsertQuote(text);
+  if (opts.asides) {
+    text = maybeAddAside(text);
+    text = maybeAddStageDirection(text);
+  }
 
   // Cleanups
   text = text.replace(/\s+([.,!?;:])/g, "$1");
@@ -1798,6 +1909,129 @@ function shakespearify() {
   void outputEl.offsetWidth; // trigger reflow
   outputEl.classList.add('active');
 }
+// Transformation settings: intensity plus the optional-addition toggles, shared
+// by the six style pages and the dashboard.
+//
+// The pages are standalone -- no shared runtime files -- so this file is pasted
+// VERBATIM into all seven of them. tools/test-settings.mjs fails the build if
+// any copy drifts: it compares against browserSource() of this file.
+//
+// getTransformOptions() is called by every page's main function to read the
+// current controls. It is self-contained on purpose: it guards against a
+// missing document so the generated dashboard can extract it into each style
+// module's IIFE and still run headless (tools/verify-dashboard.mjs gives the
+// modules no DOM at all). When the controls are absent it returns the defaults,
+// and the defaults reproduce the engine's original behaviour exactly -- balanced
+// intensity with every optional addition on -- so a page built before this block
+// existed transforms identically to one built after.
+
+var OPTS_KEY = 'repriser.settings';
+
+function getTransformOptions() {
+  var defs = { intensity: 'balanced', openings: true, metaphors: true, asides: true, invert: true };
+  if (typeof document === 'undefined' || !document.getElementById) return defs;
+  var intensityEl = document.getElementById('optIntensity');
+  var intensity = defs.intensity;
+  if (intensityEl) {
+    var v = intensityEl.value;
+    if (v === 'light' || v === 'dramatic') intensity = v;
+  }
+  function on(id, def) {
+    var el = document.getElementById(id);
+    return el ? el.checked !== false : def;
+  }
+  return {
+    intensity: intensity,
+    openings: on('optOpenings', defs.openings),
+    metaphors: on('optMetaphors', defs.metaphors),
+    asides: on('optAsides', defs.asides),
+    invert: on('optInvert', defs.invert),
+  };
+}
+
+// localStorage throws in Safari private mode and some file:// contexts, so the
+// whole probe is guarded, mirroring tools/savedquotes.js.
+function optStore() {
+  try {
+    var store = (typeof window !== 'undefined' && window.localStorage) ||
+      (typeof localStorage !== 'undefined' ? localStorage : null);
+    if (!store) return null;
+    var probe = '__repriser_opt_probe__';
+    store.setItem(probe, '1');
+    store.removeItem(probe);
+    return store;
+  } catch (e) {
+    return null;
+  }
+}
+
+function optSave(opts) {
+  var store = optStore();
+  if (!store) return;
+  try { store.setItem(OPTS_KEY, JSON.stringify(opts)); } catch (e) { /* quota or private mode */ }
+}
+
+function optLoad() {
+  var store = optStore();
+  if (!store) return null;
+  try {
+    var raw = store.getItem(OPTS_KEY);
+    if (!raw) return null;
+    var o = JSON.parse(raw);
+    if (!o || typeof o !== 'object') return null;
+    return {
+      intensity: (o.intensity === 'light' || o.intensity === 'dramatic') ? o.intensity : 'balanced',
+      openings: o.openings !== false,
+      metaphors: o.metaphors !== false,
+      asides: o.asides !== false,
+      invert: o.invert !== false,
+    };
+  } catch (e) {
+    return null;
+  }
+}
+
+function optApply(opts) {
+  if (typeof document === 'undefined' || !document.getElementById) return;
+  var intensityEl = document.getElementById('optIntensity');
+  if (intensityEl) intensityEl.value = opts.intensity;
+  function set(id, v) { var el = document.getElementById(id); if (el) el.checked = !!v; }
+  set('optOpenings', opts.openings);
+  set('optMetaphors', opts.metaphors);
+  set('optAsides', opts.asides);
+  set('optInvert', opts.invert);
+}
+
+function optReset() {
+  var defs = { intensity: 'balanced', openings: true, metaphors: true, asides: true, invert: true };
+  optApply(defs);
+  optSave(defs);
+  var status = document.getElementById('optStatus');
+  if (status) status.textContent = 'Settings reset to defaults';
+}
+
+function initOptions() {
+  var saved = optLoad();
+  if (saved) optApply(saved);
+  if (typeof document === 'undefined' || !document.getElementById) return getTransformOptions();
+  var resetBtn = document.getElementById('optResetBtn');
+  if (resetBtn && resetBtn.addEventListener) {
+    resetBtn.addEventListener('click', function () { optReset(); });
+  }
+  var ids = ['optIntensity', 'optOpenings', 'optMetaphors', 'optAsides', 'optInvert'];
+  for (var i = 0; i < ids.length; i++) {
+    (function (id) {
+      var el = document.getElementById(id);
+      if (el && el.addEventListener) {
+        el.addEventListener('change', function () { optSave(getTransformOptions()); });
+      }
+    })(ids[i]);
+  }
+  return getTransformOptions();
+}
+
+var transformOptions = (typeof document !== 'undefined') ? initOptions() : null;
+
 // Saved quotes: a localStorage-backed list of saved outputs, shared by the
 // dashboard and the six style pages.
 //

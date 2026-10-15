@@ -1,0 +1,21 @@
+  <fieldset class="options-panel" id="optionsPanel">
+    <legend>Transformation settings</legend>
+    <div class="options-row">
+      <label class="options-label" for="optIntensity">Intensity</label>
+      <select id="optIntensity" class="options-select">
+        <option value="light">Light</option>
+        <option value="balanced" selected>Balanced</option>
+        <option value="dramatic">Dramatic</option>
+      </select>
+    </div>
+    <div class="options-checks">
+      <label class="options-check"><input type="checkbox" id="optOpenings" checked> Opening phrases</label>
+      <label class="options-check"><input type="checkbox" id="optMetaphors" checked> Metaphors and similes</label>
+      <label class="options-check"><input type="checkbox" id="optAsides" checked> Stage directions and asides</label>
+      <label class="options-check"><input type="checkbox" id="optInvert" checked> Sentence inversion</label>
+    </div>
+    <div class="options-footer">
+      <button type="button" class="btn-copy" id="optResetBtn">Reset settings</button>
+      <span class="visually-hidden" id="optStatus" role="status"></span>
+    </div>
+  </fieldset>

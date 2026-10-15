@@ -28,7 +28,7 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const HELPERS = [
   'maybeAddAlliteration', 'maybeAddMetaphor', 'maybeInsertQuote', 'maybeInsertInsult',
   'maybeAddAside', 'maybeAddStageDirection', 'maybeInvert', 'maybeAddFiller',
-  'maybeAddParenthetical', 'transformParagraph',
+  'maybeAddParenthetical', 'transformParagraph', 'getTransformOptions',
 ];
 
 const STYLES = [
@@ -135,6 +135,15 @@ const cardModalCss = readFileSync(join(ROOT, 'tools', 'card-modal.css'), 'utf8')
 const savedQuotesJs = browserSource(
   readFileSync(join(ROOT, 'tools', 'savedquotes.js'), 'utf8'));
 const savedQuotesHtml = readFileSync(join(ROOT, 'tools', 'savedquotes.html'), 'utf8').trimEnd();
+
+// Transformation settings, pasted into every page from tools/options.js. Its
+// stylesheet rides along via baseCss (built from shakespeare.html). The JS is
+// inlined once at the top level for the reset/persistence wiring; each style
+// module also carries its own getTransformOptions (via HELPERS) so the modules
+// stay self-contained for tools/verify-dashboard.mjs.
+const optionsJs = browserSource(
+  readFileSync(join(ROOT, 'tools', 'options.js'), 'utf8'));
+const optionsHtml = readFileSync(join(ROOT, 'tools', 'options.html'), 'utf8').trimEnd();
 
 // ---------------------------------------------------------------------------
 // Compose index.html
@@ -282,6 +291,8 @@ ${navLinks}
     <div class="char-count"><span id="charCount">0</span> characters inscribed</div>
   </div>
 
+${optionsHtml}
+
   <div class="btn-row">
     <button class="btn btn-primary" id="go">
       <span class="quill-icon">&#128396;</span> Repraise In All Styles!
@@ -318,6 +329,7 @@ ${modules}
 ${quotecard}
 ${cardui}
 ${savedQuotesJs}
+${optionsJs}
 
 (function () {
   const ORDER = ${JSON.stringify(STYLES.map((s) => s.id))};

@@ -7,7 +7,7 @@ Everything that generates or verifies the site. Zero dependencies: plain Node wi
 
 ```bash
 npm run build   # regenerate index.html from the six style pages
-npm test        # run the whole suite (build + 19 checks, ~90s)
+npm test        # run the whole suite (build + 20 checks, ~90s)
 ```
 
 `npm install` is never needed — there are no dependencies. Any individual script
@@ -26,6 +26,8 @@ also runs directly, e.g. `node tools/verify-dashboard.mjs`.
 | `test-quotecard.mjs` | Strip patterns, layout maths, font shrinking, truncation warnings |
 | `test-cardpages.mjs` | The Make Card button, modal markup and `cardpage.js` wiring pasted identically into all 7 pages; opens with the output text, message when empty |
 | `test-savedquotes.mjs` | The saved-quotes block pasted byte-identically into all 7 pages; save, delete, cap and corruption behaviour |
+| `test-transform.mjs` | Cross-style edge cases: empty, punctuation, contractions, possessives, hyphenated, substring, proper nouns, multi-sentence, paragraphs, dialogue, repeated, cascade, seeded determinism, long input |
+| `test-settings.mjs` | The settings block pasted byte-identically into all 7 pages; balanced defaults match the pre-settings engine, toggles and intensity gate the pipeline |
 | `test-engine.mjs` | Compares the single-pass engine against the old chain |
 | `test-content.mjs` | Family-friendly word lists, no servitude roasts, no duplicates |
 | `test-yoda.mjs` | Object fronting, infinitive fronting, the strict object guard, seeded seed-42 outputs |
@@ -43,6 +45,7 @@ also runs directly, e.g. `node tools/verify-dashboard.mjs`.
 | `cardpage.js` | Binds a style page's Make Card button to the modal; inlined into all six style pages |
 | `card-modal.html` / `card-modal.css` | The modal's markup and styles, inlined by the generator |
 | `savedquotes.js` / `savedquotes.html` / `savedquotes.css` | Saved quotes: logic, markup and styles pasted into all seven pages, so `test-savedquotes.mjs` has to find them unchanged |
+| `options.js` / `options.html` / `options.css` | Transformation settings (intensity + toggles): logic, markup and styles pasted into all seven pages, so `test-settings.mjs` has to find them unchanged |
 | `snapshot.mjs` | Records transform output for a fixed corpus and seed set |
 | `compare.mjs` | Diffs two snapshots and censuses output defects |
 | `corpus.mjs` | The test inputs and seeds |
