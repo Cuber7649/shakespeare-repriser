@@ -17,8 +17,11 @@ function initCardPage() {
   cardPageUI = initCardUI({ emptyMessage: 'Transform some text first' });
   btn.addEventListener('click', function () {
     var out = document.getElementById('output');
+    var input = document.getElementById('input');
     var id = btn.getAttribute ? btn.getAttribute('data-card') : null;
-    cardPageUI.open(id, out ? out.textContent : '', btn);
+    // The original input travels with the output so the modal's "Show original
+    // text" option has something to draw.
+    cardPageUI.open(id, out ? out.textContent : '', btn, input ? input.value : '');
   });
   return cardPageUI;
 }

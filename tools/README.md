@@ -23,7 +23,7 @@ also runs directly, e.g. `node tools/verify-dashboard.mjs`.
 | `run-all.mjs` | Runs every step below in order; any non-zero exit fails |
 | `verify-dashboard.mjs` | Asserts the dashboard's output matches every style page |
 | `smoke-dashboard.mjs` | Loads `index.html` in a sandbox, exercises the UI, checks the quote card against a fake 2D context (runs at dpr 1, 2 and 3) |
-| `test-quotecard.mjs` | Strip patterns, layout maths, font shrinking, truncation warnings |
+| `test-quotecard.mjs` | Strip patterns, layout maths, font shrinking, truncation warnings, skins with WCAG contrast, backgrounds, alignment, the original-text band, export dimensions at dpr 1/2/3 |
 | `test-cardpages.mjs` | The Make Card button, modal markup and `cardpage.js` wiring pasted identically into all 7 pages; opens with the output text, message when empty |
 | `test-savedquotes.mjs` | The saved-quotes block pasted byte-identically into all 7 pages; save, delete, cap and corruption behaviour |
 | `test-transform.mjs` | Cross-style edge cases: empty, punctuation, contractions, possessives, hyphenated, substring, proper nouns, multi-sentence, paragraphs, dialogue, repeated, cascade, seeded determinism, long input |
@@ -42,9 +42,9 @@ also runs directly, e.g. `node tools/verify-dashboard.mjs`.
 | `harness.mjs` | Loads a page's inline `<script>` in Node with a stubbed DOM |
 | `page-source.mjs` | Source-extraction helpers shared by the generators |
 | `quotecard.js` | Quote card: strip, layout, draw, export. Inlined into `index.html` by the generator and loaded directly by the tests, so both run identical source |
-| `cardui.js` | Quote-card preview modal wiring, shared by the generator and the smoke test |
+| `cardui.js` | Quote-card preview modal wiring including the skin/background/alignment/original options row, shared by the generator and the smoke test |
 | `cardpage.js` | Binds a style page's Make Card button to the modal; inlined into all six style pages |
-| `card-modal.html` / `card-modal.css` | The modal's markup and styles, inlined by the generator |
+| `card-modal.html` / `card-modal.css` | The modal's markup (including the options row) and styles, inlined by the generator |
 | `savedquotes.js` / `savedquotes.html` / `savedquotes.css` | Saved quotes: logic, markup and styles pasted into all seven pages, so `test-savedquotes.mjs` has to find them unchanged |
 | `options.js` / `options.html` / `options.css` | Transformation settings (intensity + toggles): logic, markup and styles pasted into all seven pages, so `test-settings.mjs` has to find them unchanged |
 | `compare.js` / `compare.css` | Original-vs-output comparison: LCS word diff and panel styles pasted into all seven pages, so `test-compare.mjs` has to find them unchanged |

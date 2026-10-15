@@ -2,6 +2,34 @@
   <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="cardModalTitle">
     <h2 id="cardModalTitle">Quote card</h2>
     <p class="modal-note" id="cardModalNote">Preparing&hellip;</p>
+    <div class="modal-options">
+      <label class="modal-option" for="cardSkin">Skin
+        <select id="cardSkin">
+          <option value="auto">Page style</option>
+          <option value="parchment">Parchment</option>
+          <option value="midnight">Midnight</option>
+          <option value="verdant">Verdant</option>
+        </select>
+      </label>
+      <label class="modal-option" for="cardBackground">Background
+        <select id="cardBackground">
+          <option value="gradient">Lit parchment</option>
+          <option value="flat">Flat</option>
+          <option value="wash">Wash</option>
+        </select>
+      </label>
+      <label class="modal-option" for="cardAlign">Text
+        <select id="cardAlign">
+          <option value="left">Left</option>
+          <option value="center">Centered</option>
+          <option value="right">Right</option>
+        </select>
+      </label>
+      <label class="modal-option modal-option-check" for="cardOriginal">
+        <input type="checkbox" id="cardOriginal">
+        Show original text
+      </label>
+    </div>
     <canvas id="cardPreview" width="1080" height="1350" role="img" aria-label="Preview of the generated quote card"></canvas>
     <p class="modal-warn" id="cardModalWarn" hidden>Your text is too long for the card, so the end has been cut short.</p>
     <div class="modal-actions">

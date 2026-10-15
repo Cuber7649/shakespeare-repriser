@@ -3,8 +3,11 @@
 // Kept in its own module rather than inlined into the generator that uses it, so
 // the markup, styles and behaviour live in one place. Its markup is
 // tools/card-modal.html and its styles are tools/card-modal.css, both read and
-// inlined by the build. Ids, class names and behaviour are unchanged from the
-// version that shipped, so tools/smoke-dashboard.mjs needed no edits.
+// inlined by the build.
+//
+// The modal carries a small options row (skin, background, alignment, show
+// original). Every control re-renders the preview in place; nothing is
+// persisted, so each open starts from the classic card.
 //
 // `themes`/`render`/`download` are injected so this also runs under
 // tools/smoke-dashboard.mjs with fakes.
@@ -25,10 +28,16 @@ function initCardUI(opts) {
   var cardStatusEl = document.getElementById('cardStatus');
   var closeBtn = document.getElementById('cardClose');
   var downloadBtn = document.getElementById('cardDownload');
+  var skinSel = document.getElementById('cardSkin');
+  var bgSel = document.getElementById('cardBackground');
+  var alignSel = document.getElementById('cardAlign');
+  var originalChk = document.getElementById('cardOriginal');
 
   var lastFocus = null;
   var lastCard = null;
   var lastStyleId = null;
+  var lastText = null;
+  var lastOriginal = null;
 
   function focusables() {
     return Array.prototype.slice.call(
@@ -36,21 +45,23 @@ function initCardUI(opts) {
     ).filter(function (el) { return !el.disabled && el.offsetParent !== null; });
   }
 
-  function open(styleId, text, fromEl) {
-    if (!text || !text.trim()) {
-      cardStatusEl.textContent = emptyMessage;
-      return;
-    }
-    lastFocus = fromEl || null;
-    lastStyleId = styleId;
-    var theme = (themes && themes[styleId]) || (themes && themes.shakespeare) ||
-      { label: 'Quote' };
-    noteEl.textContent = 'Drawing a ' + theme.label.toLowerCase() + ' card';
-    warnEl.hidden = true;
-    modal.hidden = false;
-    closeBtn.focus();
+  // Empty select values (the Node harness auto-creates bare stubs) fall back to
+  // the defaults, so the classic card is what both the browser and the tests
+  // get when nothing has been chosen.
+  function currentOpts() {
+    return {
+      skin: (skinSel && skinSel.value) || 'auto',
+      background: (bgSel && bgSel.value) || 'gradient',
+      align: (alignSel && alignSel.value) || 'left',
+      original: originalChk && originalChk.checked ? lastOriginal : null,
+    };
+  }
 
-    render(text, styleId).then(function (r) {
+  function paint() {
+    if (!lastStyleId || !lastText) return;
+    var theme = (themes && themes[lastStyleId]) || (themes && themes.shakespeare) ||
+      { label: 'Quote' };
+    render(lastText, lastStyleId, currentOpts()).then(function (r) {
       var ctx = preview.getContext('2d');
       ctx.clearRect(0, 0, preview.width, preview.height);
       ctx.drawImage(r.canvas, 0, 0, preview.width, preview.height);
@@ -63,6 +74,12 @@ function initCardUI(opts) {
         warnEl.textContent = 'Your text is long, so it has been shrunk to ' +
           r.meta.font + 'px to fit the card.';
         noteEl.textContent = r.meta.font + 'px text, shrunk to fit';
+      } else if (r.meta.originalTruncated) {
+        // The original band is capped at two lines with an ellipsis; say so
+        // rather than letting the cut pass silently.
+        warnEl.hidden = false;
+        warnEl.textContent = 'The original text was shortened to two lines to fit its band.';
+        noteEl.textContent = r.meta.font + 'px text';
       } else {
         noteEl.textContent = r.meta.font + 'px text';
       }
@@ -74,6 +91,24 @@ function initCardUI(opts) {
       noteEl.textContent = 'Could not draw the card';
       cardStatusEl.textContent = 'Could not draw the card';
     });
+  }
+
+  function open(styleId, text, fromEl, originalText) {
+    if (!text || !text.trim()) {
+      cardStatusEl.textContent = emptyMessage;
+      return;
+    }
+    lastFocus = fromEl || null;
+    lastStyleId = styleId;
+    lastText = text;
+    lastOriginal = originalText || null;
+    var theme = (themes && themes[styleId]) || (themes && themes.shakespeare) ||
+      { label: 'Quote' };
+    noteEl.textContent = 'Drawing a ' + theme.label.toLowerCase() + ' card';
+    warnEl.hidden = true;
+    modal.hidden = false;
+    closeBtn.focus();
+    paint();
   }
 
   function close() {
@@ -99,6 +134,17 @@ function initCardUI(opts) {
     var last = items[items.length - 1];
     if (e.shiftKey && document.activeElement === first) { last.focus(); e.preventDefault(); }
     else if (!e.shiftKey && document.activeElement === last) { first.focus(); e.preventDefault(); }
+  });
+
+  // Any option change redraws the preview with the same text. The guard keeps
+  // this a no-op when the modal is closed (controls still focusable by tabbing
+  // through hidden UI in some browsers).
+  function onOptionChange() {
+    if (modal.hidden || !lastText) return;
+    paint();
+  }
+  [skinSel, bgSel, alignSel, originalChk].forEach(function (el) {
+    if (el && el.addEventListener) el.addEventListener('change', onOptionChange);
   });
 
   downloadBtn.addEventListener('click', function () {

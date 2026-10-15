@@ -47,6 +47,36 @@
     border-radius: 6px;
     background: #f4e8cd;
   }
+  .modal-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 14px;
+    align-items: center;
+    margin: 0 0 12px;
+    padding: 10px 12px;
+    background: rgba(196,162,101,0.14);
+    border: 1px solid rgba(196,162,101,0.35);
+    border-radius: 8px;
+  }
+  .modal-option {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: #5c4530;
+  }
+  .modal-option select {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.95rem;
+    padding: 3px 6px;
+    border: 1px solid rgba(154,120,70,0.55);
+    border-radius: 6px;
+    background: #fdf6e3;
+    color: #3a2510;
+  }
+  .modal-option-check input { accent-color: #8b5a2b; }
   .modal-actions {
     display: flex;
     gap: 10px;

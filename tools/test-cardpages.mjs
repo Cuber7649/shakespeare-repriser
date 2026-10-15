@@ -26,7 +26,8 @@ const STYLES = {
 };
 const PAGES = Object.keys(STYLES);
 const MODAL_IDS = ['cardModal', 'cardPreview', 'cardModalNote', 'cardModalWarn',
-  'cardStatus', 'cardClose', 'cardDownload'];
+  'cardStatus', 'cardClose', 'cardDownload',
+  'cardSkin', 'cardBackground', 'cardAlign', 'cardOriginal'];
 
 let failures = 0;
 const ok = (m) => console.log(`  ok    ${m}`);

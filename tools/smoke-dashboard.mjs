@@ -30,7 +30,9 @@ const byId = new Map();
 const canvases = [];
 
 function makeCtx() {
-  const calls = { fillText: [], fillRect: 0, strokeRect: 0, drawn: 0 };
+  const calls = {
+    fillText: [], fillRect: 0, strokeRect: 0, drawn: 0, linear: 0, radial: 0,
+  };
   return {
     calls,
     font: '', fillStyle: '', strokeStyle: '', lineWidth: 1,
@@ -49,10 +51,15 @@ function makeCtx() {
       const size = m ? parseFloat(m[1]) : 10;
       return { width: String(s).length * size * 0.5 };
     },
-    fillText(s, x, y) { calls.fillText.push({ text: String(s), x, y, font: this.font }); },
+    fillText(s, x, y) {
+      calls.fillText.push({
+        text: String(s), x, y, font: this.font,
+        fillStyle: this.fillStyle, textAlign: this.textAlign,
+      });
+    },
     drawImage() { calls.drawn++; },
-    createLinearGradient() { return { addColorStop() {} }; },
-    createRadialGradient() { return { addColorStop() {} }; },
+    createLinearGradient() { calls.linear++; return { addColorStop() {} }; },
+    createRadialGradient() { calls.radial++; return { addColorStop() {} }; },
   };
 }
 
@@ -355,6 +362,67 @@ async function main() {
       fail(`wrong filename: ${JSON.stringify(a.download)}`);
     } else pass(`download anchor: ${a.download}, appended then clicked`);
   }
+
+  // --- appearance options re-render in place -------------------------------
+  // Each control change must produce a fresh internal canvas (the preview is
+  // re-blitted from it), drawn with the chosen skin/background/alignment and,
+  // when asked, the original-input band.
+  const lastCalls = () => {
+    const c = canvases[canvases.length - 1];
+    return c ? c.getContext('2d').calls : null;
+  };
+  const fireChange = (id) => { const s = listeners.get(id); if (s && s.change) s.change(); };
+
+  el('cardSkin').value = 'midnight';
+  fireChange('cardSkin');
+  await tick();
+  let optCalls = lastCalls();
+  if (!optCalls) fail('skin change drew no canvas');
+  else {
+    const inked = optCalls.fillText.filter((c) => /italic 400/.test(c.font));
+    if (!inked.length || inked[0].fillStyle !== '#f0e6d2') {
+      fail(`midnight skin drew ink ${inked[0] && inked[0].fillStyle}, want #f0e6d2`);
+    } else pass('midnight skin re-rendered with its own ink');
+  }
+
+  el('cardAlign').value = 'center';
+  fireChange('cardAlign');
+  await tick();
+  optCalls = lastCalls();
+  if (!optCalls) fail('align change drew no canvas');
+  else {
+    const lines = optCalls.fillText.filter((c) => /italic 400/.test(c.font));
+    if (!lines.length || lines.some((c) => c.x !== 540 || c.textAlign !== 'center')) {
+      fail(`centered lines at x=${lines[0] && lines[0].x}, want 540`);
+    } else pass('centered alignment re-rendered on the axis');
+  }
+
+  el('cardBackground').value = 'flat';
+  fireChange('cardBackground');
+  await tick();
+  optCalls = lastCalls();
+  if (!optCalls) fail('background change drew no canvas');
+  else if (optCalls.linear !== 0 || optCalls.radial !== 0) {
+    fail(`flat background created ${optCalls.linear} linear / ${optCalls.radial} radial gradient(s)`);
+  } else if (!optCalls.fillRect) fail('flat background was not filled');
+  else pass('flat background re-rendered with no gradients');
+
+  el('cardOriginal').checked = true;
+  fireChange('cardOriginal');
+  await tick();
+  optCalls = lastCalls();
+  if (!optCalls) fail('original change drew no canvas');
+  else if (!optCalls.fillText.some((c) => c.text === 'you are my friend')) {
+    fail('original band text was not drawn');
+  } else pass('original-input band drawn when the checkbox is on');
+
+  // Restore the defaults so the reopen tests below see the classic card.
+  el('cardSkin').value = 'auto';
+  el('cardBackground').value = 'gradient';
+  el('cardAlign').value = 'left';
+  el('cardOriginal').checked = false;
+  fireChange('cardSkin');
+  await tick();
 
   // close restores focus
   listeners.get('cardClose').click();

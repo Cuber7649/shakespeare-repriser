@@ -388,7 +388,8 @@ ${optionsJs}
   document.querySelectorAll('[data-card]').forEach((btn) => {
     btn.addEventListener('click', () => {
       const id = btn.dataset.card;
-      cardUI.open(id, document.getElementById('out-' + id).textContent, btn);
+      cardUI.open(id, document.getElementById('out-' + id).textContent, btn,
+        inputEl.value);
     });
   });
 

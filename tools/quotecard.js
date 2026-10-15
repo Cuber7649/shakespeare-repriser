@@ -3,6 +3,17 @@
 // This file is the single source of truth. build-dashboard.mjs inlines it into
 // the generated index.html verbatim; tools/test-quotecard.mjs loads this same
 // file in a sandbox. Plain script (no module syntax) so both work.
+//
+// Appearance options (all opt-in; the defaults draw the original card):
+//   skin       'auto' (the page style's own parchment tints) or one of the
+//              CARD_SKINS palettes - parchment, midnight, verdant.
+//   background 'gradient' (lit parchment), 'flat' (solid mid colour) or
+//              'wash' (light flat + vignette).
+//   align      'left', 'center' or 'right' for the quote lines; the opening
+//              and closing marks follow the alignment so the group stays
+//              balanced. The footer label is always left-aligned.
+//   original   the pre-transform input text; when set it is drawn as a small
+//              muted band under the quote (max two lines, ellipsis after).
 
 const CARD_W = 1080;
 const CARD_H = 1350;
@@ -21,10 +32,19 @@ const CARD_ACCENT = '#d4a056';
 const CARD_ACCENT_SOFT = 'rgba(212,160,86,0.55)';
 const CARD_INK = '#3d2b1f';
 const CARD_LABEL_INK = '#8a6a3a';
+const CARD_MARK_INK = 'rgba(196,140,52,0.62)';
+const CARD_VIGNETTE = 'rgba(74,52,28,0.10)';
 const CARD_QUOTE_FONT = '"Cormorant Garamond", Georgia, serif';
 const CARD_LABEL_FONT = 'Cinzel, Georgia, serif';
 
-// Parchment tints copied from each style page's .card gradient.
+// The optional original-input band: small, muted, never more than two lines.
+const CARD_ORIGINAL_FONT = 30;
+const CARD_ORIGINAL_MAX_LINES = 2;
+// Breathing room between the quote group and the band's hairline rule.
+const CARD_ORIGINAL_GAP = 34;
+
+// Parchment tints copied from each style page's .card gradient. 'auto' skin
+// uses these, so every style keeps the identity it has always shipped with.
 const CARD_THEMES = {
   shakespeare: { label: 'Shakespeare', from: '#faf3e6', mid: '#f0e4cc', to: '#e8d9b8' },
   pirate:      { label: 'Pirate',      from: '#e8f0e6', mid: '#d8e8d4', to: '#c8dcc2' },
@@ -33,6 +53,55 @@ const CARD_THEMES = {
   yoda:        { label: 'Yoda',        from: '#e8f4e6', mid: '#d8ecd2', to: '#c8e2c2' },
   norse:       { label: 'Norse',       from: '#f0eaf8', mid: '#e4dcf0', to: '#d8d0e8' },
 };
+
+// User-selectable skins. Each is a full palette in the same visual family as
+// the parchment cards (deep frame, warm accents, muted footer) so no combination
+// reads as a different product. Colours are chosen so the quote ink keeps at
+// least 4.5:1 contrast against every background stop; tools/test-quotecard.mjs
+// enforces that.
+const CARD_SKINS = {
+  parchment: {
+    from: '#faf3e6', mid: '#f0e4cc', to: '#e8d9b8',
+    ink: '#3d2b1f', accent: '#d4a056', accentSoft: 'rgba(212,160,86,0.55)',
+    labelInk: '#8a6a3a', markInk: 'rgba(196,140,52,0.62)',
+    vig: 'rgba(74,52,28,0.10)',
+  },
+  midnight: {
+    from: '#1e2438', mid: '#161c2e', to: '#0e1322',
+    ink: '#f0e6d2', accent: '#c9a86a', accentSoft: 'rgba(201,168,106,0.50)',
+    labelInk: '#c9b48a', markInk: 'rgba(201,168,106,0.55)',
+    vig: 'rgba(0,0,0,0.40)',
+  },
+  verdant: {
+    from: '#eef4e8', mid: '#dfeadb', to: '#d0e0c8',
+    ink: '#2c3a26', accent: '#6a8f5a', accentSoft: 'rgba(106,143,90,0.55)',
+    labelInk: '#4a6a44', markInk: 'rgba(106,143,90,0.50)',
+    vig: 'rgba(40,60,30,0.12)',
+  },
+};
+
+/**
+ * The palette a card draws with. 'auto' (or any unknown id) keeps the page
+ * style's own tints with the classic parchment ink, so the default card is
+ * unchanged. A named skin overrides the colours but keeps the style label, so
+ * a midnight Shakespeare card still signs itself SHAKESPEARE.
+ */
+function resolveCardSkin(styleId, skinId) {
+  const base = CARD_THEMES[styleId] || CARD_THEMES.shakespeare;
+  const skin = CARD_SKINS[skinId];
+  if (!skin) {
+    return {
+      label: base.label, from: base.from, mid: base.mid, to: base.to,
+      ink: CARD_INK, accent: CARD_ACCENT, accentSoft: CARD_ACCENT_SOFT,
+      labelInk: CARD_LABEL_INK, markInk: CARD_MARK_INK, vig: CARD_VIGNETTE,
+    };
+  }
+  return {
+    label: base.label, from: skin.from, mid: skin.mid, to: skin.to,
+    ink: skin.ink, accent: skin.accent, accentSoft: skin.accentSoft,
+    labelInk: skin.labelInk, markInk: skin.markInk, vig: skin.vig,
+  };
+}
 
 // Removes asides and stage directions, then tidies the whitespace they leave
 // behind. Deliberately generic: a pattern approach matches any phrase added
@@ -86,8 +155,14 @@ function wrapParagraph(para, measure, maxWidth, font) {
  * opening mark, the lines and the closing mark together, so the budget must
  * reserve that mark stack or a full card pushes text up into the top ornament.
  *
+ * opts.original, when set, is the pre-transform input: it is wrapped at the
+ * small band size, capped at CARD_ORIGINAL_MAX_LINES with an ellipsis, and its
+ * block height is subtracted from the quote's budget so the two never overlap.
+ *
  * @returns {{lines: string[], font: number, lineHeight: number,
- *            truncated: boolean, warning: null|'long'|'cut'}}
+ *            truncated: boolean, warning: null|'long'|'cut',
+ *            original: null|{lines: string[], font: number, lineHeight:
+ *            number, truncated: boolean, blockHeight: number}}}
  */
 function layoutCard(text, measure, opts) {
   const o = opts || {};
@@ -100,11 +175,36 @@ function layoutCard(text, measure, opts) {
   // Display type needs proportionally tighter leading than body copy.
   const ratioFor = (font) => (font >= 100 ? 1.14 : font >= 72 ? 1.2 : font >= 48 ? 1.3 : 1.42);
 
+  // The optional original band, wrapped before the quote so its exact height
+  // can be carved out of the quote's budget.
+  let original = null;
+  const origBody = o.original ? stripStageBusiness(o.original) : '';
+  if (origBody) {
+    const oFont = CARD_ORIGINAL_FONT;
+    const oLineHeight = Math.round(oFont * 1.35);
+    let oLines = wrapParagraph(origBody, measure, maxWidth, oFont);
+    let oTruncated = false;
+    if (oLines.length > CARD_ORIGINAL_MAX_LINES) {
+      oLines = oLines.slice(0, CARD_ORIGINAL_MAX_LINES);
+      let last = oLines[CARD_ORIGINAL_MAX_LINES - 1];
+      while (last.length > 1 && measure(last + '…', oFont) > maxWidth) {
+        last = last.slice(0, -1);
+      }
+      oLines[CARD_ORIGINAL_MAX_LINES - 1] = last.replace(/\s+$/, '') + '…';
+      oTruncated = true;
+    }
+    original = {
+      lines: oLines, font: oFont, lineHeight: oLineHeight,
+      truncated: oTruncated,
+      blockHeight: oLines.length * oLineHeight + CARD_ORIGINAL_GAP,
+    };
+  }
+
   const body = stripStageBusiness(text);
   if (!body) {
     return {
       lines: [], font: maxFont, lineHeight: maxFont * ratioFor(maxFont),
-      truncated: false, warning: null,
+      truncated: false, warning: null, original: original,
     };
   }
 
@@ -112,7 +212,8 @@ function layoutCard(text, measure, opts) {
   // below, the closing gap and the closing mark height.
   const markStack = (font) => font * (0.46 + 0.26 + 0.08 + 0.4);
   const budgetFor = (font) => Math.max(1,
-    Math.floor((maxHeight - markStack(font)) / (font * ratioFor(font))));
+    Math.floor((maxHeight - (original ? original.blockHeight : 0) - markStack(font))
+      / (font * ratioFor(font))));
 
   const wrapAt = (font) => wrapParagraph(body, measure, maxWidth, font);
   const fits = (font) => wrapAt(font).length <= budgetFor(font);
@@ -151,7 +252,10 @@ function layoutCard(text, measure, opts) {
     truncated = true;
   }
 
-  return { lines, font, lineHeight: font * ratio, truncated, warning: cardWarning({ font, truncated }) };
+  return {
+    lines, font, lineHeight: font * ratio, truncated,
+    warning: cardWarning({ font, truncated }), original: original,
+  };
 }
 
 /**
@@ -169,32 +273,53 @@ function cardWarning(layout) {
 
 // Canvas primitives only, so nothing external is loaded and the canvas is never
 // tainted (text, fills and strokes), which keeps toBlob/export working.
+// `theme` is a resolveCardSkin() palette; `opts.background` picks the fill
+// mode and `opts.align` the quote alignment. Unknown values fall back to the
+// original look.
 function drawCard(ctx, layout, theme, opts) {
   const o = opts || {};
   const W = o.width || CARD_W;
   const H = o.height || CARD_H;
   const L = W - CARD_PAD;
+  const cx = W / 2;
   const cy = H / 2;
+  const align = o.align === 'center' ? 'center' : o.align === 'right' ? 'right' : 'left';
+  const lineX = align === 'center' ? cx : align === 'right' ? L : CARD_PAD;
+  const bgMode = o.background === 'flat' ? 'flat' : o.background === 'wash' ? 'wash' : 'gradient';
 
-  // Parchment, lit from the upper left.
-  const bg = ctx.createLinearGradient(0, 0, W * 0.55, H);
-  bg.addColorStop(0, theme.from);
-  bg.addColorStop(0.55, theme.mid);
-  bg.addColorStop(1, theme.to);
-  ctx.fillStyle = bg;
-  ctx.fillRect(0, 0, W, H);
+  if (bgMode === 'gradient') {
+    // Parchment, lit from the upper left.
+    const bg = ctx.createLinearGradient(0, 0, W * 0.55, H);
+    bg.addColorStop(0, theme.from);
+    bg.addColorStop(0.55, theme.mid);
+    bg.addColorStop(1, theme.to);
+    ctx.fillStyle = bg;
+    ctx.fillRect(0, 0, W, H);
 
-  // Very light vignette: enough to warm the corners, not so much that it reads
-  // as a spotlight behind the text.
-  const vig = ctx.createRadialGradient(cy, cy * 0.9, W * 0.42, cy, cy, H * 0.72);
-  vig.addColorStop(0, 'rgba(255,255,255,0.05)');
-  vig.addColorStop(0.7, 'rgba(0,0,0,0)');
-  vig.addColorStop(1, 'rgba(74,52,28,0.10)');
-  ctx.fillStyle = vig;
-  ctx.fillRect(0, 0, W, H);
+    // Very light vignette: enough to warm the corners, not so much that it
+    // reads as a spotlight behind the text.
+    const vig = ctx.createRadialGradient(cy, cy * 0.9, W * 0.42, cy, cy, H * 0.72);
+    vig.addColorStop(0, 'rgba(255,255,255,0.05)');
+    vig.addColorStop(0.7, 'rgba(0,0,0,0)');
+    vig.addColorStop(1, theme.vig);
+    ctx.fillStyle = vig;
+    ctx.fillRect(0, 0, W, H);
+  } else {
+    // flat and wash share a solid base; wash keeps the vignette for depth.
+    ctx.fillStyle = bgMode === 'wash' ? theme.from : theme.mid;
+    ctx.fillRect(0, 0, W, H);
+    if (bgMode === 'wash') {
+      const vig = ctx.createRadialGradient(cy, cy * 0.9, W * 0.42, cy, cy, H * 0.72);
+      vig.addColorStop(0, 'rgba(255,255,255,0.05)');
+      vig.addColorStop(0.7, 'rgba(0,0,0,0)');
+      vig.addColorStop(1, theme.vig);
+      ctx.fillStyle = vig;
+      ctx.fillRect(0, 0, W, H);
+    }
+  }
 
   // Gold frame plus a hairline inner rule.
-  ctx.strokeStyle = CARD_ACCENT;
+  ctx.strokeStyle = theme.accent;
   ctx.lineWidth = 5;
   ctx.strokeRect(26, 26, W - 52, H - 52);
   ctx.lineWidth = 1.25;
@@ -202,27 +327,29 @@ function drawCard(ctx, layout, theme, opts) {
 
   // Top ornament: a rule broken by a small diamond.
   const oy = 150;
-  ctx.strokeStyle = CARD_ACCENT_SOFT;
+  ctx.strokeStyle = theme.accentSoft;
   ctx.lineWidth = 1.5;
   ctx.beginPath();
   ctx.moveTo(CARD_PAD + 40, oy);
-  ctx.lineTo(cy - 24, oy);
-  ctx.moveTo(cy + 24, oy);
+  ctx.lineTo(cx - 24, oy);
+  ctx.moveTo(cx + 24, oy);
   ctx.lineTo(L - 40, oy);
   ctx.stroke();
-  ctx.fillStyle = CARD_ACCENT;
+  ctx.fillStyle = theme.accent;
   ctx.beginPath();
-  ctx.moveTo(cy, oy - 11);
-  ctx.lineTo(cy + 11, oy);
-  ctx.lineTo(cy, oy + 11);
-  ctx.lineTo(cy - 11, oy);
+  ctx.moveTo(cx, oy - 11);
+  ctx.lineTo(cx + 11, oy);
+  ctx.lineTo(cx, oy + 11);
+  ctx.lineTo(cx - 11, oy);
   ctx.closePath();
   ctx.fill();
 
   // Quote group: an oversized opening quote, the text, then a matching closing
   // quote. Both are part of the measured group, so the composition balances as
   // one unit rather than leaving a dead band above or below the text.
-  const zoneH = CARD_TEXT_BOTTOM - CARD_TEXT_TOP;
+  const origReserve = layout.original ? layout.original.blockHeight : 0;
+  const zoneBottom = CARD_TEXT_BOTTOM - origReserve;
+  const zoneH = zoneBottom - CARD_TEXT_TOP;
   const blockH = layout.lines.length * layout.lineHeight;
   const markSize = Math.round(layout.font * 1.5);
   const markH = layout.font * 0.46;
@@ -233,35 +360,77 @@ function drawCard(ctx, layout, theme, opts) {
   const top = CARD_TEXT_TOP + (zoneH - groupH) / 2 - groupH * 0.03;
   const textTop = top + markH + markGap;
 
-  ctx.textAlign = 'left';
   ctx.textBaseline = 'top';
 
   // U+201C / U+201D already carry the correct opening and closing shapes, so
-  // no rotation is needed.
-  ctx.fillStyle = 'rgba(196,140,52,0.62)';
+  // no rotation is needed. The marks follow the quote's alignment: left cards
+  // frame diagonally (top-left to bottom-right), centred cards stack on the
+  // axis, right cards mirror the left layout.
+  ctx.fillStyle = theme.markInk;
   ctx.font = '400 ' + markSize + 'px ' + CARD_QUOTE_FONT;
-  ctx.fillText('“', CARD_PAD - 6, top);
-
-  ctx.fillStyle = CARD_INK;
-  ctx.font = 'italic 400 ' + layout.font + 'px ' + CARD_QUOTE_FONT;
-  for (let i = 0; i < layout.lines.length; i++) {
-    ctx.fillText(layout.lines[i], CARD_PAD, textTop + i * layout.lineHeight);
+  if (align === 'center') {
+    ctx.textAlign = 'center';
+    ctx.fillText('“', cx, top);
+  } else if (align === 'right') {
+    ctx.textAlign = 'right';
+    ctx.fillText('“', L, top);
+  } else {
+    ctx.textAlign = 'left';
+    ctx.fillText('“', CARD_PAD - 6, top);
   }
 
-  ctx.fillStyle = 'rgba(196,140,52,0.62)';
-  ctx.font = '400 ' + markSize + 'px ' + CARD_QUOTE_FONT;
-  ctx.textAlign = 'right';
-  ctx.fillText('”', L, textTop + blockH + closeGap);
+  ctx.fillStyle = theme.ink;
+  ctx.font = 'italic 400 ' + layout.font + 'px ' + CARD_QUOTE_FONT;
+  ctx.textAlign = align;
+  for (let i = 0; i < layout.lines.length; i++) {
+    ctx.fillText(layout.lines[i], lineX, textTop + i * layout.lineHeight);
+  }
 
-  // Footer: a hairline above a letterspaced style name.
-  ctx.strokeStyle = CARD_ACCENT_SOFT;
+  ctx.fillStyle = theme.markInk;
+  ctx.font = '400 ' + markSize + 'px ' + CARD_QUOTE_FONT;
+  if (align === 'center') {
+    ctx.textAlign = 'center';
+    ctx.fillText('”', cx, textTop + blockH + closeGap);
+  } else if (align === 'right') {
+    ctx.textAlign = 'left';
+    ctx.fillText('”', CARD_PAD - 6, textTop + blockH + closeGap);
+  } else {
+    ctx.textAlign = 'right';
+    ctx.fillText('”', L, textTop + blockH + closeGap);
+  }
+
+  // Optional original-input band: a hairline over small muted non-italic type,
+  // pinned to the bottom of the content zone. The quote was laid out around
+  // this reservation, so the two can never collide.
+  if (origReserve) {
+    const band = layout.original;
+    const ruleY = zoneBottom + 12;
+    ctx.strokeStyle = theme.accentSoft;
+    ctx.lineWidth = 1.25;
+    ctx.beginPath();
+    ctx.moveTo(cx - 120, ruleY);
+    ctx.lineTo(cx + 120, ruleY);
+    ctx.stroke();
+
+    ctx.fillStyle = theme.labelInk;
+    ctx.font = '400 ' + band.font + 'px ' + CARD_QUOTE_FONT;
+    ctx.textAlign = align;
+    const oTop = ruleY + 22;
+    for (let i = 0; i < band.lines.length; i++) {
+      ctx.fillText(band.lines[i], lineX, oTop + i * band.lineHeight);
+    }
+  }
+
+  // Footer: a hairline above a letterspaced style name. Always left-aligned:
+  // it is a signature, not part of the quoted composition.
+  ctx.strokeStyle = theme.accentSoft;
   ctx.lineWidth = 1.25;
   ctx.beginPath();
   ctx.moveTo(CARD_PAD, CARD_LABEL_RULE_Y);
   ctx.lineTo(L, CARD_LABEL_RULE_Y);
   ctx.stroke();
 
-  ctx.fillStyle = CARD_LABEL_INK;
+  ctx.fillStyle = theme.labelInk;
   ctx.textBaseline = 'alphabetic';
   ctx.textAlign = 'left';
   ctx.font = '700 26px ' + CARD_LABEL_FONT;
@@ -271,6 +440,7 @@ function drawCard(ctx, layout, theme, opts) {
   return {
     font: layout.font, lineHeight: layout.lineHeight,
     truncated: layout.truncated, warning: layout.warning,
+    originalTruncated: !!(layout.original && layout.original.truncated),
   };
 }
 
@@ -322,8 +492,16 @@ function makeCardCanvas() {
   return { canvas: canvas, ctx: ctx, dpr: dpr };
 }
 
-function renderCard(text, styleId) {
-  const theme = CARD_THEMES[styleId] || CARD_THEMES.shakespeare;
+/**
+ * Draw a card. `opts` is optional; with none you get the classic card:
+ *   {skin: 'auto'|'parchment'|'midnight'|'verdant',
+ *    background: 'gradient'|'flat'|'wash',
+ *    align: 'left'|'center'|'right',
+ *    original: string}   // pre-transform input for the muted band
+ */
+function renderCard(text, styleId, opts) {
+  const o = opts || {};
+  const theme = resolveCardSkin(styleId, o.skin);
   return ensureCardFonts().then(function () {
     const made = makeCardCanvas();
     // measureText reflects whatever ctx.font is currently set to, and the canvas
@@ -334,8 +512,10 @@ function renderCard(text, styleId) {
       made.ctx.font = 'italic 400 ' + f + 'px ' + CARD_QUOTE_FONT;
       return made.ctx.measureText(s).width;
     };
-    const layout = layoutCard(text, measure, {});
-    const meta = drawCard(made.ctx, layout, theme, {});
+    const layout = layoutCard(text, measure, { original: o.original });
+    const meta = drawCard(made.ctx, layout, theme, {
+      background: o.background, align: o.align,
+    });
     return { canvas: made.canvas, layout: layout, theme: theme, meta: meta };
   });
 }
@@ -361,9 +541,10 @@ function downloadCard(canvas, filename) {
 
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = {
-    CARD_THEMES, CARD_W, CARD_H, CARD_PAD,
+    CARD_THEMES, CARD_SKINS, CARD_W, CARD_H, CARD_PAD,
     CARD_FONT_MIN, CARD_FONT_MAX, CARD_FONT_LONG,
+    CARD_ORIGINAL_FONT, CARD_ORIGINAL_MAX_LINES,
     stripStageBusiness, wrapParagraph, layoutCard, cardWarning, drawCard,
-    ensureCardFonts, renderCard, downloadCard,
+    resolveCardSkin, ensureCardFonts, renderCard, downloadCard,
   };
 }
