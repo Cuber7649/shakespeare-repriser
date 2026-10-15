@@ -7,7 +7,7 @@ Everything that generates or verifies the site. Zero dependencies: plain Node wi
 
 ```bash
 npm run build   # regenerate index.html from the six style pages
-npm test        # run the whole suite (build + 21 checks, ~90s)
+npm test        # run the whole suite (build + 23 checks, ~2 min)
 ```
 
 `npm install` is never needed — there are no dependencies. Any individual script
@@ -36,6 +36,8 @@ also runs directly, e.g. `node tools/verify-dashboard.mjs`.
 | `test-reproducible.mjs` | Generated output is pure LF and rebuilds byte-identically |
 | `test-links.mjs` | Every local href resolves; all pages share one switcher |
 | `check-css.mjs` | Brace balance, one `prefers-reduced-motion` block per file, real `<label for>` wiring |
+| `check-a11y.mjs` | Static accessibility audit of all 7 pages: document language, viewport, one h1, form labels, dialog semantics, button names, status regions, image alt text, `:focus-visible` and reduced-motion styles |
+| `browser-journeys.mjs` | End-to-end journeys in real headless Edge over CDP: transform on every page, dashboard, settings persistence, cross-page saved quotes, export/import, card PNG download, keyboard operation, responsive overflow, console errors. Skips (exit 0) when Edge is unavailable |
 | `check-readme.mjs` | Every README example matches real output across the corpus seeds |
 | `readme-features.mjs` | Every README claim is supported by the code |
 | `readme-examples.mjs` | Prints real output for every README example across several seeds |

@@ -14,6 +14,7 @@ const STEPS = [
   // regenerating it on request. Running it as part of the suite would silently
   // overwrite the committed image every time.
   ['check-css', ['check-css.mjs']],
+  ['check-a11y', ['check-a11y.mjs']],
   ['check-readme', ['check-readme.mjs']],
   ['readme-features', ['readme-features.mjs']],
   ['test-engine', ['test-engine.mjs']],
@@ -32,6 +33,9 @@ const STEPS = [
   ['smoke-dashboard', ['smoke-dashboard.mjs', '1']],
   ['smoke-dashboard', ['smoke-dashboard.mjs', '2']],
   ['smoke-dashboard', ['smoke-dashboard.mjs', '3']],
+  // Browser journeys launch a real headless Edge over CDP; they SKIP (exit 0)
+  // when Edge is unavailable so the suite still runs on machines without it.
+  ['browser-journeys', ['browser-journeys.mjs']],
 ];
 
 let failed = 0;

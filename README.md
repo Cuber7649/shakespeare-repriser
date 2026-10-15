@@ -134,7 +134,7 @@ one command below and run the suite before committing:
 
 ```bash
 npm run build   # regenerate index.html from the six style pages
-npm test        # run the whole suite (build + 21 checks, ~90s)
+npm test        # run the whole suite (build + 23 checks, ~2 min)
 ```
 
 There are no dependencies — `npm install` is never needed.

@@ -2,8 +2,12 @@
 tools/.dashboard-modules.js
 tools/.dashboard-style.css
 
-# Headless browser profile - scratch of tools/build-screenshot.mjs
+# Headless browser profiles - scratch of tools/build-screenshot.mjs and
+# tools/browser-journeys.mjs (journey dirs are removed on exit, but a crash
+# can leave them behind)
 tools/.edge-screenshot-profile/
+tools/.edge-journeys-profile/
+tools/.edge-journeys-downloads/
 
 # Snapshot captures - tools/snapshot.mjs output
 tools/baseline.json
