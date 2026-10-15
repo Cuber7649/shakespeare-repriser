@@ -18,18 +18,85 @@
     margin: 4px 0 0;
   }
 
+  .saved-quotes-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+    align-items: center;
+  }
+
+  .saved-quotes-field {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.95rem;
+    padding: 6px 10px;
+    background: rgba(255,255,255,0.65);
+    border: 1px solid rgba(184,149,106,0.45);
+    border-radius: 6px;
+    color: #3d2b1f;
+    min-width: 0;
+  }
+
+  .saved-quotes-field:focus {
+    outline: 2px solid #c4a265;
+    outline-offset: 1px;
+  }
+
+  .saved-quotes-field::placeholder {
+    color: #b8956a;
+    font-style: italic;
+  }
+
+  .saved-quotes-title-field {
+    flex: 1;
+    min-width: 140px;
+  }
+
+  .saved-quotes-action {
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    padding: 6px 12px;
+    background: rgba(184,149,106,0.15);
+    border: 1px solid rgba(184,149,106,0.4);
+    border-radius: 6px;
+    color: #8b6d4a;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .saved-quotes-action:hover {
+    background: rgba(138,106,58,0.18);
+    border-color: rgba(138,106,58,0.5);
+    color: #6b4f28;
+  }
+
+  .saved-quotes-action-danger:hover {
+    background: rgba(150,60,60,0.12);
+    border-color: rgba(150,60,60,0.45);
+    color: #8a3a3a;
+  }
+
   .saved-quotes-list {
     list-style: none;
-    margin: 4px 0 0;
+    margin: 10px 0 0;
     padding: 0;
   }
 
   .saved-quotes-item {
     display: flex;
+    flex-wrap: wrap;
     align-items: baseline;
     gap: 10px;
     padding: 9px 0;
     border-top: 1px solid rgba(196,162,101,0.3);
+  }
+
+  .saved-quotes-title {
+    flex-basis: 100%;
+    font-family: 'Cinzel', serif;
+    font-size: 0.78rem;
+    color: #8a6a3a;
+    margin: 0;
   }
 
   .saved-quotes-text {
@@ -49,6 +116,14 @@
     white-space: nowrap;
   }
 
+  .saved-quotes-row-actions {
+    display: flex;
+    gap: 6px;
+    margin-left: auto;
+  }
+
+  .saved-quotes-use,
+  .saved-quotes-rerun,
   .saved-quotes-del {
     font-family: 'Cormorant Garamond', serif;
     font-size: 0.85rem;
@@ -59,6 +134,18 @@
     color: #8b6d4a;
     cursor: pointer;
     transition: all 0.2s;
+  }
+
+  .saved-quotes-use:hover {
+    background: rgba(60,120,60,0.12);
+    border-color: rgba(60,120,60,0.45);
+    color: #3a6a3a;
+  }
+
+  .saved-quotes-rerun:hover {
+    background: rgba(60,90,150,0.12);
+    border-color: rgba(60,90,150,0.45);
+    color: #3a4a8a;
   }
 
   .saved-quotes-del:hover {

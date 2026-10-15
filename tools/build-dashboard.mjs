@@ -362,6 +362,17 @@ ${optionsJs}
     statusEl.textContent = 'Cleared';
   });
 
+  // Saved-quote Re-run: regenerate just this style's card from the stored
+  // original and settings, leaving the other five untouched. sqRerun has
+  // already restored #input and the settings controls before calling this.
+  window.sqTransformHook = function (item) {
+    const id = String(item.style || '').toLowerCase();
+    const idx = ORDER.indexOf(id);
+    if (idx < 0 || !item.original) return;
+    outs[idx].textContent = STYLES[id].transform(
+      item.original, (Math.random() * 0x100000000) >>> 0);
+  };
+
   // ---------- quote card ----------
   // Wiring lives in tools/cardui.js, shared with any other page that offers
   // "Make Card".

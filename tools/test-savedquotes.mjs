@@ -18,7 +18,8 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const STYLE_PAGES = ['shakespeare.html', 'pirate.html', 'victorian.html',
   'chaucer.html', 'yoda.html', 'norse.html'];
 const PAGES = [...STYLE_PAGES, 'index.html'];
-const IDS = ['savedQuotes', 'savedQuotesEmpty', 'savedQuotesList', 'savedQuotesStatus'];
+const IDS = ['savedQuotes', 'savedQuotesEmpty', 'savedQuotesList', 'savedQuotesStatus',
+  'sqSearch', 'sqFilter', 'sqTitle', 'sqExport', 'sqImportBtn', 'sqImport', 'sqClear'];
 const KEY = 'repriser.savedQuotes';
 
 let failures = 0;
@@ -106,6 +107,129 @@ if (!quotes) {
   else if (quotes.size() !== 1) no(`size after delete = ${quotes.size()}`);
   else if (listEl.innerHTML.includes('The night is young')) no('delete() left the row behind');
   else ok('delete -> removed from list and storage');
+
+  // --- v2: structured records, search, filter, import/export, clear --------
+  section('v2 records and features (shakespeare.html)');
+
+  // Migration: v1-shaped records ({text, style, at}) load with the new fields
+  // defaulted, and the old `text` field is preserved as the output.
+  page.storage.setItem(KEY, JSON.stringify([
+    { text: 'A v1 quote', style: 'Pirate', at: 1000 },
+  ]));
+  quotes.reload();
+  const migrated = quotes.all()[0];
+  if (!migrated) no('migration: v1 record did not load');
+  else if (migrated.text !== 'A v1 quote') no(`migration: text = ${JSON.stringify(migrated.text)}`);
+  else if (migrated.style !== 'Pirate') no(`migration: style = ${JSON.stringify(migrated.style)}`);
+  else if (typeof migrated.id !== 'string' || !migrated.id) no('migration: no id assigned');
+  else if (migrated.original !== '') no('migration: original should default to empty');
+  else if (migrated.title !== '') no('migration: title should default to empty');
+  else ok('v1 record migrated with id, defaults preserved');
+
+  // A second v1 record must receive a distinct id.
+  page.storage.setItem(KEY, JSON.stringify([
+    { text: 'First', style: 'Yoda', at: 1 },
+    { text: 'Second', style: 'Yoda', at: 2 },
+  ]));
+  quotes.reload();
+  const ids = quotes.all().map((q) => q.id);
+  if (ids.length !== 2 || ids[0] === ids[1]) no(`ids not unique: ${JSON.stringify(ids)}`);
+  else ok('each record gets a unique id');
+
+  // Save with original, settings and a title.
+  quotes.clearAll();
+  const settings = { intensity: 'dramatic', openings: false, metaphors: true, asides: true, invert: false };
+  const saved = quotes.add('To be or not to be', 'Shakespeare', 'Original text here', settings, 'My title');
+  const rec = quotes.all()[0];
+  if (!saved) no('add with metadata refused');
+  else if (rec.original !== 'Original text here') no(`original not stored: ${JSON.stringify(rec.original)}`);
+  else if (!rec.settings || rec.settings.intensity !== 'dramatic') no(`settings not stored: ${JSON.stringify(rec.settings)}`);
+  else if (rec.title !== 'My title') no(`title not stored: ${JSON.stringify(rec.title)}`);
+  else ok('original, settings and title stored on save');
+
+  // Search matches across output, original, style and title.
+  quotes.add('Hail Caesar', 'Pirate', 'another original', null, 'Caesar greeting');
+  quotes.setQuery('caesar');
+  let visible = listEl.innerHTML;
+  if (!visible.includes('Hail Caesar') || visible.includes('To be or not')) {
+    no(`search "caesar" wrong results: ${visible.slice(0, 120)}`);
+  } else ok('search matches title and output, excludes non-matches');
+  quotes.setQuery('another original');
+  if (!listEl.innerHTML.includes('Hail Caesar')) no('search did not match original text');
+  else ok('search matches the original input');
+  quotes.setQuery('');
+
+  // Filter by style.
+  quotes.setFilter('Pirate');
+  visible = listEl.innerHTML;
+  if (!visible.includes('Hail Caesar') || visible.includes('To be or not')) {
+    no(`filter Pirate wrong results: ${visible.slice(0, 120)}`);
+  } else ok('filter shows only the matching style');
+  quotes.setFilter('');
+
+  // Use: loads original into the input and the saved output into #output.
+  const useTarget = rec.id;
+  const inputEl = page.document.getElementById('input');
+  inputEl.value = 'something else';
+  page.document.getElementById('output').textContent = '';
+  if (!quotes.use(useTarget)) no('use() failed');
+  else if (inputEl.value !== 'Original text here') no(`use did not restore input: ${JSON.stringify(inputEl.value)}`);
+  else if (page.document.getElementById('output').textContent !== 'To be or not to be') {
+    no('use did not restore the output');
+  } else ok('Use restores original input and saved output');
+
+  // Export: returns a versioned envelope with the current items.
+  const exported = quotes.exportData();
+  if (!exported || exported.version !== 1 || !Array.isArray(exported.items)) {
+    no(`exportData shape wrong: ${JSON.stringify(exported && exported.version)}`);
+  } else if (exported.items.length !== quotes.size()) {
+    no(`exportData has ${exported.items.length} items, expected ${quotes.size()}`);
+  } else ok('exportData returns { version: 1, items }');
+
+  // Import: valid file adds new items, duplicates are skipped, malformed and
+  // wrong-shaped files are rejected with a message, not a crash.
+  quotes.clearAll();
+  quotes.add('Existing quote', 'Shakespeare');
+  const goodImport = JSON.stringify({
+    version: 1,
+    items: [
+      { text: 'Imported one', style: 'Norse', at: 5 },
+      { text: 'Existing quote', style: 'Shakespeare', at: 6 },  // duplicate output
+      { text: 'Imported two', style: 'Yoda', at: 7 },
+    ],
+  });
+  const result = quotes.importText(goodImport);
+  if (result.error) no(`importText failed: ${result.error}`);
+  else if (result.added !== 2) no(`import added ${result.added}, expected 2`);
+  else if (result.skipped !== 1) no(`import skipped ${result.skipped}, expected 1`);
+  else if (quotes.size() !== 3) no(`size after import = ${quotes.size()}, expected 3`);
+  else ok('import adds new items and skips duplicates');
+
+  const dupIds = quotes.importText(JSON.stringify({
+    version: 1,
+    items: [{ id: quotes.all()[0].id, text: 'Collides with existing id', style: 'Norse', at: 9 }],
+  }));
+  const idList = quotes.all().map((q) => q.id);
+  if (new Set(idList).size !== idList.length) no('duplicate id was not remapped');
+  else ok('import remaps a colliding id');
+
+  const badJson = quotes.importText('{ not json');
+  if (!badJson.error || !/json/i.test(badJson.error)) no(`bad JSON: ${JSON.stringify(badJson)}`);
+  else ok('malformed JSON rejected with a message');
+
+  const badShape = quotes.importText(JSON.stringify({ hello: 'world' }));
+  if (!badShape.error) no('wrong-shaped import accepted');
+  else ok('wrong-shaped import rejected');
+
+  const futureVersion = quotes.importText(JSON.stringify({ version: 99, items: [] }));
+  if (!futureVersion.error) no('newer schema version accepted');
+  else ok('newer schema version rejected');
+
+  // Clear all empties the list and storage.
+  quotes.clearAll();
+  if (quotes.size() !== 0) no(`clearAll left ${quotes.size()} item(s)`);
+  else if (JSON.parse(page.storage.getItem(KEY) || '[]').length !== 0) no('clearAll did not empty storage');
+  else ok('clear all empties list and storage');
 
   // Cap: 55 stored entries must come back as 50, oldest dropped, and be
   // written back so storage cannot grow without bound.

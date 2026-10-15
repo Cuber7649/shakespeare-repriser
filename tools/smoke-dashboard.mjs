@@ -170,9 +170,14 @@ async function main() {
   // --- ids referenced by the script must exist in the markup --------------
   const referenced = [...script.matchAll(/getElementById\('([^']+)'\)/g)].map((m) => m[1]);
   const outIds = PAGES.map(([id]) => 'out-' + id);
-  const missing = [...referenced, ...outIds].filter((id) => !html.includes(`id="${id}"`));
+  // Shared blocks may reach for a page-only id as a fallback: sqUse looks for
+  // out-<style> first and falls back to the style pages' single #output, which
+  // the dashboard does not have (the if (out) guard makes that path a no-op).
+  const pageOnly = new Set(['output']);
+  const allIds = [...new Set([...referenced, ...outIds])];
+  const missing = allIds.filter((id) => !pageOnly.has(id) && !html.includes(`id="${id}"`));
   if (missing.length) fail(`ids absent from markup: ${missing.join(', ')}`);
-  else pass(`all ${referenced.length + outIds.length} referenced ids present`);
+  else pass(`all ${allIds.length} referenced ids present`);
 
   // --- transform all matches each page ------------------------------------
   const input = el('input');
