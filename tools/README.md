@@ -65,7 +65,6 @@ also runs directly, e.g. `node tools/verify-dashboard.mjs`.
 | `engine-proto.mjs` | Standalone copy of the old engine, used by `test-engine.mjs` |
 | `fix-yoda-wordbound.mjs` | One-off: added missing leading `\b` to 22 yoda rules |
 | `.dashboard-modules.js` | Build intermediate written by `build-dashboard.mjs` (gitignored) |
-| `.dashboard-style.css` | Build intermediate: extracted stylesheet (gitignored) |
 
 `fix-yoda-wordbound.mjs` and `engine-proto.mjs` are historical scaffolding; the
 rest are in active use.
