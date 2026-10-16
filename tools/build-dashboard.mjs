@@ -181,6 +181,10 @@ const DASH_CSS = `
     padding-bottom: 8px;
     margin-bottom: 10px;
   }
+  .mini .output-actions .btn-copy {
+    flex: 1 1 calc(50% - 4px);
+    justify-content: center;
+  }
   .mini-name {
     font-family: 'Cinzel', serif;
     font-weight: 700;
