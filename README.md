@@ -129,13 +129,25 @@ Two files here are **generated** rather than hand-written:
   image editor in the loop and the icons are square and maskable-safe.
 
 The generator and test scripts live in [`tools/`](./tools/README.md), with a
-README of their own. If you change a style page, rebuild the dashboard with the
-one command below and run the suite before committing:
+README of their own. Shared logic — transformation settings, saved quotes, the
+comparison view, the quote-card modal — lives once under `tools/` and is pasted
+verbatim into every page, so each page stays a standalone file that cannot drift
+from its neighbours. To change it:
+
+1. Edit the file under `tools/`, never its pasted copies inside the `.html`
+   pages or `index.html`.
+2. Run `node tools/paste-shared.mjs` to repaste all six style pages and
+   rebuild the dashboard.
+3. Run the suite before committing:
 
 ```bash
 npm run build   # regenerate index.html from the six style pages
-npm test        # run the whole suite (build + 23 checks, ~2 min)
+npm test        # run the whole suite (build + 24 checks, ~2 min)
 ```
+
+`npm test` includes `paste-shared --check`, which fails the build the moment a
+pasted copy or a generated file no longer matches its source; the same check
+runs in `node tools/prepush-check.mjs`.
 
 There are no dependencies — `npm install` is never needed.
 

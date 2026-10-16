@@ -1,5 +1,6 @@
 // Pre-push audit: confirm the working tree is the tested, expected state.
 import { readFileSync, readdirSync } from 'node:fs';
+import { spawnSync } from 'node:child_process';
 
 let bad = 0;
 const ok = (m) => console.log(`  ok    ${m}`);
@@ -46,6 +47,31 @@ for (const where of ['norse.html', 'index.html']) {
 for (const dup of ['Do, or do not. There is no try.', 'The Force will be with you, always.']) {
   const hit = ['yoda.html', 'index.html'].find((f) => html[f].includes(dup));
   hit ? no(`${hit} still has duplicate: ${dup}`) : ok(`removed duplicate: "${dup.slice(0, 34)}..."`);
+}
+
+// --- no drift between tools/, the pages, and the committed tree -------------
+// Rebuild first: if index.html was stale at HEAD this refreshes it, so the
+// git diff below reports it instead of letting a stale build get pushed.
+const build = spawnSync(process.execPath, ['tools/build-dashboard.mjs'], { encoding: 'utf8' });
+build.status === 0
+  ? ok('index.html rebuilds byte-identically from the style pages')
+  : no('build-dashboard.mjs failed: '
+    + ((build.stdout || '') + (build.stderr || '')).trim().split(/\r?\n/).pop());
+const paste = spawnSync(process.execPath, ['tools/paste-shared.mjs', '--check'], { encoding: 'utf8' });
+paste.status === 0
+  ? ok('shared blocks pasted into all six style pages')
+  : no('style pages drifted from tools/ -- run: node tools/paste-shared.mjs');
+// Everything npm test rebuilds must match HEAD, or the push would ship a
+// state the suite never ran on. Skipped outside a git checkout.
+const diff = spawnSync('git', ['diff', '--name-only', 'HEAD', '--', ...PAGES],
+  { encoding: 'utf8' });
+if (diff.error || diff.status !== 0) {
+  ok('git diff unavailable -- skipped committed-state check');
+} else {
+  const stale = (diff.stdout || '').trim().split(/\r?\n/).filter(Boolean);
+  stale.length === 0
+    ? ok('generated and pasted files match HEAD')
+    : stale.forEach((f) => no(`${f} differs from HEAD -- commit the rebuild first`));
 }
 
 // --- nothing that looks like a secret --------------------------------------

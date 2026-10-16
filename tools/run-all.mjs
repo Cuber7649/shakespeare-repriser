@@ -8,6 +8,9 @@ const HERE = dirname(fileURLToPath(import.meta.url));
 
 const STEPS = [
   ['build-dashboard', ['build-dashboard.mjs']],
+  // Fails fast (before the slow suite) when tools/ and the pasted copies in
+  // the style pages have drifted: node tools/paste-shared.mjs repastes them.
+  ['check-pasted', ['paste-shared.mjs', '--check']],
   ['build-icons', ['build-icons.mjs']],
   // Screenshot.png is deliberately NOT built here. It is maintained by hand from
   // a real browser, and tools/build-screenshot.mjs is an opt-in helper for

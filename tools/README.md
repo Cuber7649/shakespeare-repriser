@@ -7,7 +7,7 @@ Everything that generates or verifies the site. Zero dependencies: plain Node wi
 
 ```bash
 npm run build   # regenerate index.html from the six style pages
-npm test        # run the whole suite (build + 23 checks, ~2 min)
+npm test        # run the whole suite (build + 24 checks, ~2 min)
 ```
 
 `npm install` is never needed — there are no dependencies. Any individual script
@@ -21,6 +21,7 @@ also runs directly, e.g. `node tools/verify-dashboard.mjs`.
 | `build-icons.mjs` | Regenerates the app icons and `manifest.json` |
 | `build-screenshot.mjs` | **Opt-in**: retake `Screenshot.png` via headless Edge. Never part of the suite — it overwrites a hand-maintained file |
 | `run-all.mjs` | Runs every step below in order; any non-zero exit fails |
+| `paste-shared.mjs` | Pastes the 13 shared blocks (six JS, four CSS, three HTML) from this directory into the six style pages, then rebuilds `index.html`; `--check` verifies without writing and is what `npm test` and `prepush-check.mjs` run |
 | `verify-dashboard.mjs` | Asserts the dashboard's output matches every style page |
 | `smoke-dashboard.mjs` | Loads `index.html` in a sandbox, exercises the UI, checks the quote card against a fake 2D context (runs at dpr 1, 2 and 3) |
 | `test-quotecard.mjs` | Strip patterns, layout maths, font shrinking, truncation warnings, skins with WCAG contrast, backgrounds, alignment, the original-text band, export dimensions at dpr 1/2/3 |
@@ -60,7 +61,7 @@ also runs directly, e.g. `node tools/verify-dashboard.mjs`.
 | `lookup.mjs` | Lists every rule matching a given literal, in engine order |
 | `doubled.mjs` | Lists cases whose output contains a doubled word |
 | `find-fusion.mjs` | Locates the step that introduces a fused comma |
-| `prepush-check.mjs` | Pre-push audit: shared modal and Make Card wiring, removed pages, credential shapes, local machine paths, stray files |
+| `prepush-check.mjs` | Pre-push audit: shared modal and Make Card wiring, removed pages, credential shapes, local machine paths, stray files, plus rebuild + paste drift against `tools/` and `HEAD` |
 | `engine-proto.mjs` | Standalone copy of the old engine, used by `test-engine.mjs` |
 | `fix-yoda-wordbound.mjs` | One-off: added missing leading `\b` to 22 yoda rules |
 | `.dashboard-modules.js` | Build intermediate written by `build-dashboard.mjs` (gitignored) |
@@ -87,6 +88,11 @@ expected; the diff tells you whether it is proportionate.
 
 Never hand-edit these; the next build overwrites them:
 
+- **The pasted copies inside the six style pages** — every page carries
+  verbatim copies of the shared `options*`, `savedquotes*`, `compare*`,
+  `card-modal*` and `cardpage.js` files listed above. Edit the file here, then
+  run `node tools/paste-shared.mjs` to repaste; `paste-shared.mjs --check`
+  (part of `npm test`) fails whenever a page's copy differs from its source.
 - **`index.html`** — the side-by-side dashboard. `build-dashboard.mjs` copies each
   style page's dictionaries, engine, helpers and transform function verbatim, so
   the dashboard cannot drift from the pages. After editing any style page, run
