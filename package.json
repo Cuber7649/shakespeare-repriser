@@ -2,7 +2,7 @@
   "name": "shakespeare-repriser",
   "private": true,
   "description": "Text Repriser Collection - static site with local build and test tooling",
-  "license": "Unlicense",
+  "license": "SEE LICENSE IN LICENSE",
   "scripts": {
     "build": "node tools/build-dashboard.mjs",
     "test": "node tools/run-all.mjs"

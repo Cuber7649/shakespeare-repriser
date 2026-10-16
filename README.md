@@ -132,7 +132,7 @@ shakespeare-repriser/
 ├── icon-512.png
 ├── package.json       # build and test commands (no dependencies)
 ├── README.md
-├── UNLICENSE          # public-domain dedication (The Unlicense)
+├── LICENSE            # free use; credit + GitHub link required if commercial
 ├── Screenshot.png
 └── tools/             # build + test tooling (not shipped to the browser)
 ```
@@ -194,7 +194,11 @@ saved quotes.
 
 ## License
 
-Free and unencumbered software released into the public domain under
-**[The Unlicense](https://unlicense.org/)** — do what thou wilt. The full
-dedication is in [`UNLICENSE`](./UNLICENSE), matching the
-`"license": "Unlicense"` field in `package.json`.
+Free to use however you like. If you use it **commercially** — in a product,
+service, or anything you are paid for — give credit to the author on GitHub by
+linking to their profile, [github.com/Cuber7649](https://github.com/Cuber7649),
+and to this project,
+[github.com/Cuber7649/shakespeare-repriser](https://github.com/Cuber7649/shakespeare-repriser).
+Non-commercial use needs no attribution. The full terms are in
+[`LICENSE`](./LICENSE), matching the `"license": "SEE LICENSE IN LICENSE"`
+field in `package.json`.
