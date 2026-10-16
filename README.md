@@ -45,12 +45,32 @@ it from `manifest.json`, and iOS users can use Share → Add to Home Screen.
 - **Dramatic asides and stage directions** — e.g. "[The longship sets sail.]"
 - **Metaphors and similes** — e.g. "as fierce as a berserker", "as wild as the open sea"
 - **Sentence inversion** — reordered syntax for emphasis
+- **Transformation settings** — an intensity control (Light, Balanced,
+  Dramatic) plus toggles for opening phrases, metaphors and similes, stage
+  directions and asides, and sentence inversion, on every page and the
+  dashboard. Balanced with everything on matches the original behaviour;
+  choices are remembered in your browser and follow you between pages
 - **Style-switcher navigation** — move between styles from any page
 - **Side-by-side dashboard** — one input, all six styles at once, on `index.html`
-- **Quote card export** — turn any style's output into a shareable 1080×1350 PNG, previewed before you save it. Asides and stage directions are stripped so only the speech appears. Long text shrinks to fit the card (never below a readable size), and the preview warns you when it had to shrink a lot or when the end was cut short. Open it from the dashboard or from the Make Card button beside Copy and Save on every style page.
-- **Saved quotes** — keep a list of quotes you like: Save stores the output in
-  your browser (shared by the dashboard and every style page), the list sits
-  under the results, and each row can be deleted
+- **Original/output comparison** — a Compare button beside every result opens
+  a word-by-word diff of your input against the rewrite, lining the two up and
+  marking what changed
+- **Quote card export** — turn any style's output into a shareable 1080×1350
+  PNG, previewed before you save it. Pick a skin (the page's own look,
+  parchment, midnight, or verdant), a background (lit parchment, flat, or
+  wash), text alignment, and whether the original text appears in a band
+  beneath the quote. Asides and stage directions are stripped so only the
+  speech appears. Long text shrinks to fit the card (never below a readable
+  size), and the preview warns you when it had to shrink a lot or when the end
+  has been cut short. Open it from the dashboard or from the Make Card button
+  beside Copy and Save on every style page.
+- **Saved quotes** — keep a list of quotes you like: Save stores the output
+  together with your original input, the style, the settings, and an optional
+  title (up to 50 quotes, newest first), shared by the dashboard and every
+  style page. Search the list, filter by style, load a quote back with Use,
+  regenerate it with Re-run, delete single rows or clear everything, export to
+  `repriser-quotes.json`, and import that file back — duplicates are skipped
+  and malformed files are rejected with a message
 - **Installable web app** — `manifest.json` plus generated icons, no backend
 - **Keyboard shortcut** — press Ctrl+Enter to transform
 - **Copy to clipboard** — supported on local files and HTTPS, with an announced confirmation
@@ -61,7 +81,8 @@ it from `manifest.json`, and iOS users can use Share → Add to Home Screen.
 
 ## Getting Started
 
-No build step or installation is required.
+No build step or installation is required — the pages run straight from
+`file://` or from any static file server you prefer.
 
 1. Open `index.html` for all styles at once, or any single style page (start
    with `shakespeare.html`), or use the live demo above.
@@ -111,6 +132,7 @@ shakespeare-repriser/
 ├── icon-512.png
 ├── package.json       # build and test commands (no dependencies)
 ├── README.md
+├── UNLICENSE          # public-domain dedication (The Unlicense)
 ├── Screenshot.png
 └── tools/             # build + test tooling (not shipped to the browser)
 ```
@@ -153,10 +175,26 @@ There are no dependencies — `npm install` is never needed.
 
 ## Browser Support
 
-Works in all modern browsers (Chrome, Edge, Firefox, Safari), on desktop and mobile.
-An internet connection is only needed for the Google Fonts stylesheets; the apps
-fall back to system serif fonts when offline.
+Works in modern browsers (Chrome, Edge, Firefox, Safari), on desktop and
+mobile. Known limitations: the automated browser suite runs only in headless
+Chromium/Edge, so other engines are not covered by it; and an internet
+connection is only needed for the Google Fonts stylesheets — offline, the apps
+fall back to system serif fonts.
+
+## Privacy
+
+Everything runs in your browser, on your device: there is no backend,
+account, analytics, or tracking of any kind. Saved quotes live in your
+browser's `localStorage` under `repriser.savedQuotes` and your transformation
+settings under `repriser.settings`, shared between this site's pages on the
+same origin (the dashboard and all six styles) and never sent anywhere. The
+only network requests the pages make are for the Google Fonts stylesheets.
+Clearing site data removes both — use Export first if you want to keep your
+saved quotes.
 
 ## License
 
-Do what thou wilt.
+Free and unencumbered software released into the public domain under
+**[The Unlicense](https://unlicense.org/)** — do what thou wilt. The full
+dedication is in [`UNLICENSE`](./UNLICENSE), matching the
+`"license": "Unlicense"` field in `package.json`.
