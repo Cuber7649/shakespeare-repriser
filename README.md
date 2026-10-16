@@ -130,6 +130,7 @@ shakespeare-repriser/
 ├── icon-180.png       # App icons (generated)
 ├── icon-192.png
 ├── icon-512.png
+├── icon.svg           # Scalable SVG favicon (generated)
 ├── package.json       # build and test commands (no dependencies)
 ├── README.md
 ├── LICENSE            # free use; credit + GitHub link required if commercial
@@ -147,8 +148,10 @@ Two files here are **generated** rather than hand-written:
   copying each page's dictionaries, engine, helpers and transform function
   verbatim. That keeps this repository free of shared runtime files while making
   it impossible for the dashboard to drift from the individual pages.
-- **`icon-*.png` and `manifest.json`** — drawn programmatically, so there is no
-  image editor in the loop and the icons are square and maskable-safe.
+- **`icon-*.png`, `icon.svg` and `manifest.json`** — drawn programmatically, so
+  there is no image editor in the loop; the PNGs stay square and maskable-safe
+  for install prompts and iOS home screens, and the SVG is the crisp primary
+  favicon in browsers that support it.
 
 The generator and test scripts live in [`tools/`](./tools/README.md), with a
 README of their own. Shared logic — transformation settings, saved quotes, the

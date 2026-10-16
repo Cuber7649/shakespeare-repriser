@@ -1,5 +1,5 @@
-// Generates square app icons as real PNGs (no dependencies, zlib only) and
-// writes manifest.json.
+// Generates square app icons as real PNGs (no dependencies, zlib only), the
+// matching scalable icon.svg favicon, and manifest.json.
 //
 // The roadmap pointed manifest icons at Screenshot.png, which is a 630KB
 // full-page screenshot: wrong aspect ratio, and "purpose": "any maskable"
@@ -17,6 +17,19 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const BG = [0x2b, 0x2d, 0x42];
 const GOLD = [0xd4, 0xa0, 0x56];
 const PARCH = [0xf4, 0xe8, 0xcd];
+const hex = (rgb) => '#' + rgb.map((v) => v.toString(16).padStart(2, '0')).join('');
+
+// Icon geometry as fractions of the canvas, shared by the PNG painter below
+// and the SVG writer so the two renditions cannot drift apart.
+const GEO = {
+  ringInner: 0.335,
+  ringOuter: 0.375,
+  lozenge: 0.27,
+  shaftHalf: 0.03,
+  nibR: 0.055,
+  nibDx: -0.03,
+  nibDy: 0.03,
+};
 
 const CRC_TABLE = (() => {
   const t = new Int32Array(256);
@@ -69,11 +82,11 @@ function png(width, height, rgb) {
 function draw(size) {
   const img = Buffer.alloc(size * size * 3);
   const c = (size - 1) / 2;
-  const ringInner = size * 0.335;
-  const ringOuter = size * 0.375;
-  const lozengeR = size * 0.27;
-  const shaftHalf = size * 0.030;
-  const nibR = size * 0.055;
+  const ringInner = size * GEO.ringInner;
+  const ringOuter = size * GEO.ringOuter;
+  const lozengeR = size * GEO.lozenge;
+  const shaftHalf = size * GEO.shaftHalf;
+  const nibR = size * GEO.nibR;
 
   for (let y = 0; y < size; y++) {
     for (let x = 0; x < size; x++) {
@@ -86,7 +99,7 @@ function draw(size) {
       if (r >= ringInner && r <= ringOuter) col = GOLD;
       if (diamond <= lozengeR) col = GOLD;
       if (Math.abs(dx - dy) <= shaftHalf && diamond <= lozengeR) col = PARCH;
-      if (Math.hypot(dx + size * 0.03, dy - size * 0.03) <= nibR) col = PARCH;
+      if (Math.hypot(dx - size * GEO.nibDx, dy - size * GEO.nibDy) <= nibR) col = PARCH;
 
       const o = (y * size + x) * 3;
       img[o] = col[0];
@@ -97,11 +110,39 @@ function draw(size) {
   return img;
 }
 
+// The same picture as vector text: crisp as a favicon at any density, while
+// install and home-screen icons stay raster PNG. The band condition
+// |dx - dy| <= shaftHalf is a stroke of perpendicular width shaftHalf * sqrt(2)
+// running between the two opposite lozenge edges.
+function svgSource(size = 512) {
+  const r2 = (n) => Math.round(n * 100) / 100;
+  const c = size / 2;
+  const loz = size * GEO.lozenge;
+  const end = loz / 2;
+  const ringR = size * (GEO.ringInner + GEO.ringOuter) / 2;
+  const ringW = size * (GEO.ringOuter - GEO.ringInner);
+  const shaftW = size * GEO.shaftHalf * Math.SQRT2;
+  const nibX = c + size * GEO.nibDx;
+  const nibY = c + size * GEO.nibDy;
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${size} ${size}">
+  <rect width="${size}" height="${size}" fill="${hex(BG)}"/>
+  <circle cx="${r2(c)}" cy="${r2(c)}" r="${r2(ringR)}" fill="none" stroke="${hex(GOLD)}" stroke-width="${r2(ringW)}"/>
+  <polygon points="${r2(c)},${r2(c - loz)} ${r2(c + loz)},${r2(c)} ${r2(c)},${r2(c + loz)} ${r2(c - loz)},${r2(c)}" fill="${hex(GOLD)}"/>
+  <line x1="${r2(c - end)}" y1="${r2(c - end)}" x2="${r2(c + end)}" y2="${r2(c + end)}" stroke="${hex(PARCH)}" stroke-width="${r2(shaftW)}"/>
+  <circle cx="${r2(nibX)}" cy="${r2(nibY)}" r="${r2(size * GEO.nibR)}" fill="${hex(PARCH)}"/>
+</svg>
+`;
+}
+
 for (const size of [180, 192, 512]) {
   const buf = png(size, size, draw(size));
   writeFileSync(join(ROOT, `icon-${size}.png`), buf);
   console.log(`icon-${size}.png  ${(buf.length / 1024).toFixed(1)} KB`);
 }
+
+const svg = svgSource(512);
+writeFileSync(join(ROOT, 'icon.svg'), svg);
+console.log(`icon.svg         ${(svg.length / 1024).toFixed(1)} KB`);
 
 // manifest.json is generated here, so changes belong in this object, not in the
 // output file -- editing manifest.json by hand is silently overwritten on the
