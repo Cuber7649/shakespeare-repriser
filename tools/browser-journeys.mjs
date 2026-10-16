@@ -410,8 +410,15 @@ try {
   if (!kb) fail('could not focus the input for the keyboard journey');
   else {
     await pressKey('Tab', 'Tab', 9);
-    const onButton = await evalJs(
-      `document.activeElement.classList.contains('btn-primary')`);
+    const onSettings = await evalJs(
+      `document.activeElement.id === 'optIntensity'`);
+    if (!onSettings) fail('Tab from the input did not reach the settings panel first');
+    let onButton = false;
+    for (let i = 0; i < 12 && !onButton; i++) {
+      await pressKey('Tab', 'Tab', 9);
+      onButton = await evalJs(
+        `document.activeElement.classList.contains('btn-primary')`);
+    }
     if (!onButton) fail('Tab from the input did not reach the Transform button');
     else {
       await pressKey('Enter', 'Enter', 13);
