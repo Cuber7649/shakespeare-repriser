@@ -133,6 +133,7 @@ shakespeare-repriser/
 ├── icon.svg           # Scalable SVG favicon (generated)
 ├── package.json       # build and test commands (no dependencies)
 ├── README.md
+├── AGENTS.md          # contributor/agent guide: architecture invariants and workflow
 ├── LICENSE            # free use; credit + GitHub link required if commercial
 ├── Screenshot.png
 └── tools/             # build + test tooling (not shipped to the browser)
