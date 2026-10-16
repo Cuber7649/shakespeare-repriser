@@ -33,20 +33,46 @@
     font-size: 1rem;
     color: #5c4530;
   }
-  .options-select {
-    font-family: 'Cormorant Garamond', Georgia, serif;
-    font-size: 1rem;
-    padding: 5px 10px;
-    border: 1.5px solid #c4a265;
-    border-radius: 6px;
-    background: rgba(255,252,245,0.8);
-    color: #3d2b1f;
+  .options-range {
+    -webkit-appearance: none;
+    appearance: none;
+    flex: 0 1 200px;
+    height: 6px;
+    border-radius: 3px;
+    background: linear-gradient(90deg, #e6d3a8, #c4a265);
+    border: 1px solid #c4a265;
     cursor: pointer;
   }
-  .options-select:focus {
-    border-color: #d4a056;
-    box-shadow: 0 0 0 3px rgba(212,160,86,0.2);
-    outline: none;
+  .options-range::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #8b6d4a;
+    border: 2px solid #fdf6e3;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+    cursor: grab;
+  }
+  .options-range::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #8b6d4a;
+    border: 2px solid #fdf6e3;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+    cursor: grab;
+  }
+  .options-range:focus-visible {
+    outline: 2px solid #d4a056;
+    outline-offset: 4px;
+  }
+  .options-intensity {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 600;
+    font-size: 1rem;
+    color: #5c4530;
+    min-width: 5.5em;
   }
   .options-checks {
     display: flex;

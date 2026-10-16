@@ -612,20 +612,46 @@
     font-size: 1rem;
     color: #5c4530;
   }
-  .options-select {
-    font-family: 'Cormorant Garamond', Georgia, serif;
-    font-size: 1rem;
-    padding: 5px 10px;
-    border: 1.5px solid #c4a265;
-    border-radius: 6px;
-    background: rgba(255,252,245,0.8);
-    color: #3d2b1f;
+  .options-range {
+    -webkit-appearance: none;
+    appearance: none;
+    flex: 0 1 200px;
+    height: 6px;
+    border-radius: 3px;
+    background: linear-gradient(90deg, #e6d3a8, #c4a265);
+    border: 1px solid #c4a265;
     cursor: pointer;
   }
-  .options-select:focus {
-    border-color: #d4a056;
-    box-shadow: 0 0 0 3px rgba(212,160,86,0.2);
-    outline: none;
+  .options-range::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #8b6d4a;
+    border: 2px solid #fdf6e3;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+    cursor: grab;
+  }
+  .options-range::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #8b6d4a;
+    border: 2px solid #fdf6e3;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+    cursor: grab;
+  }
+  .options-range:focus-visible {
+    outline: 2px solid #d4a056;
+    outline-offset: 4px;
+  }
+  .options-intensity {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 600;
+    font-size: 1rem;
+    color: #5c4530;
+    min-width: 5.5em;
   }
   .options-checks {
     display: flex;
@@ -933,11 +959,8 @@
     <legend>Transformation settings</legend>
     <div class="options-row">
       <label class="options-label" for="optIntensity">Intensity</label>
-      <select id="optIntensity" class="options-select">
-        <option value="light">Light</option>
-        <option value="balanced" selected>Balanced</option>
-        <option value="dramatic">Dramatic</option>
-      </select>
+      <input type="range" id="optIntensity" class="options-range" min="0" max="2" step="1" value="1">
+      <span class="options-intensity" id="optIntensityValue">Balanced</span>
     </div>
     <div class="options-checks">
       <label class="options-check"><input type="checkbox" id="optOpenings" checked> Opening phrases</label>
@@ -2179,8 +2202,14 @@ function getTransformOptions() {
   var intensityEl = document.getElementById('optIntensity');
   var intensity = defs.intensity;
   if (intensityEl) {
+    // The control is a slider whose stops are 0..2; the harness stubs and
+    // pre-slider saved state speak the plain names, so accept both. Kept
+    // inline: the dashboard's style modules extract this function alone.
+    var stops = ['light', 'balanced', 'dramatic'];
     var v = intensityEl.value;
-    if (v === 'light' || v === 'dramatic') intensity = v;
+    var n = parseInt(v, 10);
+    if (String(v).trim() === String(n) && n >= 0 && n < stops.length) intensity = stops[n];
+    else if (v === 'light' || v === 'dramatic') intensity = v;
   }
   function on(id, def) {
     var el = document.getElementById(id);
@@ -2237,10 +2266,29 @@ function optLoad() {
   }
 }
 
+function optIntensityLabel() {
+  if (typeof document === 'undefined' || !document.getElementById) return;
+  var el = document.getElementById('optIntensity');
+  if (!el) return;
+  var name = getTransformOptions().intensity;
+  var word = name.charAt(0).toUpperCase() + name.slice(1);
+  var out = document.getElementById('optIntensityValue');
+  if (out) out.textContent = word;
+  if (el.setAttribute) el.setAttribute('aria-valuetext', word);
+}
+
 function optApply(opts) {
   if (typeof document === 'undefined' || !document.getElementById) return;
   var intensityEl = document.getElementById('optIntensity');
-  if (intensityEl) intensityEl.value = opts.intensity;
+  if (intensityEl) {
+    // A real slider takes the stop index; harness stubs keep the plain name.
+    if (intensityEl.type === 'range') {
+      intensityEl.value = String(['light', 'balanced', 'dramatic'].indexOf(opts.intensity));
+    } else {
+      intensityEl.value = opts.intensity;
+    }
+    optIntensityLabel();
+  }
   function set(id, v) { var el = document.getElementById(id); if (el) el.checked = !!v; }
   set('optOpenings', opts.openings);
   set('optMetaphors', opts.metaphors);
@@ -2270,9 +2318,11 @@ function initOptions() {
       var el = document.getElementById(id);
       if (el && el.addEventListener) {
         el.addEventListener('change', function () { optSave(getTransformOptions()); });
+        if (id === 'optIntensity') el.addEventListener('input', optIntensityLabel);
       }
     })(ids[i]);
   }
+  optIntensityLabel();
   return getTransformOptions();
 }
 

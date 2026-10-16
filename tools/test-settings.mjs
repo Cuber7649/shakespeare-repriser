@@ -18,8 +18,8 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const STYLE_PAGES = ['shakespeare.html', 'pirate.html', 'victorian.html',
   'chaucer.html', 'yoda.html', 'norse.html'];
 const PAGES = [...STYLE_PAGES, 'index.html'];
-const IDS = ['optionsPanel', 'optIntensity', 'optOpenings', 'optMetaphors',
-  'optAsides', 'optInvert', 'optResetBtn', 'optStatus'];
+const IDS = ['optionsPanel', 'optIntensity', 'optIntensityValue', 'optOpenings',
+  'optMetaphors', 'optAsides', 'optInvert', 'optResetBtn', 'optStatus'];
 
 let failures = 0;
 const ok = (m) => console.log(`  ok    ${m}`);
@@ -99,6 +99,14 @@ section('getTransformOptions');
   } else {
     no(`control read wrong: ${JSON.stringify(d2)}`);
   }
+
+  // The intensity control is a slider: its stops 0..2 read as the names.
+  p.document.getElementById('optIntensity').value = '0';
+  if (p.api.getTransformOptions().intensity === 'light') ok('slider stop 0 reads as light');
+  else no(`slider stop 0 read as ${p.api.getTransformOptions().intensity}`);
+  p.document.getElementById('optIntensity').value = '2';
+  if (p.api.getTransformOptions().intensity === 'dramatic') ok('slider stop 2 reads as dramatic');
+  else no(`slider stop 2 read as ${p.api.getTransformOptions().intensity}`);
 }
 
 // --- 5. toggles and intensity actually gate the pipeline ---------------------

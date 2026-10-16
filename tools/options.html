@@ -2,11 +2,8 @@
     <legend>Transformation settings</legend>
     <div class="options-row">
       <label class="options-label" for="optIntensity">Intensity</label>
-      <select id="optIntensity" class="options-select">
-        <option value="light">Light</option>
-        <option value="balanced" selected>Balanced</option>
-        <option value="dramatic">Dramatic</option>
-      </select>
+      <input type="range" id="optIntensity" class="options-range" min="0" max="2" step="1" value="1">
+      <span class="options-intensity" id="optIntensityValue">Balanced</span>
     </div>
     <div class="options-checks">
       <label class="options-check"><input type="checkbox" id="optOpenings" checked> Opening phrases</label>

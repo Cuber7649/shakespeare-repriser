@@ -22,8 +22,14 @@ function getTransformOptions() {
   var intensityEl = document.getElementById('optIntensity');
   var intensity = defs.intensity;
   if (intensityEl) {
+    // The control is a slider whose stops are 0..2; the harness stubs and
+    // pre-slider saved state speak the plain names, so accept both. Kept
+    // inline: the dashboard's style modules extract this function alone.
+    var stops = ['light', 'balanced', 'dramatic'];
     var v = intensityEl.value;
-    if (v === 'light' || v === 'dramatic') intensity = v;
+    var n = parseInt(v, 10);
+    if (String(v).trim() === String(n) && n >= 0 && n < stops.length) intensity = stops[n];
+    else if (v === 'light' || v === 'dramatic') intensity = v;
   }
   function on(id, def) {
     var el = document.getElementById(id);
@@ -80,10 +86,29 @@ function optLoad() {
   }
 }
 
+function optIntensityLabel() {
+  if (typeof document === 'undefined' || !document.getElementById) return;
+  var el = document.getElementById('optIntensity');
+  if (!el) return;
+  var name = getTransformOptions().intensity;
+  var word = name.charAt(0).toUpperCase() + name.slice(1);
+  var out = document.getElementById('optIntensityValue');
+  if (out) out.textContent = word;
+  if (el.setAttribute) el.setAttribute('aria-valuetext', word);
+}
+
 function optApply(opts) {
   if (typeof document === 'undefined' || !document.getElementById) return;
   var intensityEl = document.getElementById('optIntensity');
-  if (intensityEl) intensityEl.value = opts.intensity;
+  if (intensityEl) {
+    // A real slider takes the stop index; harness stubs keep the plain name.
+    if (intensityEl.type === 'range') {
+      intensityEl.value = String(['light', 'balanced', 'dramatic'].indexOf(opts.intensity));
+    } else {
+      intensityEl.value = opts.intensity;
+    }
+    optIntensityLabel();
+  }
   function set(id, v) { var el = document.getElementById(id); if (el) el.checked = !!v; }
   set('optOpenings', opts.openings);
   set('optMetaphors', opts.metaphors);
@@ -113,9 +138,11 @@ function initOptions() {
       var el = document.getElementById(id);
       if (el && el.addEventListener) {
         el.addEventListener('change', function () { optSave(getTransformOptions()); });
+        if (id === 'optIntensity') el.addEventListener('input', optIntensityLabel);
       }
     })(ids[i]);
   }
+  optIntensityLabel();
   return getTransformOptions();
 }
 
