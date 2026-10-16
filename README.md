@@ -45,11 +45,12 @@ it from `manifest.json`, and iOS users can use Share → Add to Home Screen.
 - **Dramatic asides and stage directions** — e.g. "[The longship sets sail.]"
 - **Metaphors and similes** — e.g. "as fierce as a berserker", "as wild as the open sea"
 - **Sentence inversion** — reordered syntax for emphasis
-- **Transformation settings** — an intensity control (Light, Balanced,
+- **Transformation settings** — a three-stop intensity slider (Light, Balanced,
   Dramatic) plus toggles for opening phrases, metaphors and similes, stage
   directions and asides, and sentence inversion, on every page and the
   dashboard. Balanced with everything on matches the original behaviour;
-  choices are remembered in your browser and follow you between pages
+  choices are remembered in your browser and follow you between pages, and a
+  Reset button restores the defaults
 - **Style-switcher navigation** — move between styles from any page
 - **Side-by-side dashboard** — one input, all six styles at once, on `index.html`
 - **Original/output comparison** — a Compare button beside every result opens
@@ -68,9 +69,11 @@ it from `manifest.json`, and iOS users can use Share → Add to Home Screen.
   together with your original input, the style, the settings, and an optional
   title (up to 50 quotes, newest first), shared by the dashboard and every
   style page. Search the list, filter by style, load a quote back with Use,
-  regenerate it with Re-run, delete single rows or clear everything, export to
-  `repriser-quotes.json`, and import that file back — duplicates are skipped
-  and malformed files are rejected with a message
+  regenerate it with Re-run, delete single rows or clear everything (the clear
+  button asks you to confirm first), export to `repriser-quotes.json`, and
+  import that file back: the page reports how many quotes were added or
+  skipped, duplicates are skipped, and malformed files are rejected with a
+  message
 - **Installable web app** — `manifest.json` plus generated icons, no backend
 - **Keyboard shortcut** — press Ctrl+Enter to transform
 - **Copy to clipboard** — supported on local files and HTTPS, with an announced confirmation
@@ -168,7 +171,7 @@ from its neighbours. To change it:
 
 ```bash
 npm run build   # regenerate index.html from the six style pages
-npm test        # run the whole suite (build + 24 checks, ~2 min)
+npm test        # run the whole suite (24 steps, ~10 s)
 ```
 
 `npm test` includes `paste-shared --check`, which fails the build the moment a
