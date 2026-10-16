@@ -15,6 +15,5 @@ tools/baseline.json
 # tools/test-reproducible.mjs scratch copies
 .__repro-*
 
-# Handoff notes - local only, not published with the site
-Plan.md
+# Local agent workspace - not published with the site
 .sisyphus/

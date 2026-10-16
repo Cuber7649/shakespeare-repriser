@@ -93,7 +93,9 @@ const LOCAL = /C:[\\/]Users[\\/]|file:\/\/\/[A-Za-z]:|AppData[\\/]|[A-Za-z]:[\\/
 const toolFiles = readdirSync('tools')
   .filter((f) => /\.(mjs|js|css|html)$/.test(f))
   .map((f) => `tools/${f}`);
-const scan = [...PAGES, ...toolFiles];
+// Markdown docs ship too (root docs + tools/README.md).
+const docs = ['README.md', 'AGENTS.md', 'tools/README.md'];
+const scan = [...PAGES, ...toolFiles, ...docs];
 const secretHits = scan.filter((name) => SECRET.find((re) => re.test(readFileSync(name, 'utf8'))));
 const localHits = scan.filter((name) => LOCAL.test(readFileSync(name, 'utf8')));
 secretHits.length === 0
