@@ -149,9 +149,9 @@ Two files here are **generated** rather than hand-written:
   verbatim. That keeps this repository free of shared runtime files while making
   it impossible for the dashboard to drift from the individual pages.
 - **`icon-*.png`, `icon.svg` and `manifest.json`** — drawn programmatically, so
-  there is no image editor in the loop; the PNGs stay square and maskable-safe
-  for install prompts and iOS home screens, and the SVG is the crisp primary
-  favicon in browsers that support it.
+  there is no image editor in the loop; the artwork is a round medallion on a
+  square canvas, which keeps the install and iOS home-screen icons maskable-safe,
+  and the SVG is the crisp primary favicon in browsers that support it.
 
 The generator and test scripts live in [`tools/`](./tools/README.md), with a
 README of their own. Shared logic — transformation settings, saved quotes, the

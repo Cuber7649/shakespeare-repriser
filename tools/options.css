@@ -91,10 +91,32 @@
     user-select: none;
   }
   .options-check input {
-    width: 15px;
-    height: 15px;
-    accent-color: #8b6d4a;
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    margin: 0;
+    flex: none;
+    border-radius: 50%;
+    border: 1.5px solid #c4a265;
+    background: #fdf6e3;
     cursor: pointer;
+    position: relative;
+  }
+  .options-check input:checked {
+    background: #8b6d4a;
+    border-color: #8b6d4a;
+  }
+  .options-check input:checked::after {
+    content: '';
+    position: absolute;
+    left: 4px;
+    top: 1px;
+    width: 4px;
+    height: 8px;
+    border: solid #fdf6e3;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
   }
   .options-check input:focus-visible {
     outline: 2px solid #d4a056;

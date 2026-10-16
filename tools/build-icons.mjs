@@ -20,8 +20,11 @@ const PARCH = [0xf4, 0xe8, 0xcd];
 const hex = (rgb) => '#' + rgb.map((v) => v.toString(16).padStart(2, '0')).join('');
 
 // Icon geometry as fractions of the canvas, shared by the PNG painter below
-// and the SVG writer so the two renditions cannot drift apart.
+// and the SVG writer so the two renditions cannot drift apart. The dark disc
+// is round with a transparent background; ring, lozenge and shaft stay inside
+// the maskable safe zone (radius 0.40) so cropped launch icons lose nothing.
 const GEO = {
+  disc: 0.47,
   ringInner: 0.335,
   ringOuter: 0.375,
   lozenge: 0.27,
@@ -56,17 +59,17 @@ function chunk(type, data) {
   return Buffer.concat([len, body, crc]);
 }
 
-function png(width, height, rgb) {
+function png(width, height, rgba) {
   const ihdr = Buffer.alloc(13);
   ihdr.writeUInt32BE(width, 0);
   ihdr.writeUInt32BE(height, 4);
   ihdr[8] = 8;   // bit depth
-  ihdr[9] = 2;   // colour type: truecolour RGB
-  const raw = Buffer.alloc(height * (1 + width * 3));
+  ihdr[9] = 6;   // colour type: truecolour + alpha (the disc floats on transparent corners)
+  const raw = Buffer.alloc(height * (1 + width * 4));
   for (let y = 0; y < height; y++) {
-    const rowStart = y * (1 + width * 3);
+    const rowStart = y * (1 + width * 4);
     raw[rowStart] = 0; // filter: none
-    rgb.copy(raw, rowStart + 1, y * width * 3, (y + 1) * width * 3);
+    rgba.copy(raw, rowStart + 1, y * width * 4, (y + 1) * width * 4);
   }
   return Buffer.concat([
     Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]),
@@ -76,12 +79,14 @@ function png(width, height, rgb) {
   ]);
 }
 
-// Full-bleed dark background, a thin gold ring, and a centred gold lozenge
-// with a cream shaft standing in for a quill. Maskable icons get cropped to a
-// circle inscribed in the middle 80%, so all content stays within r <= 0.38.
+// A round dark disc (antialiased edge, transparent outside), a thin gold ring
+// and a centred gold lozenge with a cream shaft standing in for a quill.
+// Maskable icons get cropped to a circle inscribed in the middle 80%, so all
+// content stays within r <= 0.38.
 function draw(size) {
-  const img = Buffer.alloc(size * size * 3);
+  const img = Buffer.alloc(size * size * 4);
   const c = (size - 1) / 2;
+  const discR = size * GEO.disc;
   const ringInner = size * GEO.ringInner;
   const ringOuter = size * GEO.ringOuter;
   const lozengeR = size * GEO.lozenge;
@@ -95,16 +100,21 @@ function draw(size) {
       const r = Math.hypot(dx, dy);
       const diamond = Math.abs(dx) + Math.abs(dy);
 
-      let col = BG;
-      if (r >= ringInner && r <= ringOuter) col = GOLD;
-      if (diamond <= lozengeR) col = GOLD;
-      if (Math.abs(dx - dy) <= shaftHalf && diamond <= lozengeR) col = PARCH;
-      if (Math.hypot(dx - size * GEO.nibDx, dy - size * GEO.nibDy) <= nibR) col = PARCH;
+      let col = null;
+      const cover = Math.max(0, Math.min(1, discR - r + 0.5));
+      if (cover > 0) col = [BG[0], BG[1], BG[2], Math.round(cover * 255)];
+      if (r >= ringInner && r <= ringOuter) col = [GOLD[0], GOLD[1], GOLD[2], 255];
+      if (diamond <= lozengeR) col = [GOLD[0], GOLD[1], GOLD[2], 255];
+      if (Math.abs(dx - dy) <= shaftHalf && diamond <= lozengeR) col = [PARCH[0], PARCH[1], PARCH[2], 255];
+      if (Math.hypot(dx - size * GEO.nibDx, dy - size * GEO.nibDy) <= nibR) col = [PARCH[0], PARCH[1], PARCH[2], 255];
 
-      const o = (y * size + x) * 3;
-      img[o] = col[0];
-      img[o + 1] = col[1];
-      img[o + 2] = col[2];
+      const o = (y * size + x) * 4;
+      if (col) {
+        img[o] = col[0];
+        img[o + 1] = col[1];
+        img[o + 2] = col[2];
+        img[o + 3] = col[3];
+      }
     }
   }
   return img;
@@ -125,7 +135,7 @@ function svgSource(size = 512) {
   const nibX = c + size * GEO.nibDx;
   const nibY = c + size * GEO.nibDy;
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${size} ${size}">
-  <rect width="${size}" height="${size}" fill="${hex(BG)}"/>
+  <circle cx="${r2(c)}" cy="${r2(c)}" r="${r2(size * GEO.disc)}" fill="${hex(BG)}"/>
   <circle cx="${r2(c)}" cy="${r2(c)}" r="${r2(ringR)}" fill="none" stroke="${hex(GOLD)}" stroke-width="${r2(ringW)}"/>
   <polygon points="${r2(c)},${r2(c - loz)} ${r2(c + loz)},${r2(c)} ${r2(c)},${r2(c + loz)} ${r2(c - loz)},${r2(c)}" fill="${hex(GOLD)}"/>
   <line x1="${r2(c - end)}" y1="${r2(c - end)}" x2="${r2(c + end)}" y2="${r2(c + end)}" stroke="${hex(PARCH)}" stroke-width="${r2(shaftW)}"/>
