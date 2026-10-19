@@ -238,7 +238,7 @@ const cards = STYLES.map((s) => `      <section class="mini">
         <div class="out" id="out-${s.id}"></div>
         <div class="output-actions">
           <button class="btn-copy" data-card="${s.id}">
-            <span>&#9786;</span> Make Card
+            <span>&#128204;</span> Make Card
           </button>
           <button class="btn-copy" data-copy="${s.id}">
             <span>&#128203;</span> Copy
