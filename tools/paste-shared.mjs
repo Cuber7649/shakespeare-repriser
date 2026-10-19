@@ -36,7 +36,7 @@ const CHAINS = [
   {
     close: '</script>',
     files: ['options.js', 'savedquotes.js', 'compare.js', 'quotecard.js',
-      'cardui.js', 'cardpage.js'],
+      'cardui.js', 'cardpage.js', 'surprise.js'],
     load: (f) => norm(browserSource(rd(`tools/${f}`))),
   },
   {

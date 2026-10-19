@@ -29,6 +29,7 @@ const STEPS = [
   ['test-content', ['test-content.mjs']],
   ['test-yoda', ['test-yoda.mjs']],
   ['test-settings', ['test-settings.mjs']],
+  ['test-surprise', ['test-surprise.mjs']],
   ['test-compare', ['test-compare.mjs']],
   ['test-reproducible', ['test-reproducible.mjs']],
   ['test-links', ['test-links.mjs']],

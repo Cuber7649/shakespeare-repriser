@@ -146,6 +146,8 @@ const compareJs = browserSource(
 const optionsJs = browserSource(
   readFileSync(join(ROOT, 'tools', 'options.js'), 'utf8'));
 const optionsHtml = readFileSync(join(ROOT, 'tools', 'options.html'), 'utf8').trimEnd();
+const surpriseJs = browserSource(
+  readFileSync(join(ROOT, 'tools', 'surprise.js'), 'utf8'));
 
 // ---------------------------------------------------------------------------
 // Compose index.html
@@ -307,6 +309,9 @@ ${optionsHtml}
     <button class="btn btn-primary" id="go">
       <span class="quill-icon">&#128396;</span> Repraise In All Styles!
     </button>
+    <button class="btn btn-secondary" id="dashSurprise">
+      <span>&#128204;</span> Surprise Me!
+    </button>
     <button class="btn btn-secondary" id="clear">Clear</button>
   </div>
 
@@ -341,6 +346,10 @@ ${cardui}
 ${savedQuotesJs}
 ${compareJs}
 ${optionsJs}
+// rand() for Surprise Me sample selection (not a style transformation, so
+// Math.random() here does not affect seeded transform output).
+function rand() { return Math.random(); }
+${surpriseJs}
 
 (function () {
   const ORDER = ${JSON.stringify(STYLES.map((s) => s.id))};
@@ -371,6 +380,10 @@ ${optionsJs}
     outs.forEach((o) => { o.textContent = ''; });
     closeCard();
     statusEl.textContent = 'Cleared';
+  });
+
+  document.getElementById('dashSurprise').addEventListener('click', () => {
+    surpriseApply(inputEl, charCountEl, transformAll);
   });
 
   // Saved-quote Re-run: regenerate just this style's card from the stored

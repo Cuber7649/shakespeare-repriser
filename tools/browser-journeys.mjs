@@ -426,7 +426,8 @@ try {
       if (!out.trim()) fail('Enter on the Transform button produced no output');
       else pass('Tab + Enter transformed text without a mouse');
     }
-    // Tab along to Make Card (Clear is next, then Make Card).
+    // Tab along to Make Card (Surprise Me is next, then Clear, then Make Card).
+    await pressKey('Tab', 'Tab', 9);
     await pressKey('Tab', 'Tab', 9);
     await pressKey('Tab', 'Tab', 9);
     const onCard = await evalJs(

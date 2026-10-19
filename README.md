@@ -77,6 +77,7 @@ it from `manifest.json`, and iOS users can use Share → Add to Home Screen.
 - **Installable web app** — `manifest.json` plus generated icons, no backend
 - **Keyboard shortcut** — press Ctrl+Enter to transform
 - **Copy to clipboard** — supported on local files and HTTPS, with an announced confirmation
+- **Surprise Me!** — one click inserts a random, family-friendly sample sentence into the input and immediately runs the transformation. The same sentence never appears twice in a row.
 - **Responsive layout** — verified from mobile to desktop viewports
 - **Screen-reader support** — live regions announce results and copy confirmations; every input has a real label
 - **Reduced-motion support** — all decorative animation stops when the OS asks for it
