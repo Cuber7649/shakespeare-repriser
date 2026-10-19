@@ -205,13 +205,13 @@ non-commercial needs no attribution; AS-IS disclaimer. Do not relicense.
 
 ## Where things live
 
-| Path                                                                                           | Role                                                                  |
-| ---------------------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
-| `shakespeare.html`, `pirate.html`, `victorian.html`, `chaucer.html`, `yoda.html`, `norse.html` | The six style apps (standalone)                                       |
-| `index.html`                                                                                   | Dashboard (generated)                                                 |
-| `tools/`                                                                                       | All build + test scripts; shared-block sources; see `tools/README.md` |
-| `tools/corpus.mjs`                                                                             | Test inputs and `SEEDS`                                               |
-| `tools/engine-proto.mjs`                                                                       | Frozen old engine for `test-engine.mjs`                               |
-| `AGENTS.md`                                                                                    | This file — invariants, workflow, judgment calls, history             |
-| `README.md`                                                                                    | User-facing docs; its tables are test-checked                         |
-| `LICENSE`                                                                                      | Terms above                                                           |
+| Path | Role |
+| ---- | ---- |
+| `shakespeare.html`, `pirate.html`, `victorian.html`, `chaucer.html`, `yoda.html`, `norse.html` | The six style apps (standalone) |
+| `index.html` | Dashboard (generated) |
+| `tools/` | All build + test scripts; shared-block sources; see `tools/README.md` |
+| `tools/corpus.mjs` | Test inputs and `SEEDS` |
+| `tools/engine-proto.mjs` | Frozen old engine for `test-engine.mjs` |
+| `AGENTS.md` | This file — invariants, workflow, judgment calls, history |
+| `README.md` | User-facing docs; its tables are test-checked |
+| `LICENSE` | Terms above |
