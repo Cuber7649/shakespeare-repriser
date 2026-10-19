@@ -110,7 +110,7 @@ obvious from a diff and was settled deliberately:
   `thrall`/`slave` were reworded to attack conduct instead ("withered old
   fool", "craven liar", …): it is not humour about a vice, it uses a real
   historical oppression as the punchline. The ban is **scoped to roasts on
-  purpose** — two pirate quotes argue *against* slavery ("I'd rather be a free
+  purpose** — two pirate quotes argue _against_ slavery ("I'd rather be a free
   man…", "Better dead than to be a slave") and must stay; a blanket ban would
   delete them.
 - **Drunkenness, filth and oath-breaker roasts were deliberately KEPT** (an
@@ -122,19 +122,15 @@ obvious from a diff and was settled deliberately:
 - **Open judgment call:** `"ye cross-eyed bilge monkey"` (pirate) is allowed
   via the `ALLOWED` list in `test-content.mjs` and emits a standing `WARN` —
   judged Golden Age nautical ribaldry, no slur implication. The owner has not
-  ruled; if you disagree, remove the line *and* the `ALLOWED` entry together.
+  ruled; if you disagree, remove the line _and_ the `ALLOWED` entry together.
 - **Scans must use word boundaries.** Naive substring matching produced 18
-  false positives: `arse` inside "co**arse**r", `prick` in *"the pricking of
-  my thumbs"* (canonical Shakespeare), `slave` in the anti-slavery quotes,
-  `damn` in *"Out, damned spot!"*. Every reviewed exception lives in
+  false positives: `arse` inside "co**arse**r", `prick` in _"the pricking of
+  my thumbs"_ (canonical Shakespeare), `slave` in the anti-slavery quotes,
+  `damn` in _"Out, damned spot!"_. Every reviewed exception lives in
   `ALLOWED` with a written reason — new ones need a reason too. Secret
   scanning has the same trap (the dictionaries contain `secret`→`mystery`,
   `_TOKEN_CHAR`, the Chaucer phrase "with token and tryste"), so
-  `prepush-check.mjs` matches credential *shapes*, not bare words.
-- **Removed but recoverable:** a random picker page (`random.html` + 72
-  authored compliments) shipped in `03a1ced` and was removed in `10d0e8a` at
-  the owner's request, reason unknown — `git show 03a1ced` has the whole
-  thing. Ask before rebuilding it.
+  `prepush-check.mjs` matches credential _shapes_, not bare words.
 
 ## Known open work
 
@@ -162,7 +158,7 @@ obvious from a diff and was settled deliberately:
 - `test-settings.mjs`, `test-savedquotes.mjs`, `test-compare.mjs`,
   `test-cardpages.mjs` — byte-identical paste checks + behaviour.
 - `test-links.mjs` — every local href resolves, all pages share one switcher.
-  It was written *after* a missing-page-link mistake: deleting a page means
+  It was written _after_ a missing-page-link mistake: deleting a page means
   deleting its switcher links on all 7 pages and in the README.
 
 Last line of a green run: `working tree is ready to push`.
@@ -174,12 +170,12 @@ Last line of a green run: `working tree is ready to push`.
   temp `.mjs` file** (scratch dir: any writable directory outside the repo,
   e.g. `%TEMP%`) and run it. Heredocs do not work either: `git commit -F -`
   with `<<EOF` fails — write the message to a file and use `git commit -F
-  <path>`.
+<path>`.
 - **`edit` on files with CRLF endings can fail to match:** a large multi-line
   `oldString` written as LF will not match a file git normalised to CRLF.
   Prefer a small unique anchor, or write a script.
 - **The live site lags the push.** GitHub Pages takes a minute or two; a
-  screenshot taken from the live URL shows the *previous* deploy (this is how
+  screenshot taken from the live URL shows the _previous_ deploy (this is how
   a screenshot advertising a deleted page got committed). For a current shot,
   use the local file (`file:///<repo-root>/index.html`).
 - Edge: `C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe` (or the
@@ -209,29 +205,13 @@ non-commercial needs no attribution; AS-IS disclaimer. Do not relicense.
 
 ## Where things live
 
-| Path | Role |
-| ---- | ---- |
-| `shakespeare.html`, `pirate.html`, `victorian.html`, `chaucer.html`, `yoda.html`, `norse.html` | The six style apps (standalone) |
-| `index.html` | Dashboard (generated) |
-| `tools/` | All build + test scripts; shared-block sources; see `tools/README.md` |
-| `tools/corpus.mjs` | Test inputs and `SEEDS` |
-| `tools/engine-proto.mjs` | Frozen old engine for `test-engine.mjs` |
-| `AGENTS.md` | This file — invariants, workflow, judgment calls, history |
-| `README.md` | User-facing docs; its tables are test-checked |
-| `LICENSE` | Terms above |
-
-## History (compressed)
-
-- The cascade engine was replaced with the single-pass longest-match and the
-  dashboard added in one commit (`da63c44`); the manifest + PNG icons for
-  installability followed (`f84b7cc`). The random picker (`03a1ced`) bundled
-  three unrelated things — the picker, the content cleanups above, and the
-  shared `cardui.js` modal — so **never `git revert` it wholesale**; removing
-  the picker needed its own commit (`10d0e8a`).
-- `tools/` originally lived outside the repo (in a `Github stuff` folder) and
-  was moved in on 2026-10-07 when the owner wanted it published with the
-  site; the handoff notes (formerly `Plan.md`, local-only) were merged into
-  this file on 2026-10-16.
-- Since then: the standalone-pages + paste-shared workflow, the compare view,
-  saved quotes, quote-card export, transformation settings (intensity slider
-  + round checkboxes), the SVG favicon, and this file's own merge.
+| Path                                                                                           | Role                                                                  |
+| ---------------------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
+| `shakespeare.html`, `pirate.html`, `victorian.html`, `chaucer.html`, `yoda.html`, `norse.html` | The six style apps (standalone)                                       |
+| `index.html`                                                                                   | Dashboard (generated)                                                 |
+| `tools/`                                                                                       | All build + test scripts; shared-block sources; see `tools/README.md` |
+| `tools/corpus.mjs`                                                                             | Test inputs and `SEEDS`                                               |
+| `tools/engine-proto.mjs`                                                                       | Frozen old engine for `test-engine.mjs`                               |
+| `AGENTS.md`                                                                                    | This file — invariants, workflow, judgment calls, history             |
+| `README.md`                                                                                    | User-facing docs; its tables are test-checked                         |
+| `LICENSE`                                                                                      | Terms above                                                           |
