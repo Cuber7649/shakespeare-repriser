@@ -8120,6 +8120,7 @@ var SQ_KEY = 'repriser.savedQuotes';
 var SQ_MAX = 50;
 var SQ_EXCERPT = 90;
 var SQ_UNAVAILABLE = 'Saving is unavailable in this browser';
+var SQ_ID_COUNTER = 0;
 
 // The list itself: [{ id, text, original, style, settings, title, at }],
 // newest first. Storage mirrors it and is never the source of truth for an
@@ -8145,7 +8146,7 @@ function sqExcerpt(text, limit) {
 }
 
 function sqId() {
-  return 'q' + Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+  return 'q' + Date.now().toString(36) + (++SQ_ID_COUNTER).toString(36);
 }
 
 // localStorage throws in Safari's private mode and in some file:// contexts,
