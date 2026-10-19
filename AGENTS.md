@@ -138,17 +138,11 @@ obvious from a diff and was settled deliberately:
 
 ## Known open work
 
-- **Engine defect census:** 16 of 4176 cases contain a doubled word or
-  repeat (victorian 3, yoda 4, norse 1, plus cross-variant doubles).
-  `test-engine` reports it; not fixed.
 - **Known cosmetic artefact:** a ~6px stray mark in the textarea of
   `Screenshot.png`, composited by headless Edge; survives
   `caret-color: transparent`, `cursor: none` and moving the virtual pointer.
   ~3px at README width. Documented rather than fixed — suppressing it is not
   worth the machinery.
-- Layout had gone unverified in a real browser for a long time;
-  `check-css.mjs` validates brace balance and query counts but cannot tell you
-  a page *looks* wrong. If you change CSS, look at it.
 
 ## Testing
 
