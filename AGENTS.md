@@ -138,13 +138,6 @@ obvious from a diff and was settled deliberately:
 
 ## Known open work
 
-- **193 of the 234 quotes are dead code.** Only `shakespeare.html` calls
-  `pick(quotes)`; the other five pages define a `quotes` array that
-  `maybeInsertQuote` never touches (hardcoded 2–4 item list instead). Counts:
-  shakespeare 41 / pirate 31 / victorian 25 / chaucer 35 / yoda 72 /
-  norse 30. The fix is one line per page but it is a **live behaviour change**
-  that shifts seeded output — snapshot first for blast radius, and do not do
-  it unasked.
 - **Engine defect census:** 16 of 4176 cases contain a doubled word or
   repeat (victorian 3, yoda 4, norse 1, plus cross-variant doubles).
   `test-engine` reports it; not fixed.
