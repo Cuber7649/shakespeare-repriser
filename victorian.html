@@ -2019,8 +2019,7 @@ function maybeAddMetaphor(text) {
 // ============================================================
 function maybeInsertQuote(text) {
   if (!chance(0.04)) return text;
-  var q = ['Good heavens!', 'My dear fellow!', 'I dare say!', 'Indeed!', 'How remarkable!'];
-  return text + " " + q[Math.floor(rand() * q.length)];
+  return text + " " + pick(quotes);
 }
 
 // ============================================================

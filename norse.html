@@ -2110,8 +2110,7 @@ function maybeAddMetaphor(text) {
 // ============================================================
 function maybeInsertQuote(text) {
   if (!chance(0.04)) return text;
-  var q = ['Hark!', 'Skál!', "By Odin's beard!", 'Hear me!', "By Thor's hammer!"];
-  return text + " " + q[Math.floor(rand() * q.length)];
+  return text + " " + pick(quotes);
 }
 
 // ============================================================

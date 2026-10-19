@@ -2074,8 +2074,7 @@ function maybeAddMetaphor(text) {
 // ============================================================
 function maybeInsertQuote(text) {
   if (!chance(0.04)) return text;
-  var q = ['Whan that Aprille...', 'Heere bigynneth...', 'By GoddesSoule!', 'In good feith!', 'Now herkneth!'];
-  return text + " " + q[Math.floor(rand() * q.length)];
+  return text + " " + pick(quotes);
 }
 
 // ============================================================

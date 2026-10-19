@@ -2030,8 +2030,7 @@ function maybeAddMetaphor(text) {
 // ============================================================
 function maybeInsertQuote(text) {
   if (!chance(0.04)) return text;
-  var q = ['Hmm...', 'Strong with the Force you are!', 'Yes, yes!', 'Patience!', 'Fear not!'];
-  return text + " " + q[Math.floor(rand() * q.length)];
+  return text + " " + pick(quotes);
 }
 
 // ============================================================

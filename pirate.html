@@ -2008,8 +2008,7 @@ function maybeAddMetaphor(text) {
 // ============================================================
 function maybeInsertQuote(text) {
   if (!chance(0.04)) return text;
-  var q = ['Arrr!', 'Ahoy!', 'Yo ho ho!', 'Avast ye!', "By Davy Jones' locker!"];
-  return text + " " + q[Math.floor(rand() * q.length)];
+  return text + " " + pick(quotes);
 }
 
 // ============================================================
