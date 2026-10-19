@@ -2166,8 +2166,9 @@ function maybeAddFiller(text) {
   var filler = fillers[Math.floor(rand() * fillers.length)];
   words.splice(idx + 1, 0, filler);
   var candidate = words.join(" ");
-  // Never let a filler insertion repeat a word (e.g. "by by the gods").
-  if (/\b([A-Za-z']+) \1\b/i.test(candidate)) return text;
+  // Never let a filler insertion repeat a word or phrase
+  // (e.g. "by by the gods", "by the gods by the gods").
+  if (/\b([A-Za-z']+) \1\b|([A-Za-z']+\s+[A-Za-z']+)\s+\2\b|([A-Za-z']+\s+[A-Za-z']+\s+[A-Za-z']+)\s+\3\b/i.test(candidate)) return text;
   return candidate;
 }
 

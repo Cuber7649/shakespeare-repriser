@@ -2128,7 +2128,11 @@ function maybeAddFiller(text) {
   if (words.length < 3) return text;
   var idx = Math.floor(rand() * Math.min(3, words.length));
   words.splice(idx + 1, 0, fillers[Math.floor(rand() * fillers.length)]);
-  return words.join(" ");
+  var candidate = words.join(" ");
+  // Never let a filler insertion repeat a word or phrase
+  // (e.g. "in good faith in good faith", "trewely trewely").
+  if (/\b([A-Za-z']+) \1\b|([A-Za-z']+\s+[A-Za-z']+)\s+\2\b|([A-Za-z']+\s+[A-Za-z']+\s+[A-Za-z']+)\s+\3\b/i.test(candidate)) return text;
+  return candidate;
 }
 
 // ============================================================

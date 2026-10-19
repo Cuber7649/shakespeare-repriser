@@ -2257,7 +2257,11 @@ function maybeAddFiller(text) {
   if (words.length < 3) return text;
   let idx = Math.floor(rand() * Math.min(3, words.length));
   words.splice(idx + 1, 0, pick(fillers));
-  return words.join(" ");
+  let candidate = words.join(" ");
+  // Never let a filler insertion repeat a word or phrase
+  // (e.g. "by my troth by my troth", "verily verily").
+  if (/\b([A-Za-z']+) \1\b|([A-Za-z']+\s+[A-Za-z']+)\s+\2\b|([A-Za-z']+\s+[A-Za-z']+\s+[A-Za-z']+)\s+\3\b/i.test(candidate)) return text;
+  return candidate;
 }
 
 function maybeAddParenthetical(text) {
@@ -3199,8 +3203,13 @@ function maybeAddFiller(text) {
   var words = text.split(/\s+/);
   if (words.length < 3) return text;
   var idx = Math.floor(rand() * Math.min(3, words.length));
-  words.splice(idx + 1, 0, fillers[Math.floor(rand() * fillers.length)]);
-  return words.join(" ");
+  var filler = fillers[Math.floor(rand() * fillers.length)];
+  words.splice(idx + 1, 0, filler);
+  var candidate = words.join(" ");
+  // Never let a filler insertion repeat a word or phrase
+  // (e.g. "sort of sort of", "by the powers by the powers").
+  if (/\b([A-Za-z']+) \1\b|([A-Za-z']+\s+[A-Za-z']+)\s+\2\b|([A-Za-z']+\s+[A-Za-z']+\s+[A-Za-z']+)\s+\3\b/i.test(candidate)) return text;
+  return candidate;
 }
 
 function maybeAddParenthetical(text) {
@@ -4151,8 +4160,9 @@ function maybeAddFiller(text) {
   var filler = fillers[Math.floor(rand() * fillers.length)];
   words.splice(idx + 1, 0, filler);
   var candidate = words.join(" ");
-  // Never let a filler insertion repeat a word (e.g. "most most certainly").
-  if (/\b([A-Za-z']+) \1\b/i.test(candidate)) return text;
+  // Never let a filler insertion repeat a word or phrase
+  // (e.g. "most most certainly", "most certainly most certainly").
+  if (/\b([A-Za-z']+) \1\b|([A-Za-z']+\s+[A-Za-z']+)\s+\2\b|([A-Za-z']+\s+[A-Za-z']+\s+[A-Za-z']+)\s+\3\b/i.test(candidate)) return text;
   return candidate;
 }
 
@@ -5157,7 +5167,11 @@ function maybeAddFiller(text) {
   if (words.length < 3) return text;
   var idx = Math.floor(rand() * Math.min(3, words.length));
   words.splice(idx + 1, 0, fillers[Math.floor(rand() * fillers.length)]);
-  return words.join(" ");
+  var candidate = words.join(" ");
+  // Never let a filler insertion repeat a word or phrase
+  // (e.g. "in good faith in good faith", "trewely trewely").
+  if (/\b([A-Za-z']+) \1\b|([A-Za-z']+\s+[A-Za-z']+)\s+\2\b|([A-Za-z']+\s+[A-Za-z']+\s+[A-Za-z']+)\s+\3\b/i.test(candidate)) return text;
+  return candidate;
 }
 
 function maybeAddParenthetical(text) {
@@ -7225,8 +7239,9 @@ function maybeAddFiller(text) {
   var filler = fillers[Math.floor(rand() * fillers.length)];
   words.splice(idx + 1, 0, filler);
   var candidate = words.join(" ");
-  // Never let a filler insertion repeat a word (e.g. "by by the gods").
-  if (/\b([A-Za-z']+) \1\b/i.test(candidate)) return text;
+  // Never let a filler insertion repeat a word or phrase
+  // (e.g. "by by the gods", "by the gods by the gods").
+  if (/\b([A-Za-z']+) \1\b|([A-Za-z']+\s+[A-Za-z']+)\s+\2\b|([A-Za-z']+\s+[A-Za-z']+\s+[A-Za-z']+)\s+\3\b/i.test(candidate)) return text;
   return candidate;
 }
 
