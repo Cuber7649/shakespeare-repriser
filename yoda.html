@@ -1244,7 +1244,7 @@ function copyOutput() {
   }
 }
 
-const _randomSeed = Math.random;
+const _randomSeed = () => 0;
 let _rngState = (_randomSeed() * 0x100000000) >>> 0;
 
 function seedRandom(seed) {
