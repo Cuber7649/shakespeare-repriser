@@ -2072,8 +2072,12 @@ function maybeAddFiller(text) {
   var words = text.split(/\s+/);
   if (words.length < 3) return text;
   var idx = Math.floor(rand() * Math.min(3, words.length));
-  words.splice(idx + 1, 0, fillers[Math.floor(rand() * fillers.length)]);
-  return words.join(" ");
+  var filler = fillers[Math.floor(rand() * fillers.length)];
+  words.splice(idx + 1, 0, filler);
+  var candidate = words.join(" ");
+  // Never let a filler insertion repeat a word (e.g. "most most certainly").
+  if (/\b([A-Za-z']+) \1\b/i.test(candidate)) return text;
+  return candidate;
 }
 
 // ============================================================
