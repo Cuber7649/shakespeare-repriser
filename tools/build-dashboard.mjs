@@ -244,7 +244,7 @@ const cards = STYLES.map((s) => `      <section class="mini">
             <span>&#128203;</span> Copy
           </button>
           <button class="btn-copy" data-save="${s.label}" data-save-target="out-${s.id}">
-            <span>&#128278;</span> Save
+            <span>&#128222;</span> Save
           </button>
           <button class="btn-copy" data-compare="out-${s.id}">
             <span>&#8644;</span> Compare
