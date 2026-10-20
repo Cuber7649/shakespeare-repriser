@@ -25,7 +25,7 @@ const EXACT = [
   ['I love the bright sun', 'The bright sun, I love'],
   ['he whispered a terrible secret', 'A terrible secret, he whispered'],
   ['the old king ruled the land', 'The land, the ancient king ruled'],
-  ['you are brave', 'Brave, are you'],
+  ['you are brave', 'Brave, you are'],
   ['I want to find the lost treasure.', 'To find the lost treasure, I want.'],
   ['You need to leave the old temple.', 'To depart the ancient temple, you need.'],
 ];
@@ -35,6 +35,114 @@ for (const [input, want] of EXACT) {
   if (got === want) ok(`${JSON.stringify(input)} -> ${JSON.stringify(got)}`);
   else no(`${JSON.stringify(input)}\n        want ${JSON.stringify(want)}\n        got  ${JSON.stringify(got)}`);
 }
+
+// --- grammar gate: optional flourishes off -----------------------------------
+// Reordering is exercised with every optional addition disabled, so these
+// assertions describe the core transformation rather than RNG taste.
+
+console.log('\ngrammar gate (seed 42, optional additions off)');
+
+const OPT_IDS = ['optOpenings', 'optMetaphors', 'optAsides', 'optInvert'];
+for (const id of OPT_IDS) yoda.document.getElementById(id).checked = false;
+
+const CORE = [
+  // Copular fronting: true copulas only, subject case normalised.
+  ['You are strong.', 'Powerful, you are.'],
+  ['The sky is blue.', 'Blue, the sky is.'],
+  ['The old king ruled the land.', 'The land, the ancient king ruled.'],
+  ['The Sith are dangerous.', 'Dangerous, the Sith are.'],
+  ['His anger is dangerous.', 'Dangerous, his anger is.'],
+  ['The greatest teacher is failure.', 'Failure, the greatest teacher is.'],
+  ['He is a great warrior.', 'A great warrior, he is.'],
+  ['It is a trap.', 'A trap, it is.'],
+  ['I am afraid of the dark side.', 'Afraid of the dark side, I am.'],
+
+  // Negation and wh-complements must not be fronted.
+  ['Death is not the end.', 'Death is not the end.'],
+  ['It is what it is.', 'It is what it is.'],
+  ['The question is whether we should go.', 'The question is whether we should go.'],
+  ['The problem is that we are late.', 'The problem is that we are late.'],
+  ['It is how we learn.', 'It is how we learn.'],
+  ['This is the way.', 'This is the way.'],
+
+  // Modal/auxiliary + verb is not an SVO object.
+  ['She will heal him.', 'She will heal him.'],
+  ['You should rest.', 'You should rest.'],
+  ['You cannot escape.', 'You cannot escape.'],
+  ['I will not fail.', 'I will not fail.'],
+
+  // Subordinate clauses keep their own order.
+  ['When you are ready, we will leave.', 'When you are ready, we will depart.'],
+  ['The book that you are reading is old.', 'The tome that you are reading is ancient.'],
+  ['When you reach 900 years old, you will not look as good.',
+    'When you reach 900 years old, you will not look as good.'],
+
+  // SVO fronting still works; the subject keeps proper-noun case.
+  ['I want peace.', 'Peace, I want.'],
+  ['I love life.', 'Life, I love.'],
+  ['The Jedi protect the galaxy.', 'The galaxy, the Jedi protect.'],
+  ['A Jedi uses the Force.', 'The Force, a Jedi uses.'],
+  ['Luke destroys the Death Star.', 'The Death Star, Luke destroys.'],
+  ['Tell me the truth.', 'Tell me the truth.'],
+  ['Look at the stars.', 'Look at the stars.'],
+  ['I think you will like it.', 'You will like it, I consider.'],
+  ['I know you are strong.', 'You are powerful, I comprehend.'],
+  ['She believes you will win.', 'You will triumph, she believes.'],
+  ['She said you are kind.', 'You are kind, she said.'],
+  ['Few know the truth.', 'The truth, few comprehend.'],
+
+  // Four-word subjects ending in a noun are parsed correctly; subjects with
+  // an internal prepositional phrase are not mistaken for subject + verb.
+  ['A powerful Sith lord rules the galaxy.', 'The galaxy, a powerful Sith lord rules.'],
+  ['The dark armored warrior wielded a red blade.',
+    'A red blade, the dark armored warrior wielded.'],
+  ['The brave young Jedi fought the dark lord.',
+    'The dark lord, the brave young Jedi fought.'],
+  ['A tall dark stranger entered the tavern.',
+    'The tavern, a tall dark stranger entered.'],
+  ['The wise old woman told a story.', 'A story, the wise ancient woman told.'],
+  ['A small green creature trained the boy.',
+    'The boy, a small green creature trained.'],
+  ['The knight in shining armor drew his sword.',
+    'The knight in shining armor drew his blade.'],
+  ['The girl with the dragon tattoo smiled.', 'The girl with the dragon tattoo smiled.'],
+  ['The leader of the free world spoke to the crowd.',
+    'The leader of the free world spoke to the crowd.'],
+  ['A group of brave warriors attacked the fortress.',
+    'A group of brave warriors struck the fortress.'],
+  ['The man in the high castle wrote a book.', 'The man in the high castle wrote a tome.'],
+
+  // Word-table regressions: nouns and proper nouns stay intact.
+  ['May the Force be with you.', 'May the Force be with you.'],
+  ['The Force is strong with you.', 'Strong with you, the Force is.'],
+  ['We are strong in the Force.', 'Strong in the Force, we are.'],
+  ['Nobody is perfect.', 'Perfect, no one is.'],
+  ['All is lost.', 'Lost, all is.'],
+  ['I have a bad feeling about this.', 'I have a dark feeling about this.'],
+
+  // Phrase tables: "years old", "happy to", negative contractions.
+  ['I am very happy to see you.', 'Very glad to perceive you, I am.'],
+  ['I have to go.', 'I must go.'],
+  ["I shouldn't go.", 'Go, I should not.'],
+  ["You can't escape.", 'You cannot escape.'],
+  ['There is no try.', 'No try, there is.'],
+  ['There are no ghosts.', 'No ghosts, there are.'],
+  ['Do or do not. There is no try.', 'Do or do not. No try, there is.'],
+
+  // Existing structural limits still hold.
+  ['I want to find the really big treasure today',
+    'I want to find the truly great treasure today'],
+  ['The dog wants to chase the cat.', 'The dog wants to pursue the cat.'],
+  ['The dog chased the cat up the tree.', 'The dog pursued the cat up the tree.'],
+];
+
+for (const [input, want] of CORE) {
+  const got = yoda.transform(input, SEED);
+  if (got === want) ok(`${JSON.stringify(input)} -> ${JSON.stringify(got)}`);
+  else no(`${JSON.stringify(input)}\n        want ${JSON.stringify(want)}\n        got  ${JSON.stringify(got)}`);
+}
+
+for (const id of OPT_IDS) yoda.document.getElementById(id).checked = true;
 
 // --- the object guard refuses these ------------------------------------------
 

@@ -1420,95 +1420,38 @@ const stageDirections = [
 // INVERSION PATTERNS (SVO -> VSO or emphasis)
 // ============================================================
 const inversions = [
-  [/\bI (am|is|are|was|were|have|has|can|will|shall|would|should|could|might|do|does|did)\b/g, (m, v) => v + " I"],
-  [/\bhe (is|was|has|can|will|shall|would|should|could|might|do|does|did)\b/g, (m, v) => v + " he"],
-  [/\bshe (is|was|has|can|will|shall|would|should|could|might|do|does|did)\b/g, (m, v) => v + " she"],
-  [/\bwe (are|were|have|had|can|will|shall|would|should|could|might|do|does|did)\b/g, (m, v) => v + " we"],
-  [/\bthey (are|were|have|had|can|will|shall|would|should|could|might|do|does|did)\b/g, (m, v) => v + " they"],
-  [/\byou (are|were|have|has|can|will|shall|would|should|could|might)\b/g, (m, v) => v + " you"],
-  [/\bit (is|was|has|can|will|shall|would|should|could|might|do|does|did)\b/g, (m, v) => v + " it"],
-  [/\bI am\b/g, "am I"],
-  [/\byou are\b/g, "are you"],
-  [/\bhe is\b/g, "is he"],
-  [/\bshe is\b/g, "is she"],
-  [/\bwe are\b/g, "are we"],
-  [/\bthey are\b/g, "are they"],
-  [/\bI was\b/g, "was I"],
-  [/\byou were\b/g, "were you"],
-  [/\bI have\b/g, "have I"],
-  [/\byou have\b/g, "have you"],
-  [/\bI will\b/g, "will I"],
-  [/\byou will\b/g, "will you"],
-  [/\bI can\b/g, "can I"],
-  [/\byou can\b/g, "can you"],
-  [/\bI would\b/g, "would I"],
-  [/\byou would\b/g, "would you"],
-  [/\bI should\b/g, "should I"],
-  [/\byou should\b/g, "should you"],
-  [/\bI must\b/g, "must I"],
-  [/\byou must\b/g, "must you"],
-  [/\bdo not\b/g, "do not"],
-  [/\bI do not\b/g, "do not I"],
-  [/\byou do not\b/g, "do not you"],
-  [/\bdoes not\b/g, "does not"],
-  [/\bI do not know\b/g, "know, I do not"],
-  [/\byou do not know\b/g, "know, you do not"],
-  [/\bI do not have\b/g, "have, I do not"],
-  [/\byou do not have\b/g, "have, you do not"],
-  [/\bI think\b/g, "think, I do"],
-  [/\byou think\b/g, "think, you do"],
-  [/\bI feel\b/g, "feel, I do"],
-  [/\byou feel\b/g, "feel, you do"],
-  [/\bI know\b/g, "know, I do"],
-  [/\byou know\b/g, "know, you do"],
-  [/\bI see\b/g, "see, I do"],
-  [/\byou see\b/g, "see, you do"],
-  [/\bI want\b/g, "want, I do"],
-  [/\byou want\b/g, "want, you do"],
-  [/\bI need\b/g, "need, I do"],
-  [/\byou need\b/g, "need, you do"],
-  [/\bI believe\b/g, "believe, I do"],
-  [/\byou believe\b/g, "believe, you do"],
-  [/\bI hope\b/g, "hope, I do"],
-  [/\byou hope\b/g, "hope, you do"],
-  [/\bI like\b/g, "like, I do"],
-  [/\byou like\b/g, "like, you do"],
-  [/\bI love\b/g, "love, I do"],
-  [/\byou love\b/g, "love, you do"],
-  [/\bI hate\b/g, "hate, I do"],
-  [/\byou hate\b/g, "hate, you do"],
-  [/\bI am not\b/g, "not, I am"],
-  [/\byou are not\b/g, "not, you are"],
-  [/\bhe is not\b/g, "not, he is"],
-  [/\bshe is not\b/g, "not, she is"],
-  [/\bit is not\b/g, "not, it is"],
-  [/\bwe are not\b/g, "not, we are"],
-  [/\bthey are not\b/g, "not, they are"],
-  [/\bI will not\b/g, "not, I will"],
-  [/\byou will not\b/g, "not, you will"],
-  [/\bI cannot\b/g, "cannot I"],
-  [/\byou cannot\b/g, "cannot you"],
-  [/\bI have been\b/g, "been, I have"],
-  [/\byou have been\b/g, "been, you have"],
-  [/\bI had been\b/g, "been, I had"],
-  [/\byou had been\b/g, "been, you had"],
-  [/\bI will be\b/g, "be, I will"],
-  [/\byou will be\b/g, "be, you will"],
-  [/\bI would be\b/g, "be, I would"],
-  [/\byou would be\b/g, "be, you would"],
-  [/\bI should be\b/g, "be, I should"],
-  [/\byou should be\b/g, "be, you should"],
-  [/\bI can be\b/g, "be, I can"],
-  [/\byou can be\b/g, "be, you can"],
-  [/\bI must be\b/g, "be, I must"],
-  [/\byou must be\b/g, "be, you must"],
-  [/\bI might be\b/g, "be, I might"],
-  [/\byou might be\b/g, "be, you might"],
-  [/\bI could be\b/g, "be, I could"],
-  [/\byou could be\b/g, "be, you could"],
-  [/\bgoing to\b/g, "about to"],
-  [/\bI am going to\b/g, "going, I am to"],
-  [/\byou are going to\b/g, "going, you are to"]
+  // Negative predicates: "I will not fail." -> "Fail, I will not."
+  [/\b(I|you|he|she|it|we|they) (am|is|are|was|were|will|can|must|should|would|could|do|does|did) not (\w+)([.!?]?)$/g,
+    (m, subj, aux, pred, tail) => pred + ", " + (subj.toLowerCase() === 'i' ? 'I' : subj.toLowerCase()) + " " + aux + " not" + tail],
+  [/\b(I|you|he|she|it|we|they) cannot (\w+)([.!?]?)$/g,
+    (m, subj, pred, tail) => pred + ", " + (subj.toLowerCase() === 'i' ? 'I' : subj.toLowerCase()) + " cannot" + tail],
+  // Standalone short statements. These are anchored to the end of the sentence
+  // on purpose: "I hope you are well" must not become "hope, I do you are well".
+  [/\bI think([.!?]?)$/g, "think, I do$1"],
+  [/\bI know([.!?]?)$/g, "know, I do$1"],
+  [/\bI feel([.!?]?)$/g, "feel, I do$1"],
+  [/\bI believe([.!?]?)$/g, "believe, I do$1"],
+  [/\bI hope([.!?]?)$/g, "hope, I do$1"],
+  [/\bI understand([.!?]?)$/g, "understand, I do$1"],
+  [/\bI remember([.!?]?)$/g, "remember, I do$1"],
+  [/\bI have been([.!?]?)$/g, "been, I have$1"],
+  [/\byou have been([.!?]?)$/g, "been, you have$1"],
+  [/\bI had been([.!?]?)$/g, "been, I had$1"],
+  [/\byou had been([.!?]?)$/g, "been, you had$1"],
+  [/\bI will be([.!?]?)$/g, "be, I will$1"],
+  [/\byou will be([.!?]?)$/g, "be, you will$1"],
+  [/\bI would be([.!?]?)$/g, "be, I would$1"],
+  [/\byou would be([.!?]?)$/g, "be, you would$1"],
+  [/\bI should be([.!?]?)$/g, "be, I should$1"],
+  [/\byou should be([.!?]?)$/g, "be, you should$1"],
+  [/\bI can be([.!?]?)$/g, "be, I can$1"],
+  [/\byou can be([.!?]?)$/g, "be, you can$1"],
+  [/\bI must be([.!?]?)$/g, "be, I must$1"],
+  [/\byou must be([.!?]?)$/g, "be, you must$1"],
+  [/\bI might be([.!?]?)$/g, "be, I might$1"],
+  [/\byou might be([.!?]?)$/g, "be, you might$1"],
+  [/\bI could be([.!?]?)$/g, "be, I could$1"],
+  [/\byou could be([.!?]?)$/g, "be, you could$1"]
 ];
 
 // ============================================================
@@ -1576,7 +1519,7 @@ const verbForms = [
 // ============================================================
 const commonWords = [
   [/\bmaybe\b/gi,"perhaps"],
-  [/\btoo\b/gi,"as well"],[/\breally\b/gi,"truly"],
+  [/\breally\b/gi,"truly"],
   [/\bactually\b/gi,"in truth"],[/\bbasically\b/gi,"in essence"],
   [/\bnobody\b/gi,"no one"],
   [/\bhonestly\b/gi,"truly"],[/\bfrankly\b/gi,"to speak plainly"],
@@ -1584,7 +1527,12 @@ const commonWords = [
   [/\bin fact\b/gi,"in truth"],
   [/\bin spite of\b/gi,"despite"],
   [/\bin addition\b/gi,"moreover"],
-  [/\bquite\b/gi,"passing"],[/\bpretty\b/gi,"most"],
+  // Keep age expressions and "happy to" intact: the adjective table treats
+  // "old" and "happy" as standalone adjectives, which would otherwise produce
+  // "900 years ancient" and "peaceful to see you".
+  [/\byears old\b/gi,"years old"],[/\byear old\b/gi,"year old"],
+  [/\bstrong with\b/gi,"strong with"],[/\bstrong in\b/gi,"strong in"],
+  [/\bhappy to\b/gi,"glad to"],
   [/\bwonderfully\b/gi,"very wonderful"]
 ];
 
@@ -1610,8 +1558,6 @@ const verbs = [
 	[/\bsaying\b/gi, "speaking"],
 
 	// Perception
-	[/\blook\b/gi, "see"],
-	[/\blooking\b/gi, "seeing"],
 	[/\bsee\b/gi, "perceive"],
 	[/\bseeing\b/gi, "perceiving"],
 	[/\bwatch\b/gi, "observe"],
@@ -1628,7 +1574,6 @@ const verbs = [
 	[/\bthinking\b/gi, "considering"],
 	[/\bfeel\b/gi, "sense"],
 	[/\bfeels\b/gi, "senses"],
-	[/\bfeeling\b/gi, "sensing"],
 	[/\bfear\b/gi, "dread"],
 	[/\bfears\b/gi, "dreads"],
 
@@ -1682,7 +1627,6 @@ const verbs = [
 	[/\bwin\b/gi, "triumph"],
 	[/\bwon\b/gi, "triumphed"],
 	[/\blose\b/gi, "lose"],
-	[/\blog\b/gi, "lost"],
 	[/\bstop\b/gi, "cease"],
 	[/\bstopped\b/gi, "ceased"],
 	[/\bcontinue\b/gi, "continue"],
@@ -1711,7 +1655,6 @@ const verbs = [
 	[/\bgot\b/gi, "got"],
 	[/\bgets\b/gi, "gets"],
 	[/\bput\b/gi, "place"],
-	[/\bput\b/gi, "placed"],
 	[/\bmake\b/gi, "make"],
 	[/\bmade\b/gi, "made"],
 	[/\bwork\b/gi, "work"],
@@ -1739,7 +1682,6 @@ const verbs = [
 	[/\bwashed\b/gi, "washed"],
 	[/\beat\b/gi, "eat"],
 	[/\beating\b/gi, "eating"],
-	[/\beat\b/gi, "ate"],
 	[/\bdrink\b/gi, "drink"],
 	[/\bdrinking\b/gi, "drinking"],
 	[/\bdrank\b/gi, "drank"],
@@ -1786,14 +1728,12 @@ const verbs = [
 	[/\bthrow\b/gi, "throw"],
 	[/\bthrew\b/gi, "threw"],
 	[/\bhit\b/gi, "hit"],
-	[/\bhit\b/gi, "hit"],
 	[/\bhurt\b/gi, "hurt"],
 	[/\bkill\b/gi, "defeat"],
 	[/\bkilled\b/gi, "defeated"],
 	[/\bdie\b/gi, "pass"],
 	[/\bdied\b/gi, "passed"],
 	[/\bdies\b/gi, "passes"],
-	[/\bdead\b/gi, "at one with the Force"],
 	[/\blive\b/gi, "live"],
 	[/\blived\b/gi, "lived"],
 	[/\bliving\b/gi, "living"],
@@ -1864,16 +1804,12 @@ const adjectives = [
 	[/\bcowardly\b/gi, "cowardly"],
 	[/\btrue\b/gi, "true"],
 	[/\bfalse\b/gi, "false"],
-	[/\blie\b/gi, "false"],
-	[/\blies\b/gi, "false"],
 	[/\breal\b/gi, "true"],
 	[/\bfake\b/gi, "false"],
 	[/\bclean\b/gi, "clean"],
-	[/\bdirty\b/gi, "dark"],
-	[/\bdusty\b/gi, "dark"],
+	[/\bdirty\b/gi, "grimy"],
 	[/\bsafe\b/gi, "safe"],
 	[/\bdangerous\b/gi, "dangerous"],
-	[/\bdanger\b/gi, "dangerous"],
 	[/\bfree\b/gi, "free"],
 	[/\btrapped\b/gi, "bound"],
 	[/\bcalm\b/gi, "calm"],
@@ -1893,16 +1829,10 @@ const adjectives = [
 	[/\bclouded\b/gi, "clouded"],
 	[/\bquiet\b/gi, "quiet"],
 	[/\bloud\b/gi, "loud"],
-	[/\bcold\b/gi, "cold"],
 	[/\bicy\b/gi, "cold"],
-	[/\bwarm\b/gi, "warm"],
-	[/\bhot\b/gi, "hot"],
-	[/\bnew\b/gi, "new"],
 	[/\baged\b/gi, "ancient"],
 	[/\bancient\b/gi, "ancient"],
-	[/\bdead\b/gi, "at one with the Force"],
 	[/\bliving\b/gi, "living"],
-	[/\blife\b/gi, "alive"],
 	[/\bwounded\b/gi, "wounded"],
 	[/\binjured\b/gi, "wounded"],
 	[/\bbeautiful\b/gi, "beautiful"],
@@ -1910,77 +1840,6 @@ const adjectives = [
 	[/\bpure\b/gi, "pure"],
 	[/\bcorrupted\b/gi, "corrupted"],
 	[/\bcorrupt\b/gi, "corrupted"],
-	// Additional coverage (Fix yoda.html.md, Advansed section)
-	[/\bancient\b/gi,"ancient"],[/\blost\b/gi,"lost"],[/\bfound\b/gi,"found"],
-	[/\bhidden\b/gi,"hidden"],[/\brevealed\b/gi,"revealed"],[/\bknown\b/gi,"known"],
-	[/\bdark\b/gi,"dark"],[/\blight\b/gi,"light"],[/\bshadow\b/gi,"dark"],
-	[/\bpeace\b/gi,"peaceful"],[/\bwar\b/gi,"warlike"],[/\bchaos\b/gi,"chaotic"],
-	[/\border\b/gi,"ordered"],[/\bjedi\b/gi,"jedi"],[/\bsith\b/gi,"sith"],
-	[/\bforce\b/gi,"forceful"],[/\blife\b/gi,"alive"],[/\bdeath\b/gi,"dead"],
-	[/\bhate\b/gi,"hateful"],[/\blove\b/gi,"loving"],[/\bfear\b/gi,"fearful"],
-	[/\banger\b/gi,"angry"],[/\bcalm\b/gi,"calm"],[/\bstorm\b/gi,"stormy"],
-	[/\btruth\b/gi,"true"],[/\blie\b/gi,"false"],[/\bfaith\b/gi,"faithful"],
-	[/\bdoubt\b/gi,"doubtful"],[/\bhope\b/gi,"hopeful"],[/\bdespair\b/gi,"hopeless"],
-	[/\bstrong\b/gi,"strong"],[/\bweak\b/gi,"weak"],[/\bpowerful\b/gi,"powerful"],
-	[/\bpure\b/gi,"pure"],[/\bcorrupt\b/gi,"corrupt"],[/\bpure\b/gi,"pure"],
-	[/\bdirty\b/gi,"dirty"],[/\bclean\b/gi,"clean"],[/\bclear\b/gi,"clear"],
-	[/\bclouded\b/gi,"clouded"],[/\bsharp\b/gi,"sharp"],[/\bdull\b/gi,"dull"],
-	[/\bswift\b/gi,"swift"],[/\bslow\b/gi,"slow"],[/\bquick\b/gi,"quick"],
-	[/\bfar\b/gi,"far"],[/\bnear\b/gi,"near"],[/\bclose\b/gi,"close"],
-	[/\bopen\b/gi,"open"],[/\bclosed\b/gi,"closed"],[/\bfree\b/gi,"free"],
-	[/\bbound\b/gi,"bound"],[/\blet\b/gi,"free"],[/\btrap\b/gi,"trapped"],
-	[/\bescape\b/gi,"escaped"],[/\benter\b/gi,"entered"],[/\bexit\b/gi,"exited"],
-	[/\bbegin\b/gi,"beginning"],[/\bend\b/gi,"ending"],[/\bstart\b/gi,"start"],
-	[/\bstop\b/gi,"stopped"],[/\bcontinue\b/gi,"continued"],[/\bfinish\b/gi,"finished"],
-	[/\bwin\b/gi,"winning"],[/\blose\b/gi,"losing"],[/\bdefeat\b/gi,"defeated"],
-	[/\battack\b/gi,"attacking"],[/\bdefend\b/gi,"defending"],[/\bprotect\b/gi,"protected"],
-	[/\bdestroy\b/gi,"destroyed"],[/\bcreate\b/gi,"created"],[/\bbuild\b/gi,"built"],
-	[/\bbreak\b/gi,"broken"],[/\bfixed\b/gi,"fixed"],[/\bheal\b/gi,"healed"],
-	[/\bhurt\b/gi,"hurt"],[/\bcare\b/gi,"caring"],[/\bcruel\b/gi,"cruel"],
-	[/\bkind\b/gi,"kind"],[/\bnice\b/gi,"nice"],[/\brude\b/gi,"rude"],
-	[/\bpolite\b/gi,"polite"],[/\bimpolite\b/gi,"rude"],[/\bbrave\b/gi,"brave"],
-	[/\bcoward\b/gi,"cowardly"],[/\bfearless\b/gi,"fearless"],[/\bbold\b/gi,"bold"],
-	[/\bshy\b/gi,"shy"],[/\bquiet\b/gi,"quiet"],[/\bloud\b/gi,"loud"],
-	[/\bsilent\b/gi,"silent"],[/\bnoisy\b/gi,"noisy"],[/\bcalm\b/gi,"calm"],
-	[/\bwild\b/gi,"wild"],[/\btame\b/gi,"tame"],[/\bfierce\b/gi,"fierce"],
-	[/\bgentle\b/gi,"gentle"],[/\brough\b/gi,"rough"],[/\bsmooth\b/gi,"smooth"],
-	[/\bhard\b/gi,"hard"],[/\bsoft\b/gi,"soft"],[/\bsolid\b/gi,"solid"],
-	[/\bliquid\b/gi,"liquid"],[/\bgas\b/gi,"gaseous"],[/\bfrozen\b/gi,"frozen"],
-	[/\bmelted\b/gi,"melted"],[/\bburning\b/gi,"burning"],[/\bcooled\b/gi,"cooled"],
-	[/\bwarm\b/gi,"warm"],[/\bcold\b/gi,"cold"],[/\bhot\b/gi,"hot"],
-	[/\bfrozen\b/gi,"frozen"],[/\bicy\b/gi,"icy"],[/\bsunny\b/gi,"sunny"],
-	[/\bcloudy\b/gi,"cloudy"],[/\brainy\b/gi,"rainy"],[/\bsnowy\b/gi,"snowy"],
-	[/\bwindy\b/gi,"windy"],[/\bstormy\b/gi,"stormy"],[/\bcalm\b/gi,"calm"],
-	[/\bpeaceful\b/gi,"peaceful"],[/\bviolent\b/gi,"violent"],[/\bgentle\b/gi,"gentle"],
-	[/\bharsh\b/gi,"harsh"],[/\bsweet\b/gi,"sweet"],[/\bbitter\b/gi,"bitter"],
-	[/\bsour\b/gi,"sour"],[/\bsalty\b/gi,"salty"],[/\bspicy\b/gi,"spicy"],
-	[/\btasty\b/gi,"tasty"],[/\bdelicious\b/gi,"delicious"],[/\bgross\b/gi,"gross"],
-	[/\byeble\b/gi,"gross"],[/\bfresh\b/gi,"fresh"],[/\bstale\b/gi,"stale"],
-	[/\bnew\b/gi,"new"],[/\bold\b/gi,"old"],[/\bancient\b/gi,"ancient"],
-	[/\bmodern\b/gi,"modern"],[/\bfuture\b/gi,"future"],[/\bpast\b/gi,"past"],
-	[/\bpresent\b/gi,"present"],[/\bhere\b/gi,"here"],[/\bthere\b/gi,"there"],
-	[/\baway\b/gi,"away"],[/\bnear\b/gi,"near"],[/\bclose\b/gi,"close"],
-	[/\bfar\b/gi,"far"],[/\bnext\b/gi,"next"],[/\blast\b/gi,"last"],
-	[/\bfirst\b/gi,"first"],[/\blast\b/gi,"last"],[/\bonly\b/gi,"only"],
-	[/\balone\b/gi,"alone"],[/\btogether\b/gi,"together"],[/\bapart\b/gi,"apart"],
-	[/\bseparate\b/gi,"separate"],[/\bjoint\b/gi,"joint"],[/\bunited\b/gi,"united"],
-	[/\bdivided\b/gi,"divided"],[/\bwhole\b/gi,"whole"],[/\bpart\b/gi,"part"],
-	[/\bfull\b/gi,"full"],[/\bempty\b/gi,"empty"],[/\bcomplete\b/gi,"complete"],
-	[/\bincomplete\b/gi,"incomplete"],[/\bperfect\b/gi,"perfect"],[/\bfaulty\b/gi,"faulty"],
-	[/\bbroken\b/gi,"broken"],[/\bfixed\b/gi,"fixed"],[/\bready\b/gi,"ready"],
-	[/\bunready\b/gi,"unready"],[/\bset\b/gi,"set"],[/\bmoved\b/gi,"moved"],
-	[/\bstill\b/gi,"still"],[/\bmoving\b/gi,"moving"],[/\bstopped\b/gi,"stopped"],
-	[/\bstarted\b/gi,"started"],[/\bended\b/gi,"ended"],[/\bbeginning\b/gi,"beginning"],
-	[/\bending\b/gi,"ending"],[/\bmiddle\b/gi,"middle"],[/\bside\b/gi,"side"],
-	[/\btop\b/gi,"top"],[/\bbottom\b/gi,"bottom"],[/\bfront\b/gi,"front"],
-	[/\bback\b/gi,"back"],[/\bleft\b/gi,"left"],[/\bright\b/gi,"right"],
-	[/\binside\b/gi,"inside"],[/\boutside\b/gi,"outside"],[/\bwithin\b/gi,"within"],
-	[/\bbeyond\b/gi,"beyond"],[/\babove\b/gi,"above"],[/\bbelow\b/gi,"below"],
-	[/\bover\b/gi,"over"],[/\bunder\b/gi,"under"],[/\bthrough\b/gi,"through"],
-	[/\bagainst\b/gi,"against"],[/\btoward\b/gi,"toward"],[/\baway\b/gi,"away"],
-	[/\btowards\b/gi,"towards"],[/\binto\b/gi,"into"],[/\bout\b/gi,"out"],
-	[/\boutside\b/gi,"outside"],[/\binside\b/gi,"inside"],[/\bwithin\b/gi,"within"],
-	[/\bbeyond\b/gi,"beyond"],
 ];
 
 
@@ -2011,6 +1870,13 @@ const contractions = [
   [/\bwe'd\b/gi,"we would"],[/\bthey'd\b/gi,"they would"],
   [/\bthat's\b/gi,"that is"],[/\bwho's\b/gi,"who is"],
   [/\bwhat's\b/gi,"what is"],[/\bhere's\b/gi,"here is"],[/\bthere's\b/gi,"there is"],
+  [/\bcan't\b/gi,"cannot"],[/\bwon't\b/gi,"will not"],
+  [/\bwouldn't\b/gi,"would not"],[/\bshouldn't\b/gi,"should not"],
+  [/\bcouldn't\b/gi,"could not"],[/\bmustn't\b/gi,"must not"],
+  [/\bdon't\b/gi,"do not"],[/\bdoesn't\b/gi,"does not"],[/\bdidn't\b/gi,"did not"],
+  [/\bisn't\b/gi,"is not"],[/\baren't\b/gi,"are not"],
+  [/\bwasn't\b/gi,"was not"],[/\bweren't\b/gi,"were not"],
+  [/\bhaven't\b/gi,"have not"],[/\bhasn't\b/gi,"has not"],[/\bhadn't\b/gi,"had not"],
   [/\bgonna\b/gi,"going to"],[/\bwanna\b/gi,"want to"],
   [/\bkinda\b/gi,"sort of"],[/\bsorta\b/gi,"sort of"],
   [/\btryna\b/gi,"trying to"]
@@ -2020,72 +1886,33 @@ const contractions = [
 // SENTENCE TRANSFORMS
 // ============================================================
 const sentenceTransforms = [
-  [/\bi'd like to\b/gi,"would like to, I"],
-  [/\bi need to\b/gi,"must, I"],
-  [/\bi have to\b/gi,"have to, I must"],
-  [/\bi've got to\b/gi,"must, I have"],
-  [/\bi'm going to\b/gi,"going to, I am"],
-  [/\bi will\b/gi,"I will"],[/\bi can\b/gi,"I can"],
-  [/\bi can't\b/gi,"cannot, I"],
-  [/\bi can not\b/gi,"cannot, I"],
-  [/\bi should\b/gi,"should I"],
-  [/\bi shouldn't\b/gi,"should not, I"],
-  [/\bi would\b/gi,"would, I"],
-  [/\bi wouldn't\b/gi,"would not, I"],
-  [/\bi might\b/gi,"might, I"],
-  [/\bi may\b/gi,"may, I"],
+  // Phrase-level idioms only. Unconditional subject-auxiliary inversions used
+  // to live here ("you are" -> "are you", "you will" -> "will you"), which
+  // turned statements and subordinate clauses into questions. Reordering now
+  // happens in frontObject()/frontInfinitive(), and optional inversion in
+  // maybeInvert(), where it can be limited to plain short statements.
   [/\bwhat do you think\b/gi,"think, what do you"],
   [/\bwhat do you mean\b/gi,"mean, what do you"],
-  [/\bdon't you\b/gi,"do not you"],
-  [/\bcan you\b/gi,"can you"],[/\bwill you\b/gi,"will you"],
-  [/\bwould you\b/gi,"would you"],
-  [/\byou should\b/gi,"should you"],
-  [/\byou shouldn't\b/gi,"should not you"],
-  [/\byou can\b/gi,"can you"],
-  [/\byou can't\b/gi,"cannot you"],
-  [/\byou will\b/gi,"will you"],
-  [/\byou won't\b/gi,"will not you"],
-  [/\byou would\b/gi,"would you"],
-  [/\byou wouldn't\b/gi,"would not you"],
-  [/\byou have\b/gi,"have you"],
-  [/\byou haven't\b/gi,"have not you"],
-  [/\byou had\b/gi,"had you"],
-  [/\byou hadn't\b/gi,"had not you"],
-  [/\byou do\b/gi,"do you"],
-  [/\byou don't\b/gi,"do not you"],
-  [/\byou did\b/gi,"did you"],
-  [/\byou didn't\b/gi,"did not you"],
-  [/\byou are\b/gi,"are you"],
-  [/\byou aren't\b/gi,"are not you"],
-  [/\bhow are you\b/gi,"how are you"],
   [/\bhow's it going\b/gi,"how goes it"],
   [/\bwhat's up\b/gi,"what news"],
-  [/\bhow do you do\b/gi,"how do you do"],
   [/\bnice to meet you\b/gi,"pleased to meet you, I am"],
   [/\bsee you later\b/gi,"see you, I will"],
-  [/\bgood night\b/gi,"good night, it is"],
-  [/\bgood morning\b/gi,"good morning, it is"],
-  [/\bgood evening\b/gi,"good evening, it is"],
   [/\bexcuse me\b/gi,"pardon me"],
   [/\bmy name is\b/gi,"I am called"],
   [/\bmy name's\b/gi,"I am"],
-  [/\bi am\b/gi,"I am"],
-  [/\bhe is\b/gi,"he is"],[/\bshe is\b/gi,"she is"],
-  [/\bit is\b/gi,"it is"],[/\bwe are\b/gi,"we are"],
-  [/\bthey are\b/gi,"they are"],
-  [/\bthat is\b/gi,"that is"],[/\bthis is\b/gi,"this is"],
   [/\bshut up\b/gi,"be silent, you must"],
   [/\bmy bad\b/gi,"my fault, it is"],
-  [/\bsorry\b/gi,"apologize, I do"],
-  [/\bthank you\b/gi,"grateful, I am"],
-  [/\bthanks\b/gi,"thanks"],
-  [/\byes\b/gi,"yes"],[/\bno\b/gi,"no"],
-  [/\bok\b/gi,"very well"],[/\bokay\b/gi,"very well"],
-  [/\bsure\b/gi,"of course"],[/\bnope\b/gi,"no"],
+  [/\bsorry\b/gi,"regretful"],
+  [/\bokay\b/gi,"fine"],[/\bok\b/gi,"fine"],
+  [/\bnope\b/gi,"no"],
   [/\byeah\b/gi,"yes"],[/\byup\b/gi,"yes"],
-  [/\bplease\b/gi,"please"],
-  [/\bhello\b/gi,"hello"],[/\bhi\b/gi,"hello"],[/\bhey\b/gi,"hey"],
-  [/\bgoodbye\b/gi,"goodbye"],[/\bbye\b/gi,"goodbye"]
+  [/\bhi\b/gi,"hello"],[/\bbye\b/gi,"goodbye"],
+  // Grammar fixes that keep a sentence readable without reordering it.
+  [/\bi'd like to\b/gi,"I would like to"],
+  [/\bi have to\b/gi,"I must"],
+  [/\bi've got to\b/gi,"I must"],
+  [/\bi'm going to\b/gi,"I am going to"],
+  [/\bi can't\b/gi,"I cannot"],[/\bi can not\b/gi,"I cannot"]
 ];
 
 // ============================================================
@@ -2257,6 +2084,11 @@ function maybeAddStageDirection(text) {
 // ============================================================
 function maybeInvert(text) {
   if (!chance(0.12)) return text;
+  // Only short, single-clause statements. A comma or a subordinator means the
+  // moved verb would land in the wrong clause and read as a question.
+  if (/[,;:]/.test(text)) return text;
+  if (/\b(when|if|because|although|while|that|who|which|where|unless|since|after|before|until)\b/i.test(text)) return text;
+  if (text.trim().split(/\s+/).length > 6) return text;
   for (const [pat, fn] of inversions) {
     let newText = text.replace(pat, fn);
     if (newText !== text) {
@@ -2303,8 +2135,8 @@ function maybeAddParenthetical(text) {
 //   1. SVO: "I like pie" → "Pie, I like"
 //   2. Copular: "You are strong" → "Strong, you are"
 // Only fires on plain single-clause statements (no internal punctuation,
-// no questions or exclamations) where the subject is a pronoun or a short
-// determiner NP (<=3 words).
+// no questions or exclamations) where the subject is a short noun phrase
+// (<=4 words).
 function frontObject(sentence) {
 	var body = sentence
 	var tail = ""
@@ -2315,27 +2147,38 @@ function frontObject(sentence) {
 	}
 	if (/[,.:;?!]/.test(body) || /[?!]/.test(tail)) return sentence
 
+	// "There is no try." -> "No try, there is."
+	// The existential is the one construction that reads naturally fronted.
+	var there = body.match(/^There (is|are|was|were) no (\S+(?: \S+){0,3})$/i)
+	if (there) {
+		var thereBe = there[1].toLowerCase()
+		return "No " + there[2] + ", there " + thereBe + tail
+	}
+
 	var AUX = (
-		"am is are was were have has had do does did will shall can could " +
-		"may might must should would ought"
+		"am is are was were be being been have has had do does did will shall " +
+		"can could may might must should would ought cannot can't"
 	).split(" ")
+	var COPULA = "am is are was were".split(" ")
 	var DET = (
 		"the a an this that these those some any each every no another " +
 		"my your his her its our their either neither"
 	).split(" ")
 	var PRON = (
 		"i you he she it we they me him her us them mine yours hers ours " +
-		"theirs myself yourself himself herself itself ourselves yourselves themselves"
+		"theirs myself yourself himself herself itself ourselves yourselves themselves " +
+		"nobody somebody anyone everyone someone nothing something anything everything " +
+		"all both few many most several"
 	).split(" ")
 	var PREP = (
 		"in on at to for with by from of about into over under after before " +
 		"between through during without within along across behind beyond near past " +
-		"toward towards upon until since than like up down off out around against " +
+		"toward towards upon until since than up down off out around against " +
 		"among ahead instead"
 	).split(" ")
 	var CONJ = (
-		"and but or nor so yet because although while when if unless that " +
-		"who which what where"
+		"and but or nor so yet because although though while when if unless whether " +
+		"that who which what where"
 	).split(" ")
 	var ADV = (
 		"quickly slowly quietly loudly gently carefully badly hardly immediately " +
@@ -2354,6 +2197,8 @@ function frontObject(sentence) {
 		"silly funny crazy lazy easy messy dusty rusty sunny cloudy stormy windy " +
 		"icy wealthy healthy lonely empty tasty juicy smelly"
 	).split(" ")
+	var NEG = "not never no".split(" ")
+	var WH = "what who whom whose which when where why how".split(" ")
 	var FUNC = AUX.concat(DET, PRON, PREP, CONJ)
 
 	var words = body.split(/\s+/).filter(function (w) {
@@ -2373,12 +2218,37 @@ function frontObject(sentence) {
 	var bad = function (list, w) {
 		return list.indexOf(w) >= 0
 	}
+	// The subject lands mid-sentence after fronting, so determiners, pronouns
+	// and adjectives need a lower-case first letter: "The sky is blue" ->
+	// "Blue, the sky is", not "Blue, The sky is". Proper nouns keep their case.
+	var subjectText = function (len) {
+		var s = words.slice(0, len).join(" ")
+		var first = lower[0]
+		if (
+			first !== "i" &&
+			(bad(DET, first) || bad(PRON, first) || isAdj(first))
+		) {
+			s = s.charAt(0).toLowerCase() + s.slice(1)
+		}
+		return s
+	}
 
-	// Try to find a plausible subject length (1 to 3 words)
-	for (var len = Math.min(3, words.length - 2); len >= 1; len--) {
+	// Try to find a plausible subject length (1 to 4 words)
+	for (var len = Math.min(4, words.length - 2); len >= 1; len--) {
 		var first = lower[0]
 		var last = lower[len - 1]
 		var subjectOk
+
+		// A four-word subject with an internal preposition ("The knight in
+		// shining armor...") is usually a longer noun phrase whose real verb
+		// is further along; treating the next noun as the verb garbles it.
+		if (
+			len >= 4 &&
+			lower.slice(1, len - 1).some(function (w) {
+				return bad(PREP, w)
+			})
+		)
+			continue
 
 		if (bad(DET, first)) {
 			subjectOk = len > 1 && !bad(FUNC, last) && !isAdv(last) && !isAdj(last)
@@ -2397,23 +2267,29 @@ function frontObject(sentence) {
 
 		var verb = lower[len]
 
-		// --- Copular pattern: subject + linking verb + adjective/noun phrase ---
-		// "You are strong" → "Strong, you are"
-		// "The dark side is dangerous" → "Dangerous, the dark side is"
-		if (bad(AUX, verb) && verb !== "do" && verb !== "does" && verb !== "did") {
-			// The rest after the verb is the complement (adjective, noun phrase, etc.)
+		// --- Copular pattern: subject + am/is/are/was/were + complement ---
+		// "You are strong" -> "Strong, you are"
+		// "I am afraid of the dark side" -> "Afraid of the dark side, I am"
+		if (bad(COPULA, verb)) {
 			var compWords = lower.slice(len + 1)
-			if (compWords.length >= 1 && compWords.length <= 4) {
-				// Don't front if the complement starts with a preposition (it's a PP, not a simple complement)
-				if (!bad(PREP, compWords[0])) {
+			if (compWords.length >= 1 && compWords.length <= 5) {
+				var c0 = compWords[0]
+				// A complement starting with a preposition, conjunction,
+				// negation or wh-word is a clause or a PP, not a simple
+				// predicate: "It is what it is" must stay put.
+				var badComp =
+					bad(PREP, c0) || bad(CONJ, c0) || bad(NEG, c0) || bad(WH, c0)
+				if (!badComp) {
 					var comp = words.slice(len + 1).join(" ")
-					return comp + ", " + words.slice(0, len).join(" ") + " " + verb + tail
+					return comp + ", " + subjectText(len) + " " + verb + tail
 				}
 			}
 		}
 
 		// --- SVO pattern: subject + action verb + object ---
-		// "I like pie" → "Pie, I like"
+		// "I like pie" -> "Pie, I like"
+		// Modals and auxiliaries are excluded: "You should rest" and
+		// "You cannot escape" have no object to front.
 		var verbOk =
 			verb === "like"
 				? bad(PRON, first)
@@ -2430,7 +2306,7 @@ function frontObject(sentence) {
 			continue
 
 		var obj = words.slice(len + 1).join(" ")
-		return obj + ", " + words.slice(0, len).join(" ") + " " + words[len] + tail
+		return obj + ", " + subjectText(len) + " " + words[len] + tail
 	}
 
 	return sentence

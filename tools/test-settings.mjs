@@ -61,13 +61,15 @@ if (!markupBad) ok(`all ${IDS.length} ids present in all ${PAGES.length} files`)
 section('balanced defaults');
 
 // Golden outputs captured BEFORE the settings block existed, at seed 42.
+// Yoda's line was updated when the unconditional "you are" -> "are you"
+// inversion was removed: a statement must not come out as a question.
 const GOLDEN = [
   ['shakespeare.html', 'shakespearify', 'hello how are you today',
     'By this light! Hail how dost thou fare this day'],
   ['shakespeare.html', 'shakespearify', 'you are my friend and I am happy',
     'By this light! Thou art my good fellow and I am merry'],
   ['yoda.html', 'yodaify', 'you are my friend and I am happy',
-    'Are you my friend and I am peaceful'],
+    'You are my friend and I am peaceful'],
   ['norse.html', 'norseify', 'hello how are you today',
     'Hear my words! Hail how fare ye this day'],
 ];
