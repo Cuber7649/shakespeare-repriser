@@ -27,7 +27,7 @@ const EXACT = [
   ['the old king ruled the land', 'The land, the ancient king ruled'],
   ['you are brave', 'Brave, you are'],
   ['I want to find the lost treasure.', 'To find the lost treasure, I want.'],
-  ['You need to leave the old temple.', 'To depart the ancient temple, you need.'],
+  ['You need to leave the old temple.', 'To leave the ancient temple, you need.'],
 ];
 
 for (const [input, want] of EXACT) {
@@ -85,7 +85,7 @@ const CORE = [
   ['Luke destroys the Death Star.', 'The Death Star, Luke destroys.'],
   ['Tell me the truth.', 'Tell me the truth.'],
   ['Look at the stars.', 'Look at the stars.'],
-  ['I think you will like it.', 'You will like it, I consider.'],
+  ['I think you will like it.', 'You will like it, I think.'],
   ['I know you are strong.', 'You are powerful, I comprehend.'],
   ['She believes you will win.', 'You will triumph, she believes.'],
   ['She said you are kind.', 'You are kind, she said.'],
@@ -121,13 +121,92 @@ const CORE = [
   ['I have a bad feeling about this.', 'I have a dark feeling about this.'],
 
   // Phrase tables: "years old", "happy to", negative contractions.
-  ['I am very happy to see you.', 'Very glad to perceive you, I am.'],
+  ['I am very happy to see you.', 'Very glad to see you, I am.'],
   ['I have to go.', 'I must go.'],
   ["I shouldn't go.", 'Go, I should not.'],
   ["You can't escape.", 'You cannot escape.'],
   ['There is no try.', 'No try, there is.'],
   ['There are no ghosts.', 'No ghosts, there are.'],
   ['Do or do not. There is no try.', 'Do or do not. No try, there is.'],
+
+  // Transitive or phrasal uses the flat word table used to garble. The safe
+  // choice is to keep the plain verb rather than emit "ceased the car",
+  // "triumphed the race", "Depart him alone" or "Place away your weapon".
+  ['They won the battle.', 'The battle, they won.'],
+  ['She won the race.', 'The race, she won.'],
+  ['He won.', 'He triumphed.'],
+  ['The Jedi won the war.', 'The war, the Jedi won.'],
+  ['I stopped the car.', 'The car, I stopped.'],
+  ['The rain stopped.', 'The rain stopped.'],
+  ['They stopped the attack.', 'The strike, they stopped.'],
+  ['She started the car.', 'The car, she started.'],
+  ['The meeting started.', 'The meeting began.'],
+  ['She started the meeting.', 'The meeting, she started.'],
+  ['Leave me alone.', 'Leave me alone.'],
+  ['Leave it.', 'Leave it.'],
+  ['I leave the room.', 'The room, I leave.'],
+  ['I leave tomorrow.', 'I depart tomorrow.'],
+  ['Answer me.', 'Answer me.'],
+  ['She answered the question.', 'The question, she answered.'],
+  ['She answered.', 'She replied.'],
+  ['Say it.', 'Say it.'],
+  ['I say so.', 'I say so.'],
+  ['I say.', 'I speak.'],
+  ['What did he say?', 'What did he say?'],
+  ['I think so.', 'I think so.'],
+  ['I think about you.', 'I think about you.'],
+  ['I run the ship.', 'The ship, I run.'],
+  ['I run.', 'I rush.'],
+  ['I feel sad.', 'Sorrowful, I feel.'],
+  ['I feel like leaving.', 'I feel like leaving.'],
+  ['He feels cold.', 'Cold, he feels.'],
+  ['I feel the Force.', 'The Force, I sense.'],
+  ['It smells bad.', 'Bad, it smells.'],
+  ['She sings and dances.', 'She sings and dances.'],
+  ['He ran and jumped.', 'He ran and leapt.'],
+  ['She put away the book.', 'She put away the tome.'],
+  ['I put the book away.', 'I put the tome away.'],
+  ['He put down the weapon.', 'He put down the weapon.'],
+  ['Put away your weapon.', 'Put away your weapon.'],
+  ['Put on your helmet.', 'Don your helmet.'],
+  ['She put on a brave face.', 'She put on a brave face.'],
+  ['They put together the droid.', 'They put together the droid.'],
+  ['I searched for the droid.', 'The droid, I sought.'],
+  ['It is hard to say.', 'Hard to tell, it is.'],
+  ['He is bad at math.', 'Poor at math, he is.'],
+  ['The weather is bad.', 'Foul, the weather is.'],
+  ['She is on the run.', 'She is on the run.'],
+  ['See you tomorrow.', 'See you tomorrow.'],
+  ['I see you.', 'You, I see.'],
+  ['He is happy that she came.', 'Glad that she came, he is.'],
+  ['She is sad.', 'Sorrowful, she is.'],
+
+  // Complex objects: a short bare infinitive is not a noun to front.
+  ['I saw the ship land.', 'I saw the ship land.'],
+  ['I saw the ship crash.', 'I saw the ship crash.'],
+  ['I heard the droid beep.', 'I heard the droid beep.'],
+
+  // Imperative causatives are not subject + verb.
+  ['Make the droid carry the box.', 'Make the droid carry the box.'],
+  ['Let the droid carry the box.', 'Let the droid carry the box.'],
+
+  // Common question idioms: "what think you" / "what mean you" are archaic
+  // but grammatical. The old "think, what do you" reordered the verb into
+  // the wh-word's slot and read as a fragment.
+  ['What do you think?', 'What think you?'],
+  ['What do you mean?', 'What mean you?'],
+  ['What do you mean by that?', 'What mean you by that?'],
+  ['What do you think about it?', 'What think you of it?'],
+  ['What do you think of the plan?', 'What think you of the plan?'],
+
+  // "think" stays as "think". "consider" cannot take a bare clause
+  // ("I consider we should go"), and "believe again" is not "think again".
+  ['I think we should go to the market today.',
+    'I think we should go to the market today.'],
+  ['I think we should go.', 'We should go, I think.'],
+  ['I think better of it.', 'I think better of it.'],
+  ['Think again.', 'Think again.'],
+  ['Great minds think alike.', 'Great minds think alike.'],
 
   // Existing structural limits still hold.
   ['I want to find the really big treasure today',

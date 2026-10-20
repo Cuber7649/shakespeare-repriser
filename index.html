@@ -5594,9 +5594,9 @@ const commonWords = [
   [/\bin fact\b/gi,"in truth"],
   [/\bin spite of\b/gi,"despite"],
   [/\bin addition\b/gi,"moreover"],
-  // Keep age expressions and "happy to" intact: the adjective table treats
-  // "old" and "happy" as standalone adjectives, which would otherwise produce
-  // "900 years ancient" and "peaceful to see you".
+  // Keep age expressions intact: the adjective table would turn "900 years
+  // old" into "900 years ancient". "happy to" is pinned to "glad to" so the
+  // idiom keeps its natural form.
   [/\byears old\b/gi,"years old"],[/\byear old\b/gi,"year old"],
   [/\bstrong with\b/gi,"strong with"],[/\bstrong in\b/gi,"strong in"],
   [/\bhappy to\b/gi,"glad to"],
@@ -5635,8 +5635,10 @@ const verbs = [
 	[/\bknows\b/gi, "comprehends"],
 	[/\bunderstand\b/gi, "understand"],
 	[/\bunderstood\b/gi, "understood"],
-	[/\bthink\b/gi, "consider"],
-	[/\bthinking\b/gi, "considering"],
+	// "think" is left alone: "consider" cannot take a bare clause
+	// ("I consider we should go") and "believe again" is not "think again".
+	// The Yoda flavour comes from fronting the clause or the standalone
+	// inversion ("Think, I do"), not from the word table.
 	[/\bfeel\b/gi, "sense"],
 	[/\bfeels\b/gi, "senses"],
 	[/\bfear\b/gi, "dread"],
@@ -5673,8 +5675,8 @@ const verbs = [
 	[/\bfixed\b/gi, "mended"],
 	[/\bbreak\b/gi, "shatter"],
 	[/\bbroke\b/gi, "shattered"],
-	[/\bhold\b/gi, "keep"],
-	[/\bheld\b/gi, "kept"],
+	[/\bhold\b/gi, "hold"],
+	[/\bheld\b/gi, "held"],
 	[/\bgrab\b/gi, "seize"],
 	[/\bgrabbed\b/gi, "seized"],
 	[/\bcatch\b/gi, "catch"],
@@ -5858,8 +5860,8 @@ const adjectives = [
 	[/\blittle\b/gi, "small"],
 	[/\bgood\b/gi, "good"],
 	[/\bbad\b/gi, "dark"],
-	[/\bhappy\b/gi, "peaceful"],
-	[/\bsad\b/gi, "disturbed"],
+	[/\bhappy\b/gi, "glad"],
+	[/\bsad\b/gi, "sorrowful"],
 	[/\bafraid\b/gi, "afraid"],
 	[/\bfearful\b/gi, "afraid"],
 	[/\bstrong\b/gi, "powerful"],
@@ -5966,8 +5968,8 @@ const sentenceTransforms = [
   // maybeInvert(), where it can be limited to plain short statements.
   [/\bwhat do you think about\b/gi,"what think you of"],
   [/\bwhat do you think of\b/gi,"what think you of"],
-  [/\bwhat do you think\b/gi,"think, what do you"],
-  [/\bwhat do you mean\b/gi,"mean, what do you"],
+  [/\bwhat do you think\b/gi,"what think you"],
+  [/\bwhat do you mean\b/gi,"what mean you"],
   [/\bhow's it going\b/gi,"how goes it"],
   [/\bwhat's up\b/gi,"what news"],
   [/\bnice to meet you\b/gi,"pleased to meet you, I am"],
@@ -6275,11 +6277,244 @@ function transformParagraph(para, opts) {
       var after = whole.slice(off + m.length)
       if (/^\s+(a show|a play|a performance|an act|a brave face|weight|airs|the style|the map|the pressure)\b/i.test(after)) return m
       var before = whole.slice(0, off).replace(/\s+$/, "")
-      if (off === 0 || /[,!?:;]$/.test(before)) return m
+      if (off === 0) return "Don"
+      if (/[,!?:;]$/.test(before)) return /[.!?]$/.test(before) ? "Don" : "don"
       var last = (before.match(/(\w+)$/) || [])[1] || ""
       if (/^(will|would|shall|should|can|could|may|might|must|to|do|does|did|let|please|me|us|him|her|them)$/.test(last.toLowerCase())) return "don"
       return "donned"
     })
+  }
+
+  // The word table rewrites verbs without seeing their objects. That is safe
+  // for "The rain stopped" -> "The rain ceased", but not for "She stopped the
+  // car" -> "She ceased the car", "She won the race" -> "triumphed the race",
+  // or "Leave him alone" -> "Depart him alone". The same table turns copular
+  // "feel cold" into "sense cold" and phrasal "put away" into "place away".
+  // Protect the risky contexts with an in-word marker: the parser strips it
+  // when it lower-cases a word, the replacement engine sees a split token and
+  // leaves it alone, and the marker is removed after the pass.
+  var P_MARK = "\u0007"
+  var P_DET = (
+    "the a an this that these those some any each every no another " +
+    "my your his her its our their either neither"
+  ).split(" ")
+  var P_PRON = (
+    "i you he she it we they me him her us them mine yours hers ours theirs " +
+    "myself yourself himself herself itself ourselves yourselves themselves " +
+    "nobody somebody anyone everyone someone nothing something anything " +
+    "everything all both few many most several"
+  ).split(" ")
+  var P_PREP = (
+    "in on at to for with by from of about into over under after before " +
+    "between through during without within along across behind beyond near " +
+    "past toward towards upon until since than up down off out around against " +
+    "among aside forward forth"
+  ).split(" ")
+  var P_CONJ = (
+    "and but or nor so yet because although though while when if unless " +
+    "whether that who which what where"
+  ).split(" ")
+  var P_ADV = (
+    "quickly slowly quietly loudly gently carefully badly hardly immediately " +
+    "finally suddenly recently often always never sometimes usually really " +
+    "very too just again away back already still maybe perhaps together alone " +
+    "fast hard straight almost only even quite rather actually today tonight " +
+    "tomorrow yesterday here there now then soon early late well ever once " +
+    "twice else hence thus therefore anyway somehow somewhere forever " +
+    "aside forward forth alike"
+  ).split(" ")
+  var P_ADJ = (
+    "big small old new young good bad happy sad angry tired brave bright dark " +
+    "red blue green white black strong weak rich poor kind nice sweet terrible " +
+    "horrible wonderful strange quiet loud clean dirty short tall long high low " +
+    "warm cold hot cool little large wide deep fine true false real sure ready " +
+    "free busy safe proud calm clever foolish gentle mighty cute pretty ugly " +
+    "soft fresh silly funny crazy lazy easy messy dusty rusty sunny cloudy " +
+    "stormy windy icy wealthy healthy lonely empty tasty juicy smelly better " +
+    "worse well ill unwell asleep awake alive dead lost done finished afraid " +
+    "scared nervous anxious excited bored satisfied pleased disappointed upset " +
+    "hurt sore stiff dizzy confused numb guilty ashamed jealous curious odd great"
+  ).split(" ")
+  var P_PARTICLE = (
+    "back away out off over through around up down aside together forth forward behind"
+  ).split(" ")
+  var P_SUBJ = "i you he she it we they who".split(" ")
+  var pMark = function (w) { return w.charAt(0) + P_MARK + w.slice(1) }
+  var pClean = function (w) { return w.split(P_MARK).join("") }
+  var pNext = function (whole, off) {
+    var m = whole.slice(off).match(/^\s+([A-Za-z0-9'\u0007]+)/)
+    return m ? pClean(m[1].toLowerCase()) : ""
+  }
+  var pAfter = function (whole, off) {
+    var m = whole.slice(off).match(/^\s+[A-Za-z0-9'\u0007]+\s+([A-Za-z0-9'\u0007]+)/)
+    return m ? pClean(m[1].toLowerCase()) : ""
+  }
+  var pThird = function (whole, off) {
+    var m = whole.slice(off).match(/^\s+[A-Za-z0-9'\u0007]+\s+[A-Za-z0-9'\u0007]+\s+([A-Za-z0-9'\u0007]+)/)
+    return m ? pClean(m[1].toLowerCase()) : ""
+  }
+  var pPrev = function (whole, off) {
+    var m = whole.slice(0, off).replace(/\s+$/, "").match(/([A-Za-z0-9'\u0007]+)$/)
+    return m ? pClean(m[1].toLowerCase()) : ""
+  }
+  var pAdv = function (w) { return P_ADV.indexOf(w) >= 0 || /ly$/.test(w) }
+  var pAdj = function (w) {
+    return P_ADJ.indexOf(w) >= 0 || /(ful|ous|ive|able|ible|less|ical|ed)$/.test(w)
+  }
+  var pParticle = function (w) { return P_PARTICLE.indexOf(w) >= 0 }
+  // A word after a verb is object-like unless it is a preposition,
+  // conjunction or adverb. End of sentence yields "".
+  var pObject = function (w) {
+    if (!w) return false
+    if (/^[0-9]/.test(w)) return true
+    if (P_DET.indexOf(w) >= 0 || P_PRON.indexOf(w) >= 0) return true
+    if (/^(yes|no|so|that|what|who|whom|whose|which|when|where|why|how)$/.test(w)) return true
+    if (P_PREP.indexOf(w) >= 0) return false
+    if (P_CONJ.indexOf(w) >= 0) return false
+    if (pAdv(w)) return false
+    return true
+  }
+
+  // A few adjective frames the flat word table gets wrong.
+  var fixBadPhrases = function (s) {
+    s = s.replace(/\bbad at\b/gi, "poor at")
+    s = s.replace(/\bbad for\b/gi, "harmful to")
+    s = s.replace(/\bbad with\b/gi, "poor with")
+    s = s.replace(/\bbad idea\b/gi, "foolish idea")
+    s = s.replace(/\bbad weather\b/gi, "foul weather")
+    s = s.replace(/\bbad luck\b/gi, "ill luck")
+    s = s.replace(/\b(weather|conditions?) (is|was|were|are|seems|seemed) bad\b/gi, "$1 $2 foul")
+    s = s.replace(/\b(hard|difficult|impossible|easy) to say\b/gi, "$1 to tell")
+    // "search for" is a phrasal verb; "sought for" is not English. A noun
+    // use ("the search for the droid") is left for protectVerbs to hold.
+    s = s.replace(/\b(search|searches|searched|searching) for\b/gi, function (m, w, off, whole) {
+      var prev = pPrev(whole, off)
+      if (P_DET.indexOf(prev) >= 0 || pAdj(prev) || P_PREP.indexOf(prev) >= 0) return m
+      var forms = { search: "seek", searches: "seeks", searched: "sought", searching: "seeking" }
+      return forms[w.toLowerCase()]
+    })
+    return s
+  }
+
+  var protectVerbs = function (s) {
+    // Copular "bad" after a perception verb ("smells bad", "feel bad") must
+    // not become "dark".
+    s = s.replace(/\b(bad)\b/gi, function (m, w, off, whole) {
+      var prev = pPrev(whole, off)
+      if (/^(feel|feels|felt|look|looks|looked|smell|smells|smelled|smelt|taste|tastes|tasted|sound|sounds|sounded|seem|seems|seemed)$/.test(prev)) {
+        return pMark(m)
+      }
+      return m
+    })
+
+    // "See you" is a farewell, not "perceive you".
+    s = s.replace(/\bsee(?=\s+(?:you|ya)\b)/gi, function (m) { return pMark(m) })
+
+    // feel + adjective is copular; feel + noun is perception.
+    s = s.replace(/\b(feel|feels)\b/gi, function (m, w, off, whole) {
+      var next = pNext(whole, off + m.length)
+      var after = pAfter(whole, off + m.length)
+      var third = pThird(whole, off + m.length)
+      if (next === "like" || next === "as" || next === "well" || next === "ill" ||
+          next === "unwell" || next === "better" || next === "worse") return pMark(m)
+      if (pAdj(next)) return pMark(m)
+      if (/^(so|very|really|quite|rather|too|much|a|an)$/.test(next) && pAdj(after)) return pMark(m)
+      if (/^(a|an)$/.test(next) && /^(bit|little)$/.test(after) && pAdj(third)) return pMark(m)
+      return m
+    })
+
+    // Transitive or phrasal win/leave/start/stop/run/answer/say keep the
+    // verb; intransitive uses still take the table's archaic form.
+    s = s.replace(/\b(win|wins|winning|won)\b/gi, function (m, w, off, whole) {
+      var next = pNext(whole, off + m.length)
+      var prev = pPrev(whole, off)
+      if (pObject(next) || pParticle(next) || /^(was|were|been|being|is|are)$/.test(prev)) {
+        return pMark(m)
+      }
+      return m
+    })
+    s = s.replace(/\b(leave|leaves|leaving)\b/gi, function (m, w, off, whole) {
+      var next = pNext(whole, off + m.length)
+      var prev = pPrev(whole, off)
+      if (pObject(next) || pParticle(next) || next === "alone" ||
+          P_DET.indexOf(prev) >= 0 || P_PREP.indexOf(prev) >= 0 || pAdj(prev)) {
+        return pMark(m)
+      }
+      return m
+    })
+    s = s.replace(/\b(start|starts|started|starting)\b/gi, function (m, w, off, whole) {
+      var next = pNext(whole, off + m.length)
+      var prev = pPrev(whole, off)
+      if (pObject(next) || pParticle(next) ||
+          P_DET.indexOf(prev) >= 0 || P_PREP.indexOf(prev) >= 0 || pAdj(prev) ||
+          /^(car|ship|engine|speeder|motor|generator|alarm|machine|droid)$/.test(prev)) {
+        return pMark(m)
+      }
+      return m
+    })
+    s = s.replace(/\b(stop|stops|stopped|stopping)\b/gi, function (m, w, off, whole) {
+      var next = pNext(whole, off + m.length)
+      var prev = pPrev(whole, off)
+      // stop + gerund is catenative and "cease" works there.
+      if (/ing$/.test(next)) return m
+      if (pObject(next) || P_PREP.indexOf(next) >= 0 || pParticle(next) ||
+          /^(sign|light|lights|watch|gap|motion|button|valve|order|press)$/.test(next)) {
+        return pMark(m)
+      }
+      // A noun before the verb is a noun subject or a compound noun
+      // ("The rain stopped", "the bus stop"); leave those alone.
+      var nounish = prev && P_SUBJ.indexOf(prev) < 0 &&
+        !/^(am|is|are|was|were|be|been|being|have|has|had|do|does|did|will|would|shall|should|can|could|may|might|must)$/.test(prev)
+      if (nounish) return pMark(m)
+      return m
+    })
+    s = s.replace(/\b(run|running)\b/gi, function (m, w, off, whole) {
+      var next = pNext(whole, off + m.length)
+      var prev = pPrev(whole, off)
+      if (pObject(next) || pParticle(next) || P_DET.indexOf(prev) >= 0 || P_PREP.indexOf(prev) >= 0) {
+        return pMark(m)
+      }
+      return m
+    })
+    s = s.replace(/\b(answer|answered)\b/gi, function (m, w, off, whole) {
+      var next = pNext(whole, off + m.length)
+      if (pObject(next) || pParticle(next) || next === "for" || next === "to") return pMark(m)
+      return m
+    })
+    // A noun "search" ("the search for the droid", "search and rescue")
+    // must not become "seek".
+    s = s.replace(/\b(search|searches)\b/gi, function (m, w, off, whole) {
+      var prev = pPrev(whole, off)
+      var next = pNext(whole, off + m.length)
+      var after = pAfter(whole, off + m.length)
+      if (next === "and" && after === "rescue") return pMark(m)
+      if (P_DET.indexOf(prev) >= 0 || pAdj(prev) || P_PREP.indexOf(prev) >= 0) return pMark(m)
+      return m
+    })
+    s = s.replace(/\b(say|saying)\b/gi, function (m, w, off, whole) {
+      if (/\?\s*$/.test(whole)) return pMark(m)
+      var prev = pPrev(whole, off)
+      if (prev === "to") {
+        var stem = whole.slice(0, off).replace(/\s*to\s*$/, "")
+        var beforeTo = (stem.match(/([A-Za-z']+)\s*$/) || [])[1] || ""
+        if (/^(safe|fair|true|needless|sad|strange)$/.test(beforeTo.toLowerCase())) return pMark(m)
+      }
+      var next = pNext(whole, off + m.length)
+      if (pObject(next) || pParticle(next)) return pMark(m)
+      return m
+    })
+
+    // Phrasal "put" keeps its particle and its plain past form; only a
+    // simple "put the book there" becomes "place".
+    s = s.replace(/\bput(?=\s+(?:on|away|back|aside|down|off|up|out|together|forward|forth|across|by|in|into|through|over|under|about|around)\b)/gi, function (m) {
+      return pMark(m)
+    })
+    // Object + particle: "put the book away" must not become "placed the
+    // tome away". The particle can be up to four words after the verb.
+    s = s.replace(/\bput(?=(?:\s+[A-Za-z0-9']+){0,4}\s+(?:away|back|aside|down|off|up|out|together)\b)/gi, function (m) {
+      return pMark(m)
+    })
+    return s
   }
 
   // A negative question expands from the word table as "is not it" /
@@ -6327,6 +6562,8 @@ function transformParagraph(para, opts) {
     if (!s) continue;
     s = expandContractions(s);
     s = fixPutOn(s);
+    s = fixBadPhrases(s);
+    s = protectVerbs(s);
 
     // Reorder the user's own words first, so the parser and the word table
     // see the words that were typed. Everything added below is prepended or
@@ -6338,6 +6575,8 @@ function transformParagraph(para, opts) {
 
     // Single left-to-right pass, longest match wins
     s = replaceAll(reordered);
+    // Restore the verbs held back from the table (see protectVerbs).
+    s = s.split("\u0007").join("");
     s = fixNegativeQuestions(s);
 
     // These land on the first comma or inside the sentence; a reordered
@@ -6449,7 +6688,7 @@ function frontObject(sentence) {
 		"too just again away back already still maybe perhaps together alone fast hard " +
 		"straight almost only even quite rather actually today tonight tomorrow " +
 		"yesterday here there now then soon early late well ever once twice else hence " +
-		"thus therefore anyway somehow somewhere forever"
+		"thus therefore anyway somehow somewhere forever aside forward forth alike"
 	).split(" ")
 	var ADJ = (
 		"big small old new young good bad happy sad angry tired brave bright " +
@@ -6526,7 +6765,10 @@ function frontObject(sentence) {
 		"allow bake blame care cheat climb compare consider cook cry dare deliver deny deserve " +
 		"discuss drag drop escape expect explore fetch greet intend knock laugh mend mention " +
 		"offer paint praise prefer promise protest sail stare suggest swear thank visit wander " +
-		"wear wish wonder work worry yell"
+		"wear wish wonder work worry yell dance jump land crash explode depart beep vanish " +
+		"appear disappear burn bark howl hum buzz ring knock rattle roar hiss click whir " +
+		"chirp squeak rumble tremble shiver blink glow flash spark smoke drift float hover " +
+		"orbit try decide shout whisper scream relax breathe die start"
 	).split(" ")
 
 	var isVerbWord = function (i) {
@@ -6554,6 +6796,11 @@ function frontObject(sentence) {
 	// droid running", "the sun set") mean a ditransitive, a complex object or
 	// a longer noun phrase was misread; fronting those garbles the sentence.
 	var validObjectNP = function (ws, start) {
+		// A conjunction, wh-word or preposition opening the "object" means the
+		// candidate verb was really part of a coordinated or subordinate
+		// clause ("She sings and dances", "while I dance", "to the temple").
+		// "not" cannot stand alone as a fronted object either.
+		if (bad(CONJ, ws[0]) || bad(WH, ws[0]) || bad(PREP, ws[0]) || ws[0] === "not") return false
 		if (ws.length === 1) return true
 		if (bad(PRON, ws[0])) return false
 		var detCount = 0
@@ -6581,9 +6828,14 @@ function frontObject(sentence) {
 	var subjectText = function (len) {
 		var s = words.slice(0, len).join(" ")
 		var first = lower[0]
+		var firstVerbish =
+			!bad(AUX, first) &&
+			(IRREG.indexOf(first) >= 0 || BASE_VERBS.indexOf(first) >= 0)
 		if (
 			first !== "i" &&
-			(bad(DET, first) || bad(PRON, first) || isAdj(first))
+			(bad(DET, first) || bad(PRON, first) || isAdj(first) ||
+			 firstVerbish || /ing$/.test(first) ||
+			 /^(war|peace|death|life|love|hate|fear|hope|joy|sorrow|pain|truth|honor|glory|freedom|power|strength|wisdom|knowledge|time|money|food|water|fire|earth|air|light|darkness)$/.test(first))
 		) {
 			// Skip a leading quote so the capital falls on "The", not the
 			// quote itself: `"The sky ...` -> `"the sky ...`.
@@ -6599,6 +6851,12 @@ function frontObject(sentence) {
 		var first = lower[0]
 		var last = lower[len - 1]
 		var subjectOk
+
+		// A sentence that opens with a base verb is usually an imperative
+		// ("Make the droid carry the box"). Its first words are not a subject;
+		// treating them as one produces "The box, Make the droid carry."
+		// Single-word subjects ("Love conquers all") still front.
+		if (len > 1 && (IRREG.indexOf(first) >= 0 || BASE_VERBS.indexOf(first) >= 0)) continue
 
 		// A four-word subject with an internal preposition ("The knight in
 		// shining armor...") is usually a longer noun phrase whose real verb
@@ -6701,7 +6959,7 @@ function frontObject(sentence) {
 }
 
 function frontInfinitive(sentence) {
-  var m = sentence.match(/^(I|you|we|they) (want|wish|need|hope) to ((?:\w+)(?: \w+){0,4})([.!?]?)$/i);
+  var m = sentence.match(/^(I|you|we|they) (want|wish|need|hope) to ([\w\u0007']+(?: [\w\u0007']+){0,4})([.!?]?)$/i);
   if (!m) return sentence;
   // The subject lands mid-sentence, so normalise its case: "I" stays "I",
   // everything else goes lower ("You need to leave" -> "..., you need.").

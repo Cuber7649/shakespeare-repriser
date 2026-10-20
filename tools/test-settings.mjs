@@ -69,7 +69,7 @@ const GOLDEN = [
   ['shakespeare.html', 'shakespearify', 'you are my friend and I am happy',
     'By this light! Thou art my good fellow and I am merry'],
   ['yoda.html', 'yodaify', 'you are my friend and I am happy',
-    'You are my friend and I am peaceful'],
+    'You are my friend and I am glad'],
   ['norse.html', 'norseify', 'hello how are you today',
     'Hear my words! Hail how fare ye this day'],
 ];
