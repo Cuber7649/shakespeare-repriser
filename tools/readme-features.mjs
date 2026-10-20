@@ -91,7 +91,7 @@ const SPOT = [
   ['you are my friend', 'pirate', 'ye be my matey'],
   ['you are happy', 'chaucer', 'thou art blisful'],
   ['you are happy', 'norse', 'ye are merry'],
-  ['you are brave', 'yoda', 'Are you brave'],
+  ['you are brave', 'yoda', 'Brave, are you'],
   ['I like pie', 'yoda', 'Pie, I like'],
   ['he whispered a terrible secret', 'yoda', 'terrible secret, he whispered'],
   ['you are', 'victorian', 'one is'],

@@ -24,10 +24,10 @@ const EXACT = [
   ['I like pie', 'Pie, I like'],
   ['I love the bright sun', 'The bright sun, I love'],
   ['he whispered a terrible secret', 'A terrible secret, he whispered'],
-  ['the old king ruled the land', 'The land, the old king ruled'],
-  ['you are brave', 'Are you brave'],
+  ['the old king ruled the land', 'The land, the ancient king ruled'],
+  ['you are brave', 'Brave, are you'],
   ['I want to find the lost treasure.', 'To find the lost treasure, I want.'],
-  ['You need to leave the old temple.', 'To leave the old temple, you need.'],
+  ['You need to leave the old temple.', 'To depart the ancient temple, you need.'],
 ];
 
 for (const [input, want] of EXACT) {
@@ -83,7 +83,7 @@ console.log('\nlong inputs (seed 42)');
 // below proves the table really leaves them alone.
 const LONG = [
   'the brave knight rode swiftly into the dark forest before the morning star appeared',
-  'will you help me find the secret treasure in the old ruins tonight?',
+  'will you help me find the secret treasure in the stone ruins tonight?',
   'she said that he was coming and they would linger by the river until morning',
 ];
 

@@ -32,7 +32,7 @@ it from `manifest.json`, and iOS users can use Share → Add to Home Screen.
 | `pirate.html` | Golden Age of Piracy | "you are my friend" → "Ye be my matey" |
 | `victorian.html` | Victorian English | "really" → "Truly"; "you are" → "One is" |
 | `chaucer.html` | Middle English | "you are happy" → "Thou art blisful" |
-| `yoda.html` | Jedi Master speech | "you are brave" → "Are you brave"; "I love the bright sun" → "The bright sun, I love" (object–subject–verb) |
+| `yoda.html` | Jedi Master speech | "you are brave" → "Brave, are you"; "I love the bright sun" → "The bright sun, I love" (object–subject–verb) |
 | `norse.html` | Vikings and Norse myth | "you are happy" → "Ye are merry" |
 
 ## Features
@@ -109,10 +109,10 @@ No build step or installation is required — the pages run straight from
 | `I am so happy to see my friend` | Chaucer | I am so blisful to seen my freend |
 | `we will travel tomorrow and find the treasure` | Victorian | We will journey the morrow and come upon the treasure |
 | `we will travel tomorrow and find the treasure` | Norse | We will journey the morrow and come upon the treasure |
-| `you are brave` | Yoda | Are you brave |
+| `you are brave` | Yoda | Brave, are you |
 | `I like pie` | Yoda | Pie, I like |
 | `he whispered a terrible secret` | Yoda | A terrible secret, he whispered |
-| `the old king ruled the land` | Yoda | The land, the old king ruled |
+| `the old king ruled the land` | Yoda | The land, the ancient king ruled |
 
 > These are single runs. Output varies each time — openings, interjections,
 > metaphors, alliterations, asides and stage directions are all rolled at

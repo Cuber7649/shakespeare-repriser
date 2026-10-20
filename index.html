@@ -5367,25 +5367,7 @@ const openings = [
   "Much anger in you, I sense.",
   "Control, control, you must learn control!"
 ];
-const midInsertions = [
-  ", young one,", ", hmm,", ", yes,", ", indeed,",
-  ", strong with the Force, you are,", ", I sense,",
-  ", yes, yes,", ", powerful, this is,", ", wise, you are becoming,",
-  ", a Jedi must be,", ", through the Force,",
-  ", fear not,", ", patient, you must be,",
-  ", much to learn, you still have,", ", sense the Force, you can,",
-  ", hmm, yes,", ", strong with the Force,",
-  ", young apprentice,", ", by the Force,",
-  ", interesting, this is,", ", a great disturbance in the Force,",
-  ", curious, this is,", ", trust the Force,",
-  ", believe in the Force, you must,", ", the Force is strong with you,",
-  ", dangerous, this is,", ", dangerous, it is,",
-  ", feel the Force, you must,", ", calm, you must remain,",
-  ", strong, the Force is with you,", ", powerful, you are becoming,",
-  ", young Skywalker,", ", care, you must,",
-  ", difficult, this is,", ", difficult, the dark side is,",
-  ", hmmm,", ", yes, hmmm,"
-];
+const midInsertions = [", young one,", ", yes,", ", indeed,"];
 const quotes = [
   "Do or do not, there is no try.",
   "Fear is the path to the dark side.",
@@ -5496,18 +5478,11 @@ const metaphors = [
   "as turbulent as the Clone Wars"
 ];
 const insults = [
-  "foolish young one", "naive", "weak", "unwise", "blind to the Force",
-  "a fool you are", "pathetic", "lost in the dark side",
-  "foolish, you are",
-  "great warrior, ha!", "strong in the dark side, you think",
-  "foolish Padawan", "mindless brute",
-  "a disgrace to the Sith you are", "inferior, you are",
-  "crude and foolish", "a simpleton",
-  "laughable, your power is", "helpless you are",
-  "weak your resolve is", "ignorant of the Force, you remain",
-  "a mere apprentice",
-  "shallow and weak", "dense, you are",
-  "powerless"
+	"foolish, you are",
+	"unwise, you are",
+	"clouded by fear, you are",
+	"lost, you are",
+	"a mistake, you are making",
 ];
 const asides = [
   "\n  (aside: Hmm, much to learn, you still have.)\n",
@@ -5680,129 +5655,387 @@ const commonWords = [
   [/\bwonderfully\b/gi,"very wonderful"]
 ];
 const verbs = [
-  // movement
-  [/\bjump\b/gi,"leap"],[/\bjumped\b/gi,"leapt"],
-  // communication
-  [/\btalk\b/gi,"speak"],[/\btalking\b/gi,"speaking"],
-  [/\bchatter\b/gi,"babble"],[/\bmumble\b/gi,"mutter"],
-  [/\bshout\b/gi,"proclaim"],[/\bscream\b/gi,"cry out"],
-  [/\bwhisper\b/gi,"murmur"],
-  [/\blooking at\b/gi,"gazing upon"],
-  [/\blook\b/gi,"behold"],[/\blooks\b/gi,"beholdeth"],[/\blooked\b/gi,"beheld"],
-  [/\bwatch\b/gi,"observe"],[/\bwatching\b/gi,"observing"],[/\bwatched\b/gi,"observed"],
-  [/\bstare\b/gi,"gaze"],[/\bstared\b/gi,"gazed"],
-  [/\bnotice\b/gi,"perceive"],[/\bnoticed\b/gi,"perceived"],
-  // thought / feeling[/\bknows\b/gi,"knoweth"],
-  [/\bunderstand\b/gi,"comprehend"],[/\bunderstood\b/gi,"comprehended"],
-  [/\brealize\b/gi,"perceive"],[/\brealized\b/gi,"perceived"],
-  [/\bremember\b/gi,"recollect"],[/\bremembered\b/gi,"recollected"],
-  [/\bimagine\b/gi,"conceive"],[/\bimagined\b/gi,"conceived"],
-  [/\bfeel\b/gi,"sense"],[/\bfeels\b/gi,"senses"],
-  // emotion verbs
-  [/\benjoy\b/gi,"relish"],[/\benjoyed\b/gi,"relished"],
-  [/\bmiss\b/gi,"pine for"],[/\bmissed\b/gi,"pined for"],
-  [/\bworry\b/gi,"fret"],[/\bworried\b/gi,"fretted"],
-  [/\bfear\b/gi,"dread"],[/\bfeared\b/gi,"dreaded"],
-  [/\bsurprise\b/gi,"astonish"],[/\bsurprised\b/gi,"astonished"],
-  [/\bconfuse\b/gi,"confound"],[/\bconfused\b/gi,"confounded"],
-  [/\bannoy\b/gi,"vex"],[/\bannoyed\b/gi,"vexed"],
-  [/\bdisappoint\b/gi,"dishearten"],[/\bdisappointed\b/gi,"disheartened"],
-  [/\brespect\b/gi,"honour"],[/\brespected\b/gi,"honoured"],
-  [/\badmire\b/gi,"esteem"],[/\badmired\b/gi,"esteemed"],
-  [/\bregret\b/gi,"lament"],[/\bregretted\b/gi,"lamented"],
-  [/\bsucceed\b/gi,"prevail"],[/\bsucceeded\b/gi,"prevailed"],
-  // action verbs
-  [/\banswer\b/gi,"reply"],[/\banswered\b/gi,"replied"],
-  [/\bcomplain\b/gi,"lament"],[/\bcomplained\b/gi,"lamented"],
-  [/\bagree\b/gi,"concur"],[/\bagreed\b/gi,"concurred"],
-  [/\brefuse\b/gi,"decline"],[/\brefused\b/gi,"declined"],
-  [/\baccept\b/gi,"embrace"],[/\baccepted\b/gi,"embraced"],
-  [/\bconsider\b/gi,"contemplate"],[/\bconsidered\b/gi,"contemplated"],
-  [/\bsuggest\b/gi,"propose"],[/\bsuggested\b/gi,"proposed"],
-  [/\badvise\b/gi,"counsel"],[/\badvised\b/gi,"counselled"],
-  [/\bpromise\b/gi,"vow"],[/\bpromised\b/gi,"vowed"],
-  [/\bdefend\b/gi,"protect"],[/\bdefended\b/gi,"protected"],
-  [/\battack\b/gi,"assail"],[/\battacked\b/gi,"assailed"],
-  [/\bcreate\b/gi,"fashion"],[/\bcreated\b/gi,"fashioned"],
-  [/\bbuild\b/gi,"erect"],[/\bbuilt\b/gi,"erected"],
-  [/\bfix\b/gi,"mend"],[/\bfixed\b/gi,"mended"],
-  [/\bbreak\b/gi,"shatter"],[/\bbroke\b/gi,"shattered"],
-  [/\bcut\b/gi,"sever"],
-  [/\bhold\b/gi,"clasp"],[/\bheld\b/gi,"clasped"],
-  [/\bgrab\b/gi,"seize"],[/\bgrabbed\b/gi,"seized"],
-  [/\bcatch\b/gi,"snare"],[/\bcaught\b/gi,"snared"],
-  [/\bhunt\b/gi,"pursue"],[/\bhunted\b/gi,"pursued"],
-  [/\bchase\b/gi,"pursue"],[/\bchased\b/gi,"pursued"],
-  [/\bfollow\b/gi,"trail"],[/\bfollowed\b/gi,"trailed"],
-  [/\blead\b/gi,"guide"],[/\bled\b/gi,"guided"],
-  [/\bteach\b/gi,"instruct"],[/\btaught\b/gi,"instructed"],
-  [/\bwin\b/gi,"triumph"],[/\bwon\b/gi,"triumphed"],
-  [/\blose\b/gi,"be vanquished"],
-  [/\bstop\b/gi,"cease"],[/\bstopped\b/gi,"ceased"],
-  [/\bcontinue\b/gi,"persist"],[/\bcontinued\b/gi,"persisted"],
-  [/\bstart\b/gi,"commence"],[/\bstarted\b/gi,"commenced"],
-  [/\bfinish\b/gi,"complete"],[/\bfinished\b/gi,"completed"],
-  [/\bprepare\b/gi,"ready"],[/\bprepared\b/gi,"readied"],
-  [/\buse\b/gi,"employ"],[/\bused\b/gi,"employed"],
-  [/\bsave\b/gi,"preserve"],[/\bsaved\b/gi,"preserved"],
-  [/\bspend\b/gi,"expend"],[/\bspent\b/gi,"expended"],
-  [/\bsell\b/gi,"peddle"],[/\bsold\b/gi,"peddled"],
-  [/\bbuy\b/gi,"procure"],[/\bbought\b/gi,"procured"],
-  [/\bgive\b/gi,"bestow"],[/\bgave\b/gi,"bestowed"],[/\bgives\b/gi,"bestoweth"],
-  [/\btake\b/gi,"seize"],[/\btook\b/gi,"seized"],[/\btaken\b/gi,"seized"],
-  [/\bbring\b/gi,"fetch"],[/\bbrought\b/gi,"fetched"],
-  [/\bget\b/gi,"procure"],[/\bgets\b/gi,"procureth"],[/\bgot\b/gi,"procured"],
-  [/\bput\b/gi,"place"],[/\bputs\b/gi,"placeth"],[/\bplaced\b/gi,"set"],
-  [/\bmake\b/gi,"forge"],[/\bmakes\b/gi,"forgeth"],[/\bmade\b/gi,"forged"],
-  [/\bwork\b/gi,"toil"],[/\bworked\b/gi,"toiled"],[/\bworking\b/gi,"toiling"],
-  [/\bplay\b/gi,"frolic"],[/\bplaying\b/gi,"frolicking"],[/\bplayed\b/gi,"frolicked"],
-  [/\bwait\b/gi,"tarry"],[/\bwaited\b/gi,"tarried"],[/\bwaiting\b/gi,"tarrying"],
-  [/\bstay\b/gi,"remain"],[/\bstayed\b/gi,"remained"],
-  [/\bleft\b/gi,"departed"],
-  [/\bhide\b/gi,"conceal"],[/\bhid\b/gi,"concealed"],[/\bhidden\b/gi,"concealed"],
-  [/\breveal\b/gi,"unveil"],[/\brevealed\b/gi,"unveiled"],
-  [/\bdiscover\b/gi,"uncover"],[/\bdiscovered\b/gi,"uncovered"],
-  [/\bsearch\b/gi,"seek"],[/\bsearched\b/gi,"sought"],
-  [/\bgather\b/gi,"assemble"],[/\bgathered\b/gi,"assembled"],
-  [/\bclean\b/gi,"purify"],[/\bcleaned\b/gi,"purified"],
-  [/\bwash\b/gi,"cleanse"],[/\bwashed\b/gi,"cleansed"],
-  [/\bcook\b/gi,"prepare sustenance"],[/\bcooked\b/gi,"prepared a feast"],
-  [/\beat\b/gi,"feast upon"],[/\beating\b/gi,"feasting upon"],
-  [/\bdrink\b/gi,"imbibe"],[/\bdrinking\b/gi,"imbibing"],[/\bdrank\b/gi,"imbibed"],
-  [/\bsleep\b/gi,"slumber"],[/\bsleeping\b/gi,"slumbering"],[/\bslept\b/gi,"slumbered"],
-  [/\bwake\b/gi,"awaken"],[/\bwoke\b/gi,"awakened"],
-  [/\brise\b/gi,"arise"],[/\brose\b/gi,"arose"],
-  [/\bsit\b/gi,"rest"],[/\bsat\b/gi,"rested"],
-  [/\bstand\b/gi,"arise"],[/\bstood\b/gi,"arose"],
-  [/\bendure\b/gi,"abide"],[/\bendured\b/gi,"abided"],
-  [/\bsuffer\b/gi,"endure"],[/\bsuffered\b/gi,"endured"],
-  [/\bsurvive\b/gi,"persist"],[/\bsurvived\b/gi,"persisted"],
-  [/\bheal\b/gi,"mend"],[/\bhealed\b/gi,"mended"],
-  [/\bgrow\b/gi,"flourish"],[/\bgrew\b/gi,"flourished"],[/\bgrown\b/gi,"flourished"],
-  [/\bincrease\b/gi,"multiply"],[/\bincreased\b/gi,"multiplied"],
-  [/\bdecrease\b/gi,"diminish"],[/\bdecreased\b/gi,"diminished"],
-  [/\bchange\b/gi,"transform"],[/\bchanged\b/gi,"transformed"],
-  [/\bturn\b/gi,"pivot"],[/\bturned\b/gi,"pivoted"],
-  [/\bopen\b/gi,"unfasten"],[/\bopened\b/gi,"unfastened"],
-  [/\bclose\b/gi,"fasten"],[/\bclosed\b/gi,"fastened"],
-  [/\bpush\b/gi,"shove"],[/\bpushed\b/gi,"shoved"],
-  [/\bpull\b/gi,"tug"],[/\bpulled\b/gi,"tugged"],
-  [/\blift\b/gi,"elevate"],[/\blifted\b/gi,"elevated"],
-  [/\bthrow\b/gi,"hurl"],[/\bthrew\b/gi,"hurled"],
-  [/\bhit\b/gi,"smite"],[/\bhurt\b/gi,"wound"],
-  [/\bkill\b/gi,"defeat"],[/\bkilled\b/gi,"defeated"],
-  [/\bdie\b/gi,"perish"],[/\bdies\b/gi,"perisheth"],[/\bdied\b/gi,"perished"],
-  [/\bdead\b/gi,"at one with the Force"],
-  [/\blive\b/gi,"dwell"],[/\blived\b/gi,"dwelt"],[/\bliving\b/gi,"dwelling"],
-  [/\bseem\b/gi,"appear"],[/\bseemed\b/gi,"appeared"],
-  [/\bbecome\b/gi,"grow"],[/\bbecame\b/gi,"grew"],
-  [/\bremain\b/gi,"tarry"],[/\bremained\b/gi,"tarried"],
-  [/\bneeds\b/gi,"requireth"],
-  [/\bwants\b/gi,"desireth"],[/\bwanted\b/gi,"desired"],
-  [/\bdislike\b/gi,"disapprove of"],
-  // Force-specific verbs
-  [/\bmediate\b/gi,"meditate"],[/\bmediated\b/gi,"meditated"],[/\bmediating\b/gi,"meditating"],];
+	// Movement
+	[/\bjump\b/gi, "leap"],
+	[/\bjumped\b/gi, "leapt"],
+	[/\brun\b/gi, "rush"],
+	[/\brunning\b/gi, "rushing"],
+
+	// Communication
+	[/\btalk\b/gi, "speak"],
+	[/\btalking\b/gi, "speaking"],
+	[/\bwhisper\b/gi, "murmur"],
+	[/\bshout\b/gi, "cry"],
+	[/\bsay\b/gi, "speak"],
+	[/\bsaying\b/gi, "speaking"],
+
+	// Perception
+	[/\blook\b/gi, "see"],
+	[/\blooking\b/gi, "seeing"],
+	[/\bsee\b/gi, "perceive"],
+	[/\bseeing\b/gi, "perceiving"],
+	[/\bwatch\b/gi, "observe"],
+	[/\bwatching\b/gi, "observing"],
+	[/\bnotice\b/gi, "sense"],
+	[/\bnoticed\b/gi, "sensed"],
+
+	// Thought / Feeling
+	[/\bknow\b/gi, "comprehend"],
+	[/\bknows\b/gi, "comprehends"],
+	[/\bunderstand\b/gi, "understand"],
+	[/\bunderstood\b/gi, "understood"],
+	[/\bthink\b/gi, "consider"],
+	[/\bthinking\b/gi, "considering"],
+	[/\bfeel\b/gi, "sense"],
+	[/\bfeels\b/gi, "senses"],
+	[/\bfeeling\b/gi, "sensing"],
+	[/\bfear\b/gi, "dread"],
+	[/\bfears\b/gi, "dreads"],
+
+	// Emotion
+	[/\benjoy\b/gi, "relish"],
+	[/\benjoyed\b/gi, "relished"],
+	[/\bworry\b/gi, "fret"],
+	[/\bworried\b/gi, "fretted"],
+	[/\badmire\b/gi, "respect"],
+	[/\badmired\b/gi, "respected"],
+	[/\bregret\b/gi, "lament"],
+	[/\bregretted\b/gi, "lamented"],
+
+	// Action
+	[/\banswer\b/gi, "reply"],
+	[/\banswered\b/gi, "replied"],
+	[/\bagree\b/gi, "concur"],
+	[/\bagreed\b/gi, "concurred"],
+	[/\brefuse\b/gi, "decline"],
+	[/\brefused\b/gi, "declined"],
+	[/\baccept\b/gi, "accept"],
+	[/\baccepted\b/gi, "accepted"],
+	[/\bpromise\b/gi, "vow"],
+	[/\bpromised\b/gi, "vowed"],
+	[/\battack\b/gi, "strike"],
+	[/\battacked\b/gi, "struck"],
+	[/\bdefend\b/gi, "protect"],
+	[/\bdefended\b/gi, "protected"],
+	[/\bbuild\b/gi, "create"],
+	[/\bbuilt\b/gi, "created"],
+	[/\bfix\b/gi, "mend"],
+	[/\bfixed\b/gi, "mended"],
+	[/\bbreak\b/gi, "shatter"],
+	[/\bbroke\b/gi, "shattered"],
+	[/\bhold\b/gi, "keep"],
+	[/\bheld\b/gi, "kept"],
+	[/\bgrab\b/gi, "seize"],
+	[/\bgrabbed\b/gi, "seized"],
+	[/\bcatch\b/gi, "catch"],
+	[/\bcaught\b/gi, "caught"],
+	[/\bhunt\b/gi, "hunt"],
+	[/\bhunted\b/gi, "hunted"],
+	[/\bchase\b/gi, "pursue"],
+	[/\bchased\b/gi, "pursued"],
+	[/\bfollow\b/gi, "follow"],
+	[/\bfollowed\b/gi, "followed"],
+	[/\blead\b/gi, "lead"],
+	[/\bled\b/gi, "led"],
+	[/\bteach\b/gi, "teach"],
+	[/\btaught\b/gi, "taught"],
+	[/\bwin\b/gi, "triumph"],
+	[/\bwon\b/gi, "triumphed"],
+	[/\blose\b/gi, "lose"],
+	[/\blog\b/gi, "lost"],
+	[/\bstop\b/gi, "cease"],
+	[/\bstopped\b/gi, "ceased"],
+	[/\bcontinue\b/gi, "continue"],
+	[/\bcontinued\b/gi, "continued"],
+	[/\bstart\b/gi, "begin"],
+	[/\bstarted\b/gi, "began"],
+	[/\bfinish\b/gi, "complete"],
+	[/\bfinished\b/gi, "completed"],
+	[/\buse\b/gi, "use"],
+	[/\bused\b/gi, "used"],
+	[/\bsave\b/gi, "save"],
+	[/\bsaved\b/gi, "saved"],
+	[/\bspend\b/gi, "spend"],
+	[/\bspent\b/gi, "spent"],
+	[/\bbuy\b/gi, "buy"],
+	[/\bbought\b/gi, "bought"],
+	[/\bgive\b/gi, "give"],
+	[/\bgave\b/gi, "gave"],
+	[/\bgives\b/gi, "gives"],
+	[/\btake\b/gi, "take"],
+	[/\btook\b/gi, "took"],
+	[/\btaken\b/gi, "taken"],
+	[/\bbring\b/gi, "bring"],
+	[/\bbrought\b/gi, "brought"],
+	[/\bget\b/gi, "get"],
+	[/\bgot\b/gi, "got"],
+	[/\bgets\b/gi, "gets"],
+	[/\bput\b/gi, "place"],
+	[/\bput\b/gi, "placed"],
+	[/\bmake\b/gi, "make"],
+	[/\bmade\b/gi, "made"],
+	[/\bwork\b/gi, "work"],
+	[/\bworked\b/gi, "worked"],
+	[/\bwait\b/gi, "wait"],
+	[/\bwaited\b/gi, "waited"],
+	[/\bstay\b/gi, "stay"],
+	[/\bstayed\b/gi, "stayed"],
+	[/\bleave\b/gi, "depart"],
+	[/\bleft\b/gi, "departed"],
+	[/\bhide\b/gi, "hide"],
+	[/\bhid\b/gi, "hid"],
+	[/\bhidden\b/gi, "hidden"],
+	[/\breveal\b/gi, "reveal"],
+	[/\brevealed\b/gi, "revealed"],
+	[/\bdiscover\b/gi, "discover"],
+	[/\bdiscovered\b/gi, "discovered"],
+	[/\bsearch\b/gi, "seek"],
+	[/\bsearched\b/gi, "sought"],
+	[/\bgather\b/gi, "gather"],
+	[/\bgathered\b/gi, "gathered"],
+	[/\bclean\b/gi, "clean"],
+	[/\bcleaned\b/gi, "cleaned"],
+	[/\bwash\b/gi, "wash"],
+	[/\bwashed\b/gi, "washed"],
+	[/\beat\b/gi, "eat"],
+	[/\beating\b/gi, "eating"],
+	[/\beat\b/gi, "ate"],
+	[/\bdrink\b/gi, "drink"],
+	[/\bdrinking\b/gi, "drinking"],
+	[/\bdrank\b/gi, "drank"],
+	[/\bsleep\b/gi, "sleep"],
+	[/\bsleeping\b/gi, "sleeping"],
+	[/\bslept\b/gi, "slept"],
+	[/\bwake\b/gi, "wake"],
+	[/\bwoke\b/gi, "woke"],
+	[/\brise\b/gi, "rise"],
+	[/\brose\b/gi, "rose"],
+	[/\bsit\b/gi, "sit"],
+	[/\bsat\b/gi, "sat"],
+	[/\bstand\b/gi, "stand"],
+	[/\bstood\b/gi, "stood"],
+	[/\bendure\b/gi, "endure"],
+	[/\bendured\b/gi, "endured"],
+	[/\bsuffer\b/gi, "suffer"],
+	[/\bsuffered\b/gi, "suffered"],
+	[/\bsurvive\b/gi, "survive"],
+	[/\bsurvived\b/gi, "survived"],
+	[/\bheal\b/gi, "heal"],
+	[/\bhealed\b/gi, "healed"],
+	[/\bgrow\b/gi, "grow"],
+	[/\bgrew\b/gi, "grew"],
+	[/\bgrown\b/gi, "grown"],
+	[/\bincrease\b/gi, "increase"],
+	[/\bincreased\b/gi, "increased"],
+	[/\bdecrease\b/gi, "decrease"],
+	[/\bdecreased\b/gi, "decreased"],
+	[/\bchange\b/gi, "change"],
+	[/\bchanged\b/gi, "changed"],
+	[/\bturn\b/gi, "turn"],
+	[/\bturned\b/gi, "turned"],
+	[/\bopen\b/gi, "open"],
+	[/\bopened\b/gi, "opened"],
+	[/\bclose\b/gi, "close"],
+	[/\bclosed\b/gi, "closed"],
+	[/\bpush\b/gi, "push"],
+	[/\bpushed\b/gi, "pushed"],
+	[/\bpull\b/gi, "pull"],
+	[/\bpulled\b/gi, "pulled"],
+	[/\blift\b/gi, "lift"],
+	[/\blifted\b/gi, "lifted"],
+	[/\bthrow\b/gi, "throw"],
+	[/\bthrew\b/gi, "threw"],
+	[/\bhit\b/gi, "hit"],
+	[/\bhit\b/gi, "hit"],
+	[/\bhurt\b/gi, "hurt"],
+	[/\bkill\b/gi, "defeat"],
+	[/\bkilled\b/gi, "defeated"],
+	[/\bdie\b/gi, "pass"],
+	[/\bdied\b/gi, "passed"],
+	[/\bdies\b/gi, "passes"],
+	[/\bdead\b/gi, "at one with the Force"],
+	[/\blive\b/gi, "live"],
+	[/\blived\b/gi, "lived"],
+	[/\bliving\b/gi, "living"],
+	[/\bseem\b/gi, "seem"],
+	[/\bseemed\b/gi, "seemed"],
+	[/\bbecome\b/gi, "become"],
+	[/\bbecame\b/gi, "became"],
+	[/\bneed\b/gi, "need"],
+	[/\bneeds\b/gi, "needs"],
+	[/\bneeded\b/gi, "needed"],
+	[/\bwant\b/gi, "want"],
+	[/\bwants\b/gi, "wants"],
+	[/\bwanted\b/gi, "wanted"],
+	[/\blike\b/gi, "like"],
+	[/\blikes\b/gi, "likes"],
+	[/\bliked\b/gi, "liked"],
+	[/\blove\b/gi, "love"],
+	[/\bloves\b/gi, "loves"],
+	[/\bloved\b/gi, "loved"],
+	[/\bhate\b/gi, "hate"],
+	[/\bhates\b/gi, "hates"],
+	[/\bhated\b/gi, "hated"],
+	[/\bmediate\b/gi, "meditate"],
+	[/\bmediated\b/gi, "meditated"],
+	[/\bmediating\b/gi, "meditating"],
+];
 const adjectives = [
+	[/\bbig\b/gi, "great"],
+	[/\blarge\b/gi, "great"],
+	[/\bsmall\b/gi, "small"],
+	[/\blittle\b/gi, "small"],
+	[/\bgood\b/gi, "good"],
+	[/\bbad\b/gi, "dark"],
+	[/\bhappy\b/gi, "peaceful"],
+	[/\bsad\b/gi, "disturbed"],
+	[/\bafraid\b/gi, "afraid"],
+	[/\bfearful\b/gi, "afraid"],
+	[/\bstrong\b/gi, "powerful"],
+	[/\bweak\b/gi, "weak"],
+	[/\bfeeble\b/gi, "weak"],
+	[/\bbright\b/gi, "bright"],
+	[/\bdark\b/gi, "dark"],
+	[/\bshadowed\b/gi, "dark"],
+	[/\bold\b/gi, "ancient"],
+	[/\bnew\b/gi, "new"],
+	[/\byoung\b/gi, "young"],
+	[/\bwise\b/gi, "wise"],
+	[/\bfoolish\b/gi, "foolish"],
+	[/\bcold\b/gi, "cold"],
+	[/\bhot\b/gi, "hot"],
+	[/\bwarm\b/gi, "warm"],
+	[/\bfast\b/gi, "swift"],
+	[/\bslow\b/gi, "slow"],
+	[/\blong\b/gi, "long"],
+	[/\bshort\b/gi, "short"],
+	[/\bhigh\b/gi, "high"],
+	[/\blow\b/gi, "low"],
+	[/\bkind\b/gi, "kind"],
+	[/\bgentle\b/gi, "gentle"],
+	[/\bcruel\b/gi, "cruel"],
+	[/\bharsh\b/gi, "cruel"],
+	[/\bbrave\b/gi, "brave"],
+	[/\bcowardly\b/gi, "cowardly"],
+	[/\btrue\b/gi, "true"],
+	[/\bfalse\b/gi, "false"],
+	[/\blie\b/gi, "false"],
+	[/\blies\b/gi, "false"],
+	[/\breal\b/gi, "true"],
+	[/\bfake\b/gi, "false"],
+	[/\bclean\b/gi, "clean"],
+	[/\bdirty\b/gi, "dark"],
+	[/\bdusty\b/gi, "dark"],
+	[/\bsafe\b/gi, "safe"],
+	[/\bdangerous\b/gi, "dangerous"],
+	[/\bdanger\b/gi, "dangerous"],
+	[/\bfree\b/gi, "free"],
+	[/\btrapped\b/gi, "bound"],
+	[/\bcalm\b/gi, "calm"],
+	[/\bstormy\b/gi, "turbulent"],
+	[/\bturbulent\b/gi, "turbulent"],
+	[/\blight\b/gi, "light"],
+	[/\bheavy\b/gi, "heavy"],
+	[/\bopen\b/gi, "open"],
+	[/\bclosed\b/gi, "closed"],
+	[/\balone\b/gi, "alone"],
+	[/\blonely\b/gi, "alone"],
+	[/\bwhole\b/gi, "whole"],
+	[/\bbroken\b/gi, "shattered"],
+	[/\bfull\b/gi, "full"],
+	[/\bempty\b/gi, "empty"],
+	[/\bclear\b/gi, "clear"],
+	[/\bclouded\b/gi, "clouded"],
+	[/\bquiet\b/gi, "quiet"],
+	[/\bloud\b/gi, "loud"],
+	[/\bcold\b/gi, "cold"],
+	[/\bicy\b/gi, "cold"],
+	[/\bwarm\b/gi, "warm"],
+	[/\bhot\b/gi, "hot"],
+	[/\bnew\b/gi, "new"],
+	[/\baged\b/gi, "ancient"],
+	[/\bancient\b/gi, "ancient"],
+	[/\bdead\b/gi, "at one with the Force"],
+	[/\bliving\b/gi, "living"],
+	[/\blife\b/gi, "alive"],
+	[/\bwounded\b/gi, "wounded"],
+	[/\binjured\b/gi, "wounded"],
+	[/\bbeautiful\b/gi, "beautiful"],
+	[/\bhideous\b/gi, "hideous"],
+	[/\bpure\b/gi, "pure"],
+	[/\bcorrupted\b/gi, "corrupted"],
+	[/\bcorrupt\b/gi, "corrupted"],
+	// Additional coverage (Fix yoda.html.md, Advansed section)
+	[/\bancient\b/gi,"ancient"],[/\blost\b/gi,"lost"],[/\bfound\b/gi,"found"],
+	[/\bhidden\b/gi,"hidden"],[/\brevealed\b/gi,"revealed"],[/\bknown\b/gi,"known"],
+	[/\bdark\b/gi,"dark"],[/\blight\b/gi,"light"],[/\bshadow\b/gi,"dark"],
+	[/\bpeace\b/gi,"peaceful"],[/\bwar\b/gi,"warlike"],[/\bchaos\b/gi,"chaotic"],
+	[/\border\b/gi,"ordered"],[/\bjedi\b/gi,"jedi"],[/\bsith\b/gi,"sith"],
+	[/\bforce\b/gi,"forceful"],[/\blife\b/gi,"alive"],[/\bdeath\b/gi,"dead"],
+	[/\bhate\b/gi,"hateful"],[/\blove\b/gi,"loving"],[/\bfear\b/gi,"fearful"],
+	[/\banger\b/gi,"angry"],[/\bcalm\b/gi,"calm"],[/\bstorm\b/gi,"stormy"],
+	[/\btruth\b/gi,"true"],[/\blie\b/gi,"false"],[/\bfaith\b/gi,"faithful"],
+	[/\bdoubt\b/gi,"doubtful"],[/\bhope\b/gi,"hopeful"],[/\bdespair\b/gi,"hopeless"],
+	[/\bstrong\b/gi,"strong"],[/\bweak\b/gi,"weak"],[/\bpowerful\b/gi,"powerful"],
+	[/\bpure\b/gi,"pure"],[/\bcorrupt\b/gi,"corrupt"],[/\bpure\b/gi,"pure"],
+	[/\bdirty\b/gi,"dirty"],[/\bclean\b/gi,"clean"],[/\bclear\b/gi,"clear"],
+	[/\bclouded\b/gi,"clouded"],[/\bsharp\b/gi,"sharp"],[/\bdull\b/gi,"dull"],
+	[/\bswift\b/gi,"swift"],[/\bslow\b/gi,"slow"],[/\bquick\b/gi,"quick"],
+	[/\bfar\b/gi,"far"],[/\bnear\b/gi,"near"],[/\bclose\b/gi,"close"],
+	[/\bopen\b/gi,"open"],[/\bclosed\b/gi,"closed"],[/\bfree\b/gi,"free"],
+	[/\bbound\b/gi,"bound"],[/\blet\b/gi,"free"],[/\btrap\b/gi,"trapped"],
+	[/\bescape\b/gi,"escaped"],[/\benter\b/gi,"entered"],[/\bexit\b/gi,"exited"],
+	[/\bbegin\b/gi,"beginning"],[/\bend\b/gi,"ending"],[/\bstart\b/gi,"start"],
+	[/\bstop\b/gi,"stopped"],[/\bcontinue\b/gi,"continued"],[/\bfinish\b/gi,"finished"],
+	[/\bwin\b/gi,"winning"],[/\blose\b/gi,"losing"],[/\bdefeat\b/gi,"defeated"],
+	[/\battack\b/gi,"attacking"],[/\bdefend\b/gi,"defending"],[/\bprotect\b/gi,"protected"],
+	[/\bdestroy\b/gi,"destroyed"],[/\bcreate\b/gi,"created"],[/\bbuild\b/gi,"built"],
+	[/\bbreak\b/gi,"broken"],[/\bfixed\b/gi,"fixed"],[/\bheal\b/gi,"healed"],
+	[/\bhurt\b/gi,"hurt"],[/\bcare\b/gi,"caring"],[/\bcruel\b/gi,"cruel"],
+	[/\bkind\b/gi,"kind"],[/\bnice\b/gi,"nice"],[/\brude\b/gi,"rude"],
+	[/\bpolite\b/gi,"polite"],[/\bimpolite\b/gi,"rude"],[/\bbrave\b/gi,"brave"],
+	[/\bcoward\b/gi,"cowardly"],[/\bfearless\b/gi,"fearless"],[/\bbold\b/gi,"bold"],
+	[/\bshy\b/gi,"shy"],[/\bquiet\b/gi,"quiet"],[/\bloud\b/gi,"loud"],
+	[/\bsilent\b/gi,"silent"],[/\bnoisy\b/gi,"noisy"],[/\bcalm\b/gi,"calm"],
+	[/\bwild\b/gi,"wild"],[/\btame\b/gi,"tame"],[/\bfierce\b/gi,"fierce"],
+	[/\bgentle\b/gi,"gentle"],[/\brough\b/gi,"rough"],[/\bsmooth\b/gi,"smooth"],
+	[/\bhard\b/gi,"hard"],[/\bsoft\b/gi,"soft"],[/\bsolid\b/gi,"solid"],
+	[/\bliquid\b/gi,"liquid"],[/\bgas\b/gi,"gaseous"],[/\bfrozen\b/gi,"frozen"],
+	[/\bmelted\b/gi,"melted"],[/\bburning\b/gi,"burning"],[/\bcooled\b/gi,"cooled"],
+	[/\bwarm\b/gi,"warm"],[/\bcold\b/gi,"cold"],[/\bhot\b/gi,"hot"],
+	[/\bfrozen\b/gi,"frozen"],[/\bicy\b/gi,"icy"],[/\bsunny\b/gi,"sunny"],
+	[/\bcloudy\b/gi,"cloudy"],[/\brainy\b/gi,"rainy"],[/\bsnowy\b/gi,"snowy"],
+	[/\bwindy\b/gi,"windy"],[/\bstormy\b/gi,"stormy"],[/\bcalm\b/gi,"calm"],
+	[/\bpeaceful\b/gi,"peaceful"],[/\bviolent\b/gi,"violent"],[/\bgentle\b/gi,"gentle"],
+	[/\bharsh\b/gi,"harsh"],[/\bsweet\b/gi,"sweet"],[/\bbitter\b/gi,"bitter"],
+	[/\bsour\b/gi,"sour"],[/\bsalty\b/gi,"salty"],[/\bspicy\b/gi,"spicy"],
+	[/\btasty\b/gi,"tasty"],[/\bdelicious\b/gi,"delicious"],[/\bgross\b/gi,"gross"],
+	[/\byeble\b/gi,"gross"],[/\bfresh\b/gi,"fresh"],[/\bstale\b/gi,"stale"],
+	[/\bnew\b/gi,"new"],[/\bold\b/gi,"old"],[/\bancient\b/gi,"ancient"],
+	[/\bmodern\b/gi,"modern"],[/\bfuture\b/gi,"future"],[/\bpast\b/gi,"past"],
+	[/\bpresent\b/gi,"present"],[/\bhere\b/gi,"here"],[/\bthere\b/gi,"there"],
+	[/\baway\b/gi,"away"],[/\bnear\b/gi,"near"],[/\bclose\b/gi,"close"],
+	[/\bfar\b/gi,"far"],[/\bnext\b/gi,"next"],[/\blast\b/gi,"last"],
+	[/\bfirst\b/gi,"first"],[/\blast\b/gi,"last"],[/\bonly\b/gi,"only"],
+	[/\balone\b/gi,"alone"],[/\btogether\b/gi,"together"],[/\bapart\b/gi,"apart"],
+	[/\bseparate\b/gi,"separate"],[/\bjoint\b/gi,"joint"],[/\bunited\b/gi,"united"],
+	[/\bdivided\b/gi,"divided"],[/\bwhole\b/gi,"whole"],[/\bpart\b/gi,"part"],
+	[/\bfull\b/gi,"full"],[/\bempty\b/gi,"empty"],[/\bcomplete\b/gi,"complete"],
+	[/\bincomplete\b/gi,"incomplete"],[/\bperfect\b/gi,"perfect"],[/\bfaulty\b/gi,"faulty"],
+	[/\bbroken\b/gi,"broken"],[/\bfixed\b/gi,"fixed"],[/\bready\b/gi,"ready"],
+	[/\bunready\b/gi,"unready"],[/\bset\b/gi,"set"],[/\bmoved\b/gi,"moved"],
+	[/\bstill\b/gi,"still"],[/\bmoving\b/gi,"moving"],[/\bstopped\b/gi,"stopped"],
+	[/\bstarted\b/gi,"started"],[/\bended\b/gi,"ended"],[/\bbeginning\b/gi,"beginning"],
+	[/\bending\b/gi,"ending"],[/\bmiddle\b/gi,"middle"],[/\bside\b/gi,"side"],
+	[/\btop\b/gi,"top"],[/\bbottom\b/gi,"bottom"],[/\bfront\b/gi,"front"],
+	[/\bback\b/gi,"back"],[/\bleft\b/gi,"left"],[/\bright\b/gi,"right"],
+	[/\binside\b/gi,"inside"],[/\boutside\b/gi,"outside"],[/\bwithin\b/gi,"within"],
+	[/\bbeyond\b/gi,"beyond"],[/\babove\b/gi,"above"],[/\bbelow\b/gi,"below"],
+	[/\bover\b/gi,"over"],[/\bunder\b/gi,"under"],[/\bthrough\b/gi,"through"],
+	[/\bagainst\b/gi,"against"],[/\btoward\b/gi,"toward"],[/\baway\b/gi,"away"],
+	[/\btowards\b/gi,"towards"],[/\binto\b/gi,"into"],[/\bout\b/gi,"out"],
+	[/\boutside\b/gi,"outside"],[/\binside\b/gi,"inside"],[/\bwithin\b/gi,"within"],
+	[/\bbeyond\b/gi,"beyond"],
 ];
 const nouns = [
   [/\bchild\b/gi,"young one"],[/\bchildren\b/gi,"young ones"],
@@ -6122,20 +6355,19 @@ function transformParagraph(para, opts) {
     if (!wasReordered) {
       if (opts.invert) s = maybeInvert(s);
       if (opts.metaphors) {
-        s = maybeAddMetaphor(s);
-        s = maybeAddAlliteration(s);
+        s = maybeAddMetaphor(s)
       }
     }
 
     // Opening interjection (~35%), kept: it is one of Yoda's habits.
-    if (opts.openings && chance(0.35 * chScale)) s = pick(openings) + " " + s;
+    if (opts.openings && chance(0.15 * chScale)) s = pick(openings) + " " + s;
 
     // A rebuke and a mid-sentence insertion only ride along with longer
     // sentences; on short input they are pure noise, and the insertion
     // lands on the first comma - which may be the fronted phrase's own.
     if (s.length >= 40) {
       if (!light) s = maybeInsertInsult(s);
-      if (!wasReordered && !light && chance(0.20 * chScale)) {
+      if (!wasReordered && !light && chance(0.05 * chScale)) {
         let cIdx = s.indexOf(',');
         if (cIdx > 0 && cIdx < s.length - 5) {
           let after = s.substring(cIdx + 1).replace(/^\s+/, "");
@@ -6179,92 +6411,134 @@ function getTransformOptions() {
 }
 
 function frontObject(sentence) {
-  var body = sentence;
-  var tail = '';
-  var tm = body.match(/([.!?]+)$/);
-  if (tm) {
-    tail = tm[1];
-    body = body.slice(0, -tail.length);
-  }
-  if (/[,.:;?!]/.test(body) || /[?!]/.test(tail)) return sentence;
+	var body = sentence
+	var tail = ""
+	var tm = body.match(/([.!?]+)$/)
+	if (tm) {
+		tail = tm[1]
+		body = body.slice(0, -tail.length)
+	}
+	if (/[,.:;?!]/.test(body) || /[?!]/.test(tail)) return sentence
 
-  var AUX = ('am is are was were have has had do does did will shall can could ' +
-    'may might must should would ought').split(' ');
-  var DET = ('the a an this that these those some any each every no another ' +
-    'my your his her its our their either neither').split(' ');
-  var PRON = ('i you he she it we they me him her us them mine yours hers ours ' +
-    'theirs myself yourself himself herself itself ourselves yourselves themselves').split(' ');
-  var PREP = ('in on at to for with by from of about into over under after before ' +
-    'between through during without within along across behind beyond near past ' +
-    'toward towards upon until since than like up down off out around against ' +
-    'among ahead instead').split(' ');
-  var CONJ = ('and but or nor so yet because although while when if unless that ' +
-    'who which what where').split(' ');
-  var ADV = ('quickly slowly quietly loudly gently carefully badly hardly immediately ' +
-    'finally suddenly recently often always never sometimes usually really very ' +
-    'too just again away back already still maybe perhaps together alone fast hard ' +
-    'straight almost only even quite rather actually today tonight tomorrow ' +
-    'yesterday here there now then soon early late well ever once twice else hence ' +
-    'thus therefore anyway somehow somewhere').split(' ');
-  // The suffixes here are deliberately few: -y and -ish would swallow verbs
-  // like "play" and "flourish", so the common irregulars are listed instead.
-  var ADJ = ('big small old new young good bad happy sad angry tired brave bright ' +
-    'dark red blue green white black strong weak rich poor kind nice sweet terrible ' +
-    'horrible wonderful strange quiet loud clean dirty short tall long high low warm ' +
-    'cold hot cool little large wide deep fine true false real sure ready free ' +
-    'busy safe proud calm clever foolish gentle mighty cute pretty ugly soft fresh ' +
-    'silly funny crazy lazy easy messy dirty dusty rusty sunny cloudy stormy windy ' +
-    'icy wealthy healthy lonely empty tasty juicy smelly').split(' ');
-  var FUNC = AUX.concat(DET, PRON, PREP, CONJ);
+	var AUX = (
+		"am is are was were have has had do does did will shall can could " +
+		"may might must should would ought"
+	).split(" ")
+	var DET = (
+		"the a an this that these those some any each every no another " +
+		"my your his her its our their either neither"
+	).split(" ")
+	var PRON = (
+		"i you he she it we they me him her us them mine yours hers ours " +
+		"theirs myself yourself himself herself itself ourselves yourselves themselves"
+	).split(" ")
+	var PREP = (
+		"in on at to for with by from of about into over under after before " +
+		"between through during without within along across behind beyond near past " +
+		"toward towards upon until since than like up down off out around against " +
+		"among ahead instead"
+	).split(" ")
+	var CONJ = (
+		"and but or nor so yet because although while when if unless that " +
+		"who which what where"
+	).split(" ")
+	var ADV = (
+		"quickly slowly quietly loudly gently carefully badly hardly immediately " +
+		"finally suddenly recently often always never sometimes usually really very " +
+		"too just again away back already still maybe perhaps together alone fast hard " +
+		"straight almost only even quite rather actually today tonight tomorrow " +
+		"yesterday here there now then soon early late well ever once twice else hence " +
+		"thus therefore anyway somehow somewhere"
+	).split(" ")
+	var ADJ = (
+		"big small old new young good bad happy sad angry tired brave bright " +
+		"dark red blue green white black strong weak rich poor kind nice sweet terrible " +
+		"horrible wonderful strange quiet loud clean dirty short tall long high low warm " +
+		"cold hot cool little large wide deep fine true false real sure ready free " +
+		"busy safe proud calm clever foolish gentle mighty cute pretty ugly soft fresh " +
+		"silly funny crazy lazy easy messy dusty rusty sunny cloudy stormy windy " +
+		"icy wealthy healthy lonely empty tasty juicy smelly"
+	).split(" ")
+	var FUNC = AUX.concat(DET, PRON, PREP, CONJ)
 
-  var words = body.split(/\s+/).filter(function (w) { return w; });
-  if (words.length < 3) return sentence;
-  var lower = words.map(function (w) { return w.toLowerCase().replace(/[^a-z']/g, ''); });
-  var isAdj = function (w) {
-    return ADJ.indexOf(w) >= 0 || /(ful|ous|ive|able|ible|less|ical)$/.test(w);
-  };
-  var isAdv = function (w) { return ADV.indexOf(w) >= 0 || /ly$/.test(w); };
-  var bad = function (list, w) { return list.indexOf(w) >= 0; };
+	var words = body.split(/\s+/).filter(function (w) {
+		return w
+	})
+	if (words.length < 3) return sentence
+	var lower = words.map(function (w) {
+		return w.toLowerCase().replace(/[^a-z']/g, "")
+	})
 
-  // Longest plausible subject first, so "the angry dog" wins over "the angry".
-  // A determiner needs its noun (so len 1 is out), a pronoun stands alone
-  // (so len > 1 is out), and nothing may end on a function word, adverb or
-  // adjective — those mean we have cut the subject in the wrong place.
-  for (var len = Math.min(3, words.length - 2); len >= 1; len--) {
-    var first = lower[0];
-    var last = lower[len - 1];
-    var subjectOk;
-    if (bad(DET, first)) {
-      subjectOk = len > 1 && !bad(FUNC, last) && !isAdv(last) && !isAdj(last);
-    } else if (bad(PRON, first)) {
-      subjectOk = len === 1;
-    } else {
-      subjectOk = !bad(FUNC, first) && !isAdv(first) &&
-        (len > 1 || !isAdj(first)) &&
-        !bad(FUNC, last) && !isAdv(last) && !isAdj(last);
-    }
-    if (!subjectOk) continue;
+	var isAdj = function (w) {
+		return ADJ.indexOf(w) >= 0 || /(ful|ous|ive|able|ible|less|ical)$/.test(w)
+	}
+	var isAdv = function (w) {
+		return ADV.indexOf(w) >= 0 || /ly$/.test(w)
+	}
+	var bad = function (list, w) {
+		return list.indexOf(w) >= 0
+	}
 
-    // Auxiliaries belong to the inversion patterns; "like" is only a verb
-    // right after a pronoun ("I like pie"), never a preposition there.
-    var verb = lower[len];
-    var verbOk = verb === 'like'
-      ? bad(PRON, first)
-      : !bad(FUNC, verb) && !isAdv(verb) && !isAdj(verb);
-    if (!verbOk) continue;
+	// Try to find a plausible subject length (1 to 3 words)
+	for (var len = Math.min(3, words.length - 2); len >= 1; len--) {
+		var first = lower[0]
+		var last = lower[len - 1]
+		var subjectOk
 
-    // A parse was found; the object guard decides, then we commit. The whole
-    // object phrase is checked, not just its first word: "chased the cat up
-    // the tree" hides a prepositional phrase inside the object, and a lone
-    // noun ("she runs") leaves nothing to front.
-    var objWords = lower.slice(len + 1);
-    if (objWords.length === 0 || objWords.length > 4) return sentence;
-    if (objWords.some(function (w) { return bad(PREP, w) || isAdv(w); })) return sentence;
+		if (bad(DET, first)) {
+			subjectOk = len > 1 && !bad(FUNC, last) && !isAdv(last) && !isAdj(last)
+		} else if (bad(PRON, first)) {
+			subjectOk = len === 1
+		} else {
+			subjectOk =
+				!bad(FUNC, first) &&
+				!isAdv(first) &&
+				(len > 1 || !isAdj(first)) &&
+				!bad(FUNC, last) &&
+				!isAdv(last) &&
+				!isAdj(last)
+		}
+		if (!subjectOk) continue
 
-    var obj = words.slice(len + 1).join(' ');
-    return obj + ', ' + words.slice(0, len).join(' ') + ' ' + words[len] + tail;
-  }
-  return sentence;
+		var verb = lower[len]
+
+		// --- Copular pattern: subject + linking verb + adjective/noun phrase ---
+		// "You are strong" → "Strong, you are"
+		// "The dark side is dangerous" → "Dangerous, the dark side is"
+		if (bad(AUX, verb) && verb !== "do" && verb !== "does" && verb !== "did") {
+			// The rest after the verb is the complement (adjective, noun phrase, etc.)
+			var compWords = lower.slice(len + 1)
+			if (compWords.length >= 1 && compWords.length <= 4) {
+				// Don't front if the complement starts with a preposition (it's a PP, not a simple complement)
+				if (!bad(PREP, compWords[0])) {
+					var comp = words.slice(len + 1).join(" ")
+					return comp + ", " + words.slice(0, len).join(" ") + " " + verb + tail
+				}
+			}
+		}
+
+		// --- SVO pattern: subject + action verb + object ---
+		// "I like pie" → "Pie, I like"
+		var verbOk =
+			verb === "like"
+				? bad(PRON, first)
+				: !bad(FUNC, verb) && !isAdv(verb) && !isAdj(verb)
+		if (!verbOk) continue
+
+		var objWords = lower.slice(len + 1)
+		if (objWords.length === 0 || objWords.length > 4) continue
+		if (
+			objWords.some(function (w) {
+				return bad(PREP, w) || isAdv(w)
+			})
+		)
+			continue
+
+		var obj = words.slice(len + 1).join(" ")
+		return obj + ", " + words.slice(0, len).join(" ") + " " + words[len] + tail
+	}
+
+	return sentence
 }
 
 function frontInfinitive(sentence) {
@@ -6309,7 +6583,6 @@ function yodaify() {
   if (!light) text = maybeInsertQuote(text);
   if (opts.asides && text.length >= 60) {
     text = maybeAddAside(text);
-    text = maybeAddStageDirection(text);
   }
 
   // Cleanups
