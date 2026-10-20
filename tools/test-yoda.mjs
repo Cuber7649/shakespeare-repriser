@@ -271,6 +271,13 @@ const CORE = [
   ['She is seeing a specialist tomorrow.',
     'Seeing a specialist tomorrow, she is.'],
   ['He broke the world record.', 'The world record, he broke.'],
+  ['I do not know whether she will come.',
+    'I do not know whether she will come.'],
+  ['We stayed home because the roads were icy.',
+    'We stayed home because the roads were icy.'],
+  ['I ran into my old teacher at the store.',
+    'I ran into my old teacher at the store.'],
+  ['Sorry for the confusion.', 'Sorry for the confusion.'],
 
   // Existing structural limits still hold.
 

@@ -1529,6 +1529,8 @@ const commonWords = [
   // "Sorry I am late" is an apology, not an adjective fronting invitation.
   [/\bsorry i am late\b/gi,"sorry I am late"],
   [/\bsorry i was late\b/gi,"sorry I was late"],
+  [/\bsorry for\b/gi,"sorry for"],[/\bsorry about\b/gi,"sorry about"],
+  [/\bsorry to\b/gi,"sorry to"],
   [/\bkind of you\b/gi,"kind of you"],[/\bkind of him\b/gi,"kind of him"],
   [/\bkind of her\b/gi,"kind of her"],[/\bkind of them\b/gi,"kind of them"],
   [/\bkind of me\b/gi,"kind of me"],[/\bkind of us\b/gi,"kind of us"],
@@ -1541,7 +1543,8 @@ const commonWords = [
   // idiom keeps its natural form.
   [/\byears old\b/gi,"years old"],[/\byear old\b/gi,"year old"],
   // "old friend" means long-standing, and "my old one" means the previous
-  // item; "ancient" changes both meanings.
+  // item; "ancient" changes both meanings. Other former-role phrases are
+  // protected in protectVerbs, where the word table can be skipped safely.
   [/\bold friends\b/gi,"old friends"],[/\bold friend\b/gi,"old friend"],
   [/\bold ones\b/gi,"old ones"],[/\bold one\b/gi,"old one"],
   // "agree to" takes a noun or infinitive; "concur to" is not English.
@@ -1551,6 +1554,8 @@ const commonWords = [
   [/\blet me know\b/gi,"let me know"],[/\blet us know\b/gi,"let us know"],
   [/\blet him know\b/gi,"let him know"],[/\blet her know\b/gi,"let her know"],
   [/\blet them know\b/gi,"let them know"],
+  // Embedded questions take "know", not the literary "comprehend".
+  [/\bknow whether\b/gi,"know whether"],[/\bknow if\b/gi,"know if"],
   [/\bwatch your step\b/gi,"watch your step"],
   [/\bwatch your language\b/gi,"watch your language"],
   [/\bwatch your mouth\b/gi,"watch your mouth"],
@@ -1890,7 +1895,6 @@ const adjectives = [
 	[/\bclouded\b/gi, "clouded"],
 	[/\bquiet\b/gi, "quiet"],
 	[/\bloud\b/gi, "loud"],
-	[/\bicy\b/gi, "cold"],
 	[/\baged\b/gi, "ancient"],
 	[/\bancient\b/gi, "ancient"],
 	[/\bliving\b/gi, "living"],
@@ -2927,6 +2931,11 @@ function transformParagraph(para, opts) {
     // Object + particle: "put the book away" must not become "placed the
     // tome away". The particle can be up to four words after the verb.
     s = s.replace(/\bput(?=(?:\s+[A-Za-z0-9']+){0,4}\s+(?:away|back|aside|down|off|up|out|together)\b)/gi, function (m) {
+      return pMark(m)
+    })
+    // "Old" before a former role or a familiar phrase means former or
+    // long-standing, not ancient ("my old teacher", "old news").
+    s = s.replace(/\bold\b(?=\s+(?:teacher|boss|roommate|classmate|colleague|neighbor|neighbour|doctor|coach|partner|student|employee|manager|principal|landlord|school|neighborhood|neighbourhood|times|days|news|joke|story|saying|habit|friend|friends|one|ones)\b)/gi, function (m) {
       return pMark(m)
     })
     return s
