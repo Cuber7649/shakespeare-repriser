@@ -5590,6 +5590,15 @@ const commonWords = [
   [/\bactually\b/gi,"in truth"],[/\bbasically\b/gi,"in essence"],
   [/\bnobody\b/gi,"no one"],
   [/\bhonestly\b/gi,"truly"],[/\bfrankly\b/gi,"to speak plainly"],
+  // "kind of you" is a compliment, not the vague "kind of" -> "sort of".
+  // "too bad" means unfortunate, and "not bad" means good; "dark" is wrong.
+  [/\btoo bad\b/gi,"too bad"],[/\bnot bad\b/gi,"not bad"],
+  // "Sorry I am late" is an apology, not an adjective fronting invitation.
+  [/\bsorry i am late\b/gi,"sorry I am late"],
+  [/\bsorry i was late\b/gi,"sorry I was late"],
+  [/\bkind of you\b/gi,"kind of you"],[/\bkind of him\b/gi,"kind of him"],
+  [/\bkind of her\b/gi,"kind of her"],[/\bkind of them\b/gi,"kind of them"],
+  [/\bkind of me\b/gi,"kind of me"],[/\bkind of us\b/gi,"kind of us"],
   [/\bkind of\b/gi,"sort of"],[/\bsort of\b/gi,"sort of"],
   [/\bin fact\b/gi,"in truth"],
   [/\bin spite of\b/gi,"despite"],
@@ -5598,6 +5607,26 @@ const commonWords = [
   // old" into "900 years ancient". "happy to" is pinned to "glad to" so the
   // idiom keeps its natural form.
   [/\byears old\b/gi,"years old"],[/\byear old\b/gi,"year old"],
+  // "old friend" means long-standing, and "my old one" means the previous
+  // item; "ancient" changes both meanings.
+  [/\bold friends\b/gi,"old friends"],[/\bold friend\b/gi,"old friend"],
+  [/\bold ones\b/gi,"old ones"],[/\bold one\b/gi,"old one"],
+  // "agree to" takes a noun or infinitive; "concur to" is not English.
+  [/\bagreeing to\b/gi,"agreeing to"],[/\bagreed to\b/gi,"agreed to"],
+  [/\bagrees to\b/gi,"agrees to"],[/\bagree to\b/gi,"agree to"],
+  // "let me know" means "inform me", not "comprehend".
+  [/\blet me know\b/gi,"let me know"],[/\blet us know\b/gi,"let us know"],
+  [/\blet him know\b/gi,"let him know"],[/\blet her know\b/gi,"let her know"],
+  [/\blet them know\b/gi,"let them know"],
+  [/\bwatch your step\b/gi,"watch your step"],
+  [/\bwatch your language\b/gi,"watch your language"],
+  [/\bwatch your mouth\b/gi,"watch your mouth"],
+  // Multi-word place names: the adjective table would lowercase "new".
+  [/\bnew york city\b/gi,"New York City"],[/\bnew york\b/gi,"New York"],
+  [/\bnew jersey\b/gi,"New Jersey"],[/\bnew mexico\b/gi,"New Mexico"],
+  [/\bnew hampshire\b/gi,"New Hampshire"],[/\bnew orleans\b/gi,"New Orleans"],
+  [/\bnew england\b/gi,"New England"],[/\bnew zealand\b/gi,"New Zealand"],
+  [/\bnew delhi\b/gi,"New Delhi"],
   [/\bstrong with\b/gi,"strong with"],[/\bstrong in\b/gi,"strong in"],
   [/\bhappy to\b/gi,"glad to"],
   [/\bwonderfully\b/gi,"very wonderful"],
@@ -5622,9 +5651,8 @@ const verbs = [
 	[/\bsay\b/gi, "speak"],
 	[/\bsaying\b/gi, "speaking"],
 
-	// Perception
-	[/\bsee\b/gi, "perceive"],
-	[/\bseeing\b/gi, "perceiving"],
+	// Perception. "See" is left alone: "see a doctor", "see a movie" and
+	// "see a friend" are not perception, and "perceive" changes all three.
 	[/\bwatch\b/gi, "observe"],
 	[/\bwatching\b/gi, "observing"],
 	[/\bnotice\b/gi, "sense"],
@@ -5654,8 +5682,8 @@ const verbs = [
 	[/\bregret\b/gi, "lament"],
 	[/\bregretted\b/gi, "lamented"],
 
-	// Action
-	[/\banswer\b/gi, "reply"],
+	// Action. The bare noun "answer" stays: "the answer" is a solution, not
+	// necessarily a reply. The past tense still takes "replied".
 	[/\banswered\b/gi, "replied"],
 	[/\bagree\b/gi, "concur"],
 	[/\bagreed\b/gi, "concurred"],
@@ -5673,8 +5701,8 @@ const verbs = [
 	[/\bbuilt\b/gi, "created"],
 	[/\bfix\b/gi, "mend"],
 	[/\bfixed\b/gi, "mended"],
-	[/\bbreak\b/gi, "shatter"],
-	[/\bbroke\b/gi, "shattered"],
+	// "Break" stays: "break down", "break the law" and "the news broke"
+	// are not literal shattering. Literal glass can keep the plain verb.
 	[/\bhold\b/gi, "hold"],
 	[/\bheld\b/gi, "held"],
 	[/\bgrab\b/gi, "seize"],
@@ -6219,7 +6247,7 @@ function transformParagraph(para, opts) {
     var guarded = text
       .replace(/\b(?:Mr|Mrs|Ms|Dr|Prof|St|Mt|Gen|Sen|Rep|Gov|Sgt|Capt|Lt|Col|Cmdr|Adm|Rev|Jr|Sr)\./gi,
         function (m) { return m.replace(/\./g, "\u0001") })
-      .replace(/\b(?:U\.S\.A|U\.S|U\.K|E\.U|e\.g|i\.e|a\.k\.a|Ph\.D)\./gi,
+      .replace(/\b(?:U\.S\.A|U\.S|U\.K|U\.N|E\.U|e\.g|i\.e|a\.k\.a|Ph\.D)\./gi,
         function (m) { return m.replace(/\./g, "\u0001") })
       .replace(/(\d)\.(\d)/g, "$1\u0002$2")
       .replace(/\b([ap])\.m\./gi, function (m) { return m.replace(/\./g, "\u0001") })
@@ -6321,19 +6349,20 @@ function transformParagraph(para, opts) {
     "fast hard straight almost only even quite rather actually today tonight " +
     "tomorrow yesterday here there now then soon early late well ever once " +
     "twice else hence thus therefore anyway somehow somewhere forever " +
-    "aside forward forth alike"
+    "aside forward forth apart alike online"
   ).split(" ")
   var P_ADJ = (
     "big small old new young good bad happy sad angry tired brave bright dark " +
-    "red blue green white black strong weak rich poor kind nice sweet terrible " +
+    "red blue green white black yellow brown orange purple pink gray grey gold silver strong weak rich poor kind nice sweet terrible " +
     "horrible wonderful strange quiet loud clean dirty short tall long high low " +
     "warm cold hot cool little large wide deep fine true false real sure ready " +
     "free busy safe proud calm clever foolish gentle mighty cute pretty ugly " +
-    "soft fresh silly funny crazy lazy easy messy dusty rusty sunny cloudy " +
+    "soft fresh silly funny crazy lazy easy messy dusty rusty sunny cloudy risky " +
     "stormy windy icy wealthy healthy lonely empty tasty juicy smelly better " +
     "worse well ill unwell asleep awake alive dead lost done finished afraid " +
     "scared nervous anxious excited bored satisfied pleased disappointed upset " +
-    "hurt sore stiff dizzy confused numb guilty ashamed jealous curious odd great"
+    "hurt sore stiff dizzy confused numb guilty ashamed jealous curious odd great " +
+    "ancient elderly hungry thirsty open"
   ).split(" ")
   var P_PARTICLE = (
     "back away out off over through around up down aside together forth forward behind"
@@ -6377,9 +6406,24 @@ function transformParagraph(para, opts) {
 
   // A few adjective frames the flat word table gets wrong.
   var fixBadPhrases = function (s) {
-    s = s.replace(/\bbad at\b/gi, "poor at")
-    s = s.replace(/\bbad for\b/gi, "harmful to")
-    s = s.replace(/\bbad with\b/gi, "poor with")
+    // "not bad at all" and "not bad for a beginner" are praise, not the
+    // harmful/poor frames; keep the litotes intact.
+    s = s.replace(/\bbad at\b/gi, function (m, off, whole) {
+      if (/^\s+all\b/i.test(whole.slice(off + m.length))) return m
+      var prev = pPrev(whole, off)
+      if (prev === "not" || prev === "too") return m
+      return "poor at"
+    })
+    s = s.replace(/\bbad for\b/gi, function (m, off, whole) {
+      var prev = pPrev(whole, off)
+      if (prev === "not" || prev === "too") return m
+      return "harmful to"
+    })
+    s = s.replace(/\bbad with\b/gi, function (m, off, whole) {
+      var prev = pPrev(whole, off)
+      if (prev === "not" || prev === "too") return m
+      return "poor with"
+    })
     s = s.replace(/\bbad idea\b/gi, "foolish idea")
     s = s.replace(/\bbad weather\b/gi, "foul weather")
     s = s.replace(/\bbad luck\b/gi, "ill luck")
@@ -6401,14 +6445,16 @@ function transformParagraph(para, opts) {
     // not become "dark".
     s = s.replace(/\b(bad)\b/gi, function (m, w, off, whole) {
       var prev = pPrev(whole, off)
-      if (/^(feel|feels|felt|look|looks|looked|smell|smells|smelled|smelt|taste|tastes|tasted|sound|sounds|sounded|seem|seems|seemed)$/.test(prev)) {
+      if (/^(not|too|feel|feels|felt|look|looks|looked|smell|smells|smelled|smelt|taste|tastes|tasted|sound|sounds|sounded|seem|seems|seemed)$/.test(prev)) {
         return pMark(m)
       }
       return m
     })
 
-    // "See you" is a farewell, not "perceive you".
+    // "See you" is a farewell, not "perceive you"; "watch out/for/over" is
+    // not "observe out".
     s = s.replace(/\bsee(?=\s+(?:you|ya)\b)/gi, function (m) { return pMark(m) })
+    s = s.replace(/\bwatch(?=\s+(?:out|for|over)\b)/gi, function (m) { return pMark(m) })
 
     // feel + adjective is copular; feel + noun is perception.
     s = s.replace(/\b(feel|feels)\b/gi, function (m, w, off, whole) {
@@ -6420,6 +6466,22 @@ function transformParagraph(para, opts) {
       if (pAdj(next)) return pMark(m)
       if (/^(so|very|really|quite|rather|too|much|a|an)$/.test(next) && pAdj(after)) return pMark(m)
       if (/^(a|an)$/.test(next) && /^(bit|little)$/.test(after) && pAdj(third)) return pMark(m)
+      return m
+    })
+
+    // "has broken the law" is not "has shattered the law"; the adjective
+    // table still handles "the broken window" -> "the shattered window".
+    s = s.replace(/\bbroken\b/gi, function (m, off, whole) {
+      var prev = pPrev(whole, off)
+      if (/^(have|has|had|having)$/.test(prev)) return pMark(m)
+      return m
+    })
+
+    // "finish" is intransitive in "finish early" and "finished by then";
+    // "complete" needs an object there. A real object still completes.
+    s = s.replace(/\b(finish|finishes|finished|finishing)\b/gi, function (m, w, off, whole) {
+      var next = pNext(whole, off + m.length)
+      if (!pObject(next)) return pMark(m)
       return m
     })
 
@@ -6481,6 +6543,12 @@ function transformParagraph(para, opts) {
       if (pObject(next) || pParticle(next) || next === "for" || next === "to") return pMark(m)
       return m
     })
+    // Transitive "search the room" means examine, not "seek the room".
+    s = s.replace(/\b(search|searches|searched|searching)\b/gi, function (m, w, off, whole) {
+      var next = pNext(whole, off + m.length)
+      if (pObject(next)) return pMark(m)
+      return m
+    })
     // A noun "search" ("the search for the droid", "search and rescue")
     // must not become "seek".
     s = s.replace(/\b(search|searches)\b/gi, function (m, w, off, whole) {
@@ -6534,9 +6602,42 @@ function transformParagraph(para, opts) {
     if (new RegExp("[\"'‘’“”]\\s*$").test(before)) return true
     return new RegExp("\\b(and|but|or|so|yet|then|why|how|what|where|when|who)\\s+$", "i").test(before)
   }
+  // "Isn't the store open?" expands to "Is not the store open?". The
+  // single-word helper below can move "not" past a pronoun, but a noun
+  // subject needs its determiner and any attributive adjectives. This runs
+  // after the word table, so the adjective list also knows the replaced
+  // forms ("young", "ancient") as well as the originals.
+  var fixDetNegativeQuestions = function (s) {
+    return s.replace(
+      /\b(is|are|was|were|do|does|did|will|would|should|could|can|must|have|has|had) not\s+([\s\S]+)/gi,
+      function (m, aux, rest, off, whole) {
+        if (!leadPosition(whole, off)) return m
+        var run = rest.match(/^[A-Za-z0-9'’-]+(?:\s+[A-Za-z0-9'’-]+)*/)
+        if (!run) return m
+        var words = run[0].split(/\s+/)
+        var first = words[0].toLowerCase()
+        if (P_DET.indexOf(first) < 0) return m
+        // A demonstrative can be a pronoun ("Is this not your umbrella?")
+        // or a determiner ("Are these shoes not expensive?"). Leave the
+        // pronoun cases to the single-word helper below.
+        if (/^(this|that|these|those)$/.test(first)) {
+          var second = (words[1] || "").toLowerCase()
+          if (P_DET.indexOf(second) >= 0 || pAdv(second)) return m
+        }
+        var len = 1
+        while (len < words.length - 1 && pAdj(words[len].toLowerCase())) len++
+        if (len >= words.length) return m
+        len++
+        var subject = words.slice(0, len).join(" ")
+        var after = rest.slice(subject.length)
+        if (!after.trim()) return m
+        return aux + " " + subject + " not" + after
+      }
+    )
+  }
   var fixNegativeQuestions = function (s) {
     s = s.replace(
-      /\b(is|are|was|were|do|does|did|will|would|should|could|can|must|have|has|had) not (i|you|we|they|he|she|it|there)\b/gi,
+      /\b(is|are|was|were|do|does|did|will|would|should|could|can|must|have|has|had) not (i|you|we|they|he|she|it|there|this|that|these|those)\b/gi,
       function (m, aux, subj, off, whole) {
         if (!leadPosition(whole, off)) return m
         if (/^are$/i.test(aux) && /^i$/i.test(subj)) return "am I not"
@@ -6577,6 +6678,7 @@ function transformParagraph(para, opts) {
     s = replaceAll(reordered);
     // Restore the verbs held back from the table (see protectVerbs).
     s = s.split("\u0007").join("");
+    s = fixDetNegativeQuestions(s);
     s = fixNegativeQuestions(s);
 
     // These land on the first comma or inside the sentence; a reordered
@@ -6649,6 +6751,25 @@ function frontObject(sentence) {
 	}
 	if (/[,.:;?!]/.test(body) || /[?!]/.test(tail)) return sentence
 
+	// A wh-word can be the subject ("Whoever finishes first can leave") or
+	// open a comparative/as-clause. Moving the words after it produces
+	// "First can depart, Whoever finishes" and "As the first one, this tome
+	// is as interesting", so leave these constructions in order.
+	if (/^(who|whoever|whom|whose|what|whatever|which|whichever|when|whenever|where|wherever|why|how|however)\b/i.test(body)) {
+		return sentence
+	}
+	if (/\bas\b[\s\S]*\bas\b/i.test(body)) return sentence
+	if (/\b(who|whom|whose|which)\b/i.test(body)) return sentence
+	// Resultative "creaked open" / "swung shut": the adjective belongs to the
+	// verb, not to a frontable complement.
+	if (/\b(creaked|swung|slid|slammed|banged|clicked|snapped|rattled|eased|burst|flew|fell|rolled|blew)\s+(open|shut|closed|wide)\b/i.test(body)) {
+		return sentence
+	}
+
+	// "You are welcome" is a fixed reply to thanks; fronting it turns the
+	// reply into a greeting ("Welcome, you are").
+	if (/^you are welcome$/i.test(body)) return sentence
+
 	// "There is no try." -> "No try, there is."
 	// The existential is the one construction that reads naturally fronted.
 	var there = body.match(/^There (is|are|was|were) no (\S+(?: \S+){0,3})$/i)
@@ -6688,15 +6809,15 @@ function frontObject(sentence) {
 		"too just again away back already still maybe perhaps together alone fast hard " +
 		"straight almost only even quite rather actually today tonight tomorrow " +
 		"yesterday here there now then soon early late well ever once twice else hence " +
-		"thus therefore anyway somehow somewhere forever aside forward forth alike"
+		"thus therefore anyway somehow somewhere forever aside forward forth apart alike online"
 	).split(" ")
 	var ADJ = (
 		"big small old new young good bad happy sad angry tired brave bright " +
-		"dark red blue green white black strong weak rich poor kind nice sweet terrible " +
+		"dark red blue green white black yellow brown orange purple pink gray grey gold silver strong weak rich poor kind nice sweet terrible " +
 		"horrible wonderful strange quiet loud clean dirty short tall long high low warm " +
 		"cold hot cool little large wide deep fine true false real sure ready free " +
 		"busy safe proud calm clever foolish gentle mighty cute pretty ugly soft fresh " +
-		"silly funny crazy lazy easy messy dusty rusty sunny cloudy stormy windy " +
+		"silly funny crazy lazy easy messy dusty rusty sunny cloudy stormy windy risky " +
 		"icy wealthy healthy lonely empty tasty juicy smelly"
 	).split(" ")
 	var NEG = "not never no".split(" ")
@@ -6927,6 +7048,22 @@ function frontObject(sentence) {
 
 		var objWords = lower.slice(len + 1)
 		if (objWords.length === 0 || objWords.length > 4) continue
+
+		// Naming and electing verbs take an object complement ("named their
+		// daughter Alice", "elected him captain"); the object alone is not a
+		// frontable constituent.
+		if (/^(name|named|call|called|elect|elected|appoint|appointed|crown|crowned)$/.test(verb) &&
+			objWords.length >= 2) continue
+
+		// Ditransitives have two objects ("gave the students extra time") and
+		// resultatives have an object plus a complement ("declared the man
+		// innocent", "found the answer obvious"). Fronting the whole run
+		// produces "The students extra time, the teacher gave."; leave the
+		// sentence in order when the object is long enough to contain both.
+		if (/^(give|gives|gave|given|giving|send|sends|sent|sending|bring|brings|brought|bringing|tell|tells|told|telling|offer|offers|offered|offering|buy|buys|bought|buying|show|shows|showed|shown|showing|teach|teaches|taught|teaching|lend|lends|lent|lending|pay|pays|paid|paying|promise|promises|promised|promising|read|reads|hand|hands|handed|handing|pass|passes|passed|passing|throw|throws|threw|thrown|throwing|write|writes|wrote|written|writing|cook|cooks|cooked|cooking|make|makes|made|making)$/.test(verb) &&
+			objWords.length >= 3) continue
+		if (/^(declare|declared|find|finds|found|consider|considers|considered|call|calls|called|keep|keeps|kept|leave|leaves|left|paint|paints|painted|make|makes|made)$/.test(verb) &&
+			objWords.length >= 3) continue
 		if (
 			objWords.some(function (w) {
 				return bad(PREP, w) || isAdv(w)
@@ -7023,7 +7160,7 @@ function yodaify() {
   var guardedText = text
     .replace(/\b(?:Mr|Mrs|Ms|Dr|Prof|St|Mt|Gen|Sen|Rep|Gov|Sgt|Capt|Lt|Col|Cmdr|Adm|Rev|Jr|Sr)\./gi,
       function (m) { return m.replace(/\./g, "\u0001") })
-    .replace(/\b(?:U\.S\.A|U\.S|U\.K|E\.U|e\.g|i\.e|a\.k\.a|Ph\.D)\./gi,
+    .replace(/\b(?:U\.S\.A|U\.S|U\.K|U\.N|E\.U|e\.g|i\.e|a\.k\.a|Ph\.D)\./gi,
       function (m) { return m.replace(/\./g, "\u0001") })
     .replace(/\b([ap])\.m\./gi,
       function (m) { return m.replace(/\./g, "\u0001") });
