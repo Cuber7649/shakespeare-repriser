@@ -8,10 +8,130 @@
 //   node tools/test-manifest.mjs
 
 import { readFileSync, existsSync } from 'node:fs';
+import { inflateSync } from 'node:zlib';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
+
+// Minimal decoder for the truecolour+alpha PNGs build-icons.mjs writes. Supports
+// all five row filters so a future change to the painter cannot invalidate the
+// checks silently.
+function decodePng(buf) {
+  if (buf.slice(0, 8).toString('hex') !== '89504e470d0a1a0a') throw new Error('not a PNG');
+  let pos = 8;
+  let w = 0, h = 0, depth = 0, colour = 0;
+  const idat = [];
+  while (pos < buf.length) {
+    const len = buf.readUInt32BE(pos);
+    const kind = buf.toString('ascii', pos + 4, pos + 8);
+    const data = buf.subarray(pos + 8, pos + 8 + len);
+    if (kind === 'IHDR') {
+      w = data.readUInt32BE(0);
+      h = data.readUInt32BE(4);
+      depth = data[8];
+      colour = data[9];
+    } else if (kind === 'IDAT') {
+      idat.push(data);
+    } else if (kind === 'IEND') {
+      break;
+    }
+    pos += 12 + len;
+  }
+  if (depth !== 8 || colour !== 6) throw new Error(`unsupported PNG (depth ${depth}, colour ${colour})`);
+
+  const raw = inflateSync(Buffer.concat(idat));
+  const bpp = 4;
+  const stride = w * bpp;
+  const out = Buffer.alloc(h * stride);
+  for (let y = 0; y < h; y++) {
+    const filter = raw[y * (stride + 1)];
+    const src = raw.subarray(y * (stride + 1) + 1, (y + 1) * (stride + 1));
+    const dst = out.subarray(y * stride, (y + 1) * stride);
+    const prev = y ? out.subarray((y - 1) * stride, y * stride) : null;
+    for (let x = 0; x < stride; x++) {
+      const a = x >= bpp ? dst[x - bpp] : 0;
+      const b = prev ? prev[x] : 0;
+      const c = prev && x >= bpp ? prev[x - bpp] : 0;
+      let v = src[x];
+      if (filter === 1) v += a;
+      else if (filter === 2) v += b;
+      else if (filter === 3) v += (a + b) >> 1;
+      else if (filter === 4) {
+        const p = a + b - c;
+        const pa = Math.abs(p - a), pb = Math.abs(p - b), pc = Math.abs(p - c);
+        v += pa <= pb && pa <= pc ? a : pb <= pc ? b : c;
+      } else if (filter !== 0) {
+        throw new Error(`unsupported row filter ${filter}`);
+      }
+      dst[x] = v & 255;
+    }
+  }
+  return { w, h, data: out };
+}
+
+function checkIcon(rel) {
+  const file = join(ROOT, rel);
+  if (!existsSync(file)) return;
+  let img;
+  try {
+    img = decodePng(readFileSync(file));
+  } catch (e) {
+    no(`${rel}: ${e.message}`);
+    return;
+  }
+
+  const { w, h, data } = img;
+  const cx = (w - 1) / 2;
+  const cy = (h - 1) / 2;
+  const safe = 0.40 * Math.max(w, h) + 1;
+  // The top-left pixel is the intended full-bleed background; comparing every
+  // other pixel against it keeps the test independent of the palette.
+  const bg = [data[0], data[1], data[2]];
+  let transparent = 0;
+  let content = 0;
+  let outside = 0;
+
+  for (let y = 0; y < h; y++) {
+    for (let x = 0; x < w; x++) {
+      const o = (y * w + x) * 4;
+      if (data[o + 3] !== 255) transparent++;
+      const far = Math.abs(data[o] - bg[0]) > 8
+        || Math.abs(data[o + 1] - bg[1]) > 8
+        || Math.abs(data[o + 2] - bg[2]) > 8;
+      if (far) {
+        content++;
+        if (Math.hypot(x - cx, y - cy) > safe) outside++;
+      }
+    }
+  }
+
+  const cornerBad = [[w - 1, 0], [0, h - 1], [w - 1, h - 1]].filter(([x, y]) => {
+    const o = (y * w + x) * 4;
+    return data[o + 3] !== 255
+      || Math.abs(data[o] - bg[0]) > 8
+      || Math.abs(data[o + 1] - bg[1]) > 8
+      || Math.abs(data[o + 2] - bg[2]) > 8;
+  }).length;
+
+  if (transparent) {
+    no(`${rel}: ${transparent} transparent pixel(s); Android masks expose the plate behind them`);
+  } else {
+    ok(`${rel}: fully opaque`);
+  }
+  if (cornerBad) {
+    no(`${rel}: ${cornerBad} corner(s) differ from the top-left background`);
+  } else {
+    ok(`${rel}: background reaches every corner`);
+  }
+  if (!content) {
+    no(`${rel}: no foreground art found above the background colour`);
+  } else if (outside) {
+    no(`${rel}: ${outside} foreground pixel(s) outside the maskable safe zone`);
+  } else {
+    ok(`${rel}: foreground art stays inside the maskable safe zone`);
+  }
+}
 
 let failures = 0;
 const ok = (m) => console.log(`  ok    ${m}`);
@@ -56,6 +176,16 @@ for (const icon of m.icons) {
   }
 }
 ok('declared icon sizes match the actual images');
+
+// --- launcher icons must be opaque and maskable-safe ---------------------------
+// A transparent corner is composited over the launcher's white plate on
+// Android, which is the bug this check exists to prevent. icon-180.png is not
+// in the manifest but is the apple-touch icon, so it is checked too.
+const iconFiles = [...new Set([
+  'icon-180.png',
+  ...m.icons.map((i) => i.src.replace(/^\.\//, '')),
+])];
+for (const rel of iconFiles) checkIcon(rel);
 
 // --- install criteria: needs a 192 and a 512, and a maskable icon ---------------
 const sizes = m.icons.map((i) => i.sizes);

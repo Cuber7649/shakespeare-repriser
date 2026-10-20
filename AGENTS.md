@@ -28,11 +28,13 @@ in `tools/`. Live on GitHub Pages.
      (`npm run build`); copies each page's dictionaries, engine, helpers and
      transform function verbatim so the dashboard cannot drift.
    - `manifest.json`, `icon-180/192/512.png`, `icon.svg` — drawn by
-     `tools/build-icons.mjs` from shared `GEO` constants (round medallion on a
-     square canvas; maskable-safe; SVG is the primary favicon, PNGs are
-     fallback/apple-touch/manifest). `manifest.json` in particular looks
-     hand-written and is not: a direct edit renders, commits, deploys, then
-     vanishes on the next `build-icons` run.
+     `tools/build-icons.mjs` from shared `GEO` constants. The PNGs are
+     full-bleed: opaque navy reaches every edge and the foreground stays
+     inside the maskable safe zone, so an Android launcher mask cannot expose
+     a white plate at the corners. The SVG favicon keeps the round transparent
+     disc. `manifest.json` in particular looks hand-written and is not: a
+     direct edit renders, commits, deploys, then vanishes on the next
+     `build-icons` run.
 3. **`Screenshot.png` is hand-maintained**, not part of the suite. Regenerate
    only deliberately: `node tools/build-screenshot.mjs` (pins Math.random for
    reproducibility, drives headless Edge over CDP, waits for webfonts, skips

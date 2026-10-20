@@ -33,7 +33,7 @@ also runs directly, e.g. `node tools/verify-dashboard.mjs`.
 | `test-engine.mjs` | Compares the single-pass engine against the old chain |
 | `test-content.mjs` | Family-friendly word lists, no servitude roasts, no duplicates |
 | `test-yoda.mjs` | Object/copular fronting, grammar gate, strict object guard, seeded seed-42 outputs |
-| `test-manifest.mjs` | Installability criteria, declared icon sizes vs real PNG bytes, launcher shortcuts (optional) |
+| `test-manifest.mjs` | Installability criteria, declared icon sizes vs real PNG bytes, opaque corners and maskable safe zone, launcher shortcuts (optional) |
 | `test-reproducible.mjs` | Generated output is pure LF and rebuilds byte-identically |
 | `test-links.mjs` | Every local href resolves; all pages share one switcher |
 | `check-css.mjs` | Brace balance, one `prefers-reduced-motion` block per file, real `<label for>` wiring |

@@ -20,9 +20,12 @@ const PARCH = [0xf4, 0xe8, 0xcd];
 const hex = (rgb) => '#' + rgb.map((v) => v.toString(16).padStart(2, '0')).join('');
 
 // Icon geometry as fractions of the canvas, shared by the PNG painter below
-// and the SVG writer so the two renditions cannot drift apart. The dark disc
-// is round with a transparent background; ring, lozenge and shaft stay inside
-// the maskable safe zone (radius 0.40) so cropped launch icons lose nothing.
+// and the SVG writer so the medallion cannot drift between them. The PNGs are
+// full-bleed: the navy background reaches every edge, because a transparent
+// corner is composited over the launcher's white plate on Android and shows
+// as a white wedge inside the mask. Foreground art stays inside the maskable
+// safe zone (radius 0.40) so cropping loses nothing. `disc` applies only to
+// the SVG favicon, which keeps a round transparent plate.
 const GEO = {
   disc: 0.47,
   ringInner: 0.335,
@@ -64,7 +67,7 @@ function png(width, height, rgba) {
   ihdr.writeUInt32BE(width, 0);
   ihdr.writeUInt32BE(height, 4);
   ihdr[8] = 8;   // bit depth
-  ihdr[9] = 6;   // colour type: truecolour + alpha (the disc floats on transparent corners)
+  ihdr[9] = 6;   // colour type: truecolour + alpha (every pixel we write is opaque)
   const raw = Buffer.alloc(height * (1 + width * 4));
   for (let y = 0; y < height; y++) {
     const rowStart = y * (1 + width * 4);
@@ -79,14 +82,13 @@ function png(width, height, rgba) {
   ]);
 }
 
-// A round dark disc (antialiased edge, transparent outside), a thin gold ring
-// and a centred gold lozenge with a cream shaft standing in for a quill.
-// Maskable icons get cropped to a circle inscribed in the middle 80%, so all
-// content stays within r <= 0.38.
+// A full-bleed navy square with a thin gold ring and a centred gold lozenge
+// whose cream shaft stands in for a quill. Maskable icons get cropped by the
+// launcher, so only the ring and lozenge need to stay within r <= 0.38; the
+// background intentionally runs to the canvas edge. No pixel is transparent.
 function draw(size) {
   const img = Buffer.alloc(size * size * 4);
   const c = (size - 1) / 2;
-  const discR = size * GEO.disc;
   const ringInner = size * GEO.ringInner;
   const ringOuter = size * GEO.ringOuter;
   const lozengeR = size * GEO.lozenge;
@@ -100,21 +102,17 @@ function draw(size) {
       const r = Math.hypot(dx, dy);
       const diamond = Math.abs(dx) + Math.abs(dy);
 
-      let col = null;
-      const cover = Math.max(0, Math.min(1, discR - r + 0.5));
-      if (cover > 0) col = [BG[0], BG[1], BG[2], Math.round(cover * 255)];
+      let col = [BG[0], BG[1], BG[2], 255];
       if (r >= ringInner && r <= ringOuter) col = [GOLD[0], GOLD[1], GOLD[2], 255];
       if (diamond <= lozengeR) col = [GOLD[0], GOLD[1], GOLD[2], 255];
       if (Math.abs(dx - dy) <= shaftHalf && diamond <= lozengeR) col = [PARCH[0], PARCH[1], PARCH[2], 255];
       if (Math.hypot(dx - size * GEO.nibDx, dy - size * GEO.nibDy) <= nibR) col = [PARCH[0], PARCH[1], PARCH[2], 255];
 
       const o = (y * size + x) * 4;
-      if (col) {
-        img[o] = col[0];
-        img[o + 1] = col[1];
-        img[o + 2] = col[2];
-        img[o + 3] = col[3];
-      }
+      img[o] = col[0];
+      img[o + 1] = col[1];
+      img[o + 2] = col[2];
+      img[o + 3] = col[3];
     }
   }
   return img;
