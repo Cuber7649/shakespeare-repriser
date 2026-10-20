@@ -134,6 +134,63 @@ const CORE = [
     'I want to find the truly great treasure today'],
   ['The dog wants to chase the cat.', 'The dog wants to pursue the cat.'],
   ['The dog chased the cat up the tree.', 'The dog pursued the cat up the tree.'],
+
+  // Intransitives, ditransitives and complex objects must not be reversed
+  // ("Smiled, Luke Skywalker.", "Him go, I made.").
+  ['Luke Skywalker smiled.', 'Luke Skywalker smiled.'],
+  ['The Sith Lord fell.', 'The Sith Lord fell.'],
+  ['The Clone Wars began.', 'The Clone Wars began.'],
+  ['The droid army advanced.', 'The droid army advanced.'],
+  ['She told me a story.', 'She told me a story.'],
+  ['I gave him the book.', 'I gave him the tome.'],
+  ['I made him go.', 'I made him go.'],
+  ['She found the droid broken.', 'She found the droid shattered.'],
+  ['He painted the door red.', 'He painted the door red.'],
+  ['I attended the meeting.', 'The meeting, I attended.'],
+  ['The farmer planted the seed.', 'The seed, the farmer planted.'],
+  ['I set the table.', 'The table, I set.'],
+  ['I heard the song.', 'The song, I heard.'],
+
+  // Negative questions put the auxiliary first; negative statements keep
+  // their order.
+  ["Isn't it a trap?", 'Is it not a trap?'],
+  ["Don't you know?", 'Do you not comprehend?'],
+  ['Why isn\u2019t it working?', 'Why is it not working?'],
+  ["You like it, aren't you?", 'You like it, are you not?'],
+  ['I am not you.', 'I am not you.'],
+
+  // "'s" is "has" and "'d" is "had" before a participle; elsewhere the table
+  // keeps "is"/"would".
+  ["It's been a long day.", 'It has been a long day.'],
+  ["I'd been waiting for hours.", 'I had been waiting for hours.'],
+  ["They'd already left.", 'They had already left.'],
+  ["You'd better go.", 'You had better go.'],
+  ["He's gone.", 'He is gone.'],
+  ["I'd like to go.", 'I would like to go.'],
+
+  // Tense the word table cannot see on its own.
+  ['I put the book there.', 'I placed the tome there.'],
+  ['She put on her cloak.', 'She donned her cloak.'],
+  ['I kept walking.', 'I kept walking.'],
+  ['I left the book.', 'The tome, I left.'],
+  ['The battle has been won.', 'The battle has been won.'],
+
+  // Splitting: abbreviations, decimals, ellipses, quoted ends and initialisms.
+  ['Dr. Jones knows the truth.', 'Dr. Jones comprehends the truth.'],
+  ['The ship costs 3.5 credits.', 'The ship costs 3.5 credits.'],
+  ['Well...', 'Well...'],
+  ['The party starts at 5 p.m. tonight.', 'The party starts at 5 p.m. tonight.'],
+  ['He said "Go." Then left.', 'He said "Go." Then left.'],
+  ['The U.S. is strong.', 'The U.S. is powerful.'],
+
+  // Titles the adjective table used to recase or rewrite.
+  ['Old Ben is wise.', 'Wise, Old Ben is.'],
+  ['The Old Republic fell.', 'The Old Republic fell.'],
+  ['A New Hope.', 'A New Hope.'],
+
+  // Idioms.
+  ['What do you think about it?', 'What think you of it?'],
+  ['Do I have to go?', 'Must I go?'],
 ];
 
 for (const [input, want] of CORE) {
@@ -180,6 +237,54 @@ console.log('\nobject guard (seed 42)');
   const out = yoda.transform('I want to find the really big treasure today', SEED);
   if (!/^To /.test(out)) ok(`long infinitive phrase left in order: ${JSON.stringify(out)}`);
   else no(`fronted a >5-word infinitive: ${JSON.stringify(out)}`);
+}
+
+// --- punctuation and flourish invariants (defaults on) -----------------------
+
+console.log('\npunctuation and flourish invariants (seeds 1-60)');
+
+// Inserted flourishes must not stack punctuation ("fought., clouded by fear,
+// you are!"), double up "like as calm as ...", or crush an ellipsis to "..".
+// Questions must never keep the raw contraction order "is not it".
+{
+  const INPUTS = [
+    'The brave young Jedi fought the dark lord.',
+    'I like pie.',
+    'The sky is blue.',
+    'Well...',
+  ];
+  const QUESTIONS = [
+    "Isn't it a trap?",
+    "Don't you know?",
+    'Why isn\u2019t it working?',
+    "Aren't you ready?",
+  ];
+  const problems = [];
+  for (let seed = 1; seed <= 60; seed++) {
+    for (const input of INPUTS) {
+      const out = yoda.transform(input, seed);
+      if (out.includes('.,')) problems.push(`stray ".," (seed ${seed}): ${out}`);
+      if (out.includes('!,') || out.includes('?,')) problems.push(`stray ", after !?" (seed ${seed}): ${out}`);
+      if (out.includes('like as')) problems.push(`"like as" (seed ${seed}): ${out}`);
+      if (/[a-z],[a-z]/.test(out)) problems.push(`fused comma (seed ${seed}): ${out}`);
+      const runs = out.match(/\.+/g) || [];
+      if (runs.some((r) => r.length === 2)) problems.push(`double period (seed ${seed}): ${out}`);
+    }
+    for (const input of QUESTIONS) {
+      const out = yoda.transform(input, seed);
+      if (/\bnot (i|you|we|they|he|she|it)\b/i.test(out)) {
+        problems.push(`"not <subject>" order (seed ${seed}): ${out}`);
+      }
+    }
+    const won = yoda.transform('The battle has been won.', seed);
+    if (/been triumphed/.test(won)) problems.push(`passive "been triumphed" (seed ${seed}): ${won}`);
+  }
+  if (problems.length) {
+    no(`${problems.length} punctuation/flourish problem(s)`);
+    for (const p of problems.slice(0, 8)) console.log(`        ${p}`);
+  } else {
+    ok('no stray punctuation, "like as", double periods, or raw negative questions');
+  }
 }
 
 // --- long inputs: words are reordered, never dropped or doubled --------------

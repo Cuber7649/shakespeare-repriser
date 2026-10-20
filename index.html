@@ -5600,7 +5600,12 @@ const commonWords = [
   [/\byears old\b/gi,"years old"],[/\byear old\b/gi,"year old"],
   [/\bstrong with\b/gi,"strong with"],[/\bstrong in\b/gi,"strong in"],
   [/\bhappy to\b/gi,"glad to"],
-  [/\bwonderfully\b/gi,"very wonderful"]
+  [/\bwonderfully\b/gi,"very wonderful"],
+  // Titles and names the adjective table would otherwise recase or rewrite
+  // ("Ancient Ben", "the ancient Republic", "A new Hope").
+  [/\bold ben\b/gi,"Old Ben"],
+  [/\bold republic\b/gi,"Old Republic"],
+  [/\bnew hope\b/gi,"New Hope"]
 ];
 const verbs = [
 	// Movement
@@ -5685,6 +5690,15 @@ const verbs = [
 	[/\bteach\b/gi, "teach"],
 	[/\btaught\b/gi, "taught"],
 	[/\bwin\b/gi, "triumph"],
+	// "been/is/was won" is passive; "won" as a participle cannot become
+	// "triumphed" ("has been triumphed"). Active forms keep the mapping.
+	[/\bbeen won\b/gi, "been won"],
+	[/\bbeing won\b/gi, "being won"],
+	[/\bbe won\b/gi, "be won"],
+	[/\bis won\b/gi, "is won"],
+	[/\bare won\b/gi, "are won"],
+	[/\bwas won\b/gi, "was won"],
+	[/\bwere won\b/gi, "were won"],
 	[/\bwon\b/gi, "triumphed"],
 	[/\blose\b/gi, "lose"],
 	[/\bstop\b/gi, "cease"],
@@ -5715,6 +5729,19 @@ const verbs = [
 	[/\bgot\b/gi, "got"],
 	[/\bgets\b/gi, "gets"],
 	[/\bput\b/gi, "place"],
+	// "put" is also the past tense and the perfect participle. Imperatives
+	// ("Put the book down") keep "place"; pronoun subjects and perfect
+	// auxiliaries take the past form.
+	[/\bi put\b/gi, "I placed"],
+	[/\byou put\b/gi, "you placed"],
+	[/\bwe put\b/gi, "we placed"],
+	[/\bthey put\b/gi, "they placed"],
+	[/\bhe put\b/gi, "he placed"],
+	[/\bshe put\b/gi, "she placed"],
+	[/\bit put\b/gi, "it placed"],
+	[/\bhas put\b/gi, "has placed"],
+	[/\bhave put\b/gi, "have placed"],
+	[/\bhad put\b/gi, "had placed"],
 	[/\bmake\b/gi, "make"],
 	[/\bmade\b/gi, "made"],
 	[/\bwork\b/gi, "work"],
@@ -5724,7 +5751,11 @@ const verbs = [
 	[/\bstay\b/gi, "stay"],
 	[/\bstayed\b/gi, "stayed"],
 	[/\bleave\b/gi, "depart"],
-	[/\bleft\b/gi, "departed"],
+	// "left" alone is ambiguous (depart a place / leave an object behind), so
+	// only the perfect forms where it can only mean "departed" are mapped.
+	[/\bhas left\b/gi, "has departed"],
+	[/\bhave left\b/gi, "have departed"],
+	[/\bhad left\b/gi, "had departed"],
 	[/\bhide\b/gi, "hide"],
 	[/\bhid\b/gi, "hid"],
 	[/\bhidden\b/gi, "hidden"],
@@ -5933,6 +5964,8 @@ const sentenceTransforms = [
   // turned statements and subordinate clauses into questions. Reordering now
   // happens in frontObject()/frontInfinitive(), and optional inversion in
   // maybeInvert(), where it can be limited to plain short statements.
+  [/\bwhat do you think about\b/gi,"what think you of"],
+  [/\bwhat do you think of\b/gi,"what think you of"],
   [/\bwhat do you think\b/gi,"think, what do you"],
   [/\bwhat do you mean\b/gi,"mean, what do you"],
   [/\bhow's it going\b/gi,"how goes it"],
@@ -5953,6 +5986,14 @@ const sentenceTransforms = [
   [/\bi'd like to\b/gi,"I would like to"],
   [/\bi have to\b/gi,"I must"],
   [/\bi've got to\b/gi,"I must"],
+  [/\bdo i have to\b/gi,"must I"],
+  [/\bdo you have to\b/gi,"must you"],
+  [/\bdo we have to\b/gi,"must we"],
+  [/\bdo they have to\b/gi,"must they"],
+  [/\bdoes he have to\b/gi,"must he"],
+  [/\bdoes she have to\b/gi,"must she"],
+  [/\bdoes it have to\b/gi,"must it"],
+  [/\bdo have to\b/gi,"must"],
   [/\bi'm going to\b/gi,"I am going to"],
   [/\bi can't\b/gi,"I cannot"],[/\bi can not\b/gi,"I cannot"]
 ];
@@ -6098,7 +6139,7 @@ function maybeAddMetaphor(text) {
   if (!chance(0.06)) return text;
   let commaIdx = text.indexOf(',');
   if (commaIdx < 0 || commaIdx > text.length - 10) return text;
-  let metaphor = "like " + pick(metaphors);
+  let metaphor = pick(metaphors);
   let after = text.substring(commaIdx + 1).replace(/^\s+/, "");
   return text.substring(0, commaIdx + 1) + " " + metaphor + "," + (after ? " " + after : "");
 }
@@ -6111,6 +6152,9 @@ function maybeInsertQuote(text) {
 function maybeInsertInsult(text) {
   if (!chance(0.05)) return text;
   var insult = pick(insults);
+  // Drop the sentence-ending stop: appending after "fought." used to leave
+  // "fought., clouded by fear, you are!".
+  if (/[.!?]$/.test(text)) return text.replace(/[.!?]+$/, "") + ", " + insult + "!";
   return text + ", " + insult + "!";
 }
 
@@ -6164,12 +6208,125 @@ function maybeAddParenthetical(text) {
 function transformParagraph(para, opts) {
   var light = opts.intensity === 'light';
   var chScale = light ? 0.5 : opts.intensity === 'dramatic' ? 1.5 : 1;
-  let sentences = para.match(/[^.!?]*[.!?]+|[^.!?]+/g) || [para];
+
+  // Sentence splitter that keeps abbreviations ("Dr. Jones"), decimals
+  // ("3.5 credits") and quoted sentence ends (`He said "Go." Then...`)
+  // together. The placeholders are non-token characters, so the reorder and
+  // replacement passes ignore them; they are restored per sentence below.
+  var splitSentences = function (text) {
+    var guarded = text
+      .replace(/\b(?:Mr|Mrs|Ms|Dr|Prof|St|Mt|Gen|Sen|Rep|Gov|Sgt|Capt|Lt|Col|Cmdr|Adm|Rev|Jr|Sr)\./gi,
+        function (m) { return m.replace(/\./g, "\u0001") })
+      .replace(/\b(?:U\.S\.A|U\.S|U\.K|E\.U|e\.g|i\.e|a\.k\.a|Ph\.D)\./gi,
+        function (m) { return m.replace(/\./g, "\u0001") })
+      .replace(/(\d)\.(\d)/g, "$1\u0002$2")
+      .replace(/\b([ap])\.m\./gi, function (m) { return m.replace(/\./g, "\u0001") })
+      .replace(/([.!?])(["'\u2019\u201d])/g, function (m, punct, quote) {
+        var mark = punct === "." ? "\u0003" : punct === "!" ? "\u0004" : "\u0005"
+        return mark + quote
+      })
+    var parts = guarded.match(/[^.!?]*[.!?]+|[^.!?]+/g) || [guarded]
+    return parts.map(function (p) {
+      return p.replace(/\u0001/g, ".").replace(/\u0002/g, ".")
+        .replace(/\u0003/g, ".").replace(/\u0004/g, "!").replace(/\u0005/g, "?")
+    })
+  }
+
+  // The word table expands "'s" to "is" and "'d" to "would" everywhere. Two
+  // contexts need the other auxiliary: "'s" is "has" before a participle
+  // ("It's been", "He's gone") and "'d" is "had" before "better", "been",
+  // "already"/"just" or a participle ("They'd already left"). The
+  // contractions that cannot mean anything else are expanded before the
+  // parser so "You're brave" fronts like "You are brave".
+  var expandContractions = function (s) {
+    // Pasted text often uses a curly apostrophe ("isn’t"), which the word
+    // tables do not know. Normalise it only between letters so quotation
+    // marks are untouched.
+    s = s.replace(/(\w)\u2019(\w)/g, "$1'$2")
+    s = s.replace(/\b(you|we|they)'re\b/gi, "$1 are")
+    s = s.replace(/\bi'm\b/gi, "I am")
+
+    var hasPart = (
+      "been|got|had|seen|made|taken|given|come|won|lost|found|kept|left|done|" +
+      "written|spoken|chosen|driven|eaten|slept|stood|sat|brought|bought|caught|" +
+      "taught|held|paid|heard|felt|thought|told|said|shown|grown|known|fallen|" +
+      "risen|thrown|worn|torn|broken|put|set|run"
+    )
+    var hadPart = (
+      "been|better|already|just|got|gone|seen|made|taken|given|won|lost|found|" +
+      "kept|left|done|written|spoken|chosen|driven|eaten|slept|stood|sat|brought|" +
+      "bought|caught|taught|held|paid|heard|felt|thought|told|said|shown|grown|" +
+      "known|fallen|risen|thrown|worn|torn|broken"
+    )
+    s = s.replace(new RegExp("\\b(i|you|we|they|he|she|who)'s (" + hasPart + ")\\b", "gi"), "$1 has $2")
+    s = s.replace(/\b(it|there)'s (been|got|had|come|happened|seen)\b/gi, "$1 has $2")
+    s = s.replace(new RegExp("\\b(i|you|we|they|he|she|who)'d (" + hadPart + ")\\b", "gi"), "$1 had $2")
+    s = s.replace(/\b(it|there)'d been\b/gi, "$1 had been")
+    return s
+  }
+
+  // "put on" is a phrasal verb with its own past form, which the word table
+  // cannot see ("She put on her cloak" -> "She placed on her cloak"). Keep
+  // the figurative uses; past narrative and perfect take "donned", a modal,
+  // "to" or a bare-infinitive object takes "don", and the imperative keeps
+  // the table's "place" ("Put on your helmet" -> "Place on your helmet").
+  var fixPutOn = function (s) {
+    return s.replace(/\bput on\b/gi, function (m, off, whole) {
+      var after = whole.slice(off + m.length)
+      if (/^\s+(a show|a play|a performance|an act|a brave face|weight|airs|the style|the map|the pressure)\b/i.test(after)) return m
+      var before = whole.slice(0, off).replace(/\s+$/, "")
+      if (off === 0 || /[,!?:;]$/.test(before)) return m
+      var last = (before.match(/(\w+)$/) || [])[1] || ""
+      if (/^(will|would|shall|should|can|could|may|might|must|to|do|does|did|let|please|me|us|him|her|them)$/.test(last.toLowerCase())) return "don"
+      return "donned"
+    })
+  }
+
+  // A negative question expands from the word table as "is not it" /
+  // "do not you". English wants the auxiliary first and "not" after the
+  // subject: "Isn't it a trap?" -> "Is it not a trap?". Only the
+  // sentence-initial, after-comma (tag question), after-quote and after a
+  // leading conjunction/wh-word positions invert; "I am not you" keeps its
+  // order.
+  var leadPosition = function (whole, off) {
+    if (off === 0) return true
+    var before = whole.slice(0, off)
+    // RegExp objects, not literals: the dashboard extractor only tracks
+    // regex literals that follow `(`/`=`/`,` and a literal here would break
+    // its brace counter.
+    if (new RegExp("[.!?]\\s+$").test(before)) return true
+    if (new RegExp("[,;:]\\s*$").test(before)) return true
+    if (new RegExp("[\"'‘’“”]\\s*$").test(before)) return true
+    return new RegExp("\\b(and|but|or|so|yet|then|why|how|what|where|when|who)\\s+$", "i").test(before)
+  }
+  var fixNegativeQuestions = function (s) {
+    s = s.replace(
+      /\b(is|are|was|were|do|does|did|will|would|should|could|can|must|have|has|had) not (i|you|we|they|he|she|it|there)\b/gi,
+      function (m, aux, subj, off, whole) {
+        if (!leadPosition(whole, off)) return m
+        if (/^are$/i.test(aux) && /^i$/i.test(subj)) return "am I not"
+        return aux + " " + subj + " not"
+      }
+    )
+    s = s.replace(
+      /\bcannot (i|you|we|they|he|she|it|there)\b/gi,
+      function (m, subj, off, whole) {
+        if (!leadPosition(whole, off)) return m
+        if (/^i$/i.test(subj)) return "am I not"
+        return "can " + subj + " not"
+      }
+    )
+    return s
+  }
+
+  let sentences = splitSentences(para);
   let kept = [];
 
   for (let s of sentences) {
     s = s.trim();
     if (!s) continue;
+    s = expandContractions(s);
+    s = fixPutOn(s);
 
     // Reorder the user's own words first, so the parser and the word table
     // see the words that were typed. Everything added below is prepended or
@@ -6181,6 +6338,7 @@ function transformParagraph(para, opts) {
 
     // Single left-to-right pass, longest match wins
     s = replaceAll(reordered);
+    s = fixNegativeQuestions(s);
 
     // These land on the first comma or inside the sentence; a reordered
     // sentence already carries a comma that marks its fronted phrase.
@@ -6291,7 +6449,7 @@ function frontObject(sentence) {
 		"too just again away back already still maybe perhaps together alone fast hard " +
 		"straight almost only even quite rather actually today tonight tomorrow " +
 		"yesterday here there now then soon early late well ever once twice else hence " +
-		"thus therefore anyway somehow somewhere"
+		"thus therefore anyway somehow somewhere forever"
 	).split(" ")
 	var ADJ = (
 		"big small old new young good bad happy sad angry tired brave bright " +
@@ -6323,6 +6481,100 @@ function frontObject(sentence) {
 	var bad = function (list, w) {
 		return list.indexOf(w) >= 0
 	}
+
+	// Irregular verb forms the style table does not cover, so the parser can
+	// still tell "The Sith Lord fell" from "The Sith Lord ... an object".
+	var IRREG = (
+		"am is are was were be been being have has had do does did will would shall should " +
+		"can could may might must ought go goes went gone come comes came get gets got gotten " +
+		"give gives gave given take takes took taken make makes made see sees saw seen know knows " +
+		"knew known think thinks thought feel feels felt find finds found tell tells told say says " +
+		"said speak speaks spoke spoken run runs ran fall falls fell fallen rise rises rose risen " +
+		"meet meets met begin begins began begun win wins won fight fights fought bring brings " +
+		"brought buy buys bought catch catches caught teach teaches taught hold holds held keep " +
+		"keeps kept leave leaves left lose loses lost pay pays paid read reads write writes wrote " +
+		"written drink drinks drank drunk eat eats ate eaten sleep sleeps slept stand stands stood " +
+		"break broke broken choose chose chosen draw drew drawn drive drove driven forget forgot " +
+		"forgotten forgive forgave forgiven freeze froze frozen hide hid hidden ride rode ridden " +
+		"shake shook shaken shine shone shoot shot steal stole stolen swear swore sworn wear wore " +
+		"worn tear tore torn wake woke woken fly flew flown grow grew grown throw threw thrown " +
+		"blow blew blown beat beaten bite bit bitten bleed bled creep crept dig dug feed fed flee " +
+		"fled fling flung hang hung lend lent lie lay lain light lit ring rang rung seek sought " +
+		"shrink shrank shrunk sing sang sung sink sank sunk slide slid speed sped spin spun spit " +
+		"spat split spread stick stuck sting stung strike struck sweep swept swim swam swum swing " +
+		"swung weep wept wind wound cut cuts hear hears heard send sends sent sell sells sold " +
+		"build builds built understand understands understood spend spends spent lead leads led " +
+		"lay lays laid quit quits spring springs sprang sprung " +
+		"sit sits sat set sets let lets put puts cost costs become becomes became seem seems seemed"
+	).split(" ")
+	var NEG_CONTRACTIONS = (
+		"shouldn't wouldn't couldn't mustn't can't cannot won't don't doesn't didn't isn't aren't " +
+		"wasn't weren't haven't hasn't hadn't needn't mightn't"
+	).split(" ")
+	// Common base verbs ("The Jedi protect the galaxy") that carry no ending
+	// and are absent from IRREG. A lower-case candidate outside this list is
+	// read as a noun, which stops "the droid army advanced" from fronting.
+	var BASE_VERBS = (
+		"accept admire agree answer arrive ask attack believe belong break build call carry " +
+		"change chase choose clean close command complete continue create defend destroy discover " +
+		"draw drive endure enjoy enter explain fear finish fix fly follow forget forgive gather " +
+		"grab grow hate heal hear help hide hit hope hunt hurt increase join kill learn lift like " +
+		"listen live look love march mean move need notice open pass place play plot prepare " +
+		"protect pull push refuse regret remember repair reply rescue rest return rule save search " +
+		"sense sell send serve shake shine shoot show shut sing smile spend start stay stop study " +
+		"suffer survive talk train travel turn understand use wait wake walk want warn wash watch " +
+		"allow bake blame care cheat climb compare consider cook cry dare deliver deny deserve " +
+		"discuss drag drop escape expect explore fetch greet intend knock laugh mend mention " +
+		"offer paint praise prefer promise protest sail stare suggest swear thank visit wander " +
+		"wear wish wonder work worry yell"
+	).split(" ")
+
+	var isVerbWord = function (i) {
+		var w = lower[i]
+		// A capitalised word inside the sentence is a proper noun or a title,
+		// never a verb ("...Vader commands"). The first word keeps its capital
+		// and is judged by the tables.
+		if (i > 0 && /^[A-Z]/.test(words[i]) && words[i] !== "I") return false
+		if (bad(AUX, w) || bad(COPULA, w) || bad(NEG_CONTRACTIONS, w)) return true
+		if (IRREG.indexOf(w) >= 0 || BASE_VERBS.indexOf(w) >= 0) return true
+		return /(ed|ing|es|s)$/.test(w)
+	}
+	// A stronger signal, for words that follow a noun: past participles,
+	// gerunds and irregular/base verbs ("the droid running", "the sun set").
+	var isStrongVerbWord = function (i) {
+		var w = lower[i]
+		if (i > 0 && /^[A-Z]/.test(words[i]) && words[i] !== "I") return false
+		if (bad(AUX, w) || bad(COPULA, w)) return true
+		if (IRREG.indexOf(w) >= 0 || BASE_VERBS.indexOf(w) >= 0) return true
+		return /(ed|ing)$/.test(w) && !/[e]ed$/.test(w)
+	}
+	// A valid object is a single noun phrase. Two determiners ("the droid a
+	// message"), a pronoun plus more words ("me a story", "him go"), an
+	// adjective ending ("the door red") or a verb form after a noun ("the
+	// droid running", "the sun set") mean a ditransitive, a complex object or
+	// a longer noun phrase was misread; fronting those garbles the sentence.
+	var validObjectNP = function (ws, start) {
+		if (ws.length === 1) return true
+		if (bad(PRON, ws[0])) return false
+		var detCount = 0
+		for (var k = 0; k < ws.length; k++) {
+			if (bad(DET, ws[k]) || bad(PRON, ws[k])) detCount++
+		}
+		if (detCount > 1) return false
+		// Only the adjective table, not the suffix heuristic: "the table" and
+		// "the cable" end in -able but are nouns.
+		if (bad(ADJ, ws[ws.length - 1])) return false
+		if (isStrongVerbWord(start + ws.length - 1)) {
+			var prev = ws[ws.length - 2]
+			if (!bad(DET, prev) && !bad(PRON, prev)) {
+				// "the warm morning" and "the old building" are nouns with
+				// adjectives; "the droid running" and "the stars falling" are
+				// noun + verb.
+				if (!isAdj(prev) || detCount === 0) return false
+			}
+		}
+		return true
+	}
 	// The subject lands mid-sentence after fronting, so determiners, pronouns
 	// and adjectives need a lower-case first letter: "The sky is blue" ->
 	// "Blue, the sky is", not "Blue, The sky is". Proper nouns keep their case.
@@ -6333,13 +6585,17 @@ function frontObject(sentence) {
 			first !== "i" &&
 			(bad(DET, first) || bad(PRON, first) || isAdj(first))
 		) {
-			s = s.charAt(0).toLowerCase() + s.slice(1)
+			// Skip a leading quote so the capital falls on "The", not the
+			// quote itself: `"The sky ...` -> `"the sky ...`.
+			var q = s.match(/^["'‘’“”]+/)
+			var at = q ? q[0].length : 0
+			s = s.slice(0, at) + s.charAt(at).toLowerCase() + s.slice(at + 1)
 		}
 		return s
 	}
 
 	// Try to find a plausible subject length (1 to 4 words)
-	for (var len = Math.min(4, words.length - 2); len >= 1; len--) {
+	for (var len = Math.min(4, words.length - 1); len >= 1; len--) {
 		var first = lower[0]
 		var last = lower[len - 1]
 		var subjectOk
@@ -6384,6 +6640,10 @@ function frontObject(sentence) {
 				// predicate: "It is what it is" must stay put.
 				var badComp =
 					bad(PREP, c0) || bad(CONJ, c0) || bad(NEG, c0) || bad(WH, c0)
+				// "be going to + verb" is the future auxiliary, not a
+				// frontable complement: "I am going to leave" must not
+				// become "Going to leave, I am".
+				if (c0 === "going" && compWords[1] === "to") badComp = true
 				if (!badComp) {
 					var comp = words.slice(len + 1).join(" ")
 					return comp + ", " + subjectText(len) + " " + verb + tail
@@ -6395,6 +6655,12 @@ function frontObject(sentence) {
 		// "I like pie" -> "Pie, I like"
 		// Modals and auxiliaries are excluded: "You should rest" and
 		// "You cannot escape" have no object to front.
+		// The candidate must look like a verb. A lower-case word with no verb
+		// ending that the tables do not know is probably a noun ("the droid
+		// army advanced"), and a capitalised mid-sentence word is a name
+		// ("The Sith Lord Vader commands").
+		if (!isVerbWord(len)) continue
+
 		var verbOk =
 			verb === "like"
 				? bad(PRON, first)
@@ -6409,6 +6675,23 @@ function frontObject(sentence) {
 			})
 		)
 			continue
+
+		// "I kept walking" is a catenative phrase, not verb + object: the
+		// gerund cannot stand alone after fronting.
+		if (
+			/^(keep|keeps|kept|start|starts|started|begin|begins|began|stop|stops|stopped|finish|finishes|finished)$/.test(verb) &&
+			objWords.length === 1 &&
+			/ing$/.test(objWords[0])
+		)
+			continue
+
+		var firstObj = objWords[0]
+		var clauseObject =
+			bad(WH, firstObj) ||
+			firstObj === "that" ||
+			(objWords.length > 1 && bad(AUX, objWords[1]))
+		if (firstObj === "if") continue
+		if (!clauseObject && !validObjectNP(objWords, len + 1)) continue
 
 		var obj = words.slice(len + 1).join(" ")
 		return obj + ", " + subjectText(len) + " " + words[len] + tail
@@ -6464,7 +6747,9 @@ function yodaify() {
   // Cleanups
   text = text.replace(/\s+([.,!?;:])/g, "$1");
   text = text.replace(/,\s*,/g, ",");
-  text = text.replace(/\.\s*\./g, ".");
+  text = text.replace(/\.(?:\s*\.)+/g, function (m) {
+    return m.replace(/\s+/g, "") === ".." ? "." : m;
+  });
   text = text.replace(/!\s*!/g, "!");
   text = text.replace(/\?\s*\?/g, "?");
   
@@ -6475,8 +6760,17 @@ function yodaify() {
   
   text = text.replace(/\bi\b/g, "I");
 
-  // Capitalise first letter of each sentence
-  text = text.replace(/(^\s*|[.!?]+\s+)([a-z])/g, (m, p1, p2) => p1 + p2.toUpperCase());
+  // Capitalise first letter of each sentence, but not after an abbreviation:
+  // "the party starts at 5 p.m. tonight" must not become "... p.m. Tonight".
+  var guardedText = text
+    .replace(/\b(?:Mr|Mrs|Ms|Dr|Prof|St|Mt|Gen|Sen|Rep|Gov|Sgt|Capt|Lt|Col|Cmdr|Adm|Rev|Jr|Sr)\./gi,
+      function (m) { return m.replace(/\./g, "\u0001") })
+    .replace(/\b(?:U\.S\.A|U\.S|U\.K|E\.U|e\.g|i\.e|a\.k\.a|Ph\.D)\./gi,
+      function (m) { return m.replace(/\./g, "\u0001") })
+    .replace(/\b([ap])\.m\./gi,
+      function (m) { return m.replace(/\./g, "\u0001") });
+  guardedText = guardedText.replace(/(^\s*|[.!?]+\s+)([a-z])/g, (m, p1, p2) => p1 + p2.toUpperCase());
+  text = guardedText.replace(/\u0001/g, ".");
 
   // Fix double spaces
   text = text.replace(/  +/g, " ");
