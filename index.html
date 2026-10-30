@@ -675,6 +675,26 @@
     color: #5c4530;
     min-width: 5.5em;
   }
+  .options-seed {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1rem;
+    color: #5c4530;
+    background: #fdf6e3;
+    border: 1.5px solid #c4a265;
+    border-radius: 8px;
+    padding: 4px 10px;
+    width: 9em;
+  }
+  .options-seed:focus-visible {
+    outline: 2px solid #d4a056;
+    outline-offset: 2px;
+  }
+  .options-hint {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.85rem;
+    font-style: italic;
+    color: #7a6248;
+  }
   .options-checks {
     display: flex;
     flex-wrap: wrap;
@@ -1178,7 +1198,7 @@
 
 <div class="container">
   <header class="header">
-    <span class="quill">&#128396;</span>
+    <span class="quill" aria-hidden="true">&#128396;</span>
     <h1>Text Repriser Collection</h1>
     <p class="subtitle">Six styles, side by side</p>
   </header>
@@ -1186,7 +1206,7 @@
   <div class="divider">&#10045; Anno Domini MDLXIV &#10045;</div>
 
   <div class="card">
-    <label class="card-label" for="input"><span class="icon">&#9998;</span> Modern English</label>
+    <label class="card-label" for="input"><span class="icon" aria-hidden="true">&#9998;</span> Modern English</label>
     <textarea id="input" placeholder="Type thy modern words here, good merchant..."></textarea>
     <div class="char-count"><span id="charCount">0</span> characters inscribed</div>
   </div>
@@ -1197,6 +1217,11 @@
       <label class="options-label" for="optIntensity">Intensity</label>
       <input type="range" id="optIntensity" class="options-range" min="0" max="2" step="1" value="1">
       <span class="options-intensity" id="optIntensityValue">Balanced</span>
+    </div>
+    <div class="options-row">
+      <label class="options-label" for="optSeed">Seed</label>
+      <input type="text" id="optSeed" class="options-seed" inputmode="numeric" autocomplete="off" placeholder="Random" aria-describedby="optSeedHint">
+      <span class="options-hint" id="optSeedHint">Optional; the same seed replays a run</span>
     </div>
     <div class="options-checks">
       <label class="options-check"><input type="checkbox" id="optOpenings" checked> Opening phrases</label>
@@ -1212,10 +1237,10 @@
 
   <div class="btn-row">
     <button class="btn btn-primary" id="go">
-      <span class="quill-icon">&#128396;</span> Repraise In All Styles!
+      <span class="quill-icon" aria-hidden="true">&#128396;</span> Repraise In All Styles!
     </button>
     <button class="btn btn-secondary" id="dashSurprise">
-      <span>&#128204;</span> Surprise Me!
+      <span aria-hidden="true">&#128204;</span> Surprise Me!
     </button>
     <button class="btn btn-secondary" id="clear">Clear</button>
   </div>
@@ -1225,134 +1250,134 @@
   <div class="grid">
       <section class="mini">
         <div class="mini-head">
-          <span class="mini-name"><span class="mini-icon">&#128220;</span> Shakespeare</span>
+          <span class="mini-name"><span class="mini-icon" aria-hidden="true">&#128220;</span> Shakespeare</span>
           <a class="mini-link" href="./shakespeare.html">Open page</a>
         </div>
         <div class="out" id="out-shakespeare"></div>
         <div class="output-actions">
           <button class="btn-copy" data-card="shakespeare">
-            <span>&#128204;</span> Make Card
+            <span aria-hidden="true">&#128204;</span> Make Card
           </button>
           <button class="btn-copy" data-copy="shakespeare">
-            <span>&#128203;</span> Copy
+            <span aria-hidden="true">&#128203;</span> Copy
           </button>
           <button class="btn-copy" data-save="Shakespeare" data-save-target="out-shakespeare">
-            <span>&#128222;</span> Save
+            <span aria-hidden="true">&#128222;</span> Save
           </button>
           <button class="btn-copy" data-compare="out-shakespeare">
-            <span>&#8644;</span> Compare
+            <span aria-hidden="true">&#8644;</span> Compare
           </button>
         </div>
       </section>
       <section class="mini">
         <div class="mini-head">
-          <span class="mini-name"><span class="mini-icon">&#9875;</span> Pirate</span>
+          <span class="mini-name"><span class="mini-icon" aria-hidden="true">&#9875;</span> Pirate</span>
           <a class="mini-link" href="./pirate.html">Open page</a>
         </div>
         <div class="out" id="out-pirate"></div>
         <div class="output-actions">
           <button class="btn-copy" data-card="pirate">
-            <span>&#128204;</span> Make Card
+            <span aria-hidden="true">&#128204;</span> Make Card
           </button>
           <button class="btn-copy" data-copy="pirate">
-            <span>&#128203;</span> Copy
+            <span aria-hidden="true">&#128203;</span> Copy
           </button>
           <button class="btn-copy" data-save="Pirate" data-save-target="out-pirate">
-            <span>&#128222;</span> Save
+            <span aria-hidden="true">&#128222;</span> Save
           </button>
           <button class="btn-copy" data-compare="out-pirate">
-            <span>&#8644;</span> Compare
+            <span aria-hidden="true">&#8644;</span> Compare
           </button>
         </div>
       </section>
       <section class="mini">
         <div class="mini-head">
-          <span class="mini-name"><span class="mini-icon">&#128187;</span> Victorian</span>
+          <span class="mini-name"><span class="mini-icon" aria-hidden="true">&#128187;</span> Victorian</span>
           <a class="mini-link" href="./victorian.html">Open page</a>
         </div>
         <div class="out" id="out-victorian"></div>
         <div class="output-actions">
           <button class="btn-copy" data-card="victorian">
-            <span>&#128204;</span> Make Card
+            <span aria-hidden="true">&#128204;</span> Make Card
           </button>
           <button class="btn-copy" data-copy="victorian">
-            <span>&#128203;</span> Copy
+            <span aria-hidden="true">&#128203;</span> Copy
           </button>
           <button class="btn-copy" data-save="Victorian" data-save-target="out-victorian">
-            <span>&#128222;</span> Save
+            <span aria-hidden="true">&#128222;</span> Save
           </button>
           <button class="btn-copy" data-compare="out-victorian">
-            <span>&#8644;</span> Compare
+            <span aria-hidden="true">&#8644;</span> Compare
           </button>
         </div>
       </section>
       <section class="mini">
         <div class="mini-head">
-          <span class="mini-name"><span class="mini-icon">&#128220;</span> Chaucer</span>
+          <span class="mini-name"><span class="mini-icon" aria-hidden="true">&#128220;</span> Chaucer</span>
           <a class="mini-link" href="./chaucer.html">Open page</a>
         </div>
         <div class="out" id="out-chaucer"></div>
         <div class="output-actions">
           <button class="btn-copy" data-card="chaucer">
-            <span>&#128204;</span> Make Card
+            <span aria-hidden="true">&#128204;</span> Make Card
           </button>
           <button class="btn-copy" data-copy="chaucer">
-            <span>&#128203;</span> Copy
+            <span aria-hidden="true">&#128203;</span> Copy
           </button>
           <button class="btn-copy" data-save="Chaucer" data-save-target="out-chaucer">
-            <span>&#128222;</span> Save
+            <span aria-hidden="true">&#128222;</span> Save
           </button>
           <button class="btn-copy" data-compare="out-chaucer">
-            <span>&#8644;</span> Compare
+            <span aria-hidden="true">&#8644;</span> Compare
           </button>
         </div>
       </section>
       <section class="mini">
         <div class="mini-head">
-          <span class="mini-name"><span class="mini-icon">&#128161;</span> Yoda</span>
+          <span class="mini-name"><span class="mini-icon" aria-hidden="true">&#128161;</span> Yoda</span>
           <a class="mini-link" href="./yoda.html">Open page</a>
         </div>
         <div class="out" id="out-yoda"></div>
         <div class="output-actions">
           <button class="btn-copy" data-card="yoda">
-            <span>&#128204;</span> Make Card
+            <span aria-hidden="true">&#128204;</span> Make Card
           </button>
           <button class="btn-copy" data-copy="yoda">
-            <span>&#128203;</span> Copy
+            <span aria-hidden="true">&#128203;</span> Copy
           </button>
           <button class="btn-copy" data-save="Yoda" data-save-target="out-yoda">
-            <span>&#128222;</span> Save
+            <span aria-hidden="true">&#128222;</span> Save
           </button>
           <button class="btn-copy" data-compare="out-yoda">
-            <span>&#8644;</span> Compare
+            <span aria-hidden="true">&#8644;</span> Compare
           </button>
         </div>
       </section>
       <section class="mini">
         <div class="mini-head">
-          <span class="mini-name"><span class="mini-icon">&#9876;</span> Norse</span>
+          <span class="mini-name"><span class="mini-icon" aria-hidden="true">&#9876;</span> Norse</span>
           <a class="mini-link" href="./norse.html">Open page</a>
         </div>
         <div class="out" id="out-norse"></div>
         <div class="output-actions">
           <button class="btn-copy" data-card="norse">
-            <span>&#128204;</span> Make Card
+            <span aria-hidden="true">&#128204;</span> Make Card
           </button>
           <button class="btn-copy" data-copy="norse">
-            <span>&#128203;</span> Copy
+            <span aria-hidden="true">&#128203;</span> Copy
           </button>
           <button class="btn-copy" data-save="Norse" data-save-target="out-norse">
-            <span>&#128222;</span> Save
+            <span aria-hidden="true">&#128222;</span> Save
           </button>
           <button class="btn-copy" data-compare="out-norse">
-            <span>&#8644;</span> Compare
+            <span aria-hidden="true">&#8644;</span> Compare
           </button>
         </div>
       </section>
   </div>
 
 <section class="saved-quotes" id="savedQuotes">
-  <div class="card-label"><span class="icon">&#128218;</span> Saved Quotes</div>
+  <div class="card-label"><span class="icon" aria-hidden="true">&#128218;</span> Saved Quotes</div>
   <div class="saved-quotes-toolbar">
     <label class="visually-hidden" for="sqSearch">Search saved quotes</label>
     <input type="search" class="saved-quotes-field" id="sqSearch" placeholder="Search&hellip;" autocomplete="off">
@@ -1375,9 +1400,9 @@
 </section>
 
   <div class="footer">
-    <span class="quill-small">&#128396;</span>
+    <span class="quill-small" aria-hidden="true">&#128396;</span>
     Crafted with ink &amp; devotion
-    <span class="quill-small">&#128396;</span>
+    <span class="quill-small" aria-hidden="true">&#128396;</span>
   </div>
 </div>
 
@@ -1549,14 +1574,14 @@ const insults = [
   "thou bacon-faced miscreant", "thou bootless (lack)wit",
   "thou brass-eared fool", "thou dizzy-headed fopdoodle",
   "thou lily-livered gudgeon", "thou mouldy miscreant",
-  "thou scurvy canker-blossom", "thou cantankerous old",
+  "thou scurvy canker-blossom", "thou cantankerous old goat",
   "thou scut", "thou stubble-checked villain",
   "thou unwashed clerk", "thou bladder-headed knave",
-  "thou brazen basket", "thou ill-nurtured",
+  "thou brazen basket", "thou ill-nurtured knave",
   "thou reeky mischief-maker", "thou pottle-deep sot",
   "thou pribbling plume-plucked maltworm",
-  "thou coarser than a toad under a harrow",
-  "thou odiferous",
+  "thou toad beneath a harrow",
+  "thou odiferous hedge-pig",
 ];
 const asides = [
   "\n  (aside: O, what a fool am I!)\n",
@@ -1625,6 +1650,29 @@ const negatives = {
 const pronouns = [
   [/\byou\b/gi,"thou"], [/\byour\b/gi,"thy"], [/\byours\b/gi,"thine"],
   [/\byourself\b/gi,"thyself"], [/\byourselves\b/gi,"yourselves"],
+];
+const pronounCase = { subject: "thou", object: "thee" };
+const agreement = [
+  [/\bI\s+doth\b/gi, "I do"],
+  [/\bwe\s+doth\b/gi, "we do"],
+  [/\bthey\s+doth\b/gi, "they do"],
+  [/\bthou\s+doth\b/gi, "thou dost"],
+  [/\bI\s+art\b/gi, "I am"],
+  [/\b(we|they)\s+art\b/gi, "$1 are"],
+  [/\b(he|she|it)\s+art\b/gi, "$1 is"],
+  [/\bI\s+'tis\b/gi, "I am"],
+  [/\b(we|they)\s+'tis\b/gi, "$1 are"],
+  [/\b(he|she|it)\s+'tis\b/gi, "$1 is"],
+  [/\b(I|he|she|it)\s+wast\b/gi, "$1 was"],
+  [/\b(we|they)\s+wast\b/gi, "$1 were"],
+  [/\bI\s+wert\b/gi, "I were"],
+  [/\b(he|she|it)\s+wert\b/gi, "$1 was"],
+  [/\b(we|they)\s+wert\b/gi, "$1 were"],
+  [/\b(I|he|she|it|we|they)\s+(?:canst|wouldst|shouldst)\b/gi, (m, s) => s + " " + (/canst$/i.test(m) ? "can" : /wouldst$/i.test(m) ? "would" : "should")],
+  [/\b(I|he|she|it|we|they)\s+hadst\b/gi, "$1 had"],
+  [/\bthou\s+shall\b/gi, "thou shalt"],
+  [/\bthou\s+hath\b/gi, "thou hast"],
+  [/\b(I|we|they)\s+hath\b/gi, "$1 have"],
 ];
 const verbForms = [
   [/\bare\b/gi,"are"], [/\bit is\b/gi,"'tis"], [/\bit's\b/gi,"'tis"], [/\bis\b/gi,"is"],
@@ -2195,23 +2243,67 @@ function replaceAll(text) {
   return out;
 }
 
+// ============================================================
+// GRAMMAR PASSES
+// ============================================================
+// Small repairs for the shapes the flat word tables cannot see. They run
+// after replaceAll() and before the decorative insertions, so an inserted
+// phrase is never mistaken for input.
 
-function maybeAddAlliteration(text) {
+// The pronoun table maps every "you" to the subject form. This flips the
+// ones a preposition or a transitive verb governs to the object form.
+const _OBJECT_HEADS = "to|for|with|by|from|of|on|in|at|about|upon|unto|into|through|throughout|without|within|against|toward|towards|behind|before|after|near|over|under|between|betwixt|among|amongst|around|beyond|beneath|till|until|via|per|like|than";
+const _OBJECT_VERBS = "adore|behold|love|see|help|thank|tell|give|show|bring|find|let|meet|hear|call|ask|need|want|know|serve|obey|follow|trust|believe|teach|kiss|embrace|greet|welcome|praise|blame|forgive|remember|forget|protect|save|join|leave|take|hold|choose|command|bid|pray|beseech|entreat|vex|mock|scorn|hate|fear|envy|strike|kill|wound|heal|send|carry|lead|feed|clothe|arm|shield|defend|attend|await|seek|visit|court|wed|marry|cherish|revere|honour|honor|delight|please|amuse|comfort|warn|advise|remind|inform|convince|persuade|tempt|test|try|watch|observe|perceive|regard|notice|recognize|admire|despise|loathe|curse|bless|reward|punish|arrest|release|free|bind|tie|cut|stab|beat|hit|push|pull|drag|lift|raise|drop|catch|throw|sell|buy|pay|owe|cost|offer|receive|accept|refuse|deny|grant|allow|permit|forbid|stop|keep|set|put|make|miss|saw|gave|told|brought|found|heard|made|took|held|chose|struck|sent|led|fed|sought|sold|bought|paid|caught|threw|knew|forgot|forgave|besought|bound|left|kept|met|spoke|said|shown|beheld|beaten|loven|beholdeth|loveth|helpeth|thanketh|lovest|beholdest";
+
+function fixPronounCase(text, subject, object) {
+  if (!subject || !object || subject === object) return text;
+  const re = new RegExp(
+    "\\b(?:" + _OBJECT_HEADS + "|(?:" + _OBJECT_VERBS + ")(?:s|es|ed|d|eth|est|en|n)?)\\s+" + subject + "\\b",
+    "gi"
+  );
+  return text.replace(re, function (m) {
+    return m.slice(0, m.length - subject.length) + object;
+  });
+}
+
+// The negatives and verb-form tables are flat: every "don't" becomes "doth
+// not", every "was" becomes "wast". Undo the forms the subject cannot take.
+function fixAgreement(text, rules) {
+  if (!rules) return text;
+  for (const [pat, rep] of rules) text = text.replace(pat, rep);
+  return text;
+}
+
+// One intensity word per phrase: "exceedingly most agreeable" and
+// "most certainly most arduous" both collapse to a single intensifier.
+const _INTENSIFIERS = "most certainly|most assuredly|exceedingly|passing|utterly|wholly|truly|very|most|right";
+
+function dedupeIntensity(text) {
+  const re = new RegExp("\\b(?:" + _INTENSIFIERS + ")\\s+(?=(?:" + _INTENSIFIERS + ")\\b)", "gi");
+  return text.replace(re, "");
+}
+
+
+function maybeAddAlliteration(text, budget) {
+  if (budget && budget.used) return text;
   if (!chance(0.08)) return text;
   let words = text.split(/\s+/);
   if (words.length < 4) return text;
   let idx = Math.floor(rand() * (words.length - 2));
   let phrase = pick(alliterations);
   words.splice(idx + 1, 0, phrase);
+  if (budget) budget.used = true;
   return words.join(" ");
 }
 
-function maybeAddMetaphor(text) {
+function maybeAddMetaphor(text, budget) {
+  if (budget && budget.used) return text;
   if (!chance(0.06)) return text;
   let commaIdx = text.indexOf(',');
   if (commaIdx < 0 || commaIdx > text.length - 10) return text;
   let metaphor = "like " + pick(metaphors);
   let after = text.substring(commaIdx + 1).replace(/^\s+/, "");
+  if (budget) budget.used = true;
   return text.substring(0, commaIdx + 1) + " " + metaphor + "," + (after ? " " + after : "");
 }
 
@@ -2220,10 +2312,12 @@ function maybeInsertQuote(text) {
   return text + " " + pick(quotes);
 }
 
-function maybeInsertInsult(text) {
+function maybeInsertInsult(text, budget) {
+  if (budget && budget.used) return text;
   if (!chance(0.05)) return text;
   let insult = pick(insults);
   let match = text.toLowerCase().match(/\bthou\b/);
+  if (budget) budget.used = true;
   if (match) {
     let thouIdx = match.index;
     return text.substring(0, thouIdx + 4) + ", " + insult + "," + text.substring(thouIdx + 4);
@@ -2243,31 +2337,49 @@ function maybeAddStageDirection(text) {
 
 function maybeInvert(text) {
   if (!chance(0.12)) return text;
+  // Only the main clause may invert. A coordinated or subordinate clause keeps
+  // its subject before the verb, so "and will we ..." and "because can he ..."
+  // cannot be produced. Conservatively, any comma also ends the main clause.
+  const cut = text.search(/[,;:]|\b(?:and|but|because|although|though|while|whilst|if|when|since|so|yet)\b/i);
+  const head = cut < 0 ? text : text.slice(0, cut);
+  const tail = cut < 0 ? "" : text.slice(cut);
+  if (!head) return text;
   for (const [pat, fn] of inversions) {
-    let newText = text.replace(pat, fn);
-    if (newText !== text) {
-      text = newText;
-      break;
-    }
+    const newHead = head.replace(pat, fn);
+    if (newHead !== head) return newHead + tail;
   }
   return text;
 }
 
-function maybeAddFiller(text) {
+function maybeAddFiller(text, budget) {
+  if (budget && budget.used) return text;
   if (!chance(0.15)) return text;
   let fillers = ["methinks", "in good sooth", "verily", "forsooth", "by my troth", "in faith", "as I live"];
-  let words = text.split(/\s+/);
-  if (words.length < 3) return text;
-  let idx = Math.floor(rand() * Math.min(3, words.length));
-  words.splice(idx + 1, 0, pick(fillers));
-  let candidate = words.join(" ");
+  // A dictionary phrase may already have supplied one ("Ye are dear to me,
+  // by the gods."); do not add a second.
+  var lowerText = text.toLowerCase();
+  if (fillers.some(function (f) { return lowerText.indexOf(f.toLowerCase()) >= 0; })) return text;
+  let filler = pick(fillers);
+  // A filler belongs at a clause boundary: after the first comma, or before
+  // the sentence starts. Splicing it after an arbitrary word can land between
+  // a determiner and its noun ("my by my troth best friend") or after the
+  // closing stop, where it leaks into the next sentence.
+  let comma = text.indexOf(',');
+  let candidate;
+  if (comma > 0 && comma < text.length - 1) {
+    candidate = text.slice(0, comma + 1) + " " + filler + "," + text.slice(comma + 1);
+  } else {
+    candidate = filler + ", " + text;
+  }
   // Never let a filler insertion repeat a word or phrase
   // (e.g. "by my troth by my troth", "verily verily").
   if (/\b([A-Za-z']+) \1\b|([A-Za-z']+\s+[A-Za-z']+)\s+\2\b|([A-Za-z']+\s+[A-Za-z']+\s+[A-Za-z']+)\s+\3\b/i.test(candidate)) return text;
+  if (budget) budget.used = true;
   return candidate;
 }
 
-function maybeAddParenthetical(text) {
+function maybeAddParenthetical(text, budget) {
+  if (budget && budget.used) return text;
   if (!chance(0.06)) return text;
   let parentheticals = [
     "(pray, mark this)", "(and so it goes)", "(as the stars decree)",
@@ -2279,6 +2391,7 @@ function maybeAddParenthetical(text) {
   if (words.length < 5) return text;
   let idx = Math.floor(rand() * (words.length - 2)) + 1;
   words.splice(idx, 0, pick(parentheticals));
+  if (budget) budget.used = true;
   return words.join(" ");
 }
 
@@ -2295,27 +2408,40 @@ function transformParagraph(para, opts) {
     // Single left-to-right pass, longest match wins
     s = replaceAll(s);
 
-    // Advanced transformations, gated by the options object.
+    // Grammar repairs for the flat tables, before anything is inserted.
+    s = fixPronounCase(s, pronounCase && pronounCase.subject, pronounCase && pronounCase.object);
+    s = fixAgreement(s, agreement);
+
+    // At most one decorative insertion per sentence. The helpers below all
+    // honour the same budget, so a sentence cannot collect a filler, an
+    // opening and a mid-sentence aside at once.
+    const budget = { used: false };
     if (opts.invert) s = maybeInvert(s);
-    if (!light) s = maybeAddFiller(s);
+    if (!light) s = maybeAddFiller(s, budget);
     if (opts.metaphors) {
-      s = maybeAddMetaphor(s);
-      s = maybeAddAlliteration(s);
+      s = maybeAddMetaphor(s, budget);
+      s = maybeAddAlliteration(s, budget);
     }
-    if (!light) s = maybeAddParenthetical(s);
-    if (!light) s = maybeInsertInsult(s);
+    if (!light) s = maybeAddParenthetical(s, budget);
+    if (!light) s = maybeInsertInsult(s, budget);
 
     // Opening exclamation (~35%), scaled by intensity.
-    if (opts.openings && chance(0.35 * chScale)) s = pick(openings) + " " + s;
+    if (opts.openings && !budget.used && chance(0.35 * chScale)) {
+      s = pick(openings) + " " + s;
+      budget.used = true;
+    }
 
     // Mid-sentence insertion (~20%), skipped under Light.
-    if (!light && chance(0.20 * chScale)) {
+    if (!light && !budget.used && chance(0.20 * chScale)) {
       let cIdx = s.indexOf(',');
       if (cIdx > 0 && cIdx < s.length - 5) {
         let after = s.substring(cIdx + 1).replace(/^\s+/, "");
         s = s.substring(0, cIdx) + pick(midInsertions) + (after ? " " + after : "");
+        budget.used = true;
       }
     }
+
+    s = dedupeIntensity(s);
 
     kept.push(s);
   }
@@ -2324,7 +2450,7 @@ function transformParagraph(para, opts) {
 }
 
 function getTransformOptions() {
-  var defs = { intensity: 'balanced', openings: true, metaphors: true, asides: true, invert: true };
+  var defs = { intensity: 'balanced', openings: true, metaphors: true, asides: true, invert: true, seed: null };
   if (typeof document === 'undefined' || !document.getElementById) return defs;
   var intensityEl = document.getElementById('optIntensity');
   var intensity = defs.intensity;
@@ -2348,6 +2474,7 @@ function getTransformOptions() {
     metaphors: on('optMetaphors', defs.metaphors),
     asides: on('optAsides', defs.asides),
     invert: on('optInvert', defs.invert),
+    seed: optSeedValue(),
   };
 }
 
@@ -2364,6 +2491,8 @@ function shakespearify() {
     return;
   }
   var opts = getTransformOptions();
+  // A filled Seed box pins the run; empty keeps the page's advancing sequence.
+  if (opts.seed !== null) seedRandom(opts.seed);
   var light = opts.intensity === 'light';
 
   // Split into paragraphs (blank lines preserved as separators)
@@ -2598,6 +2727,8 @@ const pronouns = [
   [/\byou\b/gi,"ye"], [/\byour\b/gi,"yer"], [/\byours\b/gi,"yers"],
   [/\byourself\b/gi,"yerself"], [/\byourselves\b/gi,"yerselves"],
 ];
+const pronounCase = null;
+const agreement = null;
 const verbForms = [
   [/\bare\b/gi,"be"], [/\bit is\b/gi,"it be"], [/\bit's\b/gi,"it be"], [/\bis\b/gi,"be"],
   [/\bwas\b/gi,"was"], [/\bwere\b/gi,"were"],
@@ -2738,7 +2869,7 @@ const verbs = [
   [/\bstop\b/gi,"cease"],[/\bstopped\b/gi,"ceased"],
   [/\bcontinue\b/gi,"press on"],[/\bcontinued\b/gi,"pressed on"],
   [/\bstart\b/gi,"set off"],[/\bstarted\b/gi,"set off"],
-  [/\bfinish\b/gi,"complete the voyage"],[/\bfinished\b/gi,"completed the voyage"],
+  [/\bfinish\b/gi,"complete"],[/\bfinished\b/gi,"completed"],
   [/\bprepare\b/gi,"ready the ship"],[/\bprepared\b/gi,"readied the ship"],
   [/\buse\b/gi,"employ"],[/\bused\b/gi,"employed"],
   [/\bsave\b/gi,"stash"],[/\bsaved\b/gi,"stashed"],
@@ -3146,8 +3277,49 @@ function replaceAll(text) {
   return out;
 }
 
+// ============================================================
+// GRAMMAR PASSES
+// ============================================================
+// Small repairs for the shapes the flat word tables cannot see. They run
+// after replaceAll() and before the decorative insertions, so an inserted
+// phrase is never mistaken for input.
 
-function maybeAddAlliteration(text) {
+// The pronoun table maps every "you" to the subject form. This flips the
+// ones a preposition or a transitive verb governs to the object form.
+const _OBJECT_HEADS = "to|for|with|by|from|of|on|in|at|about|upon|unto|into|through|throughout|without|within|against|toward|towards|behind|before|after|near|over|under|between|betwixt|among|amongst|around|beyond|beneath|till|until|via|per|like|than";
+const _OBJECT_VERBS = "adore|behold|love|see|help|thank|tell|give|show|bring|find|let|meet|hear|call|ask|need|want|know|serve|obey|follow|trust|believe|teach|kiss|embrace|greet|welcome|praise|blame|forgive|remember|forget|protect|save|join|leave|take|hold|choose|command|bid|pray|beseech|entreat|vex|mock|scorn|hate|fear|envy|strike|kill|wound|heal|send|carry|lead|feed|clothe|arm|shield|defend|attend|await|seek|visit|court|wed|marry|cherish|revere|honour|honor|delight|please|amuse|comfort|warn|advise|remind|inform|convince|persuade|tempt|test|try|watch|observe|perceive|regard|notice|recognize|admire|despise|loathe|curse|bless|reward|punish|arrest|release|free|bind|tie|cut|stab|beat|hit|push|pull|drag|lift|raise|drop|catch|throw|sell|buy|pay|owe|cost|offer|receive|accept|refuse|deny|grant|allow|permit|forbid|stop|keep|set|put|make|miss|saw|gave|told|brought|found|heard|made|took|held|chose|struck|sent|led|fed|sought|sold|bought|paid|caught|threw|knew|forgot|forgave|besought|bound|left|kept|met|spoke|said|shown|beheld|beaten|loven|beholdeth|loveth|helpeth|thanketh|lovest|beholdest";
+
+function fixPronounCase(text, subject, object) {
+  if (!subject || !object || subject === object) return text;
+  const re = new RegExp(
+    "\\b(?:" + _OBJECT_HEADS + "|(?:" + _OBJECT_VERBS + ")(?:s|es|ed|d|eth|est|en|n)?)\\s+" + subject + "\\b",
+    "gi"
+  );
+  return text.replace(re, function (m) {
+    return m.slice(0, m.length - subject.length) + object;
+  });
+}
+
+// The negatives and verb-form tables are flat: every "don't" becomes "doth
+// not", every "was" becomes "wast". Undo the forms the subject cannot take.
+function fixAgreement(text, rules) {
+  if (!rules) return text;
+  for (const [pat, rep] of rules) text = text.replace(pat, rep);
+  return text;
+}
+
+// One intensity word per phrase: "exceedingly most agreeable" and
+// "most certainly most arduous" both collapse to a single intensifier.
+const _INTENSIFIERS = "most certainly|most assuredly|exceedingly|passing|utterly|wholly|truly|very|most|right";
+
+function dedupeIntensity(text) {
+  const re = new RegExp("\\b(?:" + _INTENSIFIERS + ")\\s+(?=(?:" + _INTENSIFIERS + ")\\b)", "gi");
+  return text.replace(re, "");
+}
+
+
+function maybeAddAlliteration(text, budget) {
+  if (budget && budget.used) return text;
   if (!chance(0.08)) return text;
   let words = text.split(/\s+/);
   if (words.length < 4) return text;
@@ -3157,7 +3329,8 @@ function maybeAddAlliteration(text) {
   return words.join(" ");
 }
 
-function maybeAddMetaphor(text) {
+function maybeAddMetaphor(text, budget) {
+  if (budget && budget.used) return text;
   if (!chance(0.06)) return text;
   let commaIdx = text.indexOf(',');
   if (commaIdx < 0 || commaIdx > text.length - 10) return text;
@@ -3171,7 +3344,8 @@ function maybeInsertQuote(text) {
   return text + " " + pick(quotes);
 }
 
-function maybeInsertInsult(text) {
+function maybeInsertInsult(text, budget) {
+  if (budget && budget.used) return text;
   if (!chance(0.05)) return text;
   var insult = pick(insults);
   return text + ", " + insult + "!";
@@ -3189,32 +3363,49 @@ function maybeAddStageDirection(text) {
 
 function maybeInvert(text) {
   if (!chance(0.12)) return text;
+  // Only the main clause may invert. A coordinated or subordinate clause keeps
+  // its subject before the verb, so "and will we ..." and "because can he ..."
+  // cannot be produced. Conservatively, any comma also ends the main clause.
+  const cut = text.search(/[,;:]|\b(?:and|but|because|although|though|while|whilst|if|when|since|so|yet)\b/i);
+  const head = cut < 0 ? text : text.slice(0, cut);
+  const tail = cut < 0 ? "" : text.slice(cut);
+  if (!head) return text;
   for (const [pat, fn] of inversions) {
-    let newText = text.replace(pat, fn);
-    if (newText !== text) {
-      text = newText;
-      break;
-    }
+    const newHead = head.replace(pat, fn);
+    if (newHead !== head) return newHead + tail;
   }
   return text;
 }
 
-function maybeAddFiller(text) {
+function maybeAddFiller(text, budget) {
+  if (budget && budget.used) return text;
   if (!chance(0.15)) return text;
-  var fillers = ['arr', 'by the powers', 'avast', 'yo ho', 'scurvy'];
-  var words = text.split(/\s+/);
-  if (words.length < 3) return text;
-  var idx = Math.floor(rand() * Math.min(3, words.length));
+  var fillers = ['arr', 'by the powers', 'avast', 'yo ho', 'shiver me timbers'];
+  // A dictionary phrase may already have supplied one ("Ye are dear to me,
+  // by the gods."); do not add a second.
+  var lowerText = text.toLowerCase();
+  if (fillers.some(function (f) { return lowerText.indexOf(f.toLowerCase()) >= 0; })) return text;
   var filler = fillers[Math.floor(rand() * fillers.length)];
-  words.splice(idx + 1, 0, filler);
-  var candidate = words.join(" ");
+  // A filler belongs at a clause boundary: after the first comma, or before
+  // the sentence starts. Splicing it after an arbitrary word can land between
+  // a determiner and its noun ("my by my troth best friend") or after the
+  // closing stop, where it leaks into the next sentence.
+  var comma = text.indexOf(',');
+  var candidate;
+  if (comma > 0 && comma < text.length - 1) {
+    candidate = text.slice(0, comma + 1) + " " + filler + "," + text.slice(comma + 1);
+  } else {
+    candidate = filler + ", " + text;
+  }
   // Never let a filler insertion repeat a word or phrase
-  // (e.g. "sort of sort of", "by the powers by the powers").
+  // (e.g. "by my troth by my troth", "verily verily").
   if (/\b([A-Za-z']+) \1\b|([A-Za-z']+\s+[A-Za-z']+)\s+\2\b|([A-Za-z']+\s+[A-Za-z']+\s+[A-Za-z']+)\s+\3\b/i.test(candidate)) return text;
+  if (budget) budget.used = true;
   return candidate;
 }
 
-function maybeAddParenthetical(text) {
+function maybeAddParenthetical(text, budget) {
+  if (budget && budget.used) return text;
   if (!chance(0.06)) return text;
   var parentheticals = ["(by Davy Jones' locker)", '(shiver me timbers)', '(as the tide turns)'];
   var words = text.split(/\s+/);
@@ -3237,27 +3428,40 @@ function transformParagraph(para, opts) {
     // Single left-to-right pass, longest match wins
     s = replaceAll(s);
 
-    // Advanced transformations, gated by the options object.
+    // Grammar repairs for the flat tables, before anything is inserted.
+    s = fixPronounCase(s, pronounCase && pronounCase.subject, pronounCase && pronounCase.object);
+    s = fixAgreement(s, agreement);
+
+    // At most one decorative insertion per sentence. The helpers below all
+    // honour the same budget, so a sentence cannot collect a filler, an
+    // opening and a mid-sentence aside at once.
+    const budget = { used: false };
     if (opts.invert) s = maybeInvert(s);
-    if (!light) s = maybeAddFiller(s);
+    if (!light) s = maybeAddFiller(s, budget);
     if (opts.metaphors) {
-      s = maybeAddMetaphor(s);
-      s = maybeAddAlliteration(s);
+      s = maybeAddMetaphor(s, budget);
+      s = maybeAddAlliteration(s, budget);
     }
-    if (!light) s = maybeAddParenthetical(s);
-    if (!light) s = maybeInsertInsult(s);
+    if (!light) s = maybeAddParenthetical(s, budget);
+    if (!light) s = maybeInsertInsult(s, budget);
 
     // Opening exclamation (~35%), scaled by intensity.
-    if (opts.openings && chance(0.35 * chScale)) s = pick(openings) + " " + s;
+    if (opts.openings && !budget.used && chance(0.35 * chScale)) {
+      s = pick(openings) + " " + s;
+      budget.used = true;
+    }
 
     // Mid-sentence insertion (~20%), skipped under Light.
-    if (!light && chance(0.20 * chScale)) {
+    if (!light && !budget.used && chance(0.20 * chScale)) {
       let cIdx = s.indexOf(',');
       if (cIdx > 0 && cIdx < s.length - 5) {
         let after = s.substring(cIdx + 1).replace(/^\s+/, "");
         s = s.substring(0, cIdx) + pick(midInsertions) + (after ? " " + after : "");
+        budget.used = true;
       }
     }
+
+    s = dedupeIntensity(s);
 
     kept.push(s);
   }
@@ -3266,7 +3470,7 @@ function transformParagraph(para, opts) {
 }
 
 function getTransformOptions() {
-  var defs = { intensity: 'balanced', openings: true, metaphors: true, asides: true, invert: true };
+  var defs = { intensity: 'balanced', openings: true, metaphors: true, asides: true, invert: true, seed: null };
   if (typeof document === 'undefined' || !document.getElementById) return defs;
   var intensityEl = document.getElementById('optIntensity');
   var intensity = defs.intensity;
@@ -3290,6 +3494,7 @@ function getTransformOptions() {
     metaphors: on('optMetaphors', defs.metaphors),
     asides: on('optAsides', defs.asides),
     invert: on('optInvert', defs.invert),
+    seed: optSeedValue(),
   };
 }
 
@@ -3306,6 +3511,8 @@ function pirateify() {
     return;
   }
   var opts = getTransformOptions();
+  // A filled Seed box pins the run; empty keeps the page's advancing sequence.
+  if (opts.seed !== null) seedRandom(opts.seed);
   var light = opts.intensity === 'light';
 
   // Split into paragraphs (blank lines preserved as separators)
@@ -3531,6 +3738,8 @@ const pronouns = [
   [/\byou\b/gi,"one"], [/\byour\b/gi,"one's"], [/\byours\b/gi,"one's"],
   [/\byourself\b/gi,"oneself"], [/\byourselves\b/gi,"oneselves"],
 ];
+const pronounCase = null;
+const agreement = null;
 const verbForms = [
   [/\bare\b/gi,"are"], [/\bit is\b/gi,"it is"], [/\bit's\b/gi,"it is"], [/\bis\b/gi,"is"],
   [/\bwas\b/gi,"was"], [/\bwere\b/gi,"were"],
@@ -4099,8 +4308,49 @@ function replaceAll(text) {
   return out;
 }
 
+// ============================================================
+// GRAMMAR PASSES
+// ============================================================
+// Small repairs for the shapes the flat word tables cannot see. They run
+// after replaceAll() and before the decorative insertions, so an inserted
+// phrase is never mistaken for input.
 
-function maybeAddAlliteration(text) {
+// The pronoun table maps every "you" to the subject form. This flips the
+// ones a preposition or a transitive verb governs to the object form.
+const _OBJECT_HEADS = "to|for|with|by|from|of|on|in|at|about|upon|unto|into|through|throughout|without|within|against|toward|towards|behind|before|after|near|over|under|between|betwixt|among|amongst|around|beyond|beneath|till|until|via|per|like|than";
+const _OBJECT_VERBS = "adore|behold|love|see|help|thank|tell|give|show|bring|find|let|meet|hear|call|ask|need|want|know|serve|obey|follow|trust|believe|teach|kiss|embrace|greet|welcome|praise|blame|forgive|remember|forget|protect|save|join|leave|take|hold|choose|command|bid|pray|beseech|entreat|vex|mock|scorn|hate|fear|envy|strike|kill|wound|heal|send|carry|lead|feed|clothe|arm|shield|defend|attend|await|seek|visit|court|wed|marry|cherish|revere|honour|honor|delight|please|amuse|comfort|warn|advise|remind|inform|convince|persuade|tempt|test|try|watch|observe|perceive|regard|notice|recognize|admire|despise|loathe|curse|bless|reward|punish|arrest|release|free|bind|tie|cut|stab|beat|hit|push|pull|drag|lift|raise|drop|catch|throw|sell|buy|pay|owe|cost|offer|receive|accept|refuse|deny|grant|allow|permit|forbid|stop|keep|set|put|make|miss|saw|gave|told|brought|found|heard|made|took|held|chose|struck|sent|led|fed|sought|sold|bought|paid|caught|threw|knew|forgot|forgave|besought|bound|left|kept|met|spoke|said|shown|beheld|beaten|loven|beholdeth|loveth|helpeth|thanketh|lovest|beholdest";
+
+function fixPronounCase(text, subject, object) {
+  if (!subject || !object || subject === object) return text;
+  const re = new RegExp(
+    "\\b(?:" + _OBJECT_HEADS + "|(?:" + _OBJECT_VERBS + ")(?:s|es|ed|d|eth|est|en|n)?)\\s+" + subject + "\\b",
+    "gi"
+  );
+  return text.replace(re, function (m) {
+    return m.slice(0, m.length - subject.length) + object;
+  });
+}
+
+// The negatives and verb-form tables are flat: every "don't" becomes "doth
+// not", every "was" becomes "wast". Undo the forms the subject cannot take.
+function fixAgreement(text, rules) {
+  if (!rules) return text;
+  for (const [pat, rep] of rules) text = text.replace(pat, rep);
+  return text;
+}
+
+// One intensity word per phrase: "exceedingly most agreeable" and
+// "most certainly most arduous" both collapse to a single intensifier.
+const _INTENSIFIERS = "most certainly|most assuredly|exceedingly|passing|utterly|wholly|truly|very|most|right";
+
+function dedupeIntensity(text) {
+  const re = new RegExp("\\b(?:" + _INTENSIFIERS + ")\\s+(?=(?:" + _INTENSIFIERS + ")\\b)", "gi");
+  return text.replace(re, "");
+}
+
+
+function maybeAddAlliteration(text, budget) {
+  if (budget && budget.used) return text;
   if (!chance(0.08)) return text;
   let words = text.split(/\s+/);
   if (words.length < 4) return text;
@@ -4110,7 +4360,8 @@ function maybeAddAlliteration(text) {
   return words.join(" ");
 }
 
-function maybeAddMetaphor(text) {
+function maybeAddMetaphor(text, budget) {
+  if (budget && budget.used) return text;
   if (!chance(0.06)) return text;
   let commaIdx = text.indexOf(',');
   if (commaIdx < 0 || commaIdx > text.length - 10) return text;
@@ -4124,7 +4375,8 @@ function maybeInsertQuote(text) {
   return text + " " + pick(quotes);
 }
 
-function maybeInsertInsult(text) {
+function maybeInsertInsult(text, budget) {
+  if (budget && budget.used) return text;
   if (!chance(0.05)) return text;
   var insult = pick(insults);
   return text + ", " + insult + "!";
@@ -4142,32 +4394,49 @@ function maybeAddStageDirection(text) {
 
 function maybeInvert(text) {
   if (!chance(0.12)) return text;
+  // Only the main clause may invert. A coordinated or subordinate clause keeps
+  // its subject before the verb, so "and will we ..." and "because can he ..."
+  // cannot be produced. Conservatively, any comma also ends the main clause.
+  const cut = text.search(/[,;:]|\b(?:and|but|because|although|though|while|whilst|if|when|since|so|yet)\b/i);
+  const head = cut < 0 ? text : text.slice(0, cut);
+  const tail = cut < 0 ? "" : text.slice(cut);
+  if (!head) return text;
   for (const [pat, fn] of inversions) {
-    let newText = text.replace(pat, fn);
-    if (newText !== text) {
-      text = newText;
-      break;
-    }
+    const newHead = head.replace(pat, fn);
+    if (newHead !== head) return newHead + tail;
   }
   return text;
 }
 
-function maybeAddFiller(text) {
+function maybeAddFiller(text, budget) {
+  if (budget && budget.used) return text;
   if (!chance(0.15)) return text;
   var fillers = ['indeed', 'quite so', 'I dare say', 'most certainly', 'how curious'];
-  var words = text.split(/\s+/);
-  if (words.length < 3) return text;
-  var idx = Math.floor(rand() * Math.min(3, words.length));
+  // A dictionary phrase may already have supplied one ("Ye are dear to me,
+  // by the gods."); do not add a second.
+  var lowerText = text.toLowerCase();
+  if (fillers.some(function (f) { return lowerText.indexOf(f.toLowerCase()) >= 0; })) return text;
   var filler = fillers[Math.floor(rand() * fillers.length)];
-  words.splice(idx + 1, 0, filler);
-  var candidate = words.join(" ");
+  // A filler belongs at a clause boundary: after the first comma, or before
+  // the sentence starts. Splicing it after an arbitrary word can land between
+  // a determiner and its noun ("my by my troth best friend") or after the
+  // closing stop, where it leaks into the next sentence.
+  var comma = text.indexOf(',');
+  var candidate;
+  if (comma > 0 && comma < text.length - 1) {
+    candidate = text.slice(0, comma + 1) + " " + filler + "," + text.slice(comma + 1);
+  } else {
+    candidate = filler + ", " + text;
+  }
   // Never let a filler insertion repeat a word or phrase
-  // (e.g. "most most certainly", "most certainly most certainly").
+  // (e.g. "by my troth by my troth", "verily verily").
   if (/\b([A-Za-z']+) \1\b|([A-Za-z']+\s+[A-Za-z']+)\s+\2\b|([A-Za-z']+\s+[A-Za-z']+\s+[A-Za-z']+)\s+\3\b/i.test(candidate)) return text;
+  if (budget) budget.used = true;
   return candidate;
 }
 
-function maybeAddParenthetical(text) {
+function maybeAddParenthetical(text, budget) {
+  if (budget && budget.used) return text;
   if (!chance(0.06)) return text;
   var parentheticals = ['(I dare say)', '(how remarkable)', '(upon my honour)'];
   var words = text.split(/\s+/);
@@ -4190,27 +4459,40 @@ function transformParagraph(para, opts) {
     // Single left-to-right pass, longest match wins
     s = replaceAll(s);
 
-    // Advanced transformations, gated by the options object.
+    // Grammar repairs for the flat tables, before anything is inserted.
+    s = fixPronounCase(s, pronounCase && pronounCase.subject, pronounCase && pronounCase.object);
+    s = fixAgreement(s, agreement);
+
+    // At most one decorative insertion per sentence. The helpers below all
+    // honour the same budget, so a sentence cannot collect a filler, an
+    // opening and a mid-sentence aside at once.
+    const budget = { used: false };
     if (opts.invert) s = maybeInvert(s);
-    if (!light) s = maybeAddFiller(s);
+    if (!light) s = maybeAddFiller(s, budget);
     if (opts.metaphors) {
-      s = maybeAddMetaphor(s);
-      s = maybeAddAlliteration(s);
+      s = maybeAddMetaphor(s, budget);
+      s = maybeAddAlliteration(s, budget);
     }
-    if (!light) s = maybeAddParenthetical(s);
-    if (!light) s = maybeInsertInsult(s);
+    if (!light) s = maybeAddParenthetical(s, budget);
+    if (!light) s = maybeInsertInsult(s, budget);
 
     // Opening exclamation (~35%), scaled by intensity.
-    if (opts.openings && chance(0.35 * chScale)) s = pick(openings) + " " + s;
+    if (opts.openings && !budget.used && chance(0.35 * chScale)) {
+      s = pick(openings) + " " + s;
+      budget.used = true;
+    }
 
     // Mid-sentence insertion (~20%), skipped under Light.
-    if (!light && chance(0.20 * chScale)) {
+    if (!light && !budget.used && chance(0.20 * chScale)) {
       let cIdx = s.indexOf(',');
       if (cIdx > 0 && cIdx < s.length - 5) {
         let after = s.substring(cIdx + 1).replace(/^\s+/, "");
         s = s.substring(0, cIdx) + pick(midInsertions) + (after ? " " + after : "");
+        budget.used = true;
       }
     }
+
+    s = dedupeIntensity(s);
 
     kept.push(s);
   }
@@ -4219,7 +4501,7 @@ function transformParagraph(para, opts) {
 }
 
 function getTransformOptions() {
-  var defs = { intensity: 'balanced', openings: true, metaphors: true, asides: true, invert: true };
+  var defs = { intensity: 'balanced', openings: true, metaphors: true, asides: true, invert: true, seed: null };
   if (typeof document === 'undefined' || !document.getElementById) return defs;
   var intensityEl = document.getElementById('optIntensity');
   var intensity = defs.intensity;
@@ -4243,6 +4525,7 @@ function getTransformOptions() {
     metaphors: on('optMetaphors', defs.metaphors),
     asides: on('optAsides', defs.asides),
     invert: on('optInvert', defs.invert),
+    seed: optSeedValue(),
   };
 }
 
@@ -4259,6 +4542,8 @@ function victorianify() {
     return;
   }
   var opts = getTransformOptions();
+  // A filled Seed box pins the run; empty keeps the page's advancing sequence.
+  if (opts.seed !== null) seedRandom(opts.seed);
   var light = opts.intensity === 'light';
 
   // Split into paragraphs (blank lines preserved as separators)
@@ -4543,6 +4828,13 @@ const negatives = {
 const pronouns = [
   [/\byou\b/gi,"thou"], [/\byour\b/gi,"thy"], [/\byours\b/gi,"thine"],
   [/\byourself\b/gi,"thyself"], [/\byourselves\b/gi,"yourselves"],
+];
+const pronounCase = { subject: "thou", object: "thee" };
+const agreement = [
+  [/\bthou\s+ne\s+do\b/gi, "thou ne dost"],
+  [/\b(he|she|it)\s+ne\s+do\b/gi, "$1 ne doth"],
+  [/\bthou\s+wol\b/gi, "thou wolt"],
+  [/\bthou\s+hath\b/gi, "thou hast"],
 ];
 const verbForms = [
   [/\bare\b/gi,"are"], [/\bit is\b/gi,"it is"], [/\bit's\b/gi,"it is"], [/\bis\b/gi,"is"],
@@ -5107,8 +5399,49 @@ function replaceAll(text) {
   return out;
 }
 
+// ============================================================
+// GRAMMAR PASSES
+// ============================================================
+// Small repairs for the shapes the flat word tables cannot see. They run
+// after replaceAll() and before the decorative insertions, so an inserted
+// phrase is never mistaken for input.
 
-function maybeAddAlliteration(text) {
+// The pronoun table maps every "you" to the subject form. This flips the
+// ones a preposition or a transitive verb governs to the object form.
+const _OBJECT_HEADS = "to|for|with|by|from|of|on|in|at|about|upon|unto|into|through|throughout|without|within|against|toward|towards|behind|before|after|near|over|under|between|betwixt|among|amongst|around|beyond|beneath|till|until|via|per|like|than";
+const _OBJECT_VERBS = "adore|behold|love|see|help|thank|tell|give|show|bring|find|let|meet|hear|call|ask|need|want|know|serve|obey|follow|trust|believe|teach|kiss|embrace|greet|welcome|praise|blame|forgive|remember|forget|protect|save|join|leave|take|hold|choose|command|bid|pray|beseech|entreat|vex|mock|scorn|hate|fear|envy|strike|kill|wound|heal|send|carry|lead|feed|clothe|arm|shield|defend|attend|await|seek|visit|court|wed|marry|cherish|revere|honour|honor|delight|please|amuse|comfort|warn|advise|remind|inform|convince|persuade|tempt|test|try|watch|observe|perceive|regard|notice|recognize|admire|despise|loathe|curse|bless|reward|punish|arrest|release|free|bind|tie|cut|stab|beat|hit|push|pull|drag|lift|raise|drop|catch|throw|sell|buy|pay|owe|cost|offer|receive|accept|refuse|deny|grant|allow|permit|forbid|stop|keep|set|put|make|miss|saw|gave|told|brought|found|heard|made|took|held|chose|struck|sent|led|fed|sought|sold|bought|paid|caught|threw|knew|forgot|forgave|besought|bound|left|kept|met|spoke|said|shown|beheld|beaten|loven|beholdeth|loveth|helpeth|thanketh|lovest|beholdest";
+
+function fixPronounCase(text, subject, object) {
+  if (!subject || !object || subject === object) return text;
+  const re = new RegExp(
+    "\\b(?:" + _OBJECT_HEADS + "|(?:" + _OBJECT_VERBS + ")(?:s|es|ed|d|eth|est|en|n)?)\\s+" + subject + "\\b",
+    "gi"
+  );
+  return text.replace(re, function (m) {
+    return m.slice(0, m.length - subject.length) + object;
+  });
+}
+
+// The negatives and verb-form tables are flat: every "don't" becomes "doth
+// not", every "was" becomes "wast". Undo the forms the subject cannot take.
+function fixAgreement(text, rules) {
+  if (!rules) return text;
+  for (const [pat, rep] of rules) text = text.replace(pat, rep);
+  return text;
+}
+
+// One intensity word per phrase: "exceedingly most agreeable" and
+// "most certainly most arduous" both collapse to a single intensifier.
+const _INTENSIFIERS = "most certainly|most assuredly|exceedingly|passing|utterly|wholly|truly|very|most|right";
+
+function dedupeIntensity(text) {
+  const re = new RegExp("\\b(?:" + _INTENSIFIERS + ")\\s+(?=(?:" + _INTENSIFIERS + ")\\b)", "gi");
+  return text.replace(re, "");
+}
+
+
+function maybeAddAlliteration(text, budget) {
+  if (budget && budget.used) return text;
   if (!chance(0.08)) return text;
   let words = text.split(/\s+/);
   if (words.length < 4) return text;
@@ -5118,7 +5451,8 @@ function maybeAddAlliteration(text) {
   return words.join(" ");
 }
 
-function maybeAddMetaphor(text) {
+function maybeAddMetaphor(text, budget) {
+  if (budget && budget.used) return text;
   if (!chance(0.06)) return text;
   let commaIdx = text.indexOf(',');
   if (commaIdx < 0 || commaIdx > text.length - 10) return text;
@@ -5132,7 +5466,8 @@ function maybeInsertQuote(text) {
   return text + " " + pick(quotes);
 }
 
-function maybeInsertInsult(text) {
+function maybeInsertInsult(text, budget) {
+  if (budget && budget.used) return text;
   if (!chance(0.05)) return text;
   var insult = pick(insults);
   return text + ", " + insult + "!";
@@ -5150,31 +5485,49 @@ function maybeAddStageDirection(text) {
 
 function maybeInvert(text) {
   if (!chance(0.12)) return text;
+  // Only the main clause may invert. A coordinated or subordinate clause keeps
+  // its subject before the verb, so "and will we ..." and "because can he ..."
+  // cannot be produced. Conservatively, any comma also ends the main clause.
+  const cut = text.search(/[,;:]|\b(?:and|but|because|although|though|while|whilst|if|when|since|so|yet)\b/i);
+  const head = cut < 0 ? text : text.slice(0, cut);
+  const tail = cut < 0 ? "" : text.slice(cut);
+  if (!head) return text;
   for (const [pat, fn] of inversions) {
-    let newText = text.replace(pat, fn);
-    if (newText !== text) {
-      text = newText;
-      break;
-    }
+    const newHead = head.replace(pat, fn);
+    if (newHead !== head) return newHead + tail;
   }
   return text;
 }
 
-function maybeAddFiller(text) {
+function maybeAddFiller(text, budget) {
+  if (budget && budget.used) return text;
   if (!chance(0.15)) return text;
   var fillers = ['forsooth', 'in good faith', 'by my trouthe', 'soothly', 'trewely'];
-  var words = text.split(/\s+/);
-  if (words.length < 3) return text;
-  var idx = Math.floor(rand() * Math.min(3, words.length));
-  words.splice(idx + 1, 0, fillers[Math.floor(rand() * fillers.length)]);
-  var candidate = words.join(" ");
+  // A dictionary phrase may already have supplied one ("Ye are dear to me,
+  // by the gods."); do not add a second.
+  var lowerText = text.toLowerCase();
+  if (fillers.some(function (f) { return lowerText.indexOf(f.toLowerCase()) >= 0; })) return text;
+  var filler = fillers[Math.floor(rand() * fillers.length)];
+  // A filler belongs at a clause boundary: after the first comma, or before
+  // the sentence starts. Splicing it after an arbitrary word can land between
+  // a determiner and its noun ("my by my troth best friend") or after the
+  // closing stop, where it leaks into the next sentence.
+  var comma = text.indexOf(',');
+  var candidate;
+  if (comma > 0 && comma < text.length - 1) {
+    candidate = text.slice(0, comma + 1) + " " + filler + "," + text.slice(comma + 1);
+  } else {
+    candidate = filler + ", " + text;
+  }
   // Never let a filler insertion repeat a word or phrase
-  // (e.g. "in good faith in good faith", "trewely trewely").
+  // (e.g. "by my troth by my troth", "verily verily").
   if (/\b([A-Za-z']+) \1\b|([A-Za-z']+\s+[A-Za-z']+)\s+\2\b|([A-Za-z']+\s+[A-Za-z']+\s+[A-Za-z']+)\s+\3\b/i.test(candidate)) return text;
+  if (budget) budget.used = true;
   return candidate;
 }
 
-function maybeAddParenthetical(text) {
+function maybeAddParenthetical(text, budget) {
+  if (budget && budget.used) return text;
   if (!chance(0.06)) return text;
   var parentheticals = ['(forsooth)', '(in good faith)', '(by my trouthe)'];
   var words = text.split(/\s+/);
@@ -5197,27 +5550,40 @@ function transformParagraph(para, opts) {
     // Single left-to-right pass, longest match wins
     s = replaceAll(s);
 
-    // Advanced transformations, gated by the options object.
+    // Grammar repairs for the flat tables, before anything is inserted.
+    s = fixPronounCase(s, pronounCase && pronounCase.subject, pronounCase && pronounCase.object);
+    s = fixAgreement(s, agreement);
+
+    // At most one decorative insertion per sentence. The helpers below all
+    // honour the same budget, so a sentence cannot collect a filler, an
+    // opening and a mid-sentence aside at once.
+    const budget = { used: false };
     if (opts.invert) s = maybeInvert(s);
-    if (!light) s = maybeAddFiller(s);
+    if (!light) s = maybeAddFiller(s, budget);
     if (opts.metaphors) {
-      s = maybeAddMetaphor(s);
-      s = maybeAddAlliteration(s);
+      s = maybeAddMetaphor(s, budget);
+      s = maybeAddAlliteration(s, budget);
     }
-    if (!light) s = maybeAddParenthetical(s);
-    if (!light) s = maybeInsertInsult(s);
+    if (!light) s = maybeAddParenthetical(s, budget);
+    if (!light) s = maybeInsertInsult(s, budget);
 
     // Opening exclamation (~35%), scaled by intensity.
-    if (opts.openings && chance(0.35 * chScale)) s = pick(openings) + " " + s;
+    if (opts.openings && !budget.used && chance(0.35 * chScale)) {
+      s = pick(openings) + " " + s;
+      budget.used = true;
+    }
 
     // Mid-sentence insertion (~20%), skipped under Light.
-    if (!light && chance(0.20 * chScale)) {
+    if (!light && !budget.used && chance(0.20 * chScale)) {
       let cIdx = s.indexOf(',');
       if (cIdx > 0 && cIdx < s.length - 5) {
         let after = s.substring(cIdx + 1).replace(/^\s+/, "");
         s = s.substring(0, cIdx) + pick(midInsertions) + (after ? " " + after : "");
+        budget.used = true;
       }
     }
+
+    s = dedupeIntensity(s);
 
     kept.push(s);
   }
@@ -5226,7 +5592,7 @@ function transformParagraph(para, opts) {
 }
 
 function getTransformOptions() {
-  var defs = { intensity: 'balanced', openings: true, metaphors: true, asides: true, invert: true };
+  var defs = { intensity: 'balanced', openings: true, metaphors: true, asides: true, invert: true, seed: null };
   if (typeof document === 'undefined' || !document.getElementById) return defs;
   var intensityEl = document.getElementById('optIntensity');
   var intensity = defs.intensity;
@@ -5250,6 +5616,7 @@ function getTransformOptions() {
     metaphors: on('optMetaphors', defs.metaphors),
     asides: on('optAsides', defs.asides),
     invert: on('optInvert', defs.invert),
+    seed: optSeedValue(),
   };
 }
 
@@ -5266,6 +5633,8 @@ function chaucerify() {
     return;
   }
   var opts = getTransformOptions();
+  // A filled Seed box pins the run; empty keeps the page's advancing sequence.
+  if (opts.seed !== null) seedRandom(opts.seed);
   var light = opts.intensity === 'light';
 
   // Split into paragraphs (blank lines preserved as separators)
@@ -5582,6 +5951,8 @@ const negatives = {
 };
 const pronouns = [
 ];
+const pronounCase = null;
+const agreement = null;
 const verbForms = [
 ];
 const commonWords = [
@@ -6158,6 +6529,46 @@ function replaceAll(text) {
   return out;
 }
 
+// ============================================================
+// GRAMMAR PASSES
+// ============================================================
+// Small repairs for the shapes the flat word tables cannot see. They run
+// after replaceAll() and before the decorative insertions, so an inserted
+// phrase is never mistaken for input.
+
+// The pronoun table maps every "you" to the subject form. This flips the
+// ones a preposition or a transitive verb governs to the object form.
+const _OBJECT_HEADS = "to|for|with|by|from|of|on|in|at|about|upon|unto|into|through|throughout|without|within|against|toward|towards|behind|before|after|near|over|under|between|betwixt|among|amongst|around|beyond|beneath|till|until|via|per|like|than";
+const _OBJECT_VERBS = "adore|behold|love|see|help|thank|tell|give|show|bring|find|let|meet|hear|call|ask|need|want|know|serve|obey|follow|trust|believe|teach|kiss|embrace|greet|welcome|praise|blame|forgive|remember|forget|protect|save|join|leave|take|hold|choose|command|bid|pray|beseech|entreat|vex|mock|scorn|hate|fear|envy|strike|kill|wound|heal|send|carry|lead|feed|clothe|arm|shield|defend|attend|await|seek|visit|court|wed|marry|cherish|revere|honour|honor|delight|please|amuse|comfort|warn|advise|remind|inform|convince|persuade|tempt|test|try|watch|observe|perceive|regard|notice|recognize|admire|despise|loathe|curse|bless|reward|punish|arrest|release|free|bind|tie|cut|stab|beat|hit|push|pull|drag|lift|raise|drop|catch|throw|sell|buy|pay|owe|cost|offer|receive|accept|refuse|deny|grant|allow|permit|forbid|stop|keep|set|put|make|miss|saw|gave|told|brought|found|heard|made|took|held|chose|struck|sent|led|fed|sought|sold|bought|paid|caught|threw|knew|forgot|forgave|besought|bound|left|kept|met|spoke|said|shown|beheld|beaten|loven|beholdeth|loveth|helpeth|thanketh|lovest|beholdest";
+
+function fixPronounCase(text, subject, object) {
+  if (!subject || !object || subject === object) return text;
+  const re = new RegExp(
+    "\\b(?:" + _OBJECT_HEADS + "|(?:" + _OBJECT_VERBS + ")(?:s|es|ed|d|eth|est|en|n)?)\\s+" + subject + "\\b",
+    "gi"
+  );
+  return text.replace(re, function (m) {
+    return m.slice(0, m.length - subject.length) + object;
+  });
+}
+
+// The negatives and verb-form tables are flat: every "don't" becomes "doth
+// not", every "was" becomes "wast". Undo the forms the subject cannot take.
+function fixAgreement(text, rules) {
+  if (!rules) return text;
+  for (const [pat, rep] of rules) text = text.replace(pat, rep);
+  return text;
+}
+
+// One intensity word per phrase: "exceedingly most agreeable" and
+// "most certainly most arduous" both collapse to a single intensifier.
+const _INTENSIFIERS = "most certainly|most assuredly|exceedingly|passing|utterly|wholly|truly|very|most|right";
+
+function dedupeIntensity(text) {
+  const re = new RegExp("\\b(?:" + _INTENSIFIERS + ")\\s+(?=(?:" + _INTENSIFIERS + ")\\b)", "gi");
+  return text.replace(re, "");
+}
+
 
 function maybeAddAlliteration(text) {
   if (!chance(0.08)) return text;
@@ -6169,12 +6580,14 @@ function maybeAddAlliteration(text) {
   return words.join(" ");
 }
 
-function maybeAddMetaphor(text) {
+function maybeAddMetaphor(text, budget) {
+  if (budget && budget.used) return text;
   if (!chance(0.06)) return text;
   let commaIdx = text.indexOf(',');
   if (commaIdx < 0 || commaIdx > text.length - 10) return text;
   let metaphor = pick(metaphors);
   let after = text.substring(commaIdx + 1).replace(/^\s+/, "");
+  if (budget) budget.used = true;
   return text.substring(0, commaIdx + 1) + " " + metaphor + "," + (after ? " " + after : "");
 }
 
@@ -6183,12 +6596,14 @@ function maybeInsertQuote(text) {
   return text + " " + pick(quotes);
 }
 
-function maybeInsertInsult(text) {
+function maybeInsertInsult(text, budget) {
+  if (budget && budget.used) return text;
   if (!chance(0.05)) return text;
   var insult = pick(insults);
   // Drop the sentence-ending stop: appending after "fought." used to leave
   // "fought., clouded by fear, you are!".
-  if (/[.!?]$/.test(text)) return text.replace(/[.!?]+$/, "") + ", " + insult + "!";
+  if (/[.!?]$/.test(text)) { if (budget) budget.used = true; return text.replace(/[.!?]+$/, "") + ", " + insult + "!"; }
+  if (budget) budget.used = true;
   return text + ", " + insult + "!";
 }
 
@@ -6670,6 +7085,7 @@ function transformParagraph(para, opts) {
   for (let s of sentences) {
     s = s.trim();
     if (!s) continue;
+    var budget = { used: false };
     s = expandContractions(s);
     s = fixPutOn(s);
     s = fixBadPhrases(s);
@@ -6695,23 +7111,23 @@ function transformParagraph(para, opts) {
     if (!wasReordered) {
       if (opts.invert) s = maybeInvert(s);
       if (opts.metaphors) {
-        s = maybeAddMetaphor(s)
+        s = maybeAddMetaphor(s, budget)
       }
     }
 
     // Opening interjection (~35%), kept: it is one of Yoda's habits.
-    if (opts.openings && chance(0.15 * chScale)) s = pick(openings) + " " + s;
+    if (opts.openings && !budget.used && chance(0.15 * chScale)) { s = pick(openings) + " " + s; budget.used = true; }
 
     // A rebuke and a mid-sentence insertion only ride along with longer
     // sentences; on short input they are pure noise, and the insertion
     // lands on the first comma - which may be the fronted phrase's own.
     if (s.length >= 40) {
-      if (!light) s = maybeInsertInsult(s);
-      if (!wasReordered && !light && chance(0.05 * chScale)) {
+      if (!light) s = maybeInsertInsult(s, budget);
+      if (!wasReordered && !light && !budget.used && chance(0.05 * chScale)) {
         let cIdx = s.indexOf(',');
         if (cIdx > 0 && cIdx < s.length - 5) {
           let after = s.substring(cIdx + 1).replace(/^\s+/, "");
-          s = s.substring(0, cIdx) + pick(midInsertions) + (after ? " " + after : "");
+          s = s.substring(0, cIdx) + pick(midInsertions) + (after ? " " + after : ""); budget.used = true;
         }
       }
     }
@@ -6723,7 +7139,7 @@ function transformParagraph(para, opts) {
 }
 
 function getTransformOptions() {
-  var defs = { intensity: 'balanced', openings: true, metaphors: true, asides: true, invert: true };
+  var defs = { intensity: 'balanced', openings: true, metaphors: true, asides: true, invert: true, seed: null };
   if (typeof document === 'undefined' || !document.getElementById) return defs;
   var intensityEl = document.getElementById('optIntensity');
   var intensity = defs.intensity;
@@ -6747,6 +7163,7 @@ function getTransformOptions() {
     metaphors: on('optMetaphors', defs.metaphors),
     asides: on('optAsides', defs.asides),
     invert: on('optInvert', defs.invert),
+    seed: optSeedValue(),
   };
 }
 
@@ -7127,6 +7544,8 @@ function yodaify() {
     return;
   }
   var opts = getTransformOptions();
+  // A filled Seed box pins the run; empty keeps the page's advancing sequence.
+  if (opts.seed !== null) seedRandom(opts.seed);
   var light = opts.intensity === 'light';
 
   // Split into paragraphs (blank lines preserved as separators)
@@ -7404,6 +7823,8 @@ const pronouns = [
   [/\byou\b/gi,"ye"], [/\byour\b/gi,"your"], [/\byours\b/gi,"yours"],
   [/\byourself\b/gi,"yourself"], [/\byourselves\b/gi,"yourselves"],
 ];
+const pronounCase = null;
+const agreement = null;
 const verbForms = [
   [/\bare\b/gi,"are"], [/\bit is\b/gi,"it is"], [/\bit's\b/gi,"it is"], [/\bis\b/gi,"is"],
   [/\bwas\b/gi,"was"], [/\bwere\b/gi,"were"],
@@ -8022,8 +8443,49 @@ function replaceAll(text) {
   return out;
 }
 
+// ============================================================
+// GRAMMAR PASSES
+// ============================================================
+// Small repairs for the shapes the flat word tables cannot see. They run
+// after replaceAll() and before the decorative insertions, so an inserted
+// phrase is never mistaken for input.
 
-function maybeAddAlliteration(text) {
+// The pronoun table maps every "you" to the subject form. This flips the
+// ones a preposition or a transitive verb governs to the object form.
+const _OBJECT_HEADS = "to|for|with|by|from|of|on|in|at|about|upon|unto|into|through|throughout|without|within|against|toward|towards|behind|before|after|near|over|under|between|betwixt|among|amongst|around|beyond|beneath|till|until|via|per|like|than";
+const _OBJECT_VERBS = "adore|behold|love|see|help|thank|tell|give|show|bring|find|let|meet|hear|call|ask|need|want|know|serve|obey|follow|trust|believe|teach|kiss|embrace|greet|welcome|praise|blame|forgive|remember|forget|protect|save|join|leave|take|hold|choose|command|bid|pray|beseech|entreat|vex|mock|scorn|hate|fear|envy|strike|kill|wound|heal|send|carry|lead|feed|clothe|arm|shield|defend|attend|await|seek|visit|court|wed|marry|cherish|revere|honour|honor|delight|please|amuse|comfort|warn|advise|remind|inform|convince|persuade|tempt|test|try|watch|observe|perceive|regard|notice|recognize|admire|despise|loathe|curse|bless|reward|punish|arrest|release|free|bind|tie|cut|stab|beat|hit|push|pull|drag|lift|raise|drop|catch|throw|sell|buy|pay|owe|cost|offer|receive|accept|refuse|deny|grant|allow|permit|forbid|stop|keep|set|put|make|miss|saw|gave|told|brought|found|heard|made|took|held|chose|struck|sent|led|fed|sought|sold|bought|paid|caught|threw|knew|forgot|forgave|besought|bound|left|kept|met|spoke|said|shown|beheld|beaten|loven|beholdeth|loveth|helpeth|thanketh|lovest|beholdest";
+
+function fixPronounCase(text, subject, object) {
+  if (!subject || !object || subject === object) return text;
+  const re = new RegExp(
+    "\\b(?:" + _OBJECT_HEADS + "|(?:" + _OBJECT_VERBS + ")(?:s|es|ed|d|eth|est|en|n)?)\\s+" + subject + "\\b",
+    "gi"
+  );
+  return text.replace(re, function (m) {
+    return m.slice(0, m.length - subject.length) + object;
+  });
+}
+
+// The negatives and verb-form tables are flat: every "don't" becomes "doth
+// not", every "was" becomes "wast". Undo the forms the subject cannot take.
+function fixAgreement(text, rules) {
+  if (!rules) return text;
+  for (const [pat, rep] of rules) text = text.replace(pat, rep);
+  return text;
+}
+
+// One intensity word per phrase: "exceedingly most agreeable" and
+// "most certainly most arduous" both collapse to a single intensifier.
+const _INTENSIFIERS = "most certainly|most assuredly|exceedingly|passing|utterly|wholly|truly|very|most|right";
+
+function dedupeIntensity(text) {
+  const re = new RegExp("\\b(?:" + _INTENSIFIERS + ")\\s+(?=(?:" + _INTENSIFIERS + ")\\b)", "gi");
+  return text.replace(re, "");
+}
+
+
+function maybeAddAlliteration(text, budget) {
+  if (budget && budget.used) return text;
   if (!chance(0.08)) return text;
   let words = text.split(/\s+/);
   if (words.length < 4) return text;
@@ -8033,7 +8495,8 @@ function maybeAddAlliteration(text) {
   return words.join(" ");
 }
 
-function maybeAddMetaphor(text) {
+function maybeAddMetaphor(text, budget) {
+  if (budget && budget.used) return text;
   if (!chance(0.06)) return text;
   let commaIdx = text.indexOf(',');
   if (commaIdx < 0 || commaIdx > text.length - 10) return text;
@@ -8047,7 +8510,8 @@ function maybeInsertQuote(text) {
   return text + " " + pick(quotes);
 }
 
-function maybeInsertInsult(text) {
+function maybeInsertInsult(text, budget) {
+  if (budget && budget.used) return text;
   if (!chance(0.05)) return text;
   var insult = pick(insults);
   return text + ", " + insult + "!";
@@ -8065,32 +8529,49 @@ function maybeAddStageDirection(text) {
 
 function maybeInvert(text) {
   if (!chance(0.12)) return text;
+  // Only the main clause may invert. A coordinated or subordinate clause keeps
+  // its subject before the verb, so "and will we ..." and "because can he ..."
+  // cannot be produced. Conservatively, any comma also ends the main clause.
+  const cut = text.search(/[,;:]|\b(?:and|but|because|although|though|while|whilst|if|when|since|so|yet)\b/i);
+  const head = cut < 0 ? text : text.slice(0, cut);
+  const tail = cut < 0 ? "" : text.slice(cut);
+  if (!head) return text;
   for (const [pat, fn] of inversions) {
-    let newText = text.replace(pat, fn);
-    if (newText !== text) {
-      text = newText;
-      break;
-    }
+    const newHead = head.replace(pat, fn);
+    if (newHead !== head) return newHead + tail;
   }
   return text;
 }
 
-function maybeAddFiller(text) {
+function maybeAddFiller(text, budget) {
+  if (budget && budget.used) return text;
   if (!chance(0.15)) return text;
-  var fillers = ['by the gods', 'skál', 'by Odin', 'by the gods', 'by Thor'];
-  var words = text.split(/\s+/);
-  if (words.length < 3) return text;
-  var idx = Math.floor(rand() * Math.min(3, words.length));
+  var fillers = ['by the gods', 'skál', 'by Odin', 'by Thor'];
+  // A dictionary phrase may already have supplied one ("Ye are dear to me,
+  // by the gods."); do not add a second.
+  var lowerText = text.toLowerCase();
+  if (fillers.some(function (f) { return lowerText.indexOf(f.toLowerCase()) >= 0; })) return text;
   var filler = fillers[Math.floor(rand() * fillers.length)];
-  words.splice(idx + 1, 0, filler);
-  var candidate = words.join(" ");
+  // A filler belongs at a clause boundary: after the first comma, or before
+  // the sentence starts. Splicing it after an arbitrary word can land between
+  // a determiner and its noun ("my by my troth best friend") or after the
+  // closing stop, where it leaks into the next sentence.
+  var comma = text.indexOf(',');
+  var candidate;
+  if (comma > 0 && comma < text.length - 1) {
+    candidate = text.slice(0, comma + 1) + " " + filler + "," + text.slice(comma + 1);
+  } else {
+    candidate = filler + ", " + text;
+  }
   // Never let a filler insertion repeat a word or phrase
-  // (e.g. "by by the gods", "by the gods by the gods").
+  // (e.g. "by my troth by my troth", "verily verily").
   if (/\b([A-Za-z']+) \1\b|([A-Za-z']+\s+[A-Za-z']+)\s+\2\b|([A-Za-z']+\s+[A-Za-z']+\s+[A-Za-z']+)\s+\3\b/i.test(candidate)) return text;
+  if (budget) budget.used = true;
   return candidate;
 }
 
-function maybeAddParenthetical(text) {
+function maybeAddParenthetical(text, budget) {
+  if (budget && budget.used) return text;
   if (!chance(0.06)) return text;
   var parentheticals = ["(by Odin's beard)", "(by Thor's hammer)", '(as the Norns decree)'];
   var words = text.split(/\s+/);
@@ -8113,27 +8594,40 @@ function transformParagraph(para, opts) {
     // Single left-to-right pass, longest match wins
     s = replaceAll(s);
 
-    // Advanced transformations, gated by the options object.
+    // Grammar repairs for the flat tables, before anything is inserted.
+    s = fixPronounCase(s, pronounCase && pronounCase.subject, pronounCase && pronounCase.object);
+    s = fixAgreement(s, agreement);
+
+    // At most one decorative insertion per sentence. The helpers below all
+    // honour the same budget, so a sentence cannot collect a filler, an
+    // opening and a mid-sentence aside at once.
+    const budget = { used: false };
     if (opts.invert) s = maybeInvert(s);
-    if (!light) s = maybeAddFiller(s);
+    if (!light) s = maybeAddFiller(s, budget);
     if (opts.metaphors) {
-      s = maybeAddMetaphor(s);
-      s = maybeAddAlliteration(s);
+      s = maybeAddMetaphor(s, budget);
+      s = maybeAddAlliteration(s, budget);
     }
-    if (!light) s = maybeAddParenthetical(s);
-    if (!light) s = maybeInsertInsult(s);
+    if (!light) s = maybeAddParenthetical(s, budget);
+    if (!light) s = maybeInsertInsult(s, budget);
 
     // Opening exclamation (~35%), scaled by intensity.
-    if (opts.openings && chance(0.35 * chScale)) s = pick(openings) + " " + s;
+    if (opts.openings && !budget.used && chance(0.35 * chScale)) {
+      s = pick(openings) + " " + s;
+      budget.used = true;
+    }
 
     // Mid-sentence insertion (~20%), skipped under Light.
-    if (!light && chance(0.20 * chScale)) {
+    if (!light && !budget.used && chance(0.20 * chScale)) {
       let cIdx = s.indexOf(',');
       if (cIdx > 0 && cIdx < s.length - 5) {
         let after = s.substring(cIdx + 1).replace(/^\s+/, "");
         s = s.substring(0, cIdx) + pick(midInsertions) + (after ? " " + after : "");
+        budget.used = true;
       }
     }
+
+    s = dedupeIntensity(s);
 
     kept.push(s);
   }
@@ -8142,7 +8636,7 @@ function transformParagraph(para, opts) {
 }
 
 function getTransformOptions() {
-  var defs = { intensity: 'balanced', openings: true, metaphors: true, asides: true, invert: true };
+  var defs = { intensity: 'balanced', openings: true, metaphors: true, asides: true, invert: true, seed: null };
   if (typeof document === 'undefined' || !document.getElementById) return defs;
   var intensityEl = document.getElementById('optIntensity');
   var intensity = defs.intensity;
@@ -8166,6 +8660,7 @@ function getTransformOptions() {
     metaphors: on('optMetaphors', defs.metaphors),
     asides: on('optAsides', defs.asides),
     invert: on('optInvert', defs.invert),
+    seed: optSeedValue(),
   };
 }
 
@@ -8182,6 +8677,8 @@ function norseify() {
     return;
   }
   var opts = getTransformOptions();
+  // A filled Seed box pins the run; empty keeps the page's advancing sequence.
+  if (opts.seed !== null) seedRandom(opts.seed);
   var light = opts.intensity === 'light';
 
   // Split into paragraphs (blank lines preserved as separators)
@@ -9420,11 +9917,11 @@ function initSavedQuotes() {
           var title = titleEl ? titleEl.value : '';
           if (sqSaveQuote(source ? source.textContent : '', label, original, settings, title)) {
             if (titleEl) titleEl.value = '';
-            btn.innerHTML = '<span>&#10003;</span> Saved';
+            btn.innerHTML = '<span aria-hidden="true">&#10003;</span> Saved';
             btn.classList.add('copied');
             if (typeof setTimeout === 'function') {
               setTimeout(function () {
-                btn.innerHTML = '<span>&#128222;</span> Save';
+                btn.innerHTML = '<span aria-hidden="true">&#128222;</span> Save';
                 btn.classList.remove('copied');
               }, 2000);
             }
@@ -9797,8 +10294,21 @@ var compareUI = (typeof document !== 'undefined') ? initCompareUI() : null;
 
 var OPTS_KEY = 'repriser.settings';
 
+// An optional seed makes a run reproducible. Empty or non-numeric means "use
+// the page's advancing sequence", which is the historical behaviour.
+function optSeedValue() {
+  if (typeof document === 'undefined' || !document.getElementById) return null;
+  var el = document.getElementById('optSeed');
+  if (!el || typeof el.value !== 'string') return null;
+  var raw = el.value.trim();
+  if (!/^\d{1,10}$/.test(raw)) return null;
+  var n = Number(raw);
+  if (!isFinite(n)) return null;
+  return (n % 4294967296) >>> 0;
+}
+
 function getTransformOptions() {
-  var defs = { intensity: 'balanced', openings: true, metaphors: true, asides: true, invert: true };
+  var defs = { intensity: 'balanced', openings: true, metaphors: true, asides: true, invert: true, seed: null };
   if (typeof document === 'undefined' || !document.getElementById) return defs;
   var intensityEl = document.getElementById('optIntensity');
   var intensity = defs.intensity;
@@ -9822,6 +10332,7 @@ function getTransformOptions() {
     metaphors: on('optMetaphors', defs.metaphors),
     asides: on('optAsides', defs.asides),
     invert: on('optInvert', defs.invert),
+    seed: optSeedValue(),
   };
 }
 
@@ -9855,12 +10366,16 @@ function optLoad() {
     if (!raw) return null;
     var o = JSON.parse(raw);
     if (!o || typeof o !== 'object') return null;
+    var seed = null;
+    if (typeof o.seed === 'number' && isFinite(o.seed)) seed = (o.seed % 4294967296) >>> 0;
+    else if (typeof o.seed === 'string' && /^\d{1,10}$/.test(o.seed)) seed = (Number(o.seed) % 4294967296) >>> 0;
     return {
       intensity: (o.intensity === 'light' || o.intensity === 'dramatic') ? o.intensity : 'balanced',
       openings: o.openings !== false,
       metaphors: o.metaphors !== false,
       asides: o.asides !== false,
       invert: o.invert !== false,
+      seed: seed,
     };
   } catch (e) {
     return null;
@@ -9895,10 +10410,12 @@ function optApply(opts) {
   set('optMetaphors', opts.metaphors);
   set('optAsides', opts.asides);
   set('optInvert', opts.invert);
+  var seedEl = document.getElementById('optSeed');
+  if (seedEl) seedEl.value = (opts.seed === null || opts.seed === undefined) ? '' : String(opts.seed);
 }
 
 function optReset() {
-  var defs = { intensity: 'balanced', openings: true, metaphors: true, asides: true, invert: true };
+  var defs = { intensity: 'balanced', openings: true, metaphors: true, asides: true, invert: true, seed: null };
   optApply(defs);
   optSave(defs);
   var status = document.getElementById('optStatus');
@@ -9913,13 +10430,14 @@ function initOptions() {
   if (resetBtn && resetBtn.addEventListener) {
     resetBtn.addEventListener('click', function () { optReset(); });
   }
-  var ids = ['optIntensity', 'optOpenings', 'optMetaphors', 'optAsides', 'optInvert'];
+  var ids = ['optIntensity', 'optOpenings', 'optMetaphors', 'optAsides', 'optInvert', 'optSeed'];
   for (var i = 0; i < ids.length; i++) {
     (function (id) {
       var el = document.getElementById(id);
       if (el && el.addEventListener) {
         el.addEventListener('change', function () { optSave(getTransformOptions()); });
         if (id === 'optIntensity') el.addEventListener('input', optIntensityLabel);
+        if (id === 'optSeed') el.addEventListener('input', function () { optSave(getTransformOptions()); });
       }
     })(ids[i]);
   }
@@ -10113,8 +10631,9 @@ function surpriseApply(inputEl, charCountEl, transformFn) {
     const id = String(item.style || '').toLowerCase();
     const idx = ORDER.indexOf(id);
     if (idx < 0 || !item.original) return;
-    outs[idx].textContent = STYLES[id].transform(
-      item.original, (Math.random() * 0x100000000) >>> 0);
+    const opts = getTransformOptions();
+    const seed = opts.seed !== null ? opts.seed : (Math.random() * 0x100000000) >>> 0;
+    outs[idx].textContent = STYLES[id].transform(item.original, seed);
   };
 
   // ---------- quote card ----------
@@ -10135,16 +10654,34 @@ function surpriseApply(inputEl, charCountEl, transformFn) {
     btn.addEventListener('click', () => {
       const text = document.getElementById('out-' + btn.dataset.copy).textContent;
       if (!text) return;
-      navigator.clipboard.writeText(text).then(() => {
-        btn.innerHTML = '<span>&#10003;</span> Copied!';
+      const done = () => {
+        btn.innerHTML = '<span aria-hidden="true">&#10003;</span> Copied!';
         btn.classList.add('copied');
         copyStatusEl.textContent = 'Copied to clipboard';
         setTimeout(() => {
-          btn.innerHTML = '<span>&#128203;</span> Copy';
+          btn.innerHTML = '<span aria-hidden="true">&#128203;</span> Copy';
           btn.classList.remove('copied');
           copyStatusEl.textContent = '';
         }, 2000);
-      });
+      };
+      // navigator.clipboard is unavailable on file:// in some browsers; the
+      // style pages already fall back to a hidden textarea. Do the same here.
+      const fallback = () => {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        done();
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(done).catch(fallback);
+      } else {
+        fallback();
+      }
     });
   });
 
@@ -10155,10 +10692,18 @@ function surpriseApply(inputEl, charCountEl, transformFn) {
       inputEl.focus();
       return;
     }
-    baseSeed = (baseSeed + 0x9E3779B9) >>> 0;
-    ORDER.forEach((id, i) => {
-      outs[i].textContent = STYLES[id].transform(text, (baseSeed + i) >>> 0);
-    });
+    const opts = getTransformOptions();
+    if (opts.seed !== null) {
+      // Pinned seed: every style replays the same run each click.
+      ORDER.forEach((id, i) => {
+        outs[i].textContent = STYLES[id].transform(text, opts.seed);
+      });
+    } else {
+      baseSeed = (baseSeed + 0x9E3779B9) >>> 0;
+      ORDER.forEach((id, i) => {
+        outs[i].textContent = STYLES[id].transform(text, (baseSeed + i) >>> 0);
+      });
+    }
     statusEl.textContent = ORDER.length + ' styles transformed';
   }
 })();

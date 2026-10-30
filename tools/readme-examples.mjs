@@ -36,7 +36,7 @@ const EXAMPLES = [
   ['I am so happy to see my friend', 'pirate'],
   ['I am so happy to see my friend', 'chaucer'],
   ['we will travel tomorrow and find the treasure', 'victorian'],
-  ['we will travel tomorrow and find the treasure', 'norse'],
+  ['the warrior is strong', 'norse'],
   ['you are brave', 'yoda'],
 ];
 

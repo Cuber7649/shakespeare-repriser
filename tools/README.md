@@ -7,7 +7,7 @@ Everything that generates or verifies the site. Zero dependencies: plain Node wi
 
 ```bash
 npm run build   # regenerate index.html from the six style pages
-npm test        # run the whole suite (24 steps, ~10 s)
+npm test        # run the whole suite (30 steps, ~10 s)
 ```
 
 `npm install` is never needed — there are no dependencies. Any individual script
@@ -21,25 +21,31 @@ also runs directly, e.g. `node tools/verify-dashboard.mjs`.
 | `build-icons.mjs` | Regenerates the app icons and `manifest.json` |
 | `build-screenshot.mjs` | **Opt-in**: retake `Screenshot.png` via headless Edge. Never part of the suite — it overwrites a hand-maintained file |
 | `run-all.mjs` | Runs every step below in order; any non-zero exit fails |
-| `paste-shared.mjs` | Pastes the 13 shared blocks (six JS, four CSS, three HTML) from this directory into the six style pages, then rebuilds `index.html`; `--check` verifies without writing and is what `npm test` and `prepush-check.mjs` run |
+| `paste-shared.mjs` | Pastes the 14 shared blocks (seven JS, four CSS, three HTML) from this directory into the six style pages, then rebuilds `index.html`; `--check` verifies without writing and is what `npm test` and `prepush-check.mjs` run |
 | `verify-dashboard.mjs` | Asserts the dashboard's output matches every style page |
 | `smoke-dashboard.mjs` | Loads `index.html` in a sandbox, exercises the UI, checks the quote card against a fake 2D context (runs at dpr 1, 2 and 3) |
 | `test-quotecard.mjs` | Strip patterns, layout maths, font shrinking, truncation warnings, skins with WCAG contrast, backgrounds, alignment, the original-text band, export dimensions at dpr 1/2/3 |
 | `test-cardpages.mjs` | The Make Card button, modal markup and `cardpage.js` wiring pasted identically into all 7 pages; opens with the output text, message when empty |
 | `test-savedquotes.mjs` | The saved-quotes block pasted byte-identically into all 7 pages; save, delete, cap and corruption behaviour |
 | `test-transform.mjs` | Cross-style edge cases: empty, punctuation, contractions, possessives, hyphenated, substring, proper nouns, multi-sentence, paragraphs, dialogue, repeated, cascade, seeded determinism, long input |
-| `test-settings.mjs` | The settings block pasted byte-identically into all 7 pages; balanced defaults match the pre-settings engine, toggles and intensity gate the pipeline |
+| `test-settings.mjs` | The settings block pasted byte-identically into all 7 pages; balanced defaults match the pre-settings engine, toggles and intensity gate the pipeline, and the optional seed replays a run |
+| `test-surprise.mjs` | Surprise Me never repeats the same sentence twice in a row, works with a one-item list, and inserts a family-friendly sample |
 | `test-compare.mjs` | The compare block pasted byte-identically into all 7 pages; word diff for replacements, insertions, deletions, reordering, punctuation, paragraphs, fallback and escaping |
 | `test-engine.mjs` | Compares the single-pass engine against the old chain |
 | `test-content.mjs` | Family-friendly word lists, no servitude roasts, no duplicates |
+| `test-grammar.mjs` | The shapes the flat tables can get wrong: pronoun case, agreement, doubled intensifiers, filler placement, stacked inserts, clause-crossing inversions |
+| `test-edgecases.mjs` | Empty, whitespace, punctuation, numbers, emoji, RTL, markup, bracket text, 10k characters and 5,000 words across all six styles |
+| `test-budgets.mjs` | 100-word and 5,000-word transform timings, and page-size budgets |
 | `test-yoda.mjs` | Object/copular fronting, grammar gate, strict object guard, seeded seed-42 outputs |
 | `test-manifest.mjs` | Installability criteria, declared icon sizes vs real PNG bytes, opaque corners and maskable safe zone, launcher shortcuts (optional) |
 | `test-reproducible.mjs` | Generated output is pure LF and rebuilds byte-identically |
 | `test-links.mjs` | Every local href resolves; all pages share one switcher |
 | `check-css.mjs` | Brace balance, one `prefers-reduced-motion` block per file, real `<label for>` wiring |
-| `check-a11y.mjs` | Static accessibility audit of all 7 pages: document language, viewport, one h1, form labels, dialog semantics, button names, status regions, image alt text, `:focus-visible` and reduced-motion styles |
-| `browser-journeys.mjs` | End-to-end journeys in real headless Edge over CDP: transform on every page, dashboard, settings persistence, cross-page saved quotes, export/import, card PNG download, keyboard operation, responsive overflow, console errors. Skips (exit 0) when Edge is unavailable |
-| `check-readme.mjs` | Every README example matches real output across the corpus seeds |
+| `check-a11y.mjs` | Static accessibility audit of all 7 pages: document language, viewport, one h1, form labels, dialog semantics, button names, status regions, image alt text, decorative icon spans, `:focus-visible` and reduced-motion styles |
+| `browser-journeys.mjs` | End-to-end journeys in real headless Edge over CDP: transform on every page, dashboard, settings persistence, cross-page saved quotes, export/import, card PNG download, keyboard operation, responsive overflow, offline font fallback, console errors. Skips (exit 0) when Edge is unavailable |
+| `check-readme.mjs` | Every README example matches real output across the corpus seeds; `--write` regenerates both tables at the canonical seed |
+| `check-style-overlap.mjs` | Reports replacement values shared between styles and fails when one README input is documented for two styles with identical output |
+| `check-words.mjs` | Checks one candidate word or line against the content policy; `--roast` applies the servitude rule. Wired as `npm run check-words` |
 | `readme-features.mjs` | Every README claim is supported by the code |
 | `readme-examples.mjs` | Prints real output for every README example across several seeds |
 | `harness.mjs` | Loads a page's inline `<script>` in Node with a stubbed DOM |
@@ -49,7 +55,7 @@ also runs directly, e.g. `node tools/verify-dashboard.mjs`.
 | `cardpage.js` | Binds a style page's Make Card button to the modal; inlined into all six style pages |
 | `card-modal.html` / `card-modal.css` | The modal's markup (including the options row) and styles, inlined by the generator |
 | `savedquotes.js` / `savedquotes.html` / `savedquotes.css` | Saved quotes: logic, markup and styles pasted into all seven pages, so `test-savedquotes.mjs` has to find them unchanged |
-| `options.js` / `options.html` / `options.css` | Transformation settings (intensity + toggles): logic, markup and styles pasted into all seven pages, so `test-settings.mjs` has to find them unchanged |
+| `options.js` / `options.html` / `options.css` | Transformation settings (intensity, toggles and optional seed): logic, markup and styles pasted into all seven pages, so `test-settings.mjs` has to find them unchanged |
 | `compare.js` / `compare.css` | Original-vs-output comparison: LCS word diff and panel styles pasted into all seven pages, so `test-compare.mjs` has to find them unchanged |
 | `snapshot.mjs` | Records transform output for a fixed corpus and seed set |
 | `compare.mjs` | Diffs two snapshots and censuses output defects |

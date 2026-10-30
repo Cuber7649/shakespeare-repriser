@@ -35,6 +35,10 @@ it from `manifest.json`, and iOS users can use Share → Add to Home Screen.
 | `yoda.html` | Jedi Master speech | "you are brave" → "Brave, you are"; "I love the bright sun" → "The bright sun, I love" (object–subject–verb) |
 | `norse.html` | Vikings and Norse myth | "you are happy" → "Ye are merry" |
 
+Yoda is deliberately conservative: it reorders a clear subject–verb–object or
+copular clause and leaves ordinary prose in its original order when the parser
+cannot be sure. The other five styles rewrite every sentence they can.
+
 ## Features
 
 - **Themed word replacement** — hundreds of verbs, adjectives, nouns, and phrases per style
@@ -51,6 +55,9 @@ it from `manifest.json`, and iOS users can use Share → Add to Home Screen.
   dashboard. Balanced with everything on matches the original behaviour;
   choices are remembered in your browser and follow you between pages, and a
   Reset button restores the defaults
+- **Reproducible runs** — an optional Seed field pins the random choices, so
+  the same input, settings and seed give the same output; leave it empty for a
+  fresh variation on each click
 - **Style-switcher navigation** — move between styles from any page
 - **Side-by-side dashboard** — one input, all six styles at once, on `index.html`
 - **Original/output comparison** — a Compare button beside every result opens
@@ -108,16 +115,17 @@ No build step or installation is required — the pages run straight from
 | `I am so happy to see my friend` | Pirate | I be so jolly to spy my matey |
 | `I am so happy to see my friend` | Chaucer | I am so blisful to seen my freend |
 | `we will travel tomorrow and find the treasure` | Victorian | We will journey the morrow and come upon the treasure |
-| `we will travel tomorrow and find the treasure` | Norse | We will journey the morrow and come upon the treasure |
+| `the warrior is strong` | Norse | The berserker is mighty |
 | `you are brave` | Yoda | Brave, you are |
 | `I like pie` | Yoda | Pie, I like |
 | `he whispered a terrible secret` | Yoda | A terrible secret, he whispered |
 | `the old king ruled the land` | Yoda | The land, the ancient king ruled |
 
-> These are single runs. Output varies each time — openings, interjections,
-> metaphors, alliterations, asides and stage directions are all rolled at
-> random, so `"hello how are you today"` might equally come out as
-> `"Hail how as I live dost thou fare this day"`.
+> These are single runs at seed 2. Output varies each time — openings,
+> interjections, metaphors, alliterations, asides and stage directions are all
+> rolled at random, so `"hello how are you today"` might equally come out as
+> `"Hail how as I live dost thou fare this day"`. Regenerate the tables with
+> `node tools/check-readme.mjs --write`.
 
 ## Project Structure
 
@@ -138,6 +146,11 @@ shakespeare-repriser/
 ├── package.json       # build and test commands (no dependencies)
 ├── README.md
 ├── AGENTS.md          # contributor/agent guide: architecture invariants and workflow
+├── DEVELOPMENT.md     # pipeline, settings, adding a style, running one test
+├── CONTRIBUTING.md    # required pre-PR steps
+├── CONTENT_POLICY.md  # family-friendly rules and reviewed exceptions
+├── WORDLISTS.md       # dictionary format and how to change an entry
+├── ACCESSIBILITY.md   # what is tested, target level and known gaps
 ├── LICENSE            # free use; credit + GitHub link required if commercial
 ├── Screenshot.png
 └── tools/             # build + test tooling (not shipped to the browser)
@@ -151,8 +164,10 @@ Two files here are **generated** rather than hand-written:
 - **`index.html`** — the side-by-side dashboard. It is the one page that needs
   every dictionary in a single file, so it is built from the six style pages by
   copying each page's dictionaries, engine, helpers and transform function
-  verbatim. That keeps this repository free of shared runtime files while making
-  it impossible for the dashboard to drift from the individual pages.
+  verbatim. That keeps this repository free of shared runtime files; the
+  generator removes the duplication, and `verify-dashboard.mjs` compares the
+  dashboard's output with every style page, so drift fails the suite rather
+  than shipping silently.
 - **`icon-*.png`, `icon.svg` and `manifest.json`** — drawn programmatically, so
   there is no image editor in the loop; the artwork is a round medallion on a
   square canvas, which keeps the install and iOS home-screen icons maskable-safe,
@@ -161,8 +176,12 @@ Two files here are **generated** rather than hand-written:
 The generator and test scripts live in [`tools/`](./tools/README.md), with a
 README of their own. Shared logic — transformation settings, saved quotes, the
 comparison view, the quote-card modal — lives once under `tools/` and is pasted
-verbatim into every page, so each page stays a standalone file that cannot drift
-from its neighbours. To change it:
+verbatim into every page, so each page stays a standalone file. That pasting is
+deliberate: it is what lets the whole site work from `file://` with no runtime
+dependency, no module loader and no build step for visitors. The cost is larger
+pages (each is about 150 KB) and several copies to update when shared logic
+changes; `paste-shared.mjs --check` fails the suite when a copy drifts. To
+change it:
 
 1. Edit the file under `tools/`, never its pasted copies inside the `.html`
    pages or `index.html`.
@@ -172,7 +191,7 @@ from its neighbours. To change it:
 
 ```bash
 npm run build   # regenerate index.html from the six style pages
-npm test        # run the whole suite (24 steps, ~10 s)
+npm test        # run the whole suite (30 steps, ~10 s)
 ```
 
 `npm test` includes `paste-shared --check`, which fails the build the moment a
@@ -183,11 +202,11 @@ There are no dependencies — `npm install` is never needed.
 
 ## Browser Support
 
-Works in modern browsers (Chrome, Edge, Firefox, Safari), on desktop and
-mobile. Known limitations: the automated browser suite runs only in headless
-Chromium/Edge, so other engines are not covered by it; and an internet
-connection is only needed for the Google Fonts stylesheets — offline, the apps
-fall back to system serif fonts.
+Tested in headless Chromium/Edge, on desktop and at mobile widths, by the
+automated suite. Expected to work in Firefox and Safari — the pages use only
+standard JavaScript, CSS and `localStorage` — but those engines are not covered
+by the suite yet. An internet connection is only needed for the Google Fonts
+stylesheets; offline, the apps fall back to system serif fonts.
 
 ## Privacy
 

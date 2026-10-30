@@ -16,8 +16,21 @@
 
 var OPTS_KEY = 'repriser.settings';
 
+// An optional seed makes a run reproducible. Empty or non-numeric means "use
+// the page's advancing sequence", which is the historical behaviour.
+function optSeedValue() {
+  if (typeof document === 'undefined' || !document.getElementById) return null;
+  var el = document.getElementById('optSeed');
+  if (!el || typeof el.value !== 'string') return null;
+  var raw = el.value.trim();
+  if (!/^\d{1,10}$/.test(raw)) return null;
+  var n = Number(raw);
+  if (!isFinite(n)) return null;
+  return (n % 4294967296) >>> 0;
+}
+
 function getTransformOptions() {
-  var defs = { intensity: 'balanced', openings: true, metaphors: true, asides: true, invert: true };
+  var defs = { intensity: 'balanced', openings: true, metaphors: true, asides: true, invert: true, seed: null };
   if (typeof document === 'undefined' || !document.getElementById) return defs;
   var intensityEl = document.getElementById('optIntensity');
   var intensity = defs.intensity;
@@ -41,6 +54,7 @@ function getTransformOptions() {
     metaphors: on('optMetaphors', defs.metaphors),
     asides: on('optAsides', defs.asides),
     invert: on('optInvert', defs.invert),
+    seed: optSeedValue(),
   };
 }
 
@@ -74,12 +88,16 @@ function optLoad() {
     if (!raw) return null;
     var o = JSON.parse(raw);
     if (!o || typeof o !== 'object') return null;
+    var seed = null;
+    if (typeof o.seed === 'number' && isFinite(o.seed)) seed = (o.seed % 4294967296) >>> 0;
+    else if (typeof o.seed === 'string' && /^\d{1,10}$/.test(o.seed)) seed = (Number(o.seed) % 4294967296) >>> 0;
     return {
       intensity: (o.intensity === 'light' || o.intensity === 'dramatic') ? o.intensity : 'balanced',
       openings: o.openings !== false,
       metaphors: o.metaphors !== false,
       asides: o.asides !== false,
       invert: o.invert !== false,
+      seed: seed,
     };
   } catch (e) {
     return null;
@@ -114,10 +132,12 @@ function optApply(opts) {
   set('optMetaphors', opts.metaphors);
   set('optAsides', opts.asides);
   set('optInvert', opts.invert);
+  var seedEl = document.getElementById('optSeed');
+  if (seedEl) seedEl.value = (opts.seed === null || opts.seed === undefined) ? '' : String(opts.seed);
 }
 
 function optReset() {
-  var defs = { intensity: 'balanced', openings: true, metaphors: true, asides: true, invert: true };
+  var defs = { intensity: 'balanced', openings: true, metaphors: true, asides: true, invert: true, seed: null };
   optApply(defs);
   optSave(defs);
   var status = document.getElementById('optStatus');
@@ -132,13 +152,14 @@ function initOptions() {
   if (resetBtn && resetBtn.addEventListener) {
     resetBtn.addEventListener('click', function () { optReset(); });
   }
-  var ids = ['optIntensity', 'optOpenings', 'optMetaphors', 'optAsides', 'optInvert'];
+  var ids = ['optIntensity', 'optOpenings', 'optMetaphors', 'optAsides', 'optInvert', 'optSeed'];
   for (var i = 0; i < ids.length; i++) {
     (function (id) {
       var el = document.getElementById(id);
       if (el && el.addEventListener) {
         el.addEventListener('change', function () { optSave(getTransformOptions()); });
         if (id === 'optIntensity') el.addEventListener('input', optIntensityLabel);
+        if (id === 'optSeed') el.addEventListener('input', function () { optSave(getTransformOptions()); });
       }
     })(ids[i]);
   }

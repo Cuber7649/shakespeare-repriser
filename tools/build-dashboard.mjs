@@ -43,6 +43,7 @@ const STYLES = [
 const DICTS = [
   'openings', 'midInsertions', 'quotes', 'metaphors', 'insults', 'asides',
   'stageDirections', 'inversions', 'alliterations', 'negatives', 'pronouns',
+  'pronounCase', 'agreement',
   'verbForms', 'commonWords', 'verbs', 'adjectives', 'nouns', 'contractions',
   'sentenceTransforms',
 ];
@@ -234,22 +235,22 @@ ${cardModalCss}
 
 const cards = STYLES.map((s) => `      <section class="mini">
         <div class="mini-head">
-          <span class="mini-name"><span class="mini-icon">${s.icon}</span> ${s.label}</span>
+          <span class="mini-name"><span class="mini-icon" aria-hidden="true">${s.icon}</span> ${s.label}</span>
           <a class="mini-link" href="./${s.href}">Open page</a>
         </div>
         <div class="out" id="out-${s.id}"></div>
         <div class="output-actions">
           <button class="btn-copy" data-card="${s.id}">
-            <span>&#128204;</span> Make Card
+            <span aria-hidden="true">&#128204;</span> Make Card
           </button>
           <button class="btn-copy" data-copy="${s.id}">
-            <span>&#128203;</span> Copy
+            <span aria-hidden="true">&#128203;</span> Copy
           </button>
           <button class="btn-copy" data-save="${s.label}" data-save-target="out-${s.id}">
-            <span>&#128222;</span> Save
+            <span aria-hidden="true">&#128222;</span> Save
           </button>
           <button class="btn-copy" data-compare="out-${s.id}">
-            <span>&#8644;</span> Compare
+            <span aria-hidden="true">&#8644;</span> Compare
           </button>
         </div>
       </section>`).join('\n');
@@ -290,7 +291,7 @@ ${navLinks}
 
 <div class="container">
   <header class="header">
-    <span class="quill">&#128396;</span>
+    <span class="quill" aria-hidden="true">&#128396;</span>
     <h1>Text Repriser Collection</h1>
     <p class="subtitle">Six styles, side by side</p>
   </header>
@@ -298,7 +299,7 @@ ${navLinks}
   <div class="divider">&#10045; Anno Domini MDLXIV &#10045;</div>
 
   <div class="card">
-    <label class="card-label" for="input"><span class="icon">&#9998;</span> Modern English</label>
+    <label class="card-label" for="input"><span class="icon" aria-hidden="true">&#9998;</span> Modern English</label>
     <textarea id="input" placeholder="Type thy modern words here, good merchant..."></textarea>
     <div class="char-count"><span id="charCount">0</span> characters inscribed</div>
   </div>
@@ -307,10 +308,10 @@ ${optionsHtml}
 
   <div class="btn-row">
     <button class="btn btn-primary" id="go">
-      <span class="quill-icon">&#128396;</span> Repraise In All Styles!
+      <span class="quill-icon" aria-hidden="true">&#128396;</span> Repraise In All Styles!
     </button>
     <button class="btn btn-secondary" id="dashSurprise">
-      <span>&#128204;</span> Surprise Me!
+      <span aria-hidden="true">&#128204;</span> Surprise Me!
     </button>
     <button class="btn btn-secondary" id="clear">Clear</button>
   </div>
@@ -324,9 +325,9 @@ ${cards}
 ${savedQuotesHtml}
 
   <div class="footer">
-    <span class="quill-small">&#128396;</span>
+    <span class="quill-small" aria-hidden="true">&#128396;</span>
     Crafted with ink &amp; devotion
-    <span class="quill-small">&#128396;</span>
+    <span class="quill-small" aria-hidden="true">&#128396;</span>
   </div>
 </div>
 
@@ -393,8 +394,9 @@ ${surpriseJs}
     const id = String(item.style || '').toLowerCase();
     const idx = ORDER.indexOf(id);
     if (idx < 0 || !item.original) return;
-    outs[idx].textContent = STYLES[id].transform(
-      item.original, (Math.random() * 0x100000000) >>> 0);
+    const opts = getTransformOptions();
+    const seed = opts.seed !== null ? opts.seed : (Math.random() * 0x100000000) >>> 0;
+    outs[idx].textContent = STYLES[id].transform(item.original, seed);
   };
 
   // ---------- quote card ----------
@@ -415,16 +417,34 @@ ${surpriseJs}
     btn.addEventListener('click', () => {
       const text = document.getElementById('out-' + btn.dataset.copy).textContent;
       if (!text) return;
-      navigator.clipboard.writeText(text).then(() => {
-        btn.innerHTML = '<span>&#10003;</span> Copied!';
+      const done = () => {
+        btn.innerHTML = '<span aria-hidden="true">&#10003;</span> Copied!';
         btn.classList.add('copied');
         copyStatusEl.textContent = 'Copied to clipboard';
         setTimeout(() => {
-          btn.innerHTML = '<span>&#128203;</span> Copy';
+          btn.innerHTML = '<span aria-hidden="true">&#128203;</span> Copy';
           btn.classList.remove('copied');
           copyStatusEl.textContent = '';
         }, 2000);
-      });
+      };
+      // navigator.clipboard is unavailable on file:// in some browsers; the
+      // style pages already fall back to a hidden textarea. Do the same here.
+      const fallback = () => {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        done();
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(done).catch(fallback);
+      } else {
+        fallback();
+      }
     });
   });
 
@@ -435,10 +455,18 @@ ${surpriseJs}
       inputEl.focus();
       return;
     }
-    baseSeed = (baseSeed + 0x9E3779B9) >>> 0;
-    ORDER.forEach((id, i) => {
-      outs[i].textContent = STYLES[id].transform(text, (baseSeed + i) >>> 0);
-    });
+    const opts = getTransformOptions();
+    if (opts.seed !== null) {
+      // Pinned seed: every style replays the same run each click.
+      ORDER.forEach((id, i) => {
+        outs[i].textContent = STYLES[id].transform(text, opts.seed);
+      });
+    } else {
+      baseSeed = (baseSeed + 0x9E3779B9) >>> 0;
+      ORDER.forEach((id, i) => {
+        outs[i].textContent = STYLES[id].transform(text, (baseSeed + i) >>> 0);
+      });
+    }
     statusEl.textContent = ORDER.length + ' styles transformed';
   }
 })();

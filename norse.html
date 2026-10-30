@@ -684,6 +684,26 @@
     color: #5c4530;
     min-width: 5.5em;
   }
+  .options-seed {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1rem;
+    color: #5c4530;
+    background: #fdf6e3;
+    border: 1.5px solid #c4a265;
+    border-radius: 8px;
+    padding: 4px 10px;
+    width: 9em;
+  }
+  .options-seed:focus-visible {
+    outline: 2px solid #d4a056;
+    outline-offset: 2px;
+  }
+  .options-hint {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.85rem;
+    font-style: italic;
+    color: #7a6248;
+  }
   .options-checks {
     display: flex;
     flex-wrap: wrap;
@@ -995,7 +1015,7 @@
 
 <div class="container">
   <header class="header">
-    <span class="quill">&#128396;</span>
+    <span class="quill" aria-hidden="true">&#128396;</span>
     <h1>Norse Text Repriser</h1>
     <p class="subtitle">Forge thy words in the old tongue</p>
   </header>
@@ -1003,7 +1023,7 @@
   <div class="divider">&#10045; By Odin's Eye MDLXXXII &#10045;</div>
 
   <div class="card">
-    <label class="card-label" for="input"><span class="icon">&#9998;</span> Modern English</label>
+    <label class="card-label" for="input"><span class="icon" aria-hidden="true">&#9998;</span> Modern English</label>
     <textarea id="input" placeholder="Type thy words here, warrior..."></textarea>
     <div class="char-count"><span id="charCount">0</span> characters inscribed</div>
   </div>
@@ -1014,6 +1034,11 @@
       <label class="options-label" for="optIntensity">Intensity</label>
       <input type="range" id="optIntensity" class="options-range" min="0" max="2" step="1" value="1">
       <span class="options-intensity" id="optIntensityValue">Balanced</span>
+    </div>
+    <div class="options-row">
+      <label class="options-label" for="optSeed">Seed</label>
+      <input type="text" id="optSeed" class="options-seed" inputmode="numeric" autocomplete="off" placeholder="Random" aria-describedby="optSeedHint">
+      <span class="options-hint" id="optSeedHint">Optional; the same seed replays a run</span>
     </div>
     <div class="options-checks">
       <label class="options-check"><input type="checkbox" id="optOpenings" checked> Opening phrases</label>
@@ -1029,10 +1054,10 @@
 
   <div class="btn-row">
     <button class="btn btn-primary" onclick="norseify()">
-      <span class="quill-icon">&#128396;</span> Forge it!
+      <span class="quill-icon" aria-hidden="true">&#128396;</span> Forge it!
     </button>
     <button class="btn btn-secondary" onclick="surpriseApply(inputEl, charCountEl, norseify)">
-      <span>&#128204;</span> Surprise Me!
+      <span aria-hidden="true">&#128204;</span> Surprise Me!
     </button>
     <button class="btn btn-secondary" onclick="clearAll()">
       Clear
@@ -1041,27 +1066,27 @@
 
   <div class="output-card">
     <div class="ink-drip"></div>
-    <div class="card-label"><span class="icon">&#128214;</span> Norse Output</div>
+    <div class="card-label"><span class="icon" aria-hidden="true">&#128214;</span> Norse Output</div>
     <div id="output" aria-live="polite" aria-atomic="true"></div>
     <div class="output-actions">
       <button class="btn-copy" id="makeCardBtn" data-card="norse">
-        <span>&#128204;</span> Make Card
+        <span aria-hidden="true">&#128204;</span> Make Card
       </button>
       <button class="btn-copy" onclick="copyOutput()" id="copyBtn">
-        <span>&#128203;</span> Copy to Clipboard
+        <span aria-hidden="true">&#128203;</span> Copy to Clipboard
       </button>
       <button class="btn-copy" data-save="Norse" data-save-target="output">
-        <span>&#128278;</span> Save
+        <span aria-hidden="true">&#128278;</span> Save
       </button>
       <button class="btn-copy" data-compare="output">
-        <span>&#8644;</span> Compare
+        <span aria-hidden="true">&#8644;</span> Compare
       </button>
       <span class="visually-hidden" id="copyStatus" role="status"></span>
     </div>
   </div>
 
   <section class="saved-quotes" id="savedQuotes">
-  <div class="card-label"><span class="icon">&#128218;</span> Saved Quotes</div>
+  <div class="card-label"><span class="icon" aria-hidden="true">&#128218;</span> Saved Quotes</div>
   <div class="saved-quotes-toolbar">
     <label class="visually-hidden" for="sqSearch">Search saved quotes</label>
     <input type="search" class="saved-quotes-field" id="sqSearch" placeholder="Search&hellip;" autocomplete="off">
@@ -1084,9 +1109,9 @@
 </section>
 
   <div class="footer">
-    <span class="quill-small">&#128396;</span>
+    <span class="quill-small" aria-hidden="true">&#128396;</span>
     Crafted with ink & devotion
-    <span class="quill-small">&#128396;</span>
+    <span class="quill-small" aria-hidden="true">&#128396;</span>
   </div>
 </div>
 
@@ -1167,11 +1192,11 @@ function copyOutput() {
   const btn = document.getElementById('copyBtn');
   function showCopied() {
     btn.classList.add('copied');
-    btn.innerHTML = '<span>&#10003;</span> Copied!';
+    btn.innerHTML = '<span aria-hidden="true">&#10003;</span> Copied!';
     copyStatusEl.textContent = 'Copied to clipboard';
     setTimeout(() => {
       btn.classList.remove('copied');
-      btn.innerHTML = '<span>&#128203;</span> Copy to Clipboard';
+      btn.innerHTML = '<span aria-hidden="true">&#128203;</span> Copy to Clipboard';
       copyStatusEl.textContent = '';
     }, 2000);
   }
@@ -1457,6 +1482,12 @@ const pronouns = [
   [/\byou\b/gi,"ye"], [/\byour\b/gi,"your"], [/\byours\b/gi,"yours"],
   [/\byourself\b/gi,"yourself"], [/\byourselves\b/gi,"yourselves"],
 ];
+
+// This style has one pronoun form for both cases, so no case pass is needed.
+const pronounCase = null;
+
+// No subject-sensitive verb repairs are needed for this style's flat tables.
+const agreement = null;
 
 // ============================================================
 // VERB FORMS
@@ -2084,9 +2115,50 @@ function replaceAll(text) {
 }
 
 // ============================================================
+// GRAMMAR PASSES
+// ============================================================
+// Small repairs for the shapes the flat word tables cannot see. They run
+// after replaceAll() and before the decorative insertions, so an inserted
+// phrase is never mistaken for input.
+
+// The pronoun table maps every "you" to the subject form. This flips the
+// ones a preposition or a transitive verb governs to the object form.
+const _OBJECT_HEADS = "to|for|with|by|from|of|on|in|at|about|upon|unto|into|through|throughout|without|within|against|toward|towards|behind|before|after|near|over|under|between|betwixt|among|amongst|around|beyond|beneath|till|until|via|per|like|than";
+const _OBJECT_VERBS = "adore|behold|love|see|help|thank|tell|give|show|bring|find|let|meet|hear|call|ask|need|want|know|serve|obey|follow|trust|believe|teach|kiss|embrace|greet|welcome|praise|blame|forgive|remember|forget|protect|save|join|leave|take|hold|choose|command|bid|pray|beseech|entreat|vex|mock|scorn|hate|fear|envy|strike|kill|wound|heal|send|carry|lead|feed|clothe|arm|shield|defend|attend|await|seek|visit|court|wed|marry|cherish|revere|honour|honor|delight|please|amuse|comfort|warn|advise|remind|inform|convince|persuade|tempt|test|try|watch|observe|perceive|regard|notice|recognize|admire|despise|loathe|curse|bless|reward|punish|arrest|release|free|bind|tie|cut|stab|beat|hit|push|pull|drag|lift|raise|drop|catch|throw|sell|buy|pay|owe|cost|offer|receive|accept|refuse|deny|grant|allow|permit|forbid|stop|keep|set|put|make|miss|saw|gave|told|brought|found|heard|made|took|held|chose|struck|sent|led|fed|sought|sold|bought|paid|caught|threw|knew|forgot|forgave|besought|bound|left|kept|met|spoke|said|shown|beheld|beaten|loven|beholdeth|loveth|helpeth|thanketh|lovest|beholdest";
+
+function fixPronounCase(text, subject, object) {
+  if (!subject || !object || subject === object) return text;
+  const re = new RegExp(
+    "\\b(?:" + _OBJECT_HEADS + "|(?:" + _OBJECT_VERBS + ")(?:s|es|ed|d|eth|est|en|n)?)\\s+" + subject + "\\b",
+    "gi"
+  );
+  return text.replace(re, function (m) {
+    return m.slice(0, m.length - subject.length) + object;
+  });
+}
+
+// The negatives and verb-form tables are flat: every "don't" becomes "doth
+// not", every "was" becomes "wast". Undo the forms the subject cannot take.
+function fixAgreement(text, rules) {
+  if (!rules) return text;
+  for (const [pat, rep] of rules) text = text.replace(pat, rep);
+  return text;
+}
+
+// One intensity word per phrase: "exceedingly most agreeable" and
+// "most certainly most arduous" both collapse to a single intensifier.
+const _INTENSIFIERS = "most certainly|most assuredly|exceedingly|passing|utterly|wholly|truly|very|most|right";
+
+function dedupeIntensity(text) {
+  const re = new RegExp("\\b(?:" + _INTENSIFIERS + ")\\s+(?=(?:" + _INTENSIFIERS + ")\\b)", "gi");
+  return text.replace(re, "");
+}
+
+// ============================================================
 // HELPER: pick a random number of words from text and apply alliteration
 // ============================================================
-function maybeAddAlliteration(text) {
+function maybeAddAlliteration(text, budget) {
+  if (budget && budget.used) return text;
   if (!chance(0.08)) return text;
   let words = text.split(/\s+/);
   if (words.length < 4) return text;
@@ -2099,7 +2171,8 @@ function maybeAddAlliteration(text) {
 // ============================================================
 // HELPER: insert a metaphor after a comma
 // ============================================================
-function maybeAddMetaphor(text) {
+function maybeAddMetaphor(text, budget) {
+  if (budget && budget.used) return text;
   if (!chance(0.06)) return text;
   let commaIdx = text.indexOf(',');
   if (commaIdx < 0 || commaIdx > text.length - 10) return text;
@@ -2119,7 +2192,8 @@ function maybeInsertQuote(text) {
 // ============================================================
 // HELPER: insert a Viking insult
 // ============================================================
-function maybeInsertInsult(text) {
+function maybeInsertInsult(text, budget) {
+  if (budget && budget.used) return text;
   if (!chance(0.05)) return text;
   var insult = pick(insults);
   return text + ", " + insult + "!";
@@ -2146,12 +2220,16 @@ function maybeAddStageDirection(text) {
 // ============================================================
 function maybeInvert(text) {
   if (!chance(0.12)) return text;
+  // Only the main clause may invert. A coordinated or subordinate clause keeps
+  // its subject before the verb, so "and will we ..." and "because can he ..."
+  // cannot be produced. Conservatively, any comma also ends the main clause.
+  const cut = text.search(/[,;:]|\b(?:and|but|because|although|though|while|whilst|if|when|since|so|yet)\b/i);
+  const head = cut < 0 ? text : text.slice(0, cut);
+  const tail = cut < 0 ? "" : text.slice(cut);
+  if (!head) return text;
   for (const [pat, fn] of inversions) {
-    let newText = text.replace(pat, fn);
-    if (newText !== text) {
-      text = newText;
-      break;
-    }
+    const newHead = head.replace(pat, fn);
+    if (newHead !== head) return newHead + tail;
   }
   return text;
 }
@@ -2159,25 +2237,38 @@ function maybeInvert(text) {
 // ============================================================
 // HELPER: add Norse flavor to some sentences
 // ============================================================
-function maybeAddFiller(text) {
+function maybeAddFiller(text, budget) {
+  if (budget && budget.used) return text;
   if (!chance(0.15)) return text;
-  var fillers = ['by the gods', 'skál', 'by Odin', 'by the gods', 'by Thor'];
-  var words = text.split(/\s+/);
-  if (words.length < 3) return text;
-  var idx = Math.floor(rand() * Math.min(3, words.length));
+  var fillers = ['by the gods', 'skál', 'by Odin', 'by Thor'];
+  // A dictionary phrase may already have supplied one ("Ye are dear to me,
+  // by the gods."); do not add a second.
+  var lowerText = text.toLowerCase();
+  if (fillers.some(function (f) { return lowerText.indexOf(f.toLowerCase()) >= 0; })) return text;
   var filler = fillers[Math.floor(rand() * fillers.length)];
-  words.splice(idx + 1, 0, filler);
-  var candidate = words.join(" ");
+  // A filler belongs at a clause boundary: after the first comma, or before
+  // the sentence starts. Splicing it after an arbitrary word can land between
+  // a determiner and its noun ("my by my troth best friend") or after the
+  // closing stop, where it leaks into the next sentence.
+  var comma = text.indexOf(',');
+  var candidate;
+  if (comma > 0 && comma < text.length - 1) {
+    candidate = text.slice(0, comma + 1) + " " + filler + "," + text.slice(comma + 1);
+  } else {
+    candidate = filler + ", " + text;
+  }
   // Never let a filler insertion repeat a word or phrase
-  // (e.g. "by by the gods", "by the gods by the gods").
+  // (e.g. "by my troth by my troth", "verily verily").
   if (/\b([A-Za-z']+) \1\b|([A-Za-z']+\s+[A-Za-z']+)\s+\2\b|([A-Za-z']+\s+[A-Za-z']+\s+[A-Za-z']+)\s+\3\b/i.test(candidate)) return text;
+  if (budget) budget.used = true;
   return candidate;
 }
 
 // ============================================================
 // HELPER: wrap a clause in parentheses for dramatic effect
 // ============================================================
-function maybeAddParenthetical(text) {
+function maybeAddParenthetical(text, budget) {
+  if (budget && budget.used) return text;
   if (!chance(0.06)) return text;
   var parentheticals = ["(by Odin's beard)", "(by Thor's hammer)", '(as the Norns decree)'];
   var words = text.split(/\s+/);
@@ -2203,27 +2294,40 @@ function transformParagraph(para, opts) {
     // Single left-to-right pass, longest match wins
     s = replaceAll(s);
 
-    // Advanced transformations, gated by the options object.
+    // Grammar repairs for the flat tables, before anything is inserted.
+    s = fixPronounCase(s, pronounCase && pronounCase.subject, pronounCase && pronounCase.object);
+    s = fixAgreement(s, agreement);
+
+    // At most one decorative insertion per sentence. The helpers below all
+    // honour the same budget, so a sentence cannot collect a filler, an
+    // opening and a mid-sentence aside at once.
+    const budget = { used: false };
     if (opts.invert) s = maybeInvert(s);
-    if (!light) s = maybeAddFiller(s);
+    if (!light) s = maybeAddFiller(s, budget);
     if (opts.metaphors) {
-      s = maybeAddMetaphor(s);
-      s = maybeAddAlliteration(s);
+      s = maybeAddMetaphor(s, budget);
+      s = maybeAddAlliteration(s, budget);
     }
-    if (!light) s = maybeAddParenthetical(s);
-    if (!light) s = maybeInsertInsult(s);
+    if (!light) s = maybeAddParenthetical(s, budget);
+    if (!light) s = maybeInsertInsult(s, budget);
 
     // Opening exclamation (~35%), scaled by intensity.
-    if (opts.openings && chance(0.35 * chScale)) s = pick(openings) + " " + s;
+    if (opts.openings && !budget.used && chance(0.35 * chScale)) {
+      s = pick(openings) + " " + s;
+      budget.used = true;
+    }
 
     // Mid-sentence insertion (~20%), skipped under Light.
-    if (!light && chance(0.20 * chScale)) {
+    if (!light && !budget.used && chance(0.20 * chScale)) {
       let cIdx = s.indexOf(',');
       if (cIdx > 0 && cIdx < s.length - 5) {
         let after = s.substring(cIdx + 1).replace(/^\s+/, "");
         s = s.substring(0, cIdx) + pick(midInsertions) + (after ? " " + after : "");
+        budget.used = true;
       }
     }
+
+    s = dedupeIntensity(s);
 
     kept.push(s);
   }
@@ -2241,6 +2345,8 @@ function norseify() {
     return;
   }
   var opts = getTransformOptions();
+  // A filled Seed box pins the run; empty keeps the page's advancing sequence.
+  if (opts.seed !== null) seedRandom(opts.seed);
   var light = opts.intensity === 'light';
 
   // Split into paragraphs (blank lines preserved as separators)
@@ -2305,8 +2411,21 @@ function norseify() {
 
 var OPTS_KEY = 'repriser.settings';
 
+// An optional seed makes a run reproducible. Empty or non-numeric means "use
+// the page's advancing sequence", which is the historical behaviour.
+function optSeedValue() {
+  if (typeof document === 'undefined' || !document.getElementById) return null;
+  var el = document.getElementById('optSeed');
+  if (!el || typeof el.value !== 'string') return null;
+  var raw = el.value.trim();
+  if (!/^\d{1,10}$/.test(raw)) return null;
+  var n = Number(raw);
+  if (!isFinite(n)) return null;
+  return (n % 4294967296) >>> 0;
+}
+
 function getTransformOptions() {
-  var defs = { intensity: 'balanced', openings: true, metaphors: true, asides: true, invert: true };
+  var defs = { intensity: 'balanced', openings: true, metaphors: true, asides: true, invert: true, seed: null };
   if (typeof document === 'undefined' || !document.getElementById) return defs;
   var intensityEl = document.getElementById('optIntensity');
   var intensity = defs.intensity;
@@ -2330,6 +2449,7 @@ function getTransformOptions() {
     metaphors: on('optMetaphors', defs.metaphors),
     asides: on('optAsides', defs.asides),
     invert: on('optInvert', defs.invert),
+    seed: optSeedValue(),
   };
 }
 
@@ -2363,12 +2483,16 @@ function optLoad() {
     if (!raw) return null;
     var o = JSON.parse(raw);
     if (!o || typeof o !== 'object') return null;
+    var seed = null;
+    if (typeof o.seed === 'number' && isFinite(o.seed)) seed = (o.seed % 4294967296) >>> 0;
+    else if (typeof o.seed === 'string' && /^\d{1,10}$/.test(o.seed)) seed = (Number(o.seed) % 4294967296) >>> 0;
     return {
       intensity: (o.intensity === 'light' || o.intensity === 'dramatic') ? o.intensity : 'balanced',
       openings: o.openings !== false,
       metaphors: o.metaphors !== false,
       asides: o.asides !== false,
       invert: o.invert !== false,
+      seed: seed,
     };
   } catch (e) {
     return null;
@@ -2403,10 +2527,12 @@ function optApply(opts) {
   set('optMetaphors', opts.metaphors);
   set('optAsides', opts.asides);
   set('optInvert', opts.invert);
+  var seedEl = document.getElementById('optSeed');
+  if (seedEl) seedEl.value = (opts.seed === null || opts.seed === undefined) ? '' : String(opts.seed);
 }
 
 function optReset() {
-  var defs = { intensity: 'balanced', openings: true, metaphors: true, asides: true, invert: true };
+  var defs = { intensity: 'balanced', openings: true, metaphors: true, asides: true, invert: true, seed: null };
   optApply(defs);
   optSave(defs);
   var status = document.getElementById('optStatus');
@@ -2421,13 +2547,14 @@ function initOptions() {
   if (resetBtn && resetBtn.addEventListener) {
     resetBtn.addEventListener('click', function () { optReset(); });
   }
-  var ids = ['optIntensity', 'optOpenings', 'optMetaphors', 'optAsides', 'optInvert'];
+  var ids = ['optIntensity', 'optOpenings', 'optMetaphors', 'optAsides', 'optInvert', 'optSeed'];
   for (var i = 0; i < ids.length; i++) {
     (function (id) {
       var el = document.getElementById(id);
       if (el && el.addEventListener) {
         el.addEventListener('change', function () { optSave(getTransformOptions()); });
         if (id === 'optIntensity') el.addEventListener('input', optIntensityLabel);
+        if (id === 'optSeed') el.addEventListener('input', function () { optSave(getTransformOptions()); });
       }
     })(ids[i]);
   }
@@ -2910,11 +3037,11 @@ function initSavedQuotes() {
           var title = titleEl ? titleEl.value : '';
           if (sqSaveQuote(source ? source.textContent : '', label, original, settings, title)) {
             if (titleEl) titleEl.value = '';
-            btn.innerHTML = '<span>&#10003;</span> Saved';
+            btn.innerHTML = '<span aria-hidden="true">&#10003;</span> Saved';
             btn.classList.add('copied');
             if (typeof setTimeout === 'function') {
               setTimeout(function () {
-                btn.innerHTML = '<span>&#128222;</span> Save';
+                btn.innerHTML = '<span aria-hidden="true">&#128222;</span> Save';
                 btn.classList.remove('copied');
               }, 2000);
             }

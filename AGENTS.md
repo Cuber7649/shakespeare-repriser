@@ -58,7 +58,7 @@ in `tools/`. Live on GitHub Pages.
 # 1. Edit the source under tools/ (never a pasted copy or a generated file)
 # 2. Repaste shared blocks into all pages + rebuild the dashboard:
 node tools/paste-shared.mjs
-# 3. Run the full suite (26 steps, ~10 s):
+# 3. Run the full suite (30 steps, ~10 s):
 npm test
 # 4. Commit, then:
 node tools/prepush-check.mjs   # MUST run AFTER committing (staleness vs HEAD)
@@ -86,10 +86,19 @@ node tools/prepush-check.mjs   # MUST run AFTER committing (staleness vs HEAD)
   derives a per-run seed from `Math.random()` and advances it per click, then
   passes `(baseSeed + i) >>> 0` to each style. If a test fails
   nondeterministically, look for an unseeded `Math.random()` first.
-- Quirk: seed state is initialised at parse time from the real clock before
-  `seedRandom` runs, so the same engine+seed+input can differ across
-  browsers. The suite runs in Node only; real-browser coverage is
-  `browser-journeys.mjs` in headless Edge.
+- Quirk: the page never reseeds itself. `_rngState` starts at 0 and advances
+  with every `rand()`, so a freshly loaded page returns the same output for the
+  same input on the first click and a different one on the next; a reload
+  resets the sequence. The optional Seed field calls `seedRandom()` before the
+  main function, pinning a run; an empty field keeps the advancing sequence.
+  The dashboard derives a per-run seed unless the field is filled. Tests seed
+  explicitly through `seedRandom()`. The suite runs in Node only; real-browser
+  coverage is `browser-journeys.mjs` in headless Edge.
+- **Yoda's contract (deliberate):** Yoda only reorders clear copular or
+  subject–verb–object clauses; ordinary prose it cannot parse safely comes back
+  in its original order. `test-yoda.mjs` locks both the reorderings and the
+  no-op cases. Do not "fix" the no-op cases by loosening the object guard — the
+  last six commits before this note were holdout-accuracy fixes.
 
 ## Content rules
 
@@ -156,9 +165,16 @@ obvious from a diff and was settled deliberately:
   1/2/3; exercises the modal via `initCardUI({ themes, render, download })`
   with injected fakes.
 - `check-a11y.mjs`, `check-css.mjs` — static audits (labels, focus-visible,
-  reduced-motion, brace balance).
+  reduced-motion, decorative icon spans, brace balance).
+- `test-grammar.mjs` — pattern gate over all six styles × corpus × seeds:
+  pronoun case, agreement, doubled intensifiers, filler placement, stacked
+  inserts, clause-crossing inversions.
+- `test-edgecases.mjs`, `test-budgets.mjs` — edge inputs, timings and page-size
+  budgets.
 - `test-settings.mjs`, `test-savedquotes.mjs`, `test-compare.mjs`,
   `test-cardpages.mjs` — byte-identical paste checks + behaviour.
+- `check-style-overlap.mjs` — reports vocabulary shared between styles and
+  fails when a README input documented for two styles produces the same line.
 - `test-links.mjs` — every local href resolves, all pages share one switcher.
   It was written _after_ a missing-page-link mistake: deleting a page means
   deleting its switcher links on all 7 pages and in the README.

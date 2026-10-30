@@ -96,6 +96,14 @@ for (const file of PAGES) {
     if (!/\balt="/i.test(m[1])) say(`<img${m[1].slice(0, 40)}> missing alt`);
   }
 
+  // 8b. icon-only <span>s are decorative and must not be announced: the
+  // visible label next to them already carries the name.
+  for (const m of html.matchAll(/<span\b([^>]*)>\s*&#\d+;\s*<\/span>/gi)) {
+    if (!/\baria-hidden="true"/i.test(m[1])) {
+      say(`decorative icon span missing aria-hidden: ${m[0].slice(0, 60)}`);
+    }
+  }
+
   // 9. a visible focus style exists (the pages use :focus-visible)
   if (!/:focus-visible\b/.test(html)) say('no :focus-visible style in the page CSS');
 

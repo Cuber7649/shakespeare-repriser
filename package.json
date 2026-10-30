@@ -5,6 +5,7 @@
   "license": "SEE LICENSE IN LICENSE",
   "scripts": {
     "build": "node tools/build-dashboard.mjs",
+    "check-words": "node tools/check-words.mjs",
     "test": "node tools/run-all.mjs"
   }
 }

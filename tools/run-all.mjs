@@ -19,9 +19,12 @@ const STEPS = [
   ['check-css', ['check-css.mjs']],
   ['check-a11y', ['check-a11y.mjs']],
   ['check-readme', ['check-readme.mjs']],
+  ['check-style-overlap', ['check-style-overlap.mjs']],
   ['readme-features', ['readme-features.mjs']],
   ['test-engine', ['test-engine.mjs']],
   ['test-transform', ['test-transform.mjs']],
+  ['test-grammar', ['test-grammar.mjs']],
+  ['test-edgecases', ['test-edgecases.mjs']],
   ['test-quotecard', ['test-quotecard.mjs']],
   ['test-cardpages', ['test-cardpages.mjs']],
   ['test-savedquotes', ['test-savedquotes.mjs']],
@@ -37,6 +40,7 @@ const STEPS = [
   ['smoke-dashboard', ['smoke-dashboard.mjs', '1']],
   ['smoke-dashboard', ['smoke-dashboard.mjs', '2']],
   ['smoke-dashboard', ['smoke-dashboard.mjs', '3']],
+  ['test-budgets', ['test-budgets.mjs']],
   // Browser journeys launch a real headless Edge over CDP; they SKIP (exit 0)
   // when Edge is unavailable so the suite still runs on machines without it.
   ['browser-journeys', ['browser-journeys.mjs']],

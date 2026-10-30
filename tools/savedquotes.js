@@ -471,11 +471,11 @@ function initSavedQuotes() {
           var title = titleEl ? titleEl.value : '';
           if (sqSaveQuote(source ? source.textContent : '', label, original, settings, title)) {
             if (titleEl) titleEl.value = '';
-            btn.innerHTML = '<span>&#10003;</span> Saved';
+            btn.innerHTML = '<span aria-hidden="true">&#10003;</span> Saved';
             btn.classList.add('copied');
             if (typeof setTimeout === 'function') {
               setTimeout(function () {
-                btn.innerHTML = '<span>&#128222;</span> Save';
+                btn.innerHTML = '<span aria-hidden="true">&#128222;</span> Save';
                 btn.classList.remove('copied');
               }, 2000);
             }

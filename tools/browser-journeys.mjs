@@ -13,7 +13,9 @@
 //   7. a quote card is generated and downloaded as a PNG
 //   8. the core UI is operable keyboard-only (Tab, Enter, Escape, focus trap)
 //   9. narrow (360px) and wide (1280px) viewports do not overflow sideways
-//  10. no JavaScript console errors were raised along the way
+//  10. with the Google Fonts CDN blocked, the page still transforms and falls
+//      back to a system serif
+//  11. no JavaScript console errors were raised along the way
 //
 //   node tools/browser-journeys.mjs
 //
@@ -470,7 +472,28 @@ try {
   }
   await page.send('Emulation.clearDeviceMetricsOverride');
 
-  // --- 10. console errors ---------------------------------------------------
+  // --- 10. offline: Google Fonts blocked, app still works -------------------
+  await page.send('Network.enable');
+  await page.send('Network.setBlockedURLs', {
+    urls: ['*fonts.googleapis.com*', '*fonts.gstatic.com*'],
+  });
+  {
+    await goto('shakespeare.html');
+    const family = await evalJs('getComputedStyle(document.body).fontFamily');
+    const fallback = /serif|georgia|garamond|times/i.test(family);
+    await evalJs(`(() => {
+      const i = document.getElementById('input');
+      i.value = 'hello how are you today';
+      document.querySelector('.btn-primary').click();
+    })()`);
+    const out = await evalJs('document.getElementById("output").textContent');
+    if (!out.trim()) fail('offline: transform produced no output');
+    else if (!fallback) fail(`offline: no system serif fallback (font-family: ${family})`);
+    else pass('offline: transform works and falls back to a system serif');
+  }
+  await page.send('Network.setBlockedURLs', { urls: [] });
+
+  // --- 11. console errors ---------------------------------------------------
   if (consoleErrors.length) {
     fail(`${consoleErrors.length} console error(s): ${consoleErrors.slice(0, 3).join(' | ')}`);
   } else pass('no JavaScript console errors');

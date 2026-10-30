@@ -18,8 +18,8 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const STYLE_PAGES = ['shakespeare.html', 'pirate.html', 'victorian.html',
   'chaucer.html', 'yoda.html', 'norse.html'];
 const PAGES = [...STYLE_PAGES, 'index.html'];
-const IDS = ['optionsPanel', 'optIntensity', 'optIntensityValue', 'optOpenings',
-  'optMetaphors', 'optAsides', 'optInvert', 'optResetBtn', 'optStatus'];
+const IDS = ['optionsPanel', 'optIntensity', 'optIntensityValue', 'optSeed',
+  'optOpenings', 'optMetaphors', 'optAsides', 'optInvert', 'optResetBtn', 'optStatus'];
 
 let failures = 0;
 const ok = (m) => console.log(`  ok    ${m}`);
@@ -86,8 +86,9 @@ section('getTransformOptions');
   const p = loadPage(join(ROOT, 'shakespeare.html'), 'shakespearify');
   const d = p.api.getTransformOptions();
   const isDefault = d.intensity === 'balanced' && d.openings === true
-    && d.metaphors === true && d.asides === true && d.invert === true;
-  if (isDefault) ok('missing controls -> balanced defaults (all toggles on)');
+    && d.metaphors === true && d.asides === true && d.invert === true
+    && d.seed === null;
+  if (isDefault) ok('missing controls -> balanced defaults (all toggles on, no seed)');
   else no(`defaults wrong: ${JSON.stringify(d)}`);
 
   // Drive the stubs the way a user would.
@@ -109,9 +110,68 @@ section('getTransformOptions');
   p.document.getElementById('optIntensity').value = '2';
   if (p.api.getTransformOptions().intensity === 'dramatic') ok('slider stop 2 reads as dramatic');
   else no(`slider stop 2 read as ${p.api.getTransformOptions().intensity}`);
+
+  const seedEl = p.document.getElementById('optSeed');
+  seedEl.value = '42';
+  if (p.api.getTransformOptions().seed === 42) ok('seed field reads as a number');
+  else no(`seed 42 read as ${p.api.getTransformOptions().seed}`);
+  seedEl.value = '0042';
+  if (p.api.getTransformOptions().seed === 42) ok('leading zeroes are accepted');
+  else no(`seed "0042" read as ${p.api.getTransformOptions().seed}`);
+  seedEl.value = 'not-a-seed';
+  if (p.api.getTransformOptions().seed === null) ok('invalid seed falls back to the advancing sequence');
+  else no(`invalid seed read as ${p.api.getTransformOptions().seed}`);
+  seedEl.value = '';
+  if (p.api.getTransformOptions().seed === null) ok('empty seed means random-per-click');
+  else no(`empty seed read as ${p.api.getTransformOptions().seed}`);
 }
 
-// --- 5. toggles and intensity actually gate the pipeline ---------------------
+// --- 5. a filled seed replays the same run -----------------------------------
+section('seed replay');
+{
+  const file = join(ROOT, 'shakespeare.html');
+  const input = 'hello how are you today';
+
+  const a = loadPage(file, 'shakespearify');
+  a.document.getElementById('optSeed').value = '42';
+  const first = a.transform(input, 1);
+  const second = a.transform(input, 999);
+  if (first === second) ok('same seed + same input + same settings -> same output');
+  else no(`seed replay differs: ${JSON.stringify(first)} vs ${JSON.stringify(second)}`);
+
+  a.document.getElementById('optSeed').value = '43';
+  const other = a.transform(input, 1);
+  if (other !== first) ok('a different seed changes the output');
+  else no(`seed 43 produced the seed 42 output: ${JSON.stringify(other)}`);
+
+  const b = loadPage(file, 'shakespearify');
+  b.api.seedRandom(1);
+  b.document.getElementById('input').value = input;
+  b.document.getElementById('optSeed').value = '';
+  b.api.shakespearify();
+  const advance1 = b.document.getElementById('output').textContent;
+  b.api.shakespearify();
+  const advance2 = b.document.getElementById('output').textContent;
+  if (advance1 !== advance2) ok('empty seed keeps the page advancing between clicks');
+  else no(`empty seed repeated the same run: ${JSON.stringify(advance1)}`);
+
+  const c = loadPage(file, 'shakespearify');
+  const seedEl = c.document.getElementById('optSeed');
+  seedEl.value = '42';
+  c.fire(seedEl, 'change');
+  const raw = c.storage.getItem('repriser.settings');
+  if (raw && JSON.parse(raw).seed === 42) ok('seed is saved with the other settings');
+  else no(`seed not saved: ${raw}`);
+
+  c.fire(c.document.getElementById('optResetBtn'), 'click');
+  if (seedEl.value === '' && c.api.getTransformOptions().seed === null) {
+    ok('Reset clears the seed');
+  } else {
+    no(`Reset left the seed at ${JSON.stringify(seedEl.value)}`);
+  }
+}
+
+// --- 6. toggles and intensity actually gate the pipeline ---------------------
 section('gating');
 
 function withOpts(page, mut) {

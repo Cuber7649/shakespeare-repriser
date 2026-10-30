@@ -684,6 +684,26 @@
     color: #5c4530;
     min-width: 5.5em;
   }
+  .options-seed {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1rem;
+    color: #5c4530;
+    background: #fdf6e3;
+    border: 1.5px solid #c4a265;
+    border-radius: 8px;
+    padding: 4px 10px;
+    width: 9em;
+  }
+  .options-seed:focus-visible {
+    outline: 2px solid #d4a056;
+    outline-offset: 2px;
+  }
+  .options-hint {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.85rem;
+    font-style: italic;
+    color: #7a6248;
+  }
   .options-checks {
     display: flex;
     flex-wrap: wrap;
@@ -995,7 +1015,7 @@
 
 <div class="container">
   <header class="header">
-    <span class="quill">&#128396;</span>
+    <span class="quill" aria-hidden="true">&#128396;</span>
     <h1>Yoda Text Repriser</h1>
     <p class="subtitle">Transform your words, you must</p>
   </header>
@@ -1003,7 +1023,7 @@
   <div class="divider">&#10045; The Force Awakens MDLXXVII &#10045;</div>
 
   <div class="card">
-    <label class="card-label" for="input"><span class="icon">&#9998;</span> Modern English</label>
+    <label class="card-label" for="input"><span class="icon" aria-hidden="true">&#9998;</span> Modern English</label>
     <textarea id="input" placeholder="Type your words here, you must..."></textarea>
     <div class="char-count"><span id="charCount">0</span> characters inscribed</div>
   </div>
@@ -1014,6 +1034,11 @@
       <label class="options-label" for="optIntensity">Intensity</label>
       <input type="range" id="optIntensity" class="options-range" min="0" max="2" step="1" value="1">
       <span class="options-intensity" id="optIntensityValue">Balanced</span>
+    </div>
+    <div class="options-row">
+      <label class="options-label" for="optSeed">Seed</label>
+      <input type="text" id="optSeed" class="options-seed" inputmode="numeric" autocomplete="off" placeholder="Random" aria-describedby="optSeedHint">
+      <span class="options-hint" id="optSeedHint">Optional; the same seed replays a run</span>
     </div>
     <div class="options-checks">
       <label class="options-check"><input type="checkbox" id="optOpenings" checked> Opening phrases</label>
@@ -1029,10 +1054,10 @@
 
   <div class="btn-row">
     <button class="btn btn-primary" onclick="yodaify()">
-      <span class="quill-icon">&#128396;</span> Transform, you must!
+      <span class="quill-icon" aria-hidden="true">&#128396;</span> Transform, you must!
     </button>
     <button class="btn btn-secondary" onclick="surpriseApply(inputEl, charCountEl, yodaify)">
-      <span>&#128204;</span> Surprise Me!
+      <span aria-hidden="true">&#128204;</span> Surprise Me!
     </button>
     <button class="btn btn-secondary" onclick="clearAll()">
       Clear
@@ -1041,27 +1066,27 @@
 
   <div class="output-card">
     <div class="ink-drip"></div>
-    <div class="card-label"><span class="icon">&#128214;</span> Jedi Output</div>
+    <div class="card-label"><span class="icon" aria-hidden="true">&#128214;</span> Jedi Output</div>
     <div id="output" aria-live="polite" aria-atomic="true"></div>
     <div class="output-actions">
       <button class="btn-copy" id="makeCardBtn" data-card="yoda">
-        <span>&#128204;</span> Make Card
+        <span aria-hidden="true">&#128204;</span> Make Card
       </button>
       <button class="btn-copy" onclick="copyOutput()" id="copyBtn">
-        <span>&#128203;</span> Copy to Clipboard
+        <span aria-hidden="true">&#128203;</span> Copy to Clipboard
       </button>
       <button class="btn-copy" data-save="Yoda" data-save-target="output">
-        <span>&#128278;</span> Save
+        <span aria-hidden="true">&#128278;</span> Save
       </button>
       <button class="btn-copy" data-compare="output">
-        <span>&#8644;</span> Compare
+        <span aria-hidden="true">&#8644;</span> Compare
       </button>
       <span class="visually-hidden" id="copyStatus" role="status"></span>
     </div>
   </div>
 
   <section class="saved-quotes" id="savedQuotes">
-  <div class="card-label"><span class="icon">&#128218;</span> Saved Quotes</div>
+  <div class="card-label"><span class="icon" aria-hidden="true">&#128218;</span> Saved Quotes</div>
   <div class="saved-quotes-toolbar">
     <label class="visually-hidden" for="sqSearch">Search saved quotes</label>
     <input type="search" class="saved-quotes-field" id="sqSearch" placeholder="Search&hellip;" autocomplete="off">
@@ -1084,9 +1109,9 @@
 </section>
 
   <div class="footer">
-    <span class="quill-small">&#128396;</span>
+    <span class="quill-small" aria-hidden="true">&#128396;</span>
     Crafted with ink & devotion
-    <span class="quill-small">&#128396;</span>
+    <span class="quill-small" aria-hidden="true">&#128396;</span>
   </div>
 </div>
 
@@ -1167,11 +1192,11 @@ function copyOutput() {
   const btn = document.getElementById('copyBtn');
   function showCopied() {
     btn.classList.add('copied');
-    btn.innerHTML = '<span>&#10003;</span> Copied!';
+    btn.innerHTML = '<span aria-hidden="true">&#10003;</span> Copied!';
     copyStatusEl.textContent = 'Copied to clipboard';
     setTimeout(() => {
       btn.classList.remove('copied');
-      btn.innerHTML = '<span>&#128203;</span> Copy to Clipboard';
+      btn.innerHTML = '<span aria-hidden="true">&#128203;</span> Copy to Clipboard';
       copyStatusEl.textContent = '';
     }, 2000);
   }
@@ -1507,6 +1532,13 @@ const negatives = {
 // ============================================================
 const pronouns = [
 ];
+
+// This style has one pronoun form for both cases, so no case pass is needed.
+const pronounCase = null;
+
+// No subject-sensitive verb repairs are needed for this style's flat tables.
+const agreement = null;
+
 
 // ============================================================
 // VERB FORMS
@@ -2097,6 +2129,46 @@ function replaceAll(text) {
 }
 
 // ============================================================
+// GRAMMAR PASSES
+// ============================================================
+// Small repairs for the shapes the flat word tables cannot see. They run
+// after replaceAll() and before the decorative insertions, so an inserted
+// phrase is never mistaken for input.
+
+// The pronoun table maps every "you" to the subject form. This flips the
+// ones a preposition or a transitive verb governs to the object form.
+const _OBJECT_HEADS = "to|for|with|by|from|of|on|in|at|about|upon|unto|into|through|throughout|without|within|against|toward|towards|behind|before|after|near|over|under|between|betwixt|among|amongst|around|beyond|beneath|till|until|via|per|like|than";
+const _OBJECT_VERBS = "adore|behold|love|see|help|thank|tell|give|show|bring|find|let|meet|hear|call|ask|need|want|know|serve|obey|follow|trust|believe|teach|kiss|embrace|greet|welcome|praise|blame|forgive|remember|forget|protect|save|join|leave|take|hold|choose|command|bid|pray|beseech|entreat|vex|mock|scorn|hate|fear|envy|strike|kill|wound|heal|send|carry|lead|feed|clothe|arm|shield|defend|attend|await|seek|visit|court|wed|marry|cherish|revere|honour|honor|delight|please|amuse|comfort|warn|advise|remind|inform|convince|persuade|tempt|test|try|watch|observe|perceive|regard|notice|recognize|admire|despise|loathe|curse|bless|reward|punish|arrest|release|free|bind|tie|cut|stab|beat|hit|push|pull|drag|lift|raise|drop|catch|throw|sell|buy|pay|owe|cost|offer|receive|accept|refuse|deny|grant|allow|permit|forbid|stop|keep|set|put|make|miss|saw|gave|told|brought|found|heard|made|took|held|chose|struck|sent|led|fed|sought|sold|bought|paid|caught|threw|knew|forgot|forgave|besought|bound|left|kept|met|spoke|said|shown|beheld|beaten|loven|beholdeth|loveth|helpeth|thanketh|lovest|beholdest";
+
+function fixPronounCase(text, subject, object) {
+  if (!subject || !object || subject === object) return text;
+  const re = new RegExp(
+    "\\b(?:" + _OBJECT_HEADS + "|(?:" + _OBJECT_VERBS + ")(?:s|es|ed|d|eth|est|en|n)?)\\s+" + subject + "\\b",
+    "gi"
+  );
+  return text.replace(re, function (m) {
+    return m.slice(0, m.length - subject.length) + object;
+  });
+}
+
+// The negatives and verb-form tables are flat: every "don't" becomes "doth
+// not", every "was" becomes "wast". Undo the forms the subject cannot take.
+function fixAgreement(text, rules) {
+  if (!rules) return text;
+  for (const [pat, rep] of rules) text = text.replace(pat, rep);
+  return text;
+}
+
+// One intensity word per phrase: "exceedingly most agreeable" and
+// "most certainly most arduous" both collapse to a single intensifier.
+const _INTENSIFIERS = "most certainly|most assuredly|exceedingly|passing|utterly|wholly|truly|very|most|right";
+
+function dedupeIntensity(text) {
+  const re = new RegExp("\\b(?:" + _INTENSIFIERS + ")\\s+(?=(?:" + _INTENSIFIERS + ")\\b)", "gi");
+  return text.replace(re, "");
+}
+
+// ============================================================
 // HELPER: pick a random number of words from text and apply alliteration
 // ============================================================
 function maybeAddAlliteration(text) {
@@ -2112,12 +2184,14 @@ function maybeAddAlliteration(text) {
 // ============================================================
 // HELPER: insert a metaphor after a comma
 // ============================================================
-function maybeAddMetaphor(text) {
+function maybeAddMetaphor(text, budget) {
+  if (budget && budget.used) return text;
   if (!chance(0.06)) return text;
   let commaIdx = text.indexOf(',');
   if (commaIdx < 0 || commaIdx > text.length - 10) return text;
   let metaphor = pick(metaphors);
   let after = text.substring(commaIdx + 1).replace(/^\s+/, "");
+  if (budget) budget.used = true;
   return text.substring(0, commaIdx + 1) + " " + metaphor + "," + (after ? " " + after : "");
 }
 
@@ -2132,12 +2206,14 @@ function maybeInsertQuote(text) {
 // ============================================================
 // HELPER: insert a Jedi rebuke
 // ============================================================
-function maybeInsertInsult(text) {
+function maybeInsertInsult(text, budget) {
+  if (budget && budget.used) return text;
   if (!chance(0.05)) return text;
   var insult = pick(insults);
   // Drop the sentence-ending stop: appending after "fought." used to leave
   // "fought., clouded by fear, you are!".
-  if (/[.!?]$/.test(text)) return text.replace(/[.!?]+$/, "") + ", " + insult + "!";
+  if (/[.!?]$/.test(text)) { if (budget) budget.used = true; return text.replace(/[.!?]+$/, "") + ", " + insult + "!"; }
+  if (budget) budget.used = true;
   return text + ", " + insult + "!";
 }
 
@@ -3017,6 +3093,7 @@ function transformParagraph(para, opts) {
   for (let s of sentences) {
     s = s.trim();
     if (!s) continue;
+    var budget = { used: false };
     s = expandContractions(s);
     s = fixPutOn(s);
     s = fixBadPhrases(s);
@@ -3042,23 +3119,23 @@ function transformParagraph(para, opts) {
     if (!wasReordered) {
       if (opts.invert) s = maybeInvert(s);
       if (opts.metaphors) {
-        s = maybeAddMetaphor(s)
+        s = maybeAddMetaphor(s, budget)
       }
     }
 
     // Opening interjection (~35%), kept: it is one of Yoda's habits.
-    if (opts.openings && chance(0.15 * chScale)) s = pick(openings) + " " + s;
+    if (opts.openings && !budget.used && chance(0.15 * chScale)) { s = pick(openings) + " " + s; budget.used = true; }
 
     // A rebuke and a mid-sentence insertion only ride along with longer
     // sentences; on short input they are pure noise, and the insertion
     // lands on the first comma - which may be the fronted phrase's own.
     if (s.length >= 40) {
-      if (!light) s = maybeInsertInsult(s);
-      if (!wasReordered && !light && chance(0.05 * chScale)) {
+      if (!light) s = maybeInsertInsult(s, budget);
+      if (!wasReordered && !light && !budget.used && chance(0.05 * chScale)) {
         let cIdx = s.indexOf(',');
         if (cIdx > 0 && cIdx < s.length - 5) {
           let after = s.substring(cIdx + 1).replace(/^\s+/, "");
-          s = s.substring(0, cIdx) + pick(midInsertions) + (after ? " " + after : "");
+          s = s.substring(0, cIdx) + pick(midInsertions) + (after ? " " + after : ""); budget.used = true;
         }
       }
     }
@@ -3079,6 +3156,8 @@ function yodaify() {
     return;
   }
   var opts = getTransformOptions();
+  // A filled Seed box pins the run; empty keeps the page's advancing sequence.
+  if (opts.seed !== null) seedRandom(opts.seed);
   var light = opts.intensity === 'light';
 
   // Split into paragraphs (blank lines preserved as separators)
@@ -3154,8 +3233,21 @@ function yodaify() {
 
 var OPTS_KEY = 'repriser.settings';
 
+// An optional seed makes a run reproducible. Empty or non-numeric means "use
+// the page's advancing sequence", which is the historical behaviour.
+function optSeedValue() {
+  if (typeof document === 'undefined' || !document.getElementById) return null;
+  var el = document.getElementById('optSeed');
+  if (!el || typeof el.value !== 'string') return null;
+  var raw = el.value.trim();
+  if (!/^\d{1,10}$/.test(raw)) return null;
+  var n = Number(raw);
+  if (!isFinite(n)) return null;
+  return (n % 4294967296) >>> 0;
+}
+
 function getTransformOptions() {
-  var defs = { intensity: 'balanced', openings: true, metaphors: true, asides: true, invert: true };
+  var defs = { intensity: 'balanced', openings: true, metaphors: true, asides: true, invert: true, seed: null };
   if (typeof document === 'undefined' || !document.getElementById) return defs;
   var intensityEl = document.getElementById('optIntensity');
   var intensity = defs.intensity;
@@ -3179,6 +3271,7 @@ function getTransformOptions() {
     metaphors: on('optMetaphors', defs.metaphors),
     asides: on('optAsides', defs.asides),
     invert: on('optInvert', defs.invert),
+    seed: optSeedValue(),
   };
 }
 
@@ -3212,12 +3305,16 @@ function optLoad() {
     if (!raw) return null;
     var o = JSON.parse(raw);
     if (!o || typeof o !== 'object') return null;
+    var seed = null;
+    if (typeof o.seed === 'number' && isFinite(o.seed)) seed = (o.seed % 4294967296) >>> 0;
+    else if (typeof o.seed === 'string' && /^\d{1,10}$/.test(o.seed)) seed = (Number(o.seed) % 4294967296) >>> 0;
     return {
       intensity: (o.intensity === 'light' || o.intensity === 'dramatic') ? o.intensity : 'balanced',
       openings: o.openings !== false,
       metaphors: o.metaphors !== false,
       asides: o.asides !== false,
       invert: o.invert !== false,
+      seed: seed,
     };
   } catch (e) {
     return null;
@@ -3252,10 +3349,12 @@ function optApply(opts) {
   set('optMetaphors', opts.metaphors);
   set('optAsides', opts.asides);
   set('optInvert', opts.invert);
+  var seedEl = document.getElementById('optSeed');
+  if (seedEl) seedEl.value = (opts.seed === null || opts.seed === undefined) ? '' : String(opts.seed);
 }
 
 function optReset() {
-  var defs = { intensity: 'balanced', openings: true, metaphors: true, asides: true, invert: true };
+  var defs = { intensity: 'balanced', openings: true, metaphors: true, asides: true, invert: true, seed: null };
   optApply(defs);
   optSave(defs);
   var status = document.getElementById('optStatus');
@@ -3270,13 +3369,14 @@ function initOptions() {
   if (resetBtn && resetBtn.addEventListener) {
     resetBtn.addEventListener('click', function () { optReset(); });
   }
-  var ids = ['optIntensity', 'optOpenings', 'optMetaphors', 'optAsides', 'optInvert'];
+  var ids = ['optIntensity', 'optOpenings', 'optMetaphors', 'optAsides', 'optInvert', 'optSeed'];
   for (var i = 0; i < ids.length; i++) {
     (function (id) {
       var el = document.getElementById(id);
       if (el && el.addEventListener) {
         el.addEventListener('change', function () { optSave(getTransformOptions()); });
         if (id === 'optIntensity') el.addEventListener('input', optIntensityLabel);
+        if (id === 'optSeed') el.addEventListener('input', function () { optSave(getTransformOptions()); });
       }
     })(ids[i]);
   }
@@ -3759,11 +3859,11 @@ function initSavedQuotes() {
           var title = titleEl ? titleEl.value : '';
           if (sqSaveQuote(source ? source.textContent : '', label, original, settings, title)) {
             if (titleEl) titleEl.value = '';
-            btn.innerHTML = '<span>&#10003;</span> Saved';
+            btn.innerHTML = '<span aria-hidden="true">&#10003;</span> Saved';
             btn.classList.add('copied');
             if (typeof setTimeout === 'function') {
               setTimeout(function () {
-                btn.innerHTML = '<span>&#128222;</span> Save';
+                btn.innerHTML = '<span aria-hidden="true">&#128222;</span> Save';
                 btn.classList.remove('copied');
               }, 2000);
             }

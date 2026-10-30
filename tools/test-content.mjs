@@ -12,6 +12,7 @@
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
+import { PROFANITY, EXPLICIT, SLURS, SERVITUDE, ALLOWED, scanTerms } from './content-policy.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const PAGES = ['shakespeare', 'pirate', 'victorian', 'chaucer', 'yoda', 'norse'];
@@ -43,47 +44,12 @@ for (const page of PAGES) {
 }
 
 // --- family-friendly vocabulary -------------------------------------------------
-// Matched on word boundaries. Substring matching is wrong here: it flagged
-// "arse" inside "coarser" and "prick" inside the pricking of my thumbs.
-const PROFANITY = [
-  'fuck', 'fucking', 'shit', 'bullshit', 'piss', 'pissed', 'wank', 'bollocks',
-  'bugger', 'bastard', 'twat', 'wanker', 'cunt', 'arsehole', 'arse', 'dickhead',
-];
-const EXPLICIT = [
-  'sex', 'sexual', 'sexy', 'naked', 'nude', 'nudity', 'erection', 'penis',
-  'vagina', 'boobs', 'breasts', 'orgasm', 'porn', 'prostitute', 'whore',
-  'slut', 'bitch', 'rape', 'raped', 'molest', 'incest', 'paedophile', 'pedophile',
-];
-// Kept deliberately short and specific: these are slurs, not a thesaurus of
-// historical English. Generic insults like "fool" or "coward" are the point of
-// the roasts and are not family-unfriendly.
-const SLURS = [
-  'nigger', 'nigga', 'faggot', 'faggots', 'kike', 'spic', 'chink', 'wetback',
-  'tranny', 'retard', 'retarded', 'paki', 'coon', 'gook', 'raghead', 'towelhead',
-  'shemale', 'dyke', 'jap',
-];
-
-// Reviewed exceptions, each with the reason it is allowed. Anything listed here
-// should be re-read if the corpus changes.
-const ALLOWED = [
-  [/Out, damned spot!/i,
-    'canonical Macbeth; "damned" means condemned here, not the oath "damn"'],
-  [/pricking of my thumbs/i, 'canonical Macbeth, non-sexual sense of "prick"'],
-  [/If you prick us/i, 'canonical Merchant of Venice, non-sexual sense of "prick"'],
-  [/coarser than a toad/i, 'a Shakespeare line; "arse" appears inside "coarser"'],
-  [/bilge monkey/i,
-    'Golden Age nautical ribaldry, no slur implication -- FLAGGED FOR REVIEW, see report'],
-];
-
-const escapeRe = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-
+// The lists and reviewed exceptions live in content-policy.mjs so that
+// tools/check-words.mjs checks a candidate against exactly the same policy.
 function scan(kind, terms) {
   const hits = [];
   for (const { page, text } of corpus) {
-    const lower = text.toLowerCase();
-    for (const t of terms) {
-      if (new RegExp(`\\b${escapeRe(t)}\\b`, 'i').test(lower)) hits.push({ page, text, t });
-    }
+    for (const term of scanTerms(text, terms)) hits.push({ page, text, t: term });
   }
   for (const h of hits) fail(`${kind} term "${h.t}" in ${h.page}: "${h.text.slice(0, 60)}"`);
   return hits.length;
@@ -101,13 +67,10 @@ for (const [, reason] of ALLOWED) {
 }
 
 // --- slavery only as a punchline ------------------------------------------------
-const SERVITUDE = ['slave', 'slaves', 'thrall', 'thralls', 'serf', 'bondswoman', 'bondman'];
 const servitudeRoasts = [];
 for (const page of PAGES) {
   for (const t of arraysFrom(`${page}.html`, ['insults']).insults) {
-    for (const w of SERVITUDE) {
-      if (new RegExp(`\\b${escapeRe(w)}\\b`, 'i').test(t)) servitudeRoasts.push([page, t]);
-    }
+    for (const w of scanTerms(t, SERVITUDE)) servitudeRoasts.push([page, t, w]);
   }
 }
 if (servitudeRoasts.length) {

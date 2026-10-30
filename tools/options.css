@@ -74,6 +74,26 @@
     color: #5c4530;
     min-width: 5.5em;
   }
+  .options-seed {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1rem;
+    color: #5c4530;
+    background: #fdf6e3;
+    border: 1.5px solid #c4a265;
+    border-radius: 8px;
+    padding: 4px 10px;
+    width: 9em;
+  }
+  .options-seed:focus-visible {
+    outline: 2px solid #d4a056;
+    outline-offset: 2px;
+  }
+  .options-hint {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.85rem;
+    font-style: italic;
+    color: #7a6248;
+  }
   .options-checks {
     display: flex;
     flex-wrap: wrap;
