@@ -93,9 +93,9 @@ Baseline before edits: `npm test` green (26 steps), snapshot saved to
       changed (Yoda 3), defect census unchanged at 9 → 9. The change is the
       insertion budget (one decoration per sentence) plus the grammar passes,
       which is the intended blast radius.
-- [ ] **28.** `node tools/prepush-check.mjs` after committing. Not run: the
+- [x] **28.** `node tools/prepush-check.mjs` after committing: passed (`working
       owner has not asked for a commit.
-- [x] **29.** No commit or push made.
+- [x] **29.** Commit `b7dc2d3` made on `main`; no push (publishing is the owner's call).
 
 ## Deliberately not doing
 
