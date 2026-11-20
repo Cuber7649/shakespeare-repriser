@@ -3,7 +3,7 @@
 // Bump CACHE_VERSION on every deploy that changes a cached file, or returning
 // visitors keep the previous version. Old shakespeare-repriser-* caches are
 // removed on activate.
-const CACHE_VERSION = 'shakespeare-repriser-v1';
+const CACHE_VERSION = 'shakespeare-repriser-v2';
 
 const ASSETS = [
   './',
@@ -19,6 +19,8 @@ const ASSETS = [
   './icon-180.png',
   './icon-192.png',
   './icon-512.png',
+  './icon-round-192.png',
+  './icon-round-512.png',
 ];
 
 self.addEventListener('install', (event) => {

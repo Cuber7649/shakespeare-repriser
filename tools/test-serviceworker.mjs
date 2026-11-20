@@ -46,6 +46,7 @@ if (sw) {
   const ASSETS = [
     ...ALL_PAGES, 'manifest.json',
     'icon.svg', 'icon-180.png', 'icon-192.png', 'icon-512.png',
+    'icon-round-192.png', 'icon-round-512.png',
   ];
   const missing = ASSETS.filter((a) => !sw.includes(`'./${a}'`));
   missing.length

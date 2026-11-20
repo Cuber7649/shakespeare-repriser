@@ -70,7 +70,7 @@ function decodePng(buf) {
   return { w, h, data: out };
 }
 
-function checkIcon(rel) {
+function checkIcon(rel, opts = {}) {
   const file = join(ROOT, rel);
   if (!existsSync(file)) return;
   let img;
@@ -85,44 +85,56 @@ function checkIcon(rel) {
   const cx = (w - 1) / 2;
   const cy = (h - 1) / 2;
   const safe = 0.40 * Math.max(w, h) + 1;
-  // The top-left pixel is the intended full-bleed background; comparing every
-  // other pixel against it keeps the test independent of the palette.
-  const bg = [data[0], data[1], data[2]];
+  const disc = 0.47 * Math.max(w, h);
+  // Sample navy away from both the ring and the lozenge. The round variant's
+  // top-left pixel is transparent, so it cannot serve as the background.
+  const bgAt = (Math.round(cy - 0.42 * h) * w + Math.round(cx)) * 4;
+  const bg = [data[bgAt], data[bgAt + 1], data[bgAt + 2]];
   let transparent = 0;
+  let hollow = 0;
   let content = 0;
   let outside = 0;
 
   for (let y = 0; y < h; y++) {
     for (let x = 0; x < w; x++) {
       const o = (y * w + x) * 4;
-      if (data[o + 3] !== 255) transparent++;
+      const opaque = data[o + 3] === 255;
+      if (!opaque) {
+        transparent++;
+        if (Math.hypot(x - cx, y - cy) < disc - 2) hollow++;
+      }
       const far = Math.abs(data[o] - bg[0]) > 8
         || Math.abs(data[o + 1] - bg[1]) > 8
         || Math.abs(data[o + 2] - bg[2]) > 8;
-      if (far) {
+      if (far && opaque) {
         content++;
         if (Math.hypot(x - cx, y - cy) > safe) outside++;
       }
     }
   }
 
-  const cornerBad = [[w - 1, 0], [0, h - 1], [w - 1, h - 1]].filter(([x, y]) => {
+  const corners = [[w - 1, 0], [0, h - 1], [w - 1, h - 1]].map(([x, y]) => {
     const o = (y * w + x) * 4;
-    return data[o + 3] !== 255
-      || Math.abs(data[o] - bg[0]) > 8
-      || Math.abs(data[o + 1] - bg[1]) > 8
-      || Math.abs(data[o + 2] - bg[2]) > 8;
-  }).length;
+    return { opaque: data[o + 3] === 255, bg: Math.abs(data[o] - bg[0]) <= 8
+      && Math.abs(data[o + 1] - bg[1]) <= 8
+      && Math.abs(data[o + 2] - bg[2]) <= 8 };
+  });
 
-  if (transparent) {
-    no(`${rel}: ${transparent} transparent pixel(s); Android masks expose the plate behind them`);
+  if (opts.round) {
+    corners.every((k) => !k.opaque)
+      ? ok(`${rel}: transparent corners (round taskbar icon)`)
+      : no(`${rel}: corners are opaque; the taskbar icon will be square`);
+    hollow === 0
+      ? ok(`${rel}: no transparent holes inside the disc`)
+      : no(`${rel}: ${hollow} transparent pixel(s) inside the disc`);
   } else {
-    ok(`${rel}: fully opaque`);
-  }
-  if (cornerBad) {
-    no(`${rel}: ${cornerBad} corner(s) differ from the top-left background`);
-  } else {
-    ok(`${rel}: background reaches every corner`);
+    transparent === 0
+      ? ok(`${rel}: fully opaque`)
+      : no(`${rel}: ${transparent} transparent pixel(s); Android masks expose the plate behind them`);
+    const cornerBad = corners.filter((k) => !k.opaque || !k.bg).length;
+    cornerBad === 0
+      ? ok(`${rel}: background reaches every corner`)
+      : no(`${rel}: ${cornerBad} corner(s) differ from the background`);
   }
   if (!content) {
     no(`${rel}: no foreground art found above the background colour`);
@@ -185,7 +197,10 @@ const iconFiles = [...new Set([
   'icon-180.png',
   ...m.icons.map((i) => i.src.replace(/^\.\//, '')),
 ])];
-for (const rel of iconFiles) checkIcon(rel);
+const roundIcons = new Set(m.icons
+  .filter((i) => (i.purpose || '').includes('any'))
+  .map((i) => i.src.replace(/^\.\//, '')));
+for (const rel of iconFiles) checkIcon(rel, { round: roundIcons.has(rel) });
 
 // --- install criteria: needs a 192 and a 512, and a maskable icon ---------------
 const sizes = m.icons.map((i) => i.sizes);

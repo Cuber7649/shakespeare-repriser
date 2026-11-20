@@ -118,6 +118,23 @@ function draw(size) {
   return img;
 }
 
+// Same medallion, but the plate is a circle with transparent corners. This is
+// the `purpose: "any"` variant used by the Windows taskbar; the full-bleed PNG
+// stays the `maskable` variant for Android and icon-180.png stays for iOS.
+// The disc edge is anti-aliased so it does not look jagged at small sizes.
+function drawRound(size) {
+  const img = draw(size);
+  const c = (size - 1) / 2;
+  const radius = size * GEO.disc;
+  for (let y = 0; y < size; y++) {
+    for (let x = 0; x < size; x++) {
+      const coverage = Math.min(1, Math.max(0, radius - Math.hypot(x - c, y - c) + 0.5));
+      img[(y * size + x) * 4 + 3] = Math.round(255 * coverage);
+    }
+  }
+  return img;
+}
+
 // The same picture as vector text: crisp as a favicon at any density, while
 // install and home-screen icons stay raster PNG. The band condition
 // |dx - dy| <= shaftHalf is a stroke of perpendicular width shaftHalf * sqrt(2)
@@ -147,6 +164,11 @@ for (const size of [180, 192, 512]) {
   writeFileSync(join(ROOT, `icon-${size}.png`), buf);
   console.log(`icon-${size}.png  ${(buf.length / 1024).toFixed(1)} KB`);
 }
+for (const size of [192, 512]) {
+  const buf = png(size, size, drawRound(size));
+  writeFileSync(join(ROOT, `icon-round-${size}.png`), buf);
+  console.log(`icon-round-${size}.png  ${(buf.length / 1024).toFixed(1)} KB`);
+}
 
 const svg = svgSource(512);
 writeFileSync(join(ROOT, 'icon.svg'), svg);
@@ -173,8 +195,10 @@ const manifest = {
   theme_color: '#2b2d42',
   categories: ['entertainment', 'productivity', 'utilities'],
   icons: [
-    { src: './icon-192.png', sizes: '192x192', type: 'image/png', purpose: 'any' },
-    { src: './icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'any' },
+    // Round `any` icons for the Windows taskbar; full-bleed `maskable` for
+    // Android, and icon-180.png (not in the manifest) for iOS.
+    { src: './icon-round-192.png', sizes: '192x192', type: 'image/png', purpose: 'any' },
+    { src: './icon-round-512.png', sizes: '512x512', type: 'image/png', purpose: 'any' },
     { src: './icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
   ],
 };

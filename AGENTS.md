@@ -31,13 +31,14 @@ in `tools/`. Live on GitHub Pages.
    - `index.html` — built from the style pages by `tools/build-dashboard.mjs`
      (`npm run build`); copies each page's dictionaries, engine, helpers and
      transform function verbatim so the dashboard cannot drift.
-   - `manifest.json`, `icon-180/192/512.png`, `icon.svg` — drawn by
-     `tools/build-icons.mjs` from shared `GEO` constants. The PNGs are
-     full-bleed: opaque navy reaches every edge and the foreground stays
-     inside the maskable safe zone, so an Android launcher mask cannot expose
-     a white plate at the corners. The SVG favicon keeps the round transparent
-     disc. `manifest.json` in particular looks hand-written and is not: a
-     direct edit renders, commits, deploys, then vanishes on the next
+   - `manifest.json`, `icon-180/192/512.png`, `icon-round-192/512.png`,
+     `icon.svg` — drawn by `tools/build-icons.mjs` from shared `GEO` constants.
+     The maskable PNGs and the iOS `icon-180.png` are full-bleed: opaque navy
+     reaches every edge and the foreground stays inside the maskable safe zone,
+     so an Android launcher mask cannot expose a white plate. The `any` icons
+     are round PNGs with transparent corners for the Windows taskbar; iOS and
+     Android keep the full-bleed files. `manifest.json` looks hand-written and
+     is not: a direct edit renders, commits, deploys, then vanishes on the next
      `build-icons` run.
 3. **`Screenshot.png` is hand-maintained**, not part of the suite. Regenerate
    only deliberately: `node tools/build-screenshot.mjs` (pins Math.random for
