@@ -3,8 +3,11 @@ tools/.dashboard-modules.js
 
 # Headless browser profiles - scratch of tools/build-screenshot.mjs and
 # tools/browser-journeys.mjs (journey dirs are removed on exit, but a crash
-# can leave them behind)
+# can leave them behind). Journey dirs are browser-neutral: Chrome is primary.
 tools/.edge-screenshot-profile/
+tools/.browser-journeys-profile/
+tools/.browser-journeys-downloads/
+# Legacy names left by crashes before the Chrome switch.
 tools/.edge-journeys-profile/
 tools/.edge-journeys-downloads/
 

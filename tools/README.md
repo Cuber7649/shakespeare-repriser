@@ -7,7 +7,7 @@ Everything that generates or verifies the site. Zero dependencies: plain Node wi
 
 ```bash
 npm run build   # regenerate index.html from the six style pages
-npm test        # run the whole suite (29 steps, ~10 s)
+npm test        # run the whole suite (30 steps, ~10 s)
 ```
 
 `npm install` is never needed — there are no dependencies. Any individual script
@@ -21,7 +21,7 @@ also runs directly, e.g. `node tools/verify-dashboard.mjs`.
 | `build-icons.mjs` | Regenerates the app icons and `manifest.json` |
 | `build-screenshot.mjs` | **Opt-in**: retake `Screenshot.png` via headless Edge. Never part of the suite — it overwrites a hand-maintained file |
 | `run-all.mjs` | Runs every step below in order; any non-zero exit fails |
-| `paste-shared.mjs` | Pastes the 14 shared blocks (seven JS, four CSS, three HTML) from this directory into the six style pages, then rebuilds `index.html`; `--check` verifies without writing and is what `npm test` and `prepush-check.mjs` run |
+| `paste-shared.mjs` | Pastes the 15 shared blocks (eight JS, four CSS, three HTML) from this directory into the six style pages, then rebuilds `index.html`; `--check` verifies without writing and is what `npm test` and `prepush-check.mjs` run |
 | `verify-dashboard.mjs` | Asserts the dashboard's output matches every style page |
 | `smoke-dashboard.mjs` | Loads `index.html` in a sandbox, exercises the UI, checks the quote card against a fake 2D context (runs at dpr 1, 2 and 3) |
 | `test-quotecard.mjs` | Strip patterns, layout maths, font shrinking, truncation warnings, skins with WCAG contrast, backgrounds, alignment, the original-text band, export dimensions at dpr 1/2/3 |
@@ -38,6 +38,7 @@ also runs directly, e.g. `node tools/verify-dashboard.mjs`.
 | `test-budgets.mjs` | 100-word and 5,000-word transform timings, and page-size budgets |
 | `test-yoda.mjs` | Object/copular fronting, grammar gate, strict object guard, seeded seed-42 outputs |
 | `test-manifest.mjs` | Installability criteria, declared icon sizes vs real PNG bytes, opaque corners and maskable safe zone, launcher shortcuts (optional) |
+| `test-serviceworker.mjs` | The versioned cache manifest and https-only registration snippet pasted into all 7 pages |
 | `test-reproducible.mjs` | Generated output is pure LF and rebuilds byte-identically |
 | `test-links.mjs` | Every local href resolves; all pages share one switcher |
 | `check-css.mjs` | Brace balance, one `prefers-reduced-motion` block per file, real `<label for>` wiring |
@@ -57,6 +58,7 @@ also runs directly, e.g. `node tools/verify-dashboard.mjs`.
 | `savedquotes.js` / `savedquotes.html` / `savedquotes.css` | Saved quotes: logic, markup and styles pasted into all seven pages, so `test-savedquotes.mjs` has to find them unchanged |
 | `options.js` / `options.html` / `options.css` | Transformation settings (intensity, toggles and optional seed): logic, markup and styles pasted into all seven pages, so `test-settings.mjs` has to find them unchanged |
 | `compare.js` / `compare.css` | Original-vs-output comparison: LCS word diff and panel styles pasted into all seven pages, so `test-compare.mjs` has to find them unchanged |
+| `sw-register.js` | https-only service worker registration, pasted into all seven pages by `paste-shared.mjs` and inlined into `index.html` by the generator |
 | `snapshot.mjs` | Records transform output for a fixed corpus and seed set |
 | `compare.mjs` | Diffs two snapshots and censuses output defects |
 | `corpus.mjs` | The test inputs and seeds |

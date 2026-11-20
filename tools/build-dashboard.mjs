@@ -149,6 +149,8 @@ const optionsJs = browserSource(
 const optionsHtml = readFileSync(join(ROOT, 'tools', 'options.html'), 'utf8').trimEnd();
 const surpriseJs = browserSource(
   readFileSync(join(ROOT, 'tools', 'surprise.js'), 'utf8'));
+const swRegisterJs = browserSource(
+  readFileSync(join(ROOT, 'tools', 'sw-register.js'), 'utf8'));
 
 // ---------------------------------------------------------------------------
 // Compose index.html
@@ -351,6 +353,7 @@ ${optionsJs}
 // Math.random() here does not affect seeded transform output).
 function rand() { return Math.random(); }
 ${surpriseJs}
+${swRegisterJs}
 
 (function () {
   const ORDER = ${JSON.stringify(STYLES.map((s) => s.id))};

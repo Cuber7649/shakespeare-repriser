@@ -31,8 +31,8 @@ import { dirname, join } from 'node:path';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const PORT = 9334;
-const PROFILE = join(ROOT, 'tools', '.edge-journeys-profile');
-const DOWNLOADS = join(ROOT, 'tools', '.edge-journeys-downloads');
+const PROFILE = join(ROOT, 'tools', '.browser-journeys-profile');
+const DOWNLOADS = join(ROOT, 'tools', '.browser-journeys-downloads');
 
 const BROWSER_CANDIDATES = [
   // Chrome first, on every platform.

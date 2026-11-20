@@ -4,11 +4,6 @@ Features, then chores and owner decisions.
 
 ## Features
 
-- [ ] **Offline service worker.** The app installs but needs network to load.
-  Add a small `sw.js` with a versioned cache, registered only on https.
-  `file://` pages stay untouched. Bump the cache version on deploy and extend
-  the suite.
-
 - [ ] **Shareable links.** Encode text, style, settings, and seed in the URL
   hash behind a Copy Link button. Cap the length. The hash never leaves the
   browser, so the privacy story holds.

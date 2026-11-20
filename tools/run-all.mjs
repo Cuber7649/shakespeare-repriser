@@ -29,6 +29,7 @@ const STEPS = [
   ['test-cardpages', ['test-cardpages.mjs']],
   ['test-savedquotes', ['test-savedquotes.mjs']],
   ['test-manifest', ['test-manifest.mjs']],
+  ['test-serviceworker', ['test-serviceworker.mjs']],
   ['test-content', ['test-content.mjs']],
   ['test-yoda', ['test-yoda.mjs']],
   ['test-settings', ['test-settings.mjs']],

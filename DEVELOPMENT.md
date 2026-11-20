@@ -8,7 +8,7 @@ style page directly from disk and it works.
 
 ```bash
 node --version        # 18+; the suite is developed on 24
-npm test              # 29 steps, about 10 seconds
+npm test              # 30 steps, about 10 seconds
 ```
 
 `npm test` runs `tools/run-all.mjs`, which lists the steps in order. A green run

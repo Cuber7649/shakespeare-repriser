@@ -22,7 +22,10 @@ Hosted with GitHub Pages: **[Live site](https://cuber7649.github.io/shakespeare-
 | Norse | [Open](https://cuber7649.github.io/shakespeare-repriser/norse.html) |
 
 The site is installable: browsers that support web apps will offer to install
-it from `manifest.json`, and iOS users can use Share → Add to Home Screen.
+it from `manifest.json`, and iOS users can use Share → Add to Home Screen. Over
+https, a service worker caches all seven pages and the icons, so the installed
+app also opens offline. Opened as a local `file://` page, no service worker is
+registered.
 
 ## Styles
 
@@ -191,7 +194,7 @@ change it:
 
 ```bash
 npm run build   # regenerate index.html from the six style pages
-npm test        # run the whole suite (29 steps, ~10 s)
+npm test        # run the whole suite (30 steps, ~10 s)
 ```
 
 `npm test` includes `paste-shared --check`, which fails the build the moment a
