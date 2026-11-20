@@ -10,6 +10,7 @@
 import { readFileSync, readdirSync, existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
+import { ALL_PAGES, STYLE_IDS } from './styles.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -22,11 +23,29 @@ const manifest = JSON.parse(readFileSync(join(ROOT, 'manifest.json'), 'utf8'));
 
 // Everything reachable from a nav or manifest, and that it must all exist for.
 const EXPECTED_TARGETS = new Set([
-  'index.html',
-  'shakespeare.html', 'pirate.html', 'victorian.html',
-  'chaucer.html', 'yoda.html', 'norse.html',
+  ...ALL_PAGES,
   'icon-192.png', 'icon-512.png', 'icon-180.png', 'manifest.json',
 ]);
+
+// --- 0. registry agrees with the shipped style-specific tables --------------
+new Set(STYLE_IDS).size === STYLE_IDS.length
+  ? ok(`registry has ${STYLE_IDS.length} unique style ids`)
+  : no('registry style ids are not unique');
+{
+  const themeSrc = readFileSync(join(ROOT, 'tools', 'quotecard.js'), 'utf8');
+  const block = /const CARD_THEMES = \{([\s\S]*?)\n\};/.exec(themeSrc);
+  const keys = block
+    ? [...block[1].matchAll(/^\s{2}([a-z]+):/gm)].map((m) => m[1]) : [];
+  keys.join(',') === STYLE_IDS.join(',')
+    ? ok('quote-card themes match the registry')
+    : no(`quote-card themes drifted: ${keys.join(',')} vs ${STYLE_IDS.join(',')}`);
+}
+{
+  const sw = readFileSync(join(ROOT, 'sw.js'), 'utf8');
+  const missing = ALL_PAGES.filter((p) => !sw.includes(`'./${p}'`));
+  missing.length ? no(`sw.js cache missing: ${missing.join(', ')}`)
+    : ok('sw.js cache manifest matches the registry');
+}
 
 // --- 1. every local href/src in every page ----------------------------------
 let checked = 0;

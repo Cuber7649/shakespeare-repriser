@@ -14,19 +14,9 @@ import { loadPage } from './harness.mjs';
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const SEED = 2;
 
-const PAGES = {
-  shakespeare: ['shakespeare.html', 'shakespearify'],
-  pirate: ['pirate.html', 'pirateify'],
-  victorian: ['victorian.html', 'victorianify'],
-  chaucer: ['chaucer.html', 'chaucerify'],
-  yoda: ['yoda.html', 'yodaify'],
-  norse: ['norse.html', 'norseify'],
-};
+import { BY_ID as PAGES, STYLES } from './styles.mjs';
 const TABLES = ['commonWords', 'verbs', 'adjectives', 'nouns'];
-const LABEL = {
-  shakespeare: 'Shakespeare', pirate: 'Pirate', victorian: 'Victorian',
-  chaucer: 'Chaucer', yoda: 'Yoda', norse: 'Norse',
-};
+const LABEL = Object.fromEntries(STYLES.map((s) => [s.id, s.label]));
 
 let failures = 0;
 const fail = (m) => { console.log(`FAIL  ${m}`); failures++; };

@@ -11,14 +11,7 @@ import { loadPage } from './harness.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 
-const STYLES = [
-  { id: 'shakespeare', file: 'shakespeare.html', entry: 'shakespearify' },
-  { id: 'pirate', file: 'pirate.html', entry: 'pirateify' },
-  { id: 'victorian', file: 'victorian.html', entry: 'victorianify' },
-  { id: 'chaucer', file: 'chaucer.html', entry: 'chaucerify' },
-  { id: 'yoda', file: 'yoda.html', entry: 'yodaify' },
-  { id: 'norse', file: 'norse.html', entry: 'norseify' },
-];
+import { ID_FILE_ENTRY as STYLES } from './styles.mjs';
 
 const SEED = 42;
 let failures = 0;

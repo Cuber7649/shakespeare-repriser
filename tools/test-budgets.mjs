@@ -9,14 +9,7 @@ import { dirname, join } from 'node:path';
 import { loadPage } from './harness.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
-const PAGES = [
-  ['shakespeare.html', 'shakespearify'],
-  ['pirate.html', 'pirateify'],
-  ['victorian.html', 'victorianify'],
-  ['chaucer.html', 'chaucerify'],
-  ['yoda.html', 'yodaify'],
-  ['norse.html', 'norseify'],
-];
+import { FILE_ENTRY_TUPLES as PAGES } from './styles.mjs';
 
 const STYLE_BUDGET = 220 * 1024;   // current largest is yoda.html at ~188 KB
 const DASH_BUDGET = 520 * 1024;    // current dashboard is ~432 KB

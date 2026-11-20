@@ -10,14 +10,7 @@ import { CHAIN_NAMES } from './engine-proto.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 
-const PAGES = {
-  shakespeare: ['shakespeare.html', 'shakespearify'],
-  pirate: ['pirate.html', 'pirateify'],
-  victorian: ['victorian.html', 'victorianify'],
-  chaucer: ['chaucer.html', 'chaucerify'],
-  yoda: ['yoda.html', 'yodaify'],
-  norse: ['norse.html', 'norseify'],
-};
+import { BY_ID as PAGES } from './styles.mjs';
 
 const which = process.argv[2] || 'shakespeare';
 const needle = (process.argv[3] || 'won').toLowerCase();

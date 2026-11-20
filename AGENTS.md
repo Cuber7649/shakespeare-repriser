@@ -22,6 +22,10 @@ in `tools/`. Live on GitHub Pages.
    `savedquotes.css`, `compare.css`, `card-modal.css`), three HTML
    (`options.html`, `savedquotes.html`, `card-modal.html`).
    Edit the file under `tools/`, never the pasted copy inside a page.
+   The generator/test side of the style list lives once in `tools/styles.mjs`;
+   consumers derive their arrays and maps from its exports. Adding a style still
+   needs its page, switcher links, `quotecard.js` palette and `sw.js` cache
+   entry — `test-links.mjs` and `test-serviceworker.mjs` gate the last three.
 2. **Never hand-edit generated files:**
    - The pasted copies inside the six style pages.
    - `index.html` — built from the style pages by `tools/build-dashboard.mjs`
@@ -130,10 +134,6 @@ obvious from a diff and was settled deliberately:
   sanitising would gut Chaucer/Shakespeare/pirate voice — inauthenticity is
   its own disrespect. Shakespearean comic abuse ("thou knob of a dunghill")
   stays for the same reason.
-- **Open judgment call:** `"ye cross-eyed bilge monkey"` (pirate) is allowed
-  via the `ALLOWED` list in `test-content.mjs` and emits a standing `WARN` —
-  judged Golden Age nautical ribaldry, no slur implication. The owner has not
-  ruled; if you disagree, remove the line _and_ the `ALLOWED` entry together.
 - **Scans must use word boundaries.** Naive substring matching produced 18
   false positives: `arse` inside "co**arse**r", `prick` in _"the pricking of
   my thumbs"_ (canonical Shakespeare), `slave` in the anti-slavery quotes,

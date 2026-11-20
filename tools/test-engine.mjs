@@ -12,14 +12,7 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const showAt = process.argv.indexOf('--show');
 const SHOW = showAt > -1 ? Number(process.argv[showAt + 1]) : 10;
 
-const PAGES = [
-  ['shakespeare.html', 'shakespearify'],
-  ['pirate.html', 'pirateify'],
-  ['victorian.html', 'victorianify'],
-  ['chaucer.html', 'chaucerify'],
-  ['yoda.html', 'yodaify'],
-  ['norse.html', 'norseify'],
-];
+import { FILE_ENTRY_TUPLES as PAGES } from './styles.mjs';
 
 // The page splits on sentence boundaries the same way; mirror it.
 const SENTENCE_SPLIT = /[^.!?]*[.!?]+|[^.!?]+/g;

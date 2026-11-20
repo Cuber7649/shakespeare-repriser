@@ -19,14 +19,7 @@ vm.createContext(sandbox);
 vm.runInContext(src, sandbox, { filename: 'quotecard.js' });
 const Q = sandbox.module.exports;
 
-const PAGES = [
-  ['shakespeare.html', 'shakespearify'],
-  ['pirate.html', 'pirateify'],
-  ['victorian.html', 'victorianify'],
-  ['chaucer.html', 'chaucerify'],
-  ['yoda.html', 'yodaify'],
-  ['norse.html', 'norseify'],
-];
+import { FILE_ENTRY_TUPLES as PAGES } from './styles.mjs';
 
 // A deterministic stand-in for ctx.measureText: ~0.5em per character.
 const stubMeasure = (s, f) => s.length * f * 0.5;

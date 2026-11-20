@@ -11,14 +11,7 @@ import { loadPage } from './harness.mjs';
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const html = readFileSync(join(ROOT, 'index.html'), 'utf8');
 
-const PAGES = [
-  ['shakespeare', 'shakespeare.html', 'shakespearify'],
-  ['pirate', 'pirate.html', 'pirateify'],
-  ['victorian', 'victorian.html', 'victorianify'],
-  ['chaucer', 'chaucer.html', 'chaucerify'],
-  ['yoda', 'yoda.html', 'yodaify'],
-  ['norse', 'norse.html', 'norseify'],
-];
+import { ID_FILE_ENTRY_TUPLES as PAGES } from './styles.mjs';
 
 let failures = 0;
 const fail = (m) => { console.log(`FAIL  ${m}`); failures++; };

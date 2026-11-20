@@ -6,8 +6,7 @@ let bad = 0;
 const ok = (m) => console.log(`  ok    ${m}`);
 const no = (m) => { console.log(`  BAD   ${m}`); bad++; };
 
-const PAGES = ['index.html', 'shakespeare.html', 'pirate.html', 'victorian.html',
-  'chaucer.html', 'yoda.html', 'norse.html'];
+import { ALL_PAGES as PAGES } from './styles.mjs';
 const html = {};
 for (const f of PAGES) html[f] = readFileSync(f, 'utf8');
 const idx = html['index.html'];
@@ -30,8 +29,9 @@ for (const f of PAGES.slice(1)) {
   (t.match(/data-card="/g) || []).length === 1
     ? ok(`${f} points Make Card at its own style`) : no(`${f} data-card count is wrong`);
 }
-(idx.match(/data-card="/g) || []).length === 6
-  ? ok('index.html offers Make Card for all six styles') : no('index.html data-card count is wrong');
+const STYLE_COUNT = PAGES.length - 1;
+(idx.match(/data-card="/g) || []).length === STYLE_COUNT
+  ? ok(`index.html offers Make Card for all ${STYLE_COUNT} styles`) : no('index.html data-card count is wrong');
 
 // --- removed pages must stay gone ------------------------------------------
 const gone = ['unscramble.html', 'random.html', 'compliments.js'];

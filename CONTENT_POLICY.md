@@ -60,10 +60,6 @@ Do not "helpfully" undo these without the owner:
   removing them would gut the Chaucer/Shakespeare/pirate voice.
 - Shakespearean comic abuse ("thou knob of a dunghill") stays for the same
   reason.
-- `"ye cross-eyed bilge monkey"` is allowed through `ALLOWED` and emits a
-  standing `WARN`. It is Golden Age nautical ribaldry with no slur
-  implication. The owner has not issued a final ruling; if you disagree,
-  remove the line and the `ALLOWED` entry together.
 
 ## Checking a candidate
 

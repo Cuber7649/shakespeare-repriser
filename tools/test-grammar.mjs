@@ -12,14 +12,7 @@ import { CORPUS, SEEDS } from './corpus.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 
-const PAGES = [
-  ['shakespeare.html', 'shakespearify'],
-  ['pirate.html', 'pirateify'],
-  ['victorian.html', 'victorianify'],
-  ['chaucer.html', 'chaucerify'],
-  ['yoda.html', 'yodaify'],
-  ['norse.html', 'norseify'],
-];
+import { FILE_ENTRY_TUPLES as PAGES } from './styles.mjs';
 
 // The shapes reported in the 2026-10-20 review. Each one is a defect no
 // legitimate rule can produce; a hit means a table or helper regressed.

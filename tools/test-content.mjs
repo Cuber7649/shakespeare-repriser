@@ -15,7 +15,7 @@ import { dirname, join } from 'node:path';
 import { PROFANITY, EXPLICIT, SLURS, SERVITUDE, ALLOWED, scanTerms } from './content-policy.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
-const PAGES = ['shakespeare', 'pirate', 'victorian', 'chaucer', 'yoda', 'norse'];
+import { STYLE_IDS as PAGES } from './styles.mjs';
 
 let failures = 0;
 let warnings = 0;

@@ -16,14 +16,7 @@ import { browserSource } from './page-source.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 
-const STYLES = {
-  'shakespeare.html': 'shakespeare',
-  'pirate.html': 'pirate',
-  'victorian.html': 'victorian',
-  'chaucer.html': 'chaucer',
-  'yoda.html': 'yoda',
-  'norse.html': 'norse',
-};
+import { BY_FILE as STYLES } from './styles.mjs';
 const PAGES = Object.keys(STYLES);
 const MODAL_IDS = ['cardModal', 'cardPreview', 'cardModalNote', 'cardModalWarn',
   'cardStatus', 'cardClose', 'cardDownload',

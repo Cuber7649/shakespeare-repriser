@@ -20,6 +20,7 @@ import { readFileSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import { html, scriptOf, extractDecl, extractFunction, between, browserSource, stripMediaQuery } from './page-source.mjs';
+import { STYLES as STYLE_DEFS } from './styles.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -31,14 +32,14 @@ const HELPERS = [
   'maybeAddParenthetical', 'transformParagraph', 'getTransformOptions',
 ];
 
-const STYLES = [
-  { id: 'shakespeare', label: 'Shakespeare', href: 'shakespeare.html', entry: 'shakespearify', icon: '&#128220;' },
-  { id: 'pirate', label: 'Pirate', href: 'pirate.html', entry: 'pirateify', icon: '&#9875;' },
-  { id: 'victorian', label: 'Victorian', href: 'victorian.html', entry: 'victorianify', icon: '&#128187;' },
-  { id: 'chaucer', label: 'Chaucer', href: 'chaucer.html', entry: 'chaucerify', icon: '&#128220;' },
-  { id: 'yoda', label: 'Yoda', href: 'yoda.html', entry: 'yodaify', icon: '&#128161;', helpers: [...HELPERS, 'frontObject', 'frontInfinitive'] },
-  { id: 'norse', label: 'Norse', href: 'norse.html', entry: 'norseify', icon: '&#9876;' },
-];
+const STYLES = STYLE_DEFS.map((s) => ({
+  id: s.id, label: s.label, href: s.href, entry: s.entry, icon: s.icon,
+  helpers: [...HELPERS, ...(s.extraHelpers || [])],
+}));
+
+const STYLE_COUNT = STYLES.length;
+const STYLE_WORD = ['zero', 'one', 'two', 'three', 'four', 'five', 'six',
+  'seven', 'eight'][STYLE_COUNT] || String(STYLE_COUNT);
 
 const DICTS = [
   'openings', 'midInsertions', 'quotes', 'metaphors', 'insults', 'asides',
@@ -269,7 +270,7 @@ const out = `<!DOCTYPE html>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Text Repriser Collection</title>
-<meta name="description" content="Rewrite modern English into six historical and literary styles, side by side.">
+<meta name="description" content="Rewrite modern English into ${STYLE_WORD} historical and literary styles, side by side.">
 <link rel="manifest" href="./manifest.json">
 <meta name="theme-color" content="#2b2d42">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -297,7 +298,7 @@ ${navLinks}
   <header class="header">
     <span class="quill" aria-hidden="true">&#128396;</span>
     <h1>Text Repriser Collection</h1>
-    <p class="subtitle">Six styles, side by side</p>
+    <p class="subtitle">${STYLE_WORD.charAt(0).toUpperCase() + STYLE_WORD.slice(1)} styles, side by side</p>
   </header>
 
   <div class="divider">&#10045; Anno Domini MDLXIV &#10045;</div>

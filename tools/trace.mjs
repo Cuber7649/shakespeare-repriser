@@ -8,14 +8,7 @@ import { loadPage } from './harness.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 
-const PAGES = {
-  shakespeare: ['shakespeare.html', 'shakespearify'],
-  pirate: ['pirate.html', 'pirateify'],
-  victorian: ['victorian.html', 'victorianify'],
-  chaucer: ['chaucer.html', 'chaucerify'],
-  yoda: ['yoda.html', 'yodaify'],
-  norse: ['norse.html', 'norseify'],
-};
+import { BY_ID as PAGES } from './styles.mjs';
 
 const text = process.argv[2] || 'it is very good but actually quite bad';
 const which = process.argv[3] || 'shakespeare';

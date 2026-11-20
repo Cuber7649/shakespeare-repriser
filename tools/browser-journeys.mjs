@@ -68,14 +68,7 @@ if (!browserPath) {
 }
 console.log(`      using ${browserPath}`);
 
-const STYLES = [
-  ['shakespeare', 'shakespeare.html'],
-  ['pirate', 'pirate.html'],
-  ['victorian', 'victorian.html'],
-  ['chaucer', 'chaucer.html'],
-  ['yoda', 'yoda.html'],
-  ['norse', 'norse.html'],
-];
+import { ID_FILE_TUPLES as STYLES } from './styles.mjs';
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const fileUrl = (f) => 'file:///' + join(ROOT, f).replace(/\\/g, '/');
@@ -288,18 +281,19 @@ try {
     const outs = [...document.querySelectorAll('.out')];
     return { total: outs.length, filled: outs.filter((o) => o.textContent.trim()).length };
   })()`);
-  if (dash.total !== 6) fail(`dashboard has ${dash.total} output cards, expected 6`);
-  else if (dash.filled !== 6) fail(`dashboard filled ${dash.filled} of 6 outputs`);
-  else pass('dashboard filled all six style outputs');
+  const N = STYLES.length;
+  if (dash.total !== N) fail(`dashboard has ${dash.total} output cards, expected ${N}`);
+  else if (dash.filled !== N) fail(`dashboard filled ${dash.filled} of ${N} outputs`);
+  else pass(`dashboard filled all ${N} style outputs`);
   const dashShare = await evalJs(`(() => {
     const btns = [...document.querySelectorAll('[data-share]')];
     return { count: btns.length,
              inCards: btns.every((b) => b.closest('.output-actions')),
              styles: btns.map((b) => b.getAttribute('data-share')).join(',') };
   })()`);
-  if (dashShare.count !== 6 || !dashShare.inCards) {
+  if (dashShare.count !== N || !dashShare.inCards) {
     fail(`dashboard share buttons: ${JSON.stringify(dashShare)}`);
-  } else pass(`dashboard has six per-style Copy Link buttons (${dashShare.styles})`);
+  } else pass(`dashboard has ${N} per-style Copy Link buttons (${dashShare.styles})`);
 
   // --- 3. settings changes are respected -----------------------------------
   // Seeded so the comparison isolates the settings, not the RNG.

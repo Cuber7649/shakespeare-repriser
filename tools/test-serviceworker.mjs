@@ -7,6 +7,7 @@ import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import { browserSource } from './page-source.mjs';
+import { ALL_PAGES } from './styles.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const read = (f) => readFileSync(join(ROOT, f), 'utf8');
@@ -43,8 +44,7 @@ if (sw) {
     : no('cross-origin requests are not excluded');
 
   const ASSETS = [
-    'index.html', 'shakespeare.html', 'pirate.html', 'victorian.html',
-    'chaucer.html', 'yoda.html', 'norse.html', 'manifest.json',
+    ...ALL_PAGES, 'manifest.json',
     'icon.svg', 'icon-180.png', 'icon-192.png', 'icon-512.png',
   ];
   const missing = ASSETS.filter((a) => !sw.includes(`'./${a}'`));
@@ -70,8 +70,7 @@ if (snippet) {
     ? ok('registers ./sw.js at the page scope')
     : no('registration does not point at ./sw.js');
 
-  for (const page of ['index.html', 'shakespeare.html', 'pirate.html',
-    'victorian.html', 'chaucer.html', 'yoda.html', 'norse.html']) {
+  for (const page of ALL_PAGES) {
     norm(read(page)).includes(snippet)
       ? ok(`${page}: registration block in sync`)
       : no(`${page}: registration block missing or drifted`);

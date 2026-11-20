@@ -15,9 +15,7 @@ import { browserSource } from './page-source.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 
-const STYLE_PAGES = ['shakespeare.html', 'pirate.html', 'victorian.html',
-  'chaucer.html', 'yoda.html', 'norse.html'];
-const PAGES = [...STYLE_PAGES, 'index.html'];
+import { PAGES_WITH_DASHBOARD as PAGES, STYLE_FILES as STYLE_PAGES } from './styles.mjs';
 const IDS = ['savedQuotes', 'savedQuotesEmpty', 'savedQuotesList', 'savedQuotesStatus',
   'sqSearch', 'sqFilter', 'sqTitle', 'sqExport', 'sqImportBtn', 'sqImport', 'sqClear'];
 const KEY = 'repriser.savedQuotes';

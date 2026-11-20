@@ -26,8 +26,7 @@ const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = dirname(HERE);
 const CHECK = process.argv.slice(2).includes('--check');
 
-const PAGES = ['shakespeare.html', 'pirate.html', 'victorian.html',
-  'chaucer.html', 'yoda.html', 'norse.html'];
+import { STYLE_FILES as PAGES } from './styles.mjs';
 
 const norm = (s) => s.replace(/\r\n/g, '\n');
 const rd = (f) => readFileSync(join(ROOT, f), 'utf8');

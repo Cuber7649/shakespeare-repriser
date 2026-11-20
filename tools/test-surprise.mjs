@@ -11,9 +11,7 @@ import { browserSource } from './page-source.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 
-const STYLE_PAGES = ['shakespeare.html', 'pirate.html', 'victorian.html',
-  'chaucer.html', 'yoda.html', 'norse.html'];
-const PAGES = [...STYLE_PAGES, 'index.html'];
+import { PAGES_WITH_DASHBOARD as PAGES } from './styles.mjs';
 
 let failures = 0;
 const ok = (m) => console.log(`  ok    ${m}`);

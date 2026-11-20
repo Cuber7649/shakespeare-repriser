@@ -7,6 +7,7 @@ import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import vm from 'node:vm';
 import { browserSource } from './page-source.mjs';
+import { ALL_PAGES } from './styles.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const read = (f) => readFileSync(join(ROOT, f), 'utf8');
@@ -19,8 +20,7 @@ const no = (m) => { console.log(`  FAIL  ${m}`); failures++; };
 const block = norm(browserSource(read('tools/sharelink.js'))).trimEnd();
 
 console.log('\npasted copies');
-for (const page of ['index.html', 'shakespeare.html', 'pirate.html',
-  'victorian.html', 'chaucer.html', 'yoda.html', 'norse.html']) {
+for (const page of ALL_PAGES) {
   norm(read(page)).includes(block)
     ? ok(`${page}: share-link block in sync`)
     : no(`${page}: share-link block missing or drifted`);

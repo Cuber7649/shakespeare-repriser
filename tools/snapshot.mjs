@@ -10,14 +10,7 @@ import { CORPUS, SEEDS } from './corpus.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 
-const PAGES = [
-  { file: 'shakespeare.html', entry: 'shakespearify' },
-  { file: 'pirate.html', entry: 'pirateify' },
-  { file: 'victorian.html', entry: 'victorianify' },
-  { file: 'chaucer.html', entry: 'chaucerify' },
-  { file: 'yoda.html', entry: 'yodaify' },
-  { file: 'norse.html', entry: 'norseify' },
-];
+import { FILE_ENTRY as PAGES } from './styles.mjs';
 
 const out = {};
 let cases = 0;

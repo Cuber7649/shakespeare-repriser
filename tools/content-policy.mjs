@@ -43,8 +43,6 @@ export const ALLOWED = [
   [/pricking of my thumbs/i, 'canonical Macbeth, non-sexual sense of "prick"'],
   [/If you prick us/i, 'canonical Merchant of Venice, non-sexual sense of "prick"'],
   [/coarser than a toad/i, 'a Shakespeare line; "arse" appears inside "coarser"'],
-  [/bilge monkey/i,
-    'Golden Age nautical ribaldry, no slur implication -- FLAGGED FOR REVIEW, see report'],
 ];
 
 const escapeRe = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');

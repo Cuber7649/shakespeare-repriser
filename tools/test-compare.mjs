@@ -16,9 +16,7 @@ import { browserSource } from './page-source.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 
-const STYLE_PAGES = ['shakespeare.html', 'pirate.html', 'victorian.html',
-  'chaucer.html', 'yoda.html', 'norse.html'];
-const PAGES = [...STYLE_PAGES, 'index.html'];
+import { PAGES_WITH_DASHBOARD as PAGES, STYLE_FILES as STYLE_PAGES, STYLE_IDS as ids } from './styles.mjs';
 
 let failures = 0;
 const ok = (m) => console.log(`  ok    ${m}`);
@@ -54,7 +52,6 @@ for (const file of STYLE_PAGES) {
   if (!read(file).includes('data-compare="output"')) { no(`${file}: no Compare button`); btnBad++; }
 }
 const dash = read('index.html');
-const ids = ['shakespeare', 'pirate', 'victorian', 'chaucer', 'yoda', 'norse'];
 const dashMissing = ids.filter((id) => !dash.includes(`data-compare="out-${id}"`));
 if (dashMissing.length) { no(`index.html: no Compare button for ${dashMissing.join(', ')}`); btnBad++; }
 if (!btnBad) ok('one Compare button per output on the dashboard and every style page');

@@ -9,8 +9,7 @@ import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
-const PAGES = ['shakespeare.html', 'pirate.html', 'victorian.html',
-  'chaucer.html', 'yoda.html', 'norse.html', 'index.html'];
+import { PAGES_WITH_DASHBOARD as PAGES } from './styles.mjs';
 
 let failures = 0;
 const fail = (m) => { console.log(`FAIL  ${m}`); failures++; };

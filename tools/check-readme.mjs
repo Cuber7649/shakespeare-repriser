@@ -17,22 +17,12 @@ const README = join(ROOT, 'README.md');
 const WRITE = process.argv.includes('--write');
 const SEED = 2;
 
-const PAGES = {
-  shakespeare: ['shakespeare.html', 'shakespearify'],
-  pirate: ['pirate.html', 'pirateify'],
-  victorian: ['victorian.html', 'victorianify'],
-  chaucer: ['chaucer.html', 'chaucerify'],
-  yoda: ['yoda.html', 'yodaify'],
-  norse: ['norse.html', 'norseify'],
-};
+import { BY_ID as PAGES, STYLES } from './styles.mjs';
 
 const pages = {};
 for (const [k, [f, e]] of Object.entries(PAGES)) pages[k] = loadPage(join(ROOT, f), e);
 
-const LABEL = {
-  shakespeare: 'Shakespeare', pirate: 'Pirate', victorian: 'Victorian',
-  chaucer: 'Chaucer', yoda: 'Yoda', norse: 'Norse',
-};
+const LABEL = Object.fromEntries(STYLES.map((s) => [s.id, s.label]));
 
 const clean = (s) => s.replace(/\s+/g, ' ').trim();
 const run = (style, input, seed) => clean(pages[style].transform(input, seed));

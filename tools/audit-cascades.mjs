@@ -10,14 +10,7 @@ import { CHAIN_NAMES } from './engine-proto.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 
-const PAGES = [
-  ['shakespeare.html', 'shakespearify'],
-  ['pirate.html', 'pirateify'],
-  ['victorian.html', 'victorianify'],
-  ['chaucer.html', 'chaucerify'],
-  ['yoda.html', 'yodaify'],
-  ['norse.html', 'norseify'],
-];
+import { FILE_ENTRY_TUPLES as PAGES } from './styles.mjs';
 
 const PURE = /^\\b([A-Za-z0-9_'’ \t-]+)\\b$/;
 const lit = (pat) => (typeof pat === 'string' ? pat : (PURE.exec(pat.source)?.[1] ?? null));

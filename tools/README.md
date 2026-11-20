@@ -52,6 +52,7 @@ also runs directly, e.g. `node tools/verify-dashboard.mjs`.
 | `readme-examples.mjs` | Prints real output for every README example across several seeds |
 | `harness.mjs` | Loads a page's inline `<script>` in Node with a stubbed DOM |
 | `page-source.mjs` | Source-extraction helpers shared by the generators |
+| `styles.mjs` | Canonical style registry: ids, files, entries, labels, icons and derived shapes used by every generator and test |
 | `quotecard.js` | Quote card: strip, layout, draw, export. Inlined into `index.html` by the generator and loaded directly by the tests, so both run identical source |
 | `cardui.js` | Quote-card preview modal wiring including the skin/background/alignment/original options row, shared by the generator and the smoke test |
 | `cardpage.js` | Binds a style page's Make Card button to the modal; inlined into all six style pages |
@@ -73,10 +74,9 @@ also runs directly, e.g. `node tools/verify-dashboard.mjs`.
 | `find-fusion.mjs` | Locates the step that introduces a fused comma |
 | `prepush-check.mjs` | Pre-push audit: shared modal and Make Card wiring, removed pages, credential shapes, local machine paths, stray files, plus rebuild + paste drift against `tools/` and `HEAD` |
 | `engine-proto.mjs` | Standalone copy of the old engine, used by `test-engine.mjs` |
-| `fix-yoda-wordbound.mjs` | One-off: added missing leading `\b` to 22 yoda rules |
 | `.dashboard-modules.js` | Build intermediate written by `build-dashboard.mjs` (gitignored) |
 
-`fix-yoda-wordbound.mjs` and `engine-proto.mjs` are historical scaffolding; the
+`engine-proto.mjs` is historical scaffolding kept for `test-engine.mjs`; the
 rest are in active use.
 
 ## Reviewing an engine or data change

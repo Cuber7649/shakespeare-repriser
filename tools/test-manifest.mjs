@@ -200,8 +200,7 @@ if (sizes.includes('192x192') && sizes.includes('512x512')
 }
 
 // --- every page the switcher offers should be reachable from the app ----------
-const PAGES = ['index.html', 'shakespeare.html',
-  'pirate.html', 'victorian.html', 'chaucer.html', 'yoda.html', 'norse.html'];
+import { ALL_PAGES as PAGES } from './styles.mjs';
 const pageMissing = PAGES.filter((p) => !existsSync(join(ROOT, p)));
 pageMissing.length === 0
   ? ok(`all ${PAGES.length} pages present on disk`)
