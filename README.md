@@ -202,11 +202,10 @@ There are no dependencies — `npm install` is never needed.
 
 ## Browser Support
 
-Tested in headless Chromium/Edge, on desktop and at mobile widths, by the
-automated suite. Expected to work in Firefox and Safari — the pages use only
-standard JavaScript, CSS and `localStorage` — but those engines are not covered
-by the suite yet. An internet connection is only needed for the Google Fonts
-stylesheets; offline, the apps fall back to system serif fonts.
+Tested in headless Chrome, with Edge as a fallback, on desktop and at mobile
+widths by the automated suite. Firefox and Safari are not covered. An internet
+connection is only needed for the Google Fonts stylesheets; offline, the apps
+fall back to system serif fonts.
 
 ## Privacy
 

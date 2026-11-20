@@ -1,9 +1,9 @@
 // Browser-level journeys driven over the DevTools protocol with only Node
 // built-ins (global fetch + WebSocket), matching the project's zero-dep rule.
-// The same headless-Edge approach as tools/build-screenshot.mjs.
+// Chrome is the primary browser; Edge is the fallback. Firefox and WebKit are
+// neither used nor claimed.
 //
-// Covers the core user journeys in a real browser (Chromium/Edge; Firefox and
-// WebKit are not available on the target machine, so they are not claimed):
+// Covers the core user journeys in a real browser:
 //   1. every style page transforms representative text
 //   2. the dashboard produces all six outputs
 //   3. settings changes are respected by the next transform
@@ -19,8 +19,10 @@
 //
 //   node tools/browser-journeys.mjs
 //
-// Skips cleanly (exit 0) when Edge is absent, so machines without a browser
-// still pass the suite. Firefox/WebKit are not exercised: not installed.
+// Skips cleanly (exit 0) when neither Chrome nor Edge is present, so machines
+// without a browser still pass the suite. Set REQUIRE_BROWSER=1 to fail instead
+// — CI uses that so the browser leg cannot silently skip. BROWSER_PATH selects
+// an explicit binary (the CI action's chrome-path output).
 
 import { spawn } from 'node:child_process';
 import { existsSync, rmSync, readdirSync, statSync, mkdirSync } from 'node:fs';
@@ -32,16 +34,38 @@ const PORT = 9334;
 const PROFILE = join(ROOT, 'tools', '.edge-journeys-profile');
 const DOWNLOADS = join(ROOT, 'tools', '.edge-journeys-downloads');
 
-const EDGE_CANDIDATES = [
+const BROWSER_CANDIDATES = [
+  // Chrome first, on every platform.
+  'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
+  'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe',
+  '/usr/bin/google-chrome',
+  '/usr/bin/google-chrome-stable',
+  '/usr/bin/chromium',
+  '/usr/bin/chromium-browser',
+  '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
+  // Edge as the fallback.
   'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe',
   'C:\\Program Files\\Microsoft\\Edge\\Application\\msedge.exe',
+  '/usr/bin/microsoft-edge',
+  '/Applications/Microsoft Edge.app/Contents/MacOS/Microsoft Edge',
 ];
-const edge = EDGE_CANDIDATES.find((p) => existsSync(p));
+const envBrowser = process.env.BROWSER_PATH;
+const browserPath = envBrowser
+  ? (existsSync(envBrowser) ? envBrowser : null)
+  : BROWSER_CANDIDATES.find((p) => existsSync(p));
 
-if (!edge) {
-  console.log('SKIP  Microsoft Edge not found; browser journeys not run.');
+if (!browserPath) {
+  const msg = envBrowser
+    ? `BROWSER_PATH is set but ${envBrowser} does not exist.`
+    : 'No Chrome or Edge binary found; browser journeys not run.';
+  if (process.env.REQUIRE_BROWSER === '1') {
+    console.error(`FAIL  ${msg} (REQUIRE_BROWSER is set)`);
+    process.exit(1);
+  }
+  console.log(`SKIP  ${msg}`);
   process.exit(0);
 }
+console.log(`      using ${browserPath}`);
 
 const STYLES = [
   ['shakespeare', 'shakespeare.html'],
@@ -119,7 +143,10 @@ async function waitForFile(pred, ms) {
   return null;
 }
 
-const child = spawn(edge, [
+const child = spawn(browserPath, [
+  // Chrome in CI may run as root or with a tiny /dev/shm.
+  ...(process.platform === 'linux'
+    ? ['--no-sandbox', '--disable-dev-shm-usage'] : []),
   '--headless=new',
   '--disable-gpu',
   '--hide-scrollbars',

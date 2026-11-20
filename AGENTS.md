@@ -93,7 +93,7 @@ node tools/prepush-check.mjs   # MUST run AFTER committing (staleness vs HEAD)
   main function, pinning a run; an empty field keeps the advancing sequence.
   The dashboard derives a per-run seed unless the field is filled. Tests seed
   explicitly through `seedRandom()`. The suite runs in Node only; real-browser
-  coverage is `browser-journeys.mjs` in headless Edge.
+  coverage is `browser-journeys.mjs` in headless Chrome (Edge fallback).
 - **Yoda's contract (deliberate):** Yoda only reorders clear copular or
   subject–verb–object clauses; ordinary prose it cannot parse safely comes back
   in its original order. `test-yoda.mjs` locks both the reorderings and the
@@ -158,9 +158,10 @@ obvious from a diff and was settled deliberately:
 
 - `paste-shared.mjs --check` — pasted copies byte-match `tools/` sources.
 - `verify-dashboard.mjs` — dashboard output matches every style page.
-- `browser-journeys.mjs` — real headless Edge over CDP: transforms on every
-  page, settings persistence, saved-quotes flow, card export, keyboard nav,
-  responsive overflow, console errors. **Skips (exit 0) when Edge is absent.**
+- `browser-journeys.mjs` — real headless Chrome over CDP (Edge fallback):
+  transforms on every page, settings persistence, saved-quotes flow, card export,
+  keyboard nav, responsive overflow, console errors. **Skips (exit 0) when no
+  browser is present; `REQUIRE_BROWSER=1` makes it fail instead, as CI does.**
 - `smoke-dashboard.mjs` ×3 — full DOM in a `vm` with a fake canvas at dpr
   1/2/3; exercises the modal via `initCardUI({ themes, render, download })`
   with injected fakes.
@@ -196,8 +197,10 @@ Last line of a green run: `working tree is ready to push`.
   screenshot taken from the live URL shows the _previous_ deploy (this is how
   a screenshot advertising a deleted page got committed). For a current shot,
   use the local file (`file:///<repo-root>/index.html`).
-- Edge: `C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe` (or the
-  x64 path). CDP harnesses use ports 9333–9338; `connect()` delivers events
+- Chrome is the primary CDP browser: `C:\Program Files\Google\Chrome\Application\chrome.exe`
+  on Windows, `/usr/bin/google-chrome` on Linux, and the app bundle on macOS.
+  Edge (`C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe`, or x64)
+  is the fallback. CDP harnesses use ports 9333–9338; `connect()` delivers events
   to `on(fn)` listeners.
 
 ## Git conventions

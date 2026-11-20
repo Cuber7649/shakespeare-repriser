@@ -42,7 +42,7 @@ also runs directly, e.g. `node tools/verify-dashboard.mjs`.
 | `test-links.mjs` | Every local href resolves; all pages share one switcher |
 | `check-css.mjs` | Brace balance, one `prefers-reduced-motion` block per file, real `<label for>` wiring |
 | `check-a11y.mjs` | Static accessibility audit of all 7 pages: document language, viewport, one h1, form labels, dialog semantics, button names, status regions, image alt text, decorative icon spans, `:focus-visible` and reduced-motion styles |
-| `browser-journeys.mjs` | End-to-end journeys in real headless Edge over CDP: transform on every page, dashboard, settings persistence, cross-page saved quotes, export/import, card PNG download, keyboard operation, responsive overflow, offline font fallback, console errors. Skips (exit 0) when Edge is unavailable |
+| `browser-journeys.mjs` | End-to-end journeys in real headless Chrome over CDP (Edge is the fallback): transform on every page, dashboard, settings persistence, cross-page saved quotes, export/import, card PNG download, keyboard operation, responsive overflow, offline font fallback, console errors. Skips (exit 0) when no browser is available; `REQUIRE_BROWSER=1` makes it fail instead and `BROWSER_PATH` selects an explicit binary, as CI does |
 | `check-readme.mjs` | Every README example matches real output across the corpus seeds; `--write` regenerates both tables at the canonical seed |
 | `check-style-overlap.mjs` | Reports replacement values shared between styles and fails when one README input is documented for two styles with identical output |
 | `check-words.mjs` | Checks one candidate word or line against the content policy; `--roast` applies the servitude rule. Wired as `npm run check-words` |

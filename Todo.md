@@ -1,21 +1,6 @@
 # Todo
 
-Quick fixes first, then CI, then features.
-
-## CI and browser coverage
-
-- [ ] **GitHub Actions workflow.** Run `npm test` on push and PR, on ubuntu
-  and windows, Node 18 and 24. Zero dependencies, so the runner just needs
-  Node. Windows runners have Edge, so browser journeys run for real there.
-
-- [ ] **Linux and macOS browser candidates.** `EDGE_CANDIDATES` in
-  `browser-journeys.mjs` lists only Windows paths. Add `/usr/bin/microsoft-edge`,
-  `/usr/bin/google-chrome`, and the macOS app paths so journeys also run on
-  ubuntu CI. The spawn flags are plain Chromium already.
-
-- [ ] **Firefox and Safari coverage (stretch).** README admits the gap. Real
-  coverage likely needs a test-only dependency, which bends the zero-dep rule.
-  Decide if a separate CI job may carry one.
+Features, then chores and owner decisions.
 
 ## Features
 

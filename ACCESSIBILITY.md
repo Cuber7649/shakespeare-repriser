@@ -21,7 +21,7 @@ or full WCAG audit has been run.
 - a `prefers-reduced-motion: reduce` block
 - `aria-hidden="true"` on decorative icon-only spans
 
-`tools/browser-journeys.mjs` checks in real headless Edge:
+`tools/browser-journeys.mjs` checks in real headless Chrome (Edge fallback):
 
 - Tab reaches the input and the Transform button; Enter transforms
 - the quote-card modal opens by keyboard, traps Tab focus and closes on Escape
