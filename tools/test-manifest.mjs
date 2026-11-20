@@ -85,7 +85,8 @@ function checkIcon(rel, opts = {}) {
   const cx = (w - 1) / 2;
   const cy = (h - 1) / 2;
   const safe = 0.40 * Math.max(w, h) + 1;
-  const disc = 0.47 * Math.max(w, h);
+  // Mirrors GEO.roundDisc in tools/build-icons.mjs.
+  const disc = 0.42 * Math.max(w, h);
   // Sample navy away from both the ring and the lozenge. The round variant's
   // top-left pixel is transparent, so it cannot serve as the background.
   const bgAt = (Math.round(cy - 0.42 * h) * w + Math.round(cx)) * 4;

@@ -35,6 +35,10 @@ const GEO = {
   nibR: 0.055,
   nibDx: -0.03,
   nibDy: 0.03,
+  // The taskbar variant is inset further so the circle is obvious at 32px;
+  // the medallion is scaled down to leave a clear navy rim inside the disc.
+  roundDisc: 0.42,
+  roundScale: 0.82,
 };
 
 const CRC_TABLE = (() => {
@@ -86,14 +90,14 @@ function png(width, height, rgba) {
 // whose cream shaft stands in for a quill. Maskable icons get cropped by the
 // launcher, so only the ring and lozenge need to stay within r <= 0.38; the
 // background intentionally runs to the canvas edge. No pixel is transparent.
-function draw(size) {
+function draw(size, scale = 1) {
   const img = Buffer.alloc(size * size * 4);
   const c = (size - 1) / 2;
-  const ringInner = size * GEO.ringInner;
-  const ringOuter = size * GEO.ringOuter;
-  const lozengeR = size * GEO.lozenge;
-  const shaftHalf = size * GEO.shaftHalf;
-  const nibR = size * GEO.nibR;
+  const ringInner = size * GEO.ringInner * scale;
+  const ringOuter = size * GEO.ringOuter * scale;
+  const lozengeR = size * GEO.lozenge * scale;
+  const shaftHalf = size * GEO.shaftHalf * scale;
+  const nibR = size * GEO.nibR * scale;
 
   for (let y = 0; y < size; y++) {
     for (let x = 0; x < size; x++) {
@@ -106,7 +110,7 @@ function draw(size) {
       if (r >= ringInner && r <= ringOuter) col = [GOLD[0], GOLD[1], GOLD[2], 255];
       if (diamond <= lozengeR) col = [GOLD[0], GOLD[1], GOLD[2], 255];
       if (Math.abs(dx - dy) <= shaftHalf && diamond <= lozengeR) col = [PARCH[0], PARCH[1], PARCH[2], 255];
-      if (Math.hypot(dx - size * GEO.nibDx, dy - size * GEO.nibDy) <= nibR) col = [PARCH[0], PARCH[1], PARCH[2], 255];
+      if (Math.hypot(dx - size * GEO.nibDx * scale, dy - size * GEO.nibDy * scale) <= nibR) col = [PARCH[0], PARCH[1], PARCH[2], 255];
 
       const o = (y * size + x) * 4;
       img[o] = col[0];
@@ -123,9 +127,9 @@ function draw(size) {
 // stays the `maskable` variant for Android and icon-180.png stays for iOS.
 // The disc edge is anti-aliased so it does not look jagged at small sizes.
 function drawRound(size) {
-  const img = draw(size);
+  const img = draw(size, GEO.roundScale);
   const c = (size - 1) / 2;
-  const radius = size * GEO.disc;
+  const radius = size * GEO.roundDisc;
   for (let y = 0; y < size; y++) {
     for (let x = 0; x < size; x++) {
       const coverage = Math.min(1, Math.max(0, radius - Math.hypot(x - c, y - c) + 0.5));
