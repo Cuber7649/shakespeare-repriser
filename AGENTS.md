@@ -45,14 +45,19 @@ in `tools/`. Live on GitHub Pages.
    cleanly if Edge is absent). It was once wired into the suite and silently
    overwrote the committed image every run — that is how a stale one survived
    a page removal.
-4. **Determinism:** every style page seeds its own PRNG (mulberry32). Any new
+4. **`sw.js` cache version is manual.** Bump `CACHE_VERSION` on every deploy
+   that changes a cached file, or returning visitors keep the previous version.
+   `test-serviceworker.mjs` checks the cache manifest against
+   `tools/styles.mjs`, but not the version string — that bump is the
+   deployer's job.
+5. **Determinism:** every style page seeds its own PRNG (mulberry32). Any new
    randomness must go through `rand()`, never `Math.random()` — one unseeded
    call voids the whole regression suite (`snapshot.mjs`/`compare.mjs`).
-5. **Line endings:** generated output (`index.html`, `manifest.json`) is pure
+6. **Line endings:** generated output (`index.html`, `manifest.json`) is pure
    LF. The six style pages have mixed endings (~1088 CR bytes each from pasted
    blocks) — when splicing, be byte-precise; the tools are LF. If you add a
    generator, normalise on write and add it to `test-reproducible.mjs`.
-6. **Design language:** parchment/medieval throughout; the six style pages
+7. **Design language:** parchment/medieval throughout; the six style pages
    share one visual template. Existing animation names: `quillBob`, `floatA`,
    `floatB`, `cardIn`, `outputGlow`, `btnSparkle`.
 
