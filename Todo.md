@@ -1,12 +1,6 @@
 # Todo
 
-Chores, then owner decisions.
-
-## Chores
-
-- [ ] **Recompress `Screenshot.png`.** 912 KB, the repo's biggest file.
-  Lossless recompress, done deliberately outside the suite since the file is
-  hand-maintained.
+Owner decisions.
 
 ## Decisions
 
