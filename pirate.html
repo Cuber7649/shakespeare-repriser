@@ -2272,12 +2272,10 @@ function pirateify() {
   text = text.replace(/\.\s*\./g, ".");
   text = text.replace(/!\s*!/g, "!");
   text = text.replace(/\?\s*\?/g, "?");
-  
-  
-  
-  
-  
-  
+
+  // Collapse synonym runs the flat tables create ("kinda sorta" -> "sort of sort of").
+  text = text.replace(/\b(sort of)(?: \1)+\b/gi, "$1");
+
   text = text.replace(/\bi\b/g, "I");
 
   // Capitalise first letter of each sentence

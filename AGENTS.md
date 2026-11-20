@@ -58,7 +58,7 @@ in `tools/`. Live on GitHub Pages.
 # 1. Edit the source under tools/ (never a pasted copy or a generated file)
 # 2. Repaste shared blocks into all pages + rebuild the dashboard:
 node tools/paste-shared.mjs
-# 3. Run the full suite (30 steps, ~10 s):
+# 3. Run the full suite (29 steps, ~10 s):
 npm test
 # 4. Commit, then:
 node tools/prepush-check.mjs   # MUST run AFTER committing (staleness vs HEAD)

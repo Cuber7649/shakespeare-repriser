@@ -1,40 +1,6 @@
 # Todo
 
-Quick fixes first, then CI, then features. The Yoda patch is already verified:
-full suite green on Node 22, snapshot diff touches only the 12 synonym-run
-cases, and the defect census drops from 9 to 0.
-
-## Bugs
-
-- [ ] **Yoda synonym runs.** `ok fine` becomes `Fine fine`. Fill the six blank
-  cleanup lines in `yodaify()`, after the punctuation cleanups and before the
-  capital-I fix, with:
-
-  ```js
-  // Collapse synonym runs the flat tables create ("ok fine" -> "fine fine").
-  text = text.replace(/\b(fine)(?: \1)+\b/gi, "$1");
-  text = text.replace(/\b(yes)(?: \1)+\b/gi, "$1");
-  text = text.replace(/\b(no)(?: \1)+\b/gi, "$1");
-  text = text.replace(/\b(hello)(?: \1)+\b/gi, "$1");
-  text = text.replace(/\b(goodbye)(?: \1)+\b/gi, "$1");
-  text = text.replace(/\b(truly)(?: \1)+\b/gi, "$1");
-  text = text.replace(/\b(in truth)(?: \1)+\b/gi, "$1");
-  text = text.replace(/\b(sort of)(?: \1)+\b/gi, "$1");
-  ```
-
-  Then `npm run build` and `npm test`. Also fixes `yeah yup`, `hi hello`,
-  `really honestly`, `kinda sorta`, and `actually in fact`. Dictionary rules
-  cannot fix this: fallback regexes only run when no bucket rule matched,
-  and `ok` always matches its bucket.
-
-- [ ] **Census undercount in `tools/compare.mjs`.** The "any repeat" pattern
-  uses `/g`, so `.test()` keeps `lastIndex` between calls and skips matches.
-  It counts 3 of 6. Drop the `g` flag. Consider a two-word phrase pattern too,
-  so `sort of sort of` gets counted.
-
-- [ ] **Step-count drift.** `run-all.mjs` has 29 steps. README and AGENTS say
-  30, DEVELOPMENT says 27. Correct the numbers, or derive them from
-  `run-all.mjs` in a check.
+Quick fixes first, then CI, then features.
 
 ## CI and browser coverage
 

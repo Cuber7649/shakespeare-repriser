@@ -3187,12 +3187,17 @@ function yodaify() {
   });
   text = text.replace(/!\s*!/g, "!");
   text = text.replace(/\?\s*\?/g, "?");
-  
-  
-  
-  
-  
-  
+
+  // Collapse synonym runs the flat tables create ("ok fine" -> "fine fine").
+  text = text.replace(/\b(fine)(?: \1)+\b/gi, "$1");
+  text = text.replace(/\b(yes)(?: \1)+\b/gi, "$1");
+  text = text.replace(/\b(no)(?: \1)+\b/gi, "$1");
+  text = text.replace(/\b(hello)(?: \1)+\b/gi, "$1");
+  text = text.replace(/\b(goodbye)(?: \1)+\b/gi, "$1");
+  text = text.replace(/\b(truly)(?: \1)+\b/gi, "$1");
+  text = text.replace(/\b(in truth)(?: \1)+\b/gi, "$1");
+  text = text.replace(/\b(sort of)(?: \1)+\b/gi, "$1");
+
   text = text.replace(/\bi\b/g, "I");
 
   // Capitalise first letter of each sentence, but not after an abbreviation:

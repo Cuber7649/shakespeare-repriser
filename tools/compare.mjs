@@ -58,7 +58,8 @@ const DEFECTS = [
   [/\b([A-Za-z']+) \1\b/i, 'doubled word'],
   [/[a-z],[a-z]/, 'comma fused to word'],
   [/\bto't\b/, "leaked 't fragment"],
-  [/\b(\w+) \1\b/gi, 'any repeat'],
+  [/\b(\w+) \1\b/i, 'any repeat'],
+  [/\b(\w+ \w+) \1\b/i, 'repeated phrase'],
 ];
 
 function census(snap) {

@@ -191,7 +191,7 @@ change it:
 
 ```bash
 npm run build   # regenerate index.html from the six style pages
-npm test        # run the whole suite (30 steps, ~10 s)
+npm test        # run the whole suite (29 steps, ~10 s)
 ```
 
 `npm test` includes `paste-shared --check`, which fails the build the moment a
