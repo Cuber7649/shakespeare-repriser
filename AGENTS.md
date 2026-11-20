@@ -16,9 +16,9 @@ in `tools/`. Live on GitHub Pages.
 
 1. **Every `.html` page is fully standalone.** Shared logic lives once under
    `tools/` and is pasted **verbatim** into each page by
-   `tools/paste-shared.mjs` — 15 blocks: eight JS (`options.js`,
+   `tools/paste-shared.mjs` — 16 blocks: nine JS (`options.js`,
    `savedquotes.js`, `compare.js`, `cardui.js`, `cardpage.js`, `quotecard.js`,
-   `surprise.js`, `sw-register.js`), four CSS (`options.css`,
+   `surprise.js`, `sw-register.js`, `sharelink.js`), four CSS (`options.css`,
    `savedquotes.css`, `compare.css`, `card-modal.css`), three HTML
    (`options.html`, `savedquotes.html`, `card-modal.html`).
    Edit the file under `tools/`, never the pasted copy inside a page.
@@ -58,7 +58,7 @@ in `tools/`. Live on GitHub Pages.
 # 1. Edit the source under tools/ (never a pasted copy or a generated file)
 # 2. Repaste shared blocks into all pages + rebuild the dashboard:
 node tools/paste-shared.mjs
-# 3. Run the full suite (30 steps, ~10 s):
+# 3. Run the full suite (31 steps, ~10 s):
 npm test
 # 4. Commit, then:
 node tools/prepush-check.mjs   # MUST run AFTER committing (staleness vs HEAD)

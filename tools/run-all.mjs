@@ -30,6 +30,7 @@ const STEPS = [
   ['test-savedquotes', ['test-savedquotes.mjs']],
   ['test-manifest', ['test-manifest.mjs']],
   ['test-serviceworker', ['test-serviceworker.mjs']],
+  ['test-sharelinks', ['test-sharelinks.mjs']],
   ['test-content', ['test-content.mjs']],
   ['test-yoda', ['test-yoda.mjs']],
   ['test-settings', ['test-settings.mjs']],

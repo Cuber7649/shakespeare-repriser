@@ -1,12 +1,6 @@
 # Todo
 
-Features, then chores and owner decisions.
-
-## Features
-
-- [ ] **Shareable links.** Encode text, style, settings, and seed in the URL
-  hash behind a Copy Link button. Cap the length. The hash never leaves the
-  browser, so the privacy story holds.
+Chores, then owner decisions.
 
 ## Chores
 

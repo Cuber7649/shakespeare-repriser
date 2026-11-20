@@ -4,8 +4,8 @@
 //   node tools/paste-shared.mjs           repaste whatever drifted, then rebuild index.html
 //   node tools/paste-shared.mjs --check   verify only; exit 1 on drift (never writes)
 //
-// Each style page is a standalone app, so it carries a VERBATIM copy of the 15
-// shared blocks that live in tools/ (eight JS, four CSS, three HTML). Content is
+// Each style page is a standalone app, so it carries a VERBATIM copy of the 16
+// shared blocks that live in tools/ (nine JS, four CSS, three HTML). Content is
 // compared after CRLF normalisation, but splices go through a raw-offset map so
 // a page's mixed line endings and its own separator spacing survive untouched:
 // a page that is already in sync is never rewritten.
@@ -36,7 +36,8 @@ const CHAINS = [
   {
     close: '</script>',
     files: ['options.js', 'savedquotes.js', 'compare.js', 'quotecard.js',
-      'cardui.js', 'cardpage.js', 'surprise.js', 'sw-register.js'],
+      'cardui.js', 'cardpage.js', 'surprise.js', 'sw-register.js',
+      'sharelink.js'],
     load: (f) => norm(browserSource(rd(`tools/${f}`))),
   },
   {

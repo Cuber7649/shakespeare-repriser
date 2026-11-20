@@ -62,9 +62,10 @@ catch { no('tools/sw-register.js is missing'); snippet = ''; }
 
 if (snippet) {
   snippet.includes("location.protocol === 'https:'")
+    && snippet.includes('localhost')
     && snippet.includes("typeof location !== 'undefined'")
-    ? ok('registers only on https, harness-safe')
-    : no('registration is not https-only / harness-safe');
+    ? ok('registers only in secure contexts, harness-safe')
+    : no('registration is not restricted to secure contexts');
   snippet.includes("register('./sw.js')")
     ? ok('registers ./sw.js at the page scope')
     : no('registration does not point at ./sw.js');

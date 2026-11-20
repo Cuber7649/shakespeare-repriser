@@ -151,6 +151,8 @@ const surpriseJs = browserSource(
   readFileSync(join(ROOT, 'tools', 'surprise.js'), 'utf8'));
 const swRegisterJs = browserSource(
   readFileSync(join(ROOT, 'tools', 'sw-register.js'), 'utf8'));
+const shareLinkJs = browserSource(
+  readFileSync(join(ROOT, 'tools', 'sharelink.js'), 'utf8'));
 
 // ---------------------------------------------------------------------------
 // Compose index.html
@@ -354,6 +356,7 @@ ${optionsJs}
 function rand() { return Math.random(); }
 ${surpriseJs}
 ${swRegisterJs}
+${shareLinkJs}
 
 (function () {
   const ORDER = ${JSON.stringify(STYLES.map((s) => s.id))};

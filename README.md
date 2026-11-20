@@ -23,9 +23,9 @@ Hosted with GitHub Pages: **[Live site](https://cuber7649.github.io/shakespeare-
 
 The site is installable: browsers that support web apps will offer to install
 it from `manifest.json`, and iOS users can use Share → Add to Home Screen. Over
-https, a service worker caches all seven pages and the icons, so the installed
-app also opens offline. Opened as a local `file://` page, no service worker is
-registered.
+secure contexts (https, or localhost for testing), a service worker caches all
+seven pages and the icons, so the app also opens offline. Opened as a local
+`file://` page, no service worker is registered.
 
 ## Styles
 
@@ -61,6 +61,9 @@ cannot be sure. The other five styles rewrite every sentence they can.
 - **Reproducible runs** — an optional Seed field pins the random choices, so
   the same input, settings and seed give the same output; leave it empty for a
   fresh variation on each click
+- **Shareable links** — a Copy Link button puts the text, style, settings and
+  seed in the URL fragment, so opening the link reproduces the run; the text is
+  capped and the fragment never leaves the browser
 - **Style-switcher navigation** — move between styles from any page
 - **Side-by-side dashboard** — one input, all six styles at once, on `index.html`
 - **Original/output comparison** — a Compare button beside every result opens
@@ -194,7 +197,7 @@ change it:
 
 ```bash
 npm run build   # regenerate index.html from the six style pages
-npm test        # run the whole suite (30 steps, ~10 s)
+npm test        # run the whole suite (31 steps, ~10 s)
 ```
 
 `npm test` includes `paste-shared --check`, which fails the build the moment a
@@ -216,8 +219,10 @@ Everything runs in your browser, on your device: there is no backend,
 account, analytics, or tracking of any kind. Saved quotes live in your
 browser's `localStorage` under `repriser.savedQuotes` and your transformation
 settings under `repriser.settings`, shared between this site's pages on the
-same origin (the dashboard and all six styles) and never sent anywhere. The
-only network requests the pages make are for the Google Fonts stylesheets.
+same origin (the dashboard and all six styles) and never sent anywhere. Share
+links carry their payload in the URL fragment, which browsers never send to a
+server. The only network requests the pages make are for the Google Fonts
+stylesheets.
 Clearing site data removes both — use Export first if you want to keep your
 saved quotes.
 

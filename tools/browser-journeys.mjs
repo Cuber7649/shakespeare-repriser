@@ -15,7 +15,8 @@
 //   9. narrow (360px) and wide (1280px) viewports do not overflow sideways
 //  10. with the Google Fonts CDN blocked, the page still transforms and falls
 //      back to a system serif
-//  11. no JavaScript console errors were raised along the way
+//  11. a Copy Link hash restores text, settings and the transform on reload
+//  12. no JavaScript console errors were raised along the way
 //
 //   node tools/browser-journeys.mjs
 //
@@ -249,6 +250,16 @@ try {
     features: [{ name: 'prefers-reduced-motion', value: 'reduce' }],
   });
 
+  // Start from clean local state: a previous journey (or a crashed one) may
+  // have left saved quotes or settings in the profile.
+  await goto('shakespeare.html');
+  await evalJs(`(() => {
+    localStorage.removeItem('repriser.savedQuotes');
+    localStorage.removeItem('repriser.settings');
+  })()`);
+  // Reload so the controls pick up the defaults, not the old stored values.
+  await goto('shakespeare.html');
+
   // --- 1. every style page transforms representative text ------------------
   const SAMPLE = 'you are my friend and it is very good';
   for (const [id, file] of STYLES) {
@@ -263,6 +274,8 @@ try {
     if (!out || !out.trim()) fail(`${file}: transform produced no output`);
     else if (out.trim() === SAMPLE) fail(`${file}: output is unchanged from the input`);
     else pass(`${file}: transformed to ${out.trim().length} chars`);
+    const hasShare = await evalJs('!!document.getElementById("shareBtn")');
+    if (!hasShare) fail(`${file}: Copy Link button was not created`);
   }
 
   // --- 2. the dashboard produces all six outputs ---------------------------
@@ -278,6 +291,15 @@ try {
   if (dash.total !== 6) fail(`dashboard has ${dash.total} output cards, expected 6`);
   else if (dash.filled !== 6) fail(`dashboard filled ${dash.filled} of 6 outputs`);
   else pass('dashboard filled all six style outputs');
+  const dashShare = await evalJs(`(() => {
+    const btns = [...document.querySelectorAll('[data-share]')];
+    return { count: btns.length,
+             inCards: btns.every((b) => b.closest('.output-actions')),
+             styles: btns.map((b) => b.getAttribute('data-share')).join(',') };
+  })()`);
+  if (dashShare.count !== 6 || !dashShare.inCards) {
+    fail(`dashboard share buttons: ${JSON.stringify(dashShare)}`);
+  } else pass(`dashboard has six per-style Copy Link buttons (${dashShare.styles})`);
 
   // --- 3. settings changes are respected -----------------------------------
   // Seeded so the comparison isolates the settings, not the RNG.
@@ -520,7 +542,49 @@ try {
   }
   await page.send('Network.setBlockedURLs', { urls: [] });
 
-  // --- 11. console errors ---------------------------------------------------
+  // --- 11. shareable links round-trip through the URL fragment --------------
+  await goto('shakespeare.html');
+  const shared = await evalJs(`(() => {
+    const btn = document.getElementById('shareBtn');
+    if (!btn) return { missing: true };
+    const ta = document.getElementById('input');
+    ta.value = 'the quick brown fox jumps';
+    ta.dispatchEvent(new Event('input', { bubbles: true }));
+    const openings = document.getElementById('optOpenings');
+    if (openings.checked) openings.click();
+    btn.click();
+    return { hash: location.hash, text: ta.value, openings: openings.checked };
+  })()`);
+  if (shared.missing) fail('Copy Link button was not created');
+  else if (!/^#share=/.test(shared.hash)) {
+    fail(`Copy Link did not write the fragment (got ${JSON.stringify(shared.hash)})`);
+  } else {
+    // Navigating to the same URL with only a hash changed is a fragment jump,
+    // not a reload — leave the page first so the snippet runs on a fresh load.
+    await goto('index.html');
+    await page.send('Page.navigate', { url: fileUrl('shakespeare.html') + shared.hash });
+    for (let i = 0; i < 80; i++) {
+      const r = await page.send('Runtime.evaluate', {
+        expression: 'document.readyState', returnByValue: true,
+      });
+      if (r.result.value === 'complete') break;
+      await sleep(125);
+    }
+    const restored = await evalJs(`(() => ({
+      input: document.getElementById('input').value,
+      openings: document.getElementById('optOpenings').checked,
+      out: document.getElementById('output').textContent,
+    }))()`);
+    if (restored.input !== shared.text) {
+      fail(`shared text not restored (${JSON.stringify(restored.input)})`);
+    } else if (restored.openings !== shared.openings) {
+      fail('shared settings not restored');
+    } else if (!restored.out.trim()) {
+      fail('shared link did not reproduce the transform');
+    } else pass('share link restores text, settings and the transform');
+  }
+
+  // --- 12. console errors ---------------------------------------------------
   if (consoleErrors.length) {
     fail(`${consoleErrors.length} console error(s): ${consoleErrors.slice(0, 3).join(' | ')}`);
   } else pass('no JavaScript console errors');
