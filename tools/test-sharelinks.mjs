@@ -70,6 +70,13 @@ if (!decoded) {
     : no(`round trip changed the payload: ${JSON.stringify(decoded)}`);
 }
 
+// optSeedValue() only accepts whole integers, so a fractional seed in a link
+// must be dropped here rather than advertised and silently lost on apply.
+const fractional = shareDecode('#share=1&style=pirate&i=2&f=15&d=1.5&text=hi');
+!fractional || fractional.opts.seed === null
+  ? ok('rejects a fractional seed')
+  : no(`accepted a fractional seed: ${JSON.stringify(fractional.opts)}`);
+
 const capped = shareDecode('#' + shareEncode('x'.repeat(5000), 'yoda', opts));
 capped && capped.text.length === SHARE_MAX_TEXT
   ? ok(`text capped at ${SHARE_MAX_TEXT} characters`)

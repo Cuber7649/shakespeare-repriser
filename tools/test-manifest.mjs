@@ -177,18 +177,20 @@ if (missing.length) no(`referenced files not on disk: ${missing.join(', ')}`);
 else ok(`all ${new Set(paths).size} referenced icon file(s) exist`);
 
 // --- sizes must match the real images ------------------------------------------
+let sizeBad = 0;
 for (const icon of m.icons) {
   const file = join(ROOT, icon.src.replace(/^\.\//, ''));
   if (!existsSync(file)) continue;
   const b = readFileSync(file);
-  if (b.slice(0, 8).toString('hex') !== '89504e470d0a1a0a') { no(`${icon.src} is not a PNG`); continue; }
+  if (b.slice(0, 8).toString('hex') !== '89504e470d0a1a0a') { no(`${icon.src} is not a PNG`); sizeBad++; continue; }
   const w = b.readUInt32BE(16), h = b.readUInt32BE(20);
   const declared = icon.sizes.split('x').map(Number);
   if (w !== declared[0] || h !== declared[1]) {
     no(`${icon.src} is ${w}x${h} but declares ${icon.sizes}`);
+    sizeBad++;
   }
 }
-ok('declared icon sizes match the actual images');
+if (!sizeBad) ok('declared icon sizes match the actual images');
 
 // --- launcher icons must be opaque and maskable-safe ---------------------------
 // A transparent corner is composited over the launcher's white plate on

@@ -109,6 +109,11 @@ const SURPRISE_SENTENCES = [
 // when the pool has more than one entry.
 let surpriseLastIndex = -1;
 
+// Test hook. The harness exports top-level `let` bindings as snapshots, so
+// assigning api.surpriseLastIndex in a test cannot reach this variable; call
+// this instead to reset the no-repeat guard.
+function surpriseReset() { surpriseLastIndex = -1; }
+
 function surprisePick() {
   const n = SURPRISE_SENTENCES.length;
   if (n === 0) return '';

@@ -50,7 +50,7 @@ const api = page.api;
 if (typeof api.surprisePick !== 'function') {
   no('surprisePick not exposed on shakespeare page');
 } else {
-  api.surpriseLastIndex = -1;
+  api.surpriseReset();
   const seen = new Set();
   let bad = 0;
   for (let i = 0; i < 100; i++) {
@@ -66,7 +66,7 @@ if (typeof api.surprisePick !== 'function') {
 // --- 4. consecutive-repeat prevention ----------------------------------------
 section('consecutive-repeat prevention');
 {
-  api.surpriseLastIndex = -1;
+  api.surpriseReset();
   const first = api.surprisePick();
   const second = api.surprisePick();
   if (first !== '' && second !== '' && first !== second) {
@@ -76,7 +76,7 @@ section('consecutive-repeat prevention');
   }
 
   // A long run should never emit the same sentence back-to-back.
-  api.surpriseLastIndex = -1;
+  api.surpriseReset();
   let prev = null;
   let repeats = 0;
   for (let i = 0; i < 200; i++) {
@@ -96,7 +96,7 @@ section('pool edge cases');
   const arr = p.api.SURPRISE_SENTENCES;
   const saved = arr.slice();
   arr.length = 0; // empty in place (same object surprisePick closes over)
-  p.api.surpriseLastIndex = -1;
+  p.api.surpriseReset();
   const s = p.api.surprisePick();
   arr.push(...saved); // restore
   if (s === '') ok('empty pool returns empty string');
@@ -109,7 +109,7 @@ section('pool edge cases');
   const saved = arr.slice();
   arr.length = 0;
   arr.push('only one sentence');
-  p.api.surpriseLastIndex = -1;
+  p.api.surpriseReset();
   const s1 = p.api.surprisePick();
   const s2 = p.api.surprisePick();
   arr.length = 0;
@@ -129,7 +129,7 @@ section('surpriseApply');
   const charCountEl = p.document.getElementById('charCount');
   const outputEl = p.document.getElementById('output');
 
-  p.api.surpriseLastIndex = -1;
+  p.api.surpriseReset();
   p.api.surpriseApply(inputEl, charCountEl, p.api.shakespearify);
 
   const inputVal = inputEl.value;
@@ -151,7 +151,7 @@ section('surpriseApply');
   // All produced outputs come from the sample pool
   let inPool = true;
   for (let i = 0; i < 20; i++) {
-    p.api.surpriseLastIndex = -1;
+    p.api.surpriseReset();
     p.api.surpriseApply(inputEl, charCountEl, p.api.shakespearify);
     if (!p.api.SURPRISE_SENTENCES.includes(inputEl.value)) { inPool = false; break; }
   }

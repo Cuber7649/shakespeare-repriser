@@ -54,7 +54,7 @@ for (const dup of ['Do, or do not. There is no try.', 'The Force will be with yo
 // git diff below reports it instead of letting a stale build get pushed.
 const build = spawnSync(process.execPath, ['tools/build-dashboard.mjs'], { encoding: 'utf8' });
 build.status === 0
-  ? ok('index.html rebuilds byte-identically from the style pages')
+  ? ok('rebuild succeeded; the byte comparison against HEAD is below')
   : no('build-dashboard.mjs failed: '
     + ((build.stdout || '') + (build.stderr || '')).trim().split(/\r?\n/).pop());
 const paste = spawnSync(process.execPath, ['tools/paste-shared.mjs', '--check'], { encoding: 'utf8' });
@@ -93,8 +93,11 @@ const LOCAL = /C:[\\/]Users[\\/]|file:\/\/\/[A-Za-z]:|AppData[\\/]|[A-Za-z]:[\\/
 const toolFiles = readdirSync('tools')
   .filter((f) => /\.(mjs|js|css|html)$/.test(f))
   .map((f) => `tools/${f}`);
-// Markdown docs ship too (root docs + tools/README.md).
-const docs = ['README.md', 'AGENTS.md', 'tools/README.md'];
+// Markdown docs ship too: every root doc plus tools/README.md.
+const docs = [
+  ...readdirSync('.').filter((f) => /\.md$/i.test(f)),
+  'tools/README.md',
+];
 const scan = [...PAGES, ...toolFiles, ...docs];
 const secretHits = scan.filter((name) => SECRET.find((re) => re.test(readFileSync(name, 'utf8'))));
 const localHits = scan.filter((name) => LOCAL.test(readFileSync(name, 'utf8')));

@@ -3,7 +3,7 @@
 // Nothing else in the suite checks this. A nav link to a page that was renamed,
 // or a manifest path with a typo, degrades quietly: the page still renders and
 // every other test still passes, because link rot is a 404 at runtime, not a
-// build error. Worth having now that the switcher has nine entries.
+// build error. Worth having now that the switcher has seven entries.
 //
 //   node tools/test-links.mjs
 
@@ -24,7 +24,10 @@ const manifest = JSON.parse(readFileSync(join(ROOT, 'manifest.json'), 'utf8'));
 // Everything reachable from a nav or manifest, and that it must all exist for.
 const EXPECTED_TARGETS = new Set([
   ...ALL_PAGES,
-  'icon-192.png', 'icon-512.png', 'icon-180.png', 'manifest.json',
+  'icon.svg',
+  'icon-180.png', 'icon-192.png', 'icon-512.png',
+  'icon-round-192.png', 'icon-round-512.png',
+  'manifest.json',
 ]);
 
 // --- 0. registry agrees with the shipped style-specific tables --------------

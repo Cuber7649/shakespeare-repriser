@@ -10,9 +10,9 @@
 // function copied VERBATIM, so the dashboard cannot drift from the pages.
 // tools/verify-dashboard.mjs asserts behavioural equality.
 //
-// The "Make Card" modal is shared with random.html: its wiring lives in
+// The "Make Card" modal is shared by every page: its wiring lives in
 // tools/cardui.js and its markup and styles in tools/card-modal.{html,css}, all
-// inlined below, so the two flows cannot drift apart.
+// inlined below, so the dashboard and style pages cannot drift apart.
 //
 //   node tools/build-dashboard.mjs
 
@@ -50,8 +50,8 @@ const DICTS = [
 ];
 
 // html(), scriptOf(), extractDecl(), extractFunction(), between(), browserSource()
-// and stripMediaQuery() now live in tools/page-source.mjs, shared with
-// tools/build-random.mjs.
+// and stripMediaQuery() now live in tools/page-source.mjs, shared with the
+// content and word-list gates.
 
 function styleModule(style) {
   const src = scriptOf(html(ROOT, style.href));
@@ -123,8 +123,8 @@ const quotecard = browserSource(
   readFileSync(join(ROOT, 'tools', 'quotecard.js'), 'utf8'));
 
 // The preview modal lives in tools/cardui.js + the two card-modal.* fragments
-// and is shared with tools/build-random.mjs, so the two "Make Card" flows cannot
-// drift apart.
+// and is shared with the style pages, so the two "Make Card" flows cannot drift
+// apart.
 const cardui = browserSource(
   readFileSync(join(ROOT, 'tools', 'cardui.js'), 'utf8'));
 const cardModalHtml = readFileSync(join(ROOT, 'tools', 'card-modal.html'), 'utf8').trimEnd();
@@ -202,7 +202,7 @@ const DASH_CSS = `
   .mini-link {
     font-family: 'Cormorant Garamond', serif;
     font-size: 0.85rem;
-    color: #8a6a3a;
+    color: #7d5f33;
     text-decoration: underline;
   }
   .out {
@@ -216,7 +216,7 @@ const DASH_CSS = `
   }
   .out:empty::before {
     content: 'Awaiting transformation...';
-    color: #b8956a;
+    color: #755f43;
     font-style: italic;
   }
   .visually-hidden {
@@ -252,7 +252,7 @@ const cards = STYLES.map((s) => `      <section class="mini">
             <span aria-hidden="true">&#128203;</span> Copy
           </button>
           <button class="btn-copy" data-save="${s.label}" data-save-target="out-${s.id}">
-            <span aria-hidden="true">&#128222;</span> Save
+            <span aria-hidden="true">&#128190;</span> Save
           </button>
           <button class="btn-copy" data-compare="out-${s.id}">
             <span aria-hidden="true">&#8644;</span> Compare
@@ -316,7 +316,7 @@ ${optionsHtml}
       <span class="quill-icon" aria-hidden="true">&#128396;</span> Repraise In All Styles!
     </button>
     <button class="btn btn-secondary" id="dashSurprise">
-      <span aria-hidden="true">&#128204;</span> Surprise Me!
+      <span aria-hidden="true">&#127922;</span> Surprise Me!
     </button>
     <button class="btn btn-secondary" id="clear">Clear</button>
   </div>

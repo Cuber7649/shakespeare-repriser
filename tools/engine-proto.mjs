@@ -3,7 +3,7 @@
 
 const WORD = /[A-Za-z0-9_]/;
 const TOKEN = /[A-Za-z0-9_'’-]/;
-const PURE_LITERAL = /^\\b([A-Za-z0-9_'’ \t-]+)\\b$/;
+export const PURE_LITERAL = /^\\b([A-Za-z0-9_'’ \t-]+)\\b$/;
 
 export function buildIndex(dicts) {
   const buckets = new Map();

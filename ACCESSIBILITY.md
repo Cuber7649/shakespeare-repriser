@@ -38,8 +38,13 @@ or full WCAG audit has been run.
 - **No screen-reader run.** Names, roles and live regions are checked
   statically; actual announcements (especially the six dashboard outputs) have
   not been listened to.
-- **Contrast is not measured.** The parchment palette is chosen by eye. The
-  muted gold text on cream is the likeliest weak point.
+- **Contrast is measured for the shared styles, not for every page-local rule.**
+  `tools/check-contrast.mjs` runs in `npm test` and checks each text colour in
+  the shared blocks and the dashboard stylesheet against its real background,
+  including gradient stops and alpha-blended fills, at the right bar for its
+  font size. The quote card's large label ink is checked by
+  `tools/test-quotecard.mjs`. A one-off browser audit can still catch issues
+  the static pairings do not model.
 - **Zoom and reflow are not tested** beyond the two viewport widths. The
   browser journey checks sideways overflow, not text spacing at 200% zoom.
 - **Focus order is only covered on the main journey**, not every control.
@@ -55,6 +60,7 @@ or full WCAG audit has been run.
 - New controls need a `<label for>` (or `aria-label`), and `check-a11y.mjs`
   fails without one.
 
-If you change the palette, check contrast before committing. If you add a
-dialog or a new live region, extend `check-a11y.mjs` so the next change cannot
-silently remove the semantics.
+If you change the palette, `check-contrast.mjs` fails below WCAG AA; add the
+new text/background pairing to its family map if it introduces a new surface.
+If you add a dialog or a new live region, extend `check-a11y.mjs` so the next
+change cannot silently remove the semantics.

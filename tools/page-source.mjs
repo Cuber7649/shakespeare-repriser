@@ -1,9 +1,9 @@
-// Shared source-extraction helpers for the two generators.
+// Shared source-extraction helpers for the generators and tests.
 //
-// tools/build-dashboard.mjs and tools/build-random.mjs both need to lift
-// declarations and functions out of the hand-written style pages verbatim. When
-// the same ~70 lines of bracket-and-string-aware scanner exists twice it will
-// drift, so it lives here once.
+// tools/build-dashboard.mjs needs to lift declarations and functions out of the
+// hand-written style pages verbatim, and the content gates extract word lists
+// the same way. When the bracket-and-string-aware scanner existed in several
+// copies it drifted, so it lives here once.
 
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';

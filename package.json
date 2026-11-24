@@ -3,6 +3,9 @@
   "private": true,
   "description": "Text Repriser Collection - static site with local build and test tooling",
   "license": "SEE LICENSE IN LICENSE",
+  "engines": {
+    "node": ">=22"
+  },
   "scripts": {
     "build": "node tools/build-dashboard.mjs",
     "check-words": "node tools/check-words.mjs",

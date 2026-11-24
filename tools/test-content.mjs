@@ -12,7 +12,11 @@
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
-import { PROFANITY, EXPLICIT, SLURS, SERVITUDE, ALLOWED, scanTerms } from './content-policy.mjs';
+import vm from 'node:vm';
+import { extractDecl } from './page-source.mjs';
+import {
+  PROFANITY, EXPLICIT, SLURS, SERVITUDE, ALLOWED, scanTerms, allowedMatches,
+} from './content-policy.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 import { STYLE_IDS as PAGES } from './styles.mjs';
@@ -23,15 +27,17 @@ const fail = (m) => { console.log(`  FAIL  ${m}`); failures++; };
 const warn = (m) => { console.log(`  WARN  ${m}`); warnings++; };
 const ok = (m) => console.log(`  ok    ${m}`);
 
+// extractDecl() is string- and regex-aware; the old bracket counter stopped at
+// the first `]` inside a regex character class or a quoted string. Evaluate the
+// extracted declaration in a vm context rather than eval() in this module.
 function arraysFrom(file, names) {
   const s = readFileSync(join(ROOT, file), 'utf8');
+  const ctx = vm.createContext({});
   const out = {};
   for (const n of names) {
-    const i = s.indexOf(`const ${n} = [`);
-    if (i < 0) throw new Error(`${n} not found in ${file}`);
-    let d = 0; const o = s.indexOf('[', i); let j = o;
-    for (; j < s.length; j++) { if (s[j] === '[') d++; else if (s[j] === ']') { d--; if (!d) break; } }
-    out[n] = eval(s.slice(o, j + 1));
+    const decl = extractDecl(s, n);
+    vm.runInContext(`${decl}\n;globalThis.__decl = ${n};`, ctx, { filename: file });
+    out[n] = ctx.__decl;
   }
   return out;
 }
@@ -49,7 +55,15 @@ for (const page of PAGES) {
 function scan(kind, terms) {
   const hits = [];
   for (const { page, text } of corpus) {
-    for (const term of scanTerms(text, terms)) hits.push({ page, text, t: term });
+    const allowed = allowedMatches(text);
+    for (const term of scanTerms(text, terms)) {
+      const exemption = allowed.find(([re]) => re.test(text));
+      if (exemption) {
+        ok(`${kind} term "${term}" allowed in ${page}: ${exemption[1]}`);
+      } else {
+        hits.push({ page, text, t: term });
+      }
+    }
   }
   for (const h of hits) fail(`${kind} term "${h.t}" in ${h.page}: "${h.text.slice(0, 60)}"`);
   return hits.length;

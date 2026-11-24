@@ -17,6 +17,7 @@ const STEPS = [
   // regenerating it on request. Running it as part of the suite would silently
   // overwrite the committed image every time.
   ['check-css', ['check-css.mjs']],
+  ['check-contrast', ['check-contrast.mjs']],
   ['check-a11y', ['check-a11y.mjs']],
   ['check-readme', ['check-readme.mjs']],
   ['check-style-overlap', ['check-style-overlap.mjs']],
@@ -43,8 +44,9 @@ const STEPS = [
   ['smoke-dashboard', ['smoke-dashboard.mjs', '2']],
   ['smoke-dashboard', ['smoke-dashboard.mjs', '3']],
   ['test-budgets', ['test-budgets.mjs']],
-  // Browser journeys launch a real headless Edge over CDP; they SKIP (exit 0)
-  // when Edge is unavailable so the suite still runs on machines without it.
+  // Browser journeys launch a real headless Chrome over CDP (Edge is the
+  // fallback); they SKIP (exit 0) when neither is available so the suite still
+  // runs on machines without a browser.
   ['browser-journeys', ['browser-journeys.mjs']],
 ];
 

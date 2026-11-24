@@ -103,12 +103,14 @@ function resolveCardSkin(styleId, skinId) {
   };
 }
 
-// Removes asides and stage directions, then tidies the whitespace they leave
-// behind. Deliberately generic: a pattern approach matches any phrase added
-// later, where a hardcoded literal list would silently miss it.
+// Removes asides and authored stage directions, then tidies the whitespace
+// they leave behind. Stage directions are appended on their own line by the
+// transform, so only a bracketed span standing alone on a line is treated as
+// one. Inline brackets the writer typed themselves are part of the speech and
+// stay on the card. The aside form is injected inline and is unambiguous.
 function stripStageBusiness(text) {
   return String(text)
-    .replace(/\[[^\]]*\]/g, '')
+    .replace(/(^|\n)[ \t]*\[[^\]]*\][ \t]*(?=\n|$)/g, '$1')
     .replace(/\(aside:[^)]*\)/gi, '')
     .replace(/\s+/g, ' ')
     .trim();
@@ -541,7 +543,7 @@ function downloadCard(canvas, filename) {
 
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = {
-    CARD_THEMES, CARD_SKINS, CARD_W, CARD_H, CARD_PAD,
+    CARD_THEMES, CARD_SKINS, CARD_DPR_CAP, CARD_W, CARD_H, CARD_PAD,
     CARD_FONT_MIN, CARD_FONT_MAX, CARD_FONT_LONG,
     CARD_ORIGINAL_FONT, CARD_ORIGINAL_MAX_LINES,
     stripStageBusiness, wrapParagraph, layoutCard, cardWarning, drawCard,

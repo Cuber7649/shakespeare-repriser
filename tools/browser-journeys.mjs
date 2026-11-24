@@ -16,7 +16,9 @@
 //  10. with the Google Fonts CDN blocked, the page still transforms and falls
 //      back to a system serif
 //  11. a Copy Link hash restores text, settings and the transform on reload
-//  12. no JavaScript console errors were raised along the way
+//  12. an open Compare panel re-renders after a second transform and Clear
+//  13. Re-run on a style page works and names the style it actually used
+//  14. no JavaScript console errors were raised along the way
 //
 //   node tools/browser-journeys.mjs
 //
@@ -50,6 +52,19 @@ const BROWSER_CANDIDATES = [
   '/usr/bin/microsoft-edge',
   '/Applications/Microsoft Edge.app/Contents/MacOS/Microsoft Edge',
 ];
+// The CDP client uses the global WebSocket, stable from Node 22. Older Node
+// versions cannot run the journeys at all, so skip with a clear reason rather
+// than throwing a ReferenceError halfway through the suite.
+if (typeof WebSocket === 'undefined') {
+  const msg = 'Global WebSocket is unavailable; browser journeys need Node 22+.';
+  if (process.env.REQUIRE_BROWSER === '1') {
+    console.error(`FAIL  ${msg} (REQUIRE_BROWSER is set)`);
+    process.exit(1);
+  }
+  console.log(`SKIP  ${msg}`);
+  process.exit(0);
+}
+
 const envBrowser = process.env.BROWSER_PATH;
 const browserPath = envBrowser
   ? (existsSync(envBrowser) ? envBrowser : null)
@@ -578,7 +593,69 @@ try {
     } else pass('share link restores text, settings and the transform');
   }
 
-  // --- 12. console errors ---------------------------------------------------
+  // --- 12. an open Compare panel follows the output -------------------------
+  await goto('shakespeare.html');
+  const compared = await evalJs(`(async () => {
+    const ta = document.getElementById('input');
+    const transform = () => document.querySelector('.btn-row .btn-primary').click();
+    ta.value = 'the warrior is strong';
+    ta.dispatchEvent(new Event('input', { bubbles: true }));
+    transform();
+    const btn = document.querySelector('[data-compare]');
+    btn.click();
+    const panel = document.getElementById('cmp-panel-output');
+    const before = panel.textContent.trim();
+    ta.value = 'the king rules the land';
+    ta.dispatchEvent(new Event('input', { bubbles: true }));
+    transform();
+    await new Promise((r) => setTimeout(r, 50));
+    const after = panel.textContent.trim();
+    const stillOpen = btn.getAttribute('aria-expanded') === 'true' && !panel.hidden;
+    document.querySelector('[onclick="clearAll()"]').click();
+    await new Promise((r) => setTimeout(r, 50));
+    return { before, after, stillOpen, empty: panel.textContent.trim() };
+  })()`);
+  if (!compared.before || compared.before === compared.after) {
+    fail('Compare panel did not re-render after the second transform');
+  } else if (!compared.stillOpen) {
+    fail('Compare panel did not stay open across the second transform');
+  } else if (!/Enter some text to compare|Transform some text first/.test(compared.empty)) {
+    fail(`Compare panel did not reset on Clear: ${JSON.stringify(compared.empty.slice(0, 60))}`);
+  } else pass('Compare panel re-renders on transform and resets on Clear');
+
+  // --- 13. Re-run on a style page -------------------------------------------
+  await goto('pirate.html');
+  await evalJs(`(() => {
+    const ta = document.getElementById('input');
+    ta.value = 'you are my friend';
+    ta.dispatchEvent(new Event('input', { bubbles: true }));
+    document.querySelector('.btn-row .btn-primary').click();
+    document.querySelector('[data-save]').click();
+  })()`);
+  await goto('shakespeare.html');
+  const rerun = await evalJs(`(() => {
+    const btn = [...document.querySelectorAll('#savedQuotesList [data-rerun]')].find((b) => {
+      const style = b.closest('li').querySelector('.saved-quotes-style');
+      return style && style.textContent.trim() === 'Pirate';
+    });
+    if (!btn) return { missing: true };
+    btn.click();
+    return {
+      status: document.getElementById('savedQuotesStatus').textContent,
+      input: document.getElementById('input').value,
+      out: document.getElementById('output').textContent,
+    };
+  })()`);
+  if (rerun.missing) fail('no Re-run button for a saved Pirate quote');
+  else if (rerun.input !== 'you are my friend') {
+    fail(`Re-run did not restore the original: ${JSON.stringify(rerun.input)}`);
+  } else if (!/this page's style/i.test(rerun.status)) {
+    fail(`Re-run message did not name the style used: ${JSON.stringify(rerun.status)}`);
+  } else if (!rerun.out.trim()) {
+    fail('Re-run on a style page produced no output');
+  } else pass('Re-run works on a style page and reports the page style');
+
+  // --- 14. console errors ---------------------------------------------------
   if (consoleErrors.length) {
     fail(`${consoleErrors.length} console error(s): ${consoleErrors.slice(0, 3).join(' | ')}`);
   } else pass('no JavaScript console errors');

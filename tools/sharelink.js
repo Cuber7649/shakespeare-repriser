@@ -38,7 +38,10 @@ function shareDecode(hash) {
   var f = q.f === undefined ? 15 : Number(q.f);
   if (!isFinite(f)) return null;
   var seed = (q.d === undefined || q.d === '') ? null : Number(q.d);
-  if (seed !== null && (!isFinite(seed) || seed < 0)) seed = null;
+  // optSeedValue() only accepts whole non-negative integers. Reject fractional
+  // seeds here too, so the fragment cannot advertise a seed that is silently
+  // dropped when the page applies the link.
+  if (seed !== null && (!isFinite(seed) || seed < 0 || Math.floor(seed) !== seed)) seed = null;
   return {
     text: text,
     style: style,
@@ -94,8 +97,9 @@ function shareApply(data) {
     }
   }
   if (typeof optApply === 'function') {
+    // A shared link applies for this run only. Saving here would overwrite the
+    // visitor's preferences across every page just because they opened a link.
     optApply(data.opts);
-    optSave(data.opts);
   }
   var primary = document.querySelector('.btn-row .btn-primary');
   if (primary && primary.click) primary.click();

@@ -33,10 +33,10 @@ export const SERVITUDE = [
 ];
 
 // Reviewed exceptions, each with the reason it is allowed. Anything listed here
-// should be re-read if the corpus changes. These are documentation and a warning
-// source, not a bypass: the term lists above are already narrow enough that the
-// canonical Shakespeare lines do not hit them once matching respects word
-// boundaries.
+// should be re-read if the corpus changes. Both content gates honour them via
+// allowedMatches(): a reviewed line is reported with its reason instead of
+// failing. The term lists above are narrow enough that the canonical lines do
+// not hit them once matching respects word boundaries.
 export const ALLOWED = [
   [/Out, damned spot!/i,
     'canonical Macbeth; "damned" means condemned here, not the oath "damn"'],

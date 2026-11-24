@@ -9,7 +9,9 @@
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
+import vm from 'node:vm';
 import { loadPage } from './harness.mjs';
+import { extractDecl } from './page-source.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const SEED = 2;
@@ -22,22 +24,17 @@ let failures = 0;
 const fail = (m) => { console.log(`FAIL  ${m}`); failures++; };
 const ok = (m) => console.log(`ok    ${m}`);
 
-// Same bracket scanner as test-content.mjs: the arrays contain regex literals,
-// so a naive regex would stop at the first `]` inside a character class.
+// The arrays contain regex literals and quoted strings, so a bracket counter
+// (or a naive regex) stops at the first `]` inside a character class. Reuse the
+// string-aware extractor and evaluate in a vm context, as test-content.mjs does.
 function arraysFrom(file, names) {
   const s = readFileSync(join(ROOT, file), 'utf8');
+  const ctx = vm.createContext({});
   const out = {};
   for (const n of names) {
-    const i = s.indexOf(`const ${n} = [`);
-    if (i < 0) throw new Error(`${n} not found in ${file}`);
-    let depth = 0;
-    const open = s.indexOf('[', i);
-    let j = open;
-    for (; j < s.length; j++) {
-      if (s[j] === '[') depth++;
-      else if (s[j] === ']') { depth--; if (!depth) break; }
-    }
-    out[n] = eval(s.slice(open, j + 1));
+    const decl = extractDecl(s, n);
+    vm.runInContext(`${decl}\n;globalThis.__decl = ${n};`, ctx, { filename: file });
+    out[n] = ctx.__decl;
   }
   return out;
 }

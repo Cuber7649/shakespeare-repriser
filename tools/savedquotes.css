@@ -14,7 +14,7 @@
   .saved-quotes-empty {
     font-family: 'Cormorant Garamond', serif;
     font-style: italic;
-    color: #b8956a;
+    color: #755f43;
     margin: 4px 0 0;
   }
 
@@ -43,7 +43,7 @@
   }
 
   .saved-quotes-field::placeholder {
-    color: #b8956a;
+    color: #755f43;
     font-style: italic;
   }
 
@@ -59,7 +59,7 @@
     background: rgba(184,149,106,0.15);
     border: 1px solid rgba(184,149,106,0.4);
     border-radius: 6px;
-    color: #8b6d4a;
+    color: #73593c;
     cursor: pointer;
     transition: all 0.2s;
   }
@@ -95,7 +95,7 @@
     flex-basis: 100%;
     font-family: 'Cinzel', serif;
     font-size: 0.78rem;
-    color: #8a6a3a;
+    color: #7d5f33;
     margin: 0;
   }
 
@@ -112,7 +112,7 @@
   .saved-quotes-style {
     font-family: 'Cinzel', serif;
     font-size: 0.75rem;
-    color: #8a6a3a;
+    color: #7d5f33;
     white-space: nowrap;
   }
 
@@ -131,7 +131,7 @@
     background: rgba(184,149,106,0.15);
     border: 1px solid rgba(184,149,106,0.4);
     border-radius: 6px;
-    color: #8b6d4a;
+    color: #73593c;
     cursor: pointer;
     transition: all 0.2s;
   }
@@ -139,7 +139,7 @@
   .saved-quotes-use:hover {
     background: rgba(60,120,60,0.12);
     border-color: rgba(60,120,60,0.45);
-    color: #3a6a3a;
+    color: #2f5a2f;
   }
 
   .saved-quotes-rerun:hover {

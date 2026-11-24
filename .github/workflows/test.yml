@@ -1,7 +1,10 @@
 name: test
 
 on:
+  # Same-repo pull requests already run the pull_request job; limiting push to
+  # main avoids running the suite twice for every PR commit.
   push:
+    branches: [main]
   pull_request:
 
 permissions:

@@ -163,6 +163,20 @@ function initOptions() {
       }
     })(ids[i]);
   }
+  // A change in another tab should be reflected here without writing it back
+  // (writing would bounce the storage event between tabs). optApply alone moves
+  // the controls; optSave is deliberately not called. Guarded for the Node
+  // harness, which has no window.
+  if (typeof window !== 'undefined' && typeof window.addEventListener === 'function') {
+    window.addEventListener('storage', function (event) {
+      if (!event || event.key !== OPTS_KEY) return;
+      var opts = optLoad();
+      if (!opts) return;
+      optApply(opts);
+      optIntensityLabel();
+    });
+  }
+
   optIntensityLabel();
   return getTransformOptions();
 }

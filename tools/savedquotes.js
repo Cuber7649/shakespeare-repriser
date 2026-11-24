@@ -209,7 +209,12 @@ function sqRender() {
     );
   }
   sqUI.elements.list.innerHTML = rows.join('');
-  if (sqUI.elements.empty) sqUI.elements.empty.hidden = sqItems.length > 0;
+  if (sqUI.elements.empty) {
+    sqUI.elements.empty.hidden = rows.length > 0;
+    sqUI.elements.empty.textContent = sqItems.length && !rows.length
+      ? 'No saved quotes match that search or filter.'
+      : 'Nothing saved yet.';
+  }
 }
 
 function sqIndexOf(text) {
@@ -249,7 +254,12 @@ function sqUse(id) {
   if (!item) return false;
   if (typeof document === 'undefined' || !document.getElementById) return false;
   var input = document.getElementById('input');
-  if (input && item.original) input.value = item.original;
+  if (input && item.original) {
+    input.value = item.original;
+    if (typeof Event !== 'undefined' && input.dispatchEvent) {
+      input.dispatchEvent(new Event('input', { bubbles: true }));
+    }
+  }
   var out = document.getElementById('output');
   if (!out) out = document.getElementById('out-' + item.style.toLowerCase());
   if (out) out.textContent = item.text;
@@ -261,18 +271,35 @@ function sqUse(id) {
 // style and settings. Pages can install a window.sqTransformHook(item) for
 // precise control (the dashboard re-runs just one style); otherwise this falls
 // back to clicking the page's own Transform button, which reads #input and the
-// settings controls after they have been restored above.
+// settings controls after they have been restored above. A style page has no
+// shared style identifier, so the fallback runs that page's own style even when
+// the quote was saved under another one; the message reports what happened
+// rather than claiming the original style was restored. Restored settings are
+// applied for this run only and are not saved, matching shareApply: neither a
+// shared link nor a re-run silently rewrites the visitor's saved preferences.
 function sqRerun(id) {
   var item = sqById(id);
   if (!item || !item.original) return false;
   if (typeof document === 'undefined' || !document.getElementById) return false;
   var input = document.getElementById('input');
-  if (input) input.value = item.original;
+  if (input) {
+    input.value = item.original;
+    if (typeof Event !== 'undefined' && input.dispatchEvent) {
+      input.dispatchEvent(new Event('input', { bubbles: true }));
+    }
+  }
   if (item.settings && typeof optApply === 'function') optApply(item.settings);
+  var usedHook = false;
   if (typeof window !== 'undefined' && typeof window.sqTransformHook === 'function') {
+    usedHook = true;
     window.sqTransformHook(item);
   } else {
     var go = document.getElementById('go');
+    if (!go && typeof document.querySelector === 'function') {
+      // Stable hook first, matching browser-journeys.mjs and sharelink.js;
+      // the inline onclick is a last resort for older markup.
+      go = document.querySelector('.btn-row .btn-primary');
+    }
     if (!go && typeof document.querySelector === 'function') {
       go = document.querySelector('.btn-primary[onclick]');
     }
@@ -282,7 +309,9 @@ function sqRerun(id) {
     }
     go.click();
   }
-  sqSay('Re-transformed with the original style and settings');
+  sqSay(usedHook
+    ? 'Re-transformed with the original style and settings'
+    : 'Re-transformed with this page\'s style and the saved settings');
   return true;
 }
 
@@ -475,7 +504,7 @@ function initSavedQuotes() {
             btn.classList.add('copied');
             if (typeof setTimeout === 'function') {
               setTimeout(function () {
-                btn.innerHTML = '<span aria-hidden="true">&#128222;</span> Save';
+                btn.innerHTML = '<span aria-hidden="true">&#128190;</span> Save';
                 btn.classList.remove('copied');
               }, 2000);
             }
@@ -552,6 +581,15 @@ function initSavedQuotes() {
     if (clearBtn && clearBtn.addEventListener) {
       clearBtn.addEventListener('click', sqClearClick);
     }
+  }
+
+  // Another tab can add, delete or clear quotes. Reload on storage so the two
+  // tabs do not overwrite each other with stale lists. Guarded for the Node
+  // harness, which has no window.
+  if (typeof window !== 'undefined' && typeof window.addEventListener === 'function') {
+    window.addEventListener('storage', function (event) {
+      if (event && event.key === SQ_KEY) sqReload();
+    });
   }
 
   sqRender();

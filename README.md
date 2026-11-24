@@ -73,8 +73,9 @@ cannot be sure. The other five styles rewrite every sentence they can.
   PNG, previewed before you save it. Pick a skin (the page's own look,
   parchment, midnight, or verdant), a background (lit parchment, flat, or
   wash), text alignment, and whether the original text appears in a band
-  beneath the quote. Asides and stage directions are stripped so only the
-  speech appears. Long text shrinks to fit the card (never below a readable
+  beneath the quote. Authored asides and stage directions are stripped so only
+  the speech appears; bracketed text you wrote yourself stays. Long text shrinks
+  to fit the card (never below a readable
   size), and the preview warns you when it had to shrink a lot or when the end
   has been cut short. Open it from the dashboard or from the Make Card button
   beside Copy and Save on every style page.
@@ -148,7 +149,10 @@ shakespeare-repriser/
 ├── icon-180.png       # App icons (generated)
 ├── icon-192.png
 ├── icon-512.png
+├── icon-round-192.png # Round "any" icons, with transparent corners
+├── icon-round-512.png
 ├── icon.svg           # Scalable SVG favicon (generated)
+├── sw.js              # Offline cache (hand-written; bump CACHE_VERSION on deploy)
 ├── package.json       # build and test commands (no dependencies)
 ├── README.md
 ├── AGENTS.md          # contributor/agent guide: architecture invariants and workflow
@@ -159,6 +163,7 @@ shakespeare-repriser/
 ├── ACCESSIBILITY.md   # what is tested, target level and known gaps
 ├── LICENSE            # free use; credit + GitHub link required if commercial
 ├── Screenshot.png
+├── .github/workflows/ # CI: full suite on Node 22 and 24, Linux and Windows
 └── tools/             # build + test tooling (not shipped to the browser)
 ```
 
@@ -185,7 +190,7 @@ comparison view, the quote-card modal — lives once under `tools/` and is paste
 verbatim into every page, so each page stays a standalone file. That pasting is
 deliberate: it is what lets the whole site work from `file://` with no runtime
 dependency, no module loader and no build step for visitors. The cost is larger
-pages (each is about 150 KB) and several copies to update when shared logic
+pages (about 160 KB each, around 200 KB for Yoda) and several copies to update when shared logic
 changes; `paste-shared.mjs --check` fails the suite when a copy drifts. To
 change it:
 
@@ -197,7 +202,7 @@ change it:
 
 ```bash
 npm run build   # regenerate index.html from the six style pages
-npm test        # run the whole suite (31 steps, ~10 s)
+npm test        # run the whole suite (32 steps, ~10 s)
 ```
 
 `npm test` includes `paste-shared --check`, which fails the build the moment a

@@ -3,7 +3,7 @@
 // Bump CACHE_VERSION on every deploy that changes a cached file, or returning
 // visitors keep the previous version. Old shakespeare-repriser-* caches are
 // removed on activate.
-const CACHE_VERSION = 'shakespeare-repriser-v4';
+const CACHE_VERSION = 'shakespeare-repriser-v5';
 
 const ASSETS = [
   './',
@@ -51,7 +51,9 @@ self.addEventListener('fetch', (event) => {
     caches.match(request).then((hit) => hit || fetch(request).then((response) => {
       if (response.ok) {
         const copy = response.clone();
-        caches.open(CACHE_VERSION).then((cache) => cache.put(request, copy));
+        // Keep the worker alive until the write lands; a bare promise can be
+        // killed when the worker terminates between the response and the put.
+        event.waitUntil(caches.open(CACHE_VERSION).then((cache) => cache.put(request, copy)));
       }
       return response;
     }))

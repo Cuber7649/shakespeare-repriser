@@ -79,7 +79,7 @@
     font-family: 'Cormorant Garamond', serif;
     font-style: italic;
     font-size: 1.15rem;
-    color: #8a6a9a;
+    color: #9274a1;
     margin-top: 6px;
     letter-spacing: 0.04em;
   }
@@ -91,7 +91,7 @@
     justify-content: center;
     gap: 12px;
     margin: 24px 0;
-    color: #6a4a7a;
+    color: #8f779b;
     font-size: 1rem;
     opacity: 0.7;
   }
@@ -163,7 +163,7 @@
   }
 
   textarea::placeholder {
-    color: #8a6a9a;
+    color: #7f628e;
     font-style: italic;
   }
 
@@ -216,7 +216,7 @@
 
   .btn-secondary {
     background: transparent;
-    color: #8a6a9a;
+    color: #9274a1;
     border: 1.5px solid #8b6d4a;
     padding: 14px 24px;
   }
@@ -298,7 +298,7 @@
 
   #output:empty::before {
     content: 'Thy words shall appear here, with proper refinement...';
-    color: #8a6a9a;
+    color: #755f43;
     font-style: italic;
   }
 
@@ -357,7 +357,7 @@
     margin-top: 30px;
     padding-top: 20px;
     border-top: 1px solid rgba(139,109,74,0.3);
-    color: #6a4a7a;
+    color: #8f779b;
     font-style: italic;
     font-size: 0.95rem;
     opacity: 0.7;
@@ -520,7 +520,7 @@
   .modal-note {
     font-family: 'Cormorant Garamond', serif;
     font-style: italic;
-    color: #8a6a3a;
+    color: #7d5f33;
     font-size: 0.9rem;
     margin: 0 0 14px;
   }
@@ -702,7 +702,7 @@
     font-family: 'Cormorant Garamond', serif;
     font-size: 0.85rem;
     font-style: italic;
-    color: #7a6248;
+    color: #745c43;
   }
   .options-checks {
     display: flex;
@@ -788,7 +788,7 @@
     font-size: 0.72rem;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: #8a6a3a;
+    color: #7d5f33;
     margin-bottom: 6px;
   }
 
@@ -833,7 +833,7 @@
     font-family: 'Cormorant Garamond', serif;
     font-style: italic;
     font-size: 0.92rem;
-    color: #8a6a3a;
+    color: #7d5f33;
     margin: 10px 0 0;
   }
 
@@ -853,7 +853,7 @@
   .saved-quotes-empty {
     font-family: 'Cormorant Garamond', serif;
     font-style: italic;
-    color: #b8956a;
+    color: #755f43;
     margin: 4px 0 0;
   }
 
@@ -882,7 +882,7 @@
   }
 
   .saved-quotes-field::placeholder {
-    color: #b8956a;
+    color: #755f43;
     font-style: italic;
   }
 
@@ -898,7 +898,7 @@
     background: rgba(184,149,106,0.15);
     border: 1px solid rgba(184,149,106,0.4);
     border-radius: 6px;
-    color: #8b6d4a;
+    color: #73593c;
     cursor: pointer;
     transition: all 0.2s;
   }
@@ -934,7 +934,7 @@
     flex-basis: 100%;
     font-family: 'Cinzel', serif;
     font-size: 0.78rem;
-    color: #8a6a3a;
+    color: #7d5f33;
     margin: 0;
   }
 
@@ -951,7 +951,7 @@
   .saved-quotes-style {
     font-family: 'Cinzel', serif;
     font-size: 0.75rem;
-    color: #8a6a3a;
+    color: #7d5f33;
     white-space: nowrap;
   }
 
@@ -970,7 +970,7 @@
     background: rgba(184,149,106,0.15);
     border: 1px solid rgba(184,149,106,0.4);
     border-radius: 6px;
-    color: #8b6d4a;
+    color: #73593c;
     cursor: pointer;
     transition: all 0.2s;
   }
@@ -978,7 +978,7 @@
   .saved-quotes-use:hover {
     background: rgba(60,120,60,0.12);
     border-color: rgba(60,120,60,0.45);
-    color: #3a6a3a;
+    color: #2f5a2f;
   }
 
   .saved-quotes-rerun:hover {
@@ -1057,7 +1057,7 @@
       <span class="quill-icon" aria-hidden="true">&#128396;</span> Repraise It!
     </button>
     <button class="btn btn-secondary" onclick="surpriseApply(inputEl, charCountEl, victorianify)">
-      <span aria-hidden="true">&#128204;</span> Surprise Me!
+      <span aria-hidden="true">&#127922;</span> Surprise Me!
     </button>
     <button class="btn btn-secondary" onclick="clearAll()">
       Clear
@@ -1076,7 +1076,7 @@
         <span aria-hidden="true">&#128203;</span> Copy to Clipboard
       </button>
       <button class="btn-copy" data-save="Victorian" data-save-target="output">
-        <span aria-hidden="true">&#128278;</span> Save
+        <span aria-hidden="true">&#128190;</span> Save
       </button>
       <button class="btn-copy" data-compare="output">
         <span aria-hidden="true">&#8644;</span> Compare
@@ -2467,6 +2467,20 @@ function initOptions() {
       }
     })(ids[i]);
   }
+  // A change in another tab should be reflected here without writing it back
+  // (writing would bounce the storage event between tabs). optApply alone moves
+  // the controls; optSave is deliberately not called. Guarded for the Node
+  // harness, which has no window.
+  if (typeof window !== 'undefined' && typeof window.addEventListener === 'function') {
+    window.addEventListener('storage', function (event) {
+      if (!event || event.key !== OPTS_KEY) return;
+      var opts = optLoad();
+      if (!opts) return;
+      optApply(opts);
+      optIntensityLabel();
+    });
+  }
+
   optIntensityLabel();
   return getTransformOptions();
 }
@@ -2684,7 +2698,12 @@ function sqRender() {
     );
   }
   sqUI.elements.list.innerHTML = rows.join('');
-  if (sqUI.elements.empty) sqUI.elements.empty.hidden = sqItems.length > 0;
+  if (sqUI.elements.empty) {
+    sqUI.elements.empty.hidden = rows.length > 0;
+    sqUI.elements.empty.textContent = sqItems.length && !rows.length
+      ? 'No saved quotes match that search or filter.'
+      : 'Nothing saved yet.';
+  }
 }
 
 function sqIndexOf(text) {
@@ -2724,7 +2743,12 @@ function sqUse(id) {
   if (!item) return false;
   if (typeof document === 'undefined' || !document.getElementById) return false;
   var input = document.getElementById('input');
-  if (input && item.original) input.value = item.original;
+  if (input && item.original) {
+    input.value = item.original;
+    if (typeof Event !== 'undefined' && input.dispatchEvent) {
+      input.dispatchEvent(new Event('input', { bubbles: true }));
+    }
+  }
   var out = document.getElementById('output');
   if (!out) out = document.getElementById('out-' + item.style.toLowerCase());
   if (out) out.textContent = item.text;
@@ -2736,18 +2760,35 @@ function sqUse(id) {
 // style and settings. Pages can install a window.sqTransformHook(item) for
 // precise control (the dashboard re-runs just one style); otherwise this falls
 // back to clicking the page's own Transform button, which reads #input and the
-// settings controls after they have been restored above.
+// settings controls after they have been restored above. A style page has no
+// shared style identifier, so the fallback runs that page's own style even when
+// the quote was saved under another one; the message reports what happened
+// rather than claiming the original style was restored. Restored settings are
+// applied for this run only and are not saved, matching shareApply: neither a
+// shared link nor a re-run silently rewrites the visitor's saved preferences.
 function sqRerun(id) {
   var item = sqById(id);
   if (!item || !item.original) return false;
   if (typeof document === 'undefined' || !document.getElementById) return false;
   var input = document.getElementById('input');
-  if (input) input.value = item.original;
+  if (input) {
+    input.value = item.original;
+    if (typeof Event !== 'undefined' && input.dispatchEvent) {
+      input.dispatchEvent(new Event('input', { bubbles: true }));
+    }
+  }
   if (item.settings && typeof optApply === 'function') optApply(item.settings);
+  var usedHook = false;
   if (typeof window !== 'undefined' && typeof window.sqTransformHook === 'function') {
+    usedHook = true;
     window.sqTransformHook(item);
   } else {
     var go = document.getElementById('go');
+    if (!go && typeof document.querySelector === 'function') {
+      // Stable hook first, matching browser-journeys.mjs and sharelink.js;
+      // the inline onclick is a last resort for older markup.
+      go = document.querySelector('.btn-row .btn-primary');
+    }
     if (!go && typeof document.querySelector === 'function') {
       go = document.querySelector('.btn-primary[onclick]');
     }
@@ -2757,7 +2798,9 @@ function sqRerun(id) {
     }
     go.click();
   }
-  sqSay('Re-transformed with the original style and settings');
+  sqSay(usedHook
+    ? 'Re-transformed with the original style and settings'
+    : 'Re-transformed with this page\'s style and the saved settings');
   return true;
 }
 
@@ -2950,7 +2993,7 @@ function initSavedQuotes() {
             btn.classList.add('copied');
             if (typeof setTimeout === 'function') {
               setTimeout(function () {
-                btn.innerHTML = '<span aria-hidden="true">&#128222;</span> Save';
+                btn.innerHTML = '<span aria-hidden="true">&#128190;</span> Save';
                 btn.classList.remove('copied');
               }, 2000);
             }
@@ -3029,6 +3072,15 @@ function initSavedQuotes() {
     }
   }
 
+  // Another tab can add, delete or clear quotes. Reload on storage so the two
+  // tabs do not overwrite each other with stale lists. Guarded for the Node
+  // harness, which has no window.
+  if (typeof window !== 'undefined' && typeof window.addEventListener === 'function') {
+    window.addEventListener('storage', function (event) {
+      if (event && event.key === SQ_KEY) sqReload();
+    });
+  }
+
   sqRender();
   if (!sqAvailable) sqSay(SQ_UNAVAILABLE);
   return sqUI;
@@ -3083,7 +3135,7 @@ function cmpWords(text) {
 
 // Longest common subsequence over normalised words. Full DP table, walked
 // backwards once at the end; CMP_MAX_WORDS caps the caller so the O(n*m)
-// table stays around a megabyte at worst.
+// table stays under 3 MB at the cap (1201 Uint16Array rows of 1201 cells).
 function cmpLcs(a, b) {
   var n = a.length;
   var m = b.length;
@@ -3254,6 +3306,18 @@ function cmpEmptyMessage(original, transformed) {
   return '';
 }
 
+// Paints one panel from the current input and output. Shared by the toggle and
+// the observer so both paths show the same empty message and the same diff.
+function cmpPaint(out, panel) {
+  var inputEl = document.getElementById('input');
+  var original = inputEl ? inputEl.value : '';
+  var transformed = out.textContent;
+  var empty = cmpEmptyMessage(original, transformed);
+  panel.innerHTML = empty
+    ? '<p class="cmp-note">' + cmpEscape(empty) + '</p>'
+    : renderCompare(original, transformed);
+}
+
 // One panel per output region, created on first toggle and reused after; the
 // button flips it and tracks aria-expanded. The original is always the shared
 // #input, which is what produced the output on every page.
@@ -3270,8 +3334,6 @@ function cmpToggle(btn) {
     btn.setAttribute('aria-expanded', 'false');
     return false;
   }
-  var original = inputEl.value;
-  var transformed = out.textContent;
   if (!panel) {
     panel = document.createElement('div');
     panel.id = 'cmp-panel-' + targetId;
@@ -3281,10 +3343,7 @@ function cmpToggle(btn) {
     if (!out.parentNode) return false;
     out.parentNode.insertBefore(panel, out.nextSibling);
   }
-  var empty = cmpEmptyMessage(original, transformed);
-  panel.innerHTML = empty
-    ? '<p class="cmp-note">' + cmpEscape(empty) + '</p>'
-    : renderCompare(original, transformed);
+  cmpPaint(out, panel);
   panel.hidden = false;
   btn.setAttribute('aria-controls', panel.id);
   btn.setAttribute('aria-expanded', 'true');
@@ -3298,6 +3357,20 @@ function initCompareUI() {
     (function (btn) {
       btn.setAttribute('aria-expanded', 'false');
       btn.addEventListener('click', function () { cmpToggle(btn); });
+      // Re-render an open panel when its output changes. The panel is a sibling
+      // of the output, never inside it, so painting the panel cannot feed back
+      // into the observer. Guarded so the Node harness (no MutationObserver)
+      // still loads this block.
+      var targetId = btn.getAttribute('data-compare');
+      var out = targetId && document.getElementById ? document.getElementById(targetId) : null;
+      if (out && typeof MutationObserver !== 'undefined') {
+        var observer = new MutationObserver(function () {
+          if (btn.getAttribute('aria-expanded') !== 'true') return;
+          var panel = document.getElementById('cmp-panel-' + targetId);
+          if (panel) cmpPaint(out, panel);
+        });
+        observer.observe(out, { childList: true, characterData: true, subtree: true });
+      }
     })(buttons[i]);
   }
   return buttons.length;
@@ -3412,12 +3485,14 @@ function resolveCardSkin(styleId, skinId) {
   };
 }
 
-// Removes asides and stage directions, then tidies the whitespace they leave
-// behind. Deliberately generic: a pattern approach matches any phrase added
-// later, where a hardcoded literal list would silently miss it.
+// Removes asides and authored stage directions, then tidies the whitespace
+// they leave behind. Stage directions are appended on their own line by the
+// transform, so only a bracketed span standing alone on a line is treated as
+// one. Inline brackets the writer typed themselves are part of the speech and
+// stay on the card. The aside form is injected inline and is unambiguous.
 function stripStageBusiness(text) {
   return String(text)
-    .replace(/\[[^\]]*\]/g, '')
+    .replace(/(^|\n)[ \t]*\[[^\]]*\][ \t]*(?=\n|$)/g, '$1')
     .replace(/\(aside:[^)]*\)/gi, '')
     .replace(/\s+/g, ' ')
     .trim();
@@ -4153,6 +4228,11 @@ const SURPRISE_SENTENCES = [
 // when the pool has more than one entry.
 let surpriseLastIndex = -1;
 
+// Test hook. The harness exports top-level `let` bindings as snapshots, so
+// assigning api.surpriseLastIndex in a test cannot reach this variable; call
+// this instead to reset the no-repeat guard.
+function surpriseReset() { surpriseLastIndex = -1; }
+
 function surprisePick() {
   const n = SURPRISE_SENTENCES.length;
   if (n === 0) return '';
@@ -4235,7 +4315,10 @@ function shareDecode(hash) {
   var f = q.f === undefined ? 15 : Number(q.f);
   if (!isFinite(f)) return null;
   var seed = (q.d === undefined || q.d === '') ? null : Number(q.d);
-  if (seed !== null && (!isFinite(seed) || seed < 0)) seed = null;
+  // optSeedValue() only accepts whole non-negative integers. Reject fractional
+  // seeds here too, so the fragment cannot advertise a seed that is silently
+  // dropped when the page applies the link.
+  if (seed !== null && (!isFinite(seed) || seed < 0 || Math.floor(seed) !== seed)) seed = null;
   return {
     text: text,
     style: style,
@@ -4291,8 +4374,9 @@ function shareApply(data) {
     }
   }
   if (typeof optApply === 'function') {
+    // A shared link applies for this run only. Saving here would overwrite the
+    // visitor's preferences across every page just because they opened a link.
     optApply(data.opts);
-    optSave(data.opts);
   }
   var primary = document.querySelector('.btn-row .btn-primary');
   if (primary && primary.click) primary.click();

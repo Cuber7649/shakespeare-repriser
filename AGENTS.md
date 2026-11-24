@@ -68,7 +68,7 @@ in `tools/`. Live on GitHub Pages.
 # 1. Edit the source under tools/ (never a pasted copy or a generated file)
 # 2. Repaste shared blocks into all pages + rebuild the dashboard:
 node tools/paste-shared.mjs
-# 3. Run the full suite (31 steps, ~10 s):
+# 3. Run the full suite (32 steps, ~10 s):
 npm test
 # 4. Commit, then:
 node tools/prepush-check.mjs   # MUST run AFTER committing (staleness vs HEAD)
@@ -186,7 +186,8 @@ obvious from a diff and was settled deliberately:
   It was written _after_ a missing-page-link mistake: deleting a page means
   deleting its switcher links on all 7 pages and in the README.
 
-Last line of a green run: `working tree is ready to push`.
+Last line of a green `npm test`: `all steps passed`. `working tree is ready to
+push` is printed by `node tools/prepush-check.mjs` after you commit.
 
 ## Platform notes (this machine)
 

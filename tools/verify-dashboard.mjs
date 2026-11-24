@@ -2,9 +2,10 @@
 // style pages: same dictionaries, same output for the same input and seed.
 //   node tools/verify-dashboard.mjs
 
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
+import { spawnSync } from 'node:child_process';
 import vm from 'node:vm';
 import { loadPage } from './harness.mjs';
 import { CORPUS, SEEDS } from './corpus.mjs';
@@ -13,7 +14,18 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 
 import { ID_FILE_ENTRY as STYLES } from './styles.mjs';
 
-const src = readFileSync(join(ROOT, 'tools', '.dashboard-modules.js'), 'utf8');
+// The module dump is a gitignored build intermediate. On a fresh clone it does
+// not exist yet, so build it rather than throwing ENOENT.
+const modulesPath = join(ROOT, 'tools', '.dashboard-modules.js');
+if (!existsSync(modulesPath)) {
+  const build = spawnSync(process.execPath, [join(ROOT, 'tools', 'build-dashboard.mjs')],
+    { encoding: 'utf8' });
+  if (build.status !== 0) {
+    console.error('Could not build tools/.dashboard-modules.js -- run npm run build first.');
+    process.exit(1);
+  }
+}
+const src = readFileSync(modulesPath, 'utf8');
 const sandbox = { STYLES: {}, console };
 sandbox.globalThis = sandbox;
 vm.createContext(sandbox);

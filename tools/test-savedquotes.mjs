@@ -176,6 +176,25 @@ if (!quotes) {
     no('use did not restore the output');
   } else ok('Use restores original input and saved output');
 
+  // Re-run through the dashboard-style hook: it must run the hook (not the
+  // Transform button), restore the original input, and say that the saved
+  // style was used. A style-page fallback is covered by a browser journey.
+  let hookCalls = 0;
+  let hookItem = null;
+  page.window.sqTransformHook = function (item) { hookCalls++; hookItem = item; };
+  const rerunOk = quotes.rerun(useTarget);
+  const rerunMessage = page.document.getElementById('savedQuotesStatus').textContent;
+  // add() rebuilds records through sqNormalise, so identity is not stable;
+  // compare the id captured before the second add instead.
+  if (!rerunOk || hookCalls !== 1 || !hookItem || hookItem.id !== useTarget) {
+    no(`Re-run did not call the hook (calls ${hookCalls})`);
+  } else if (inputEl.value !== 'Original text here') {
+    no('Re-run did not restore the original input');
+  } else if (!/original style/i.test(rerunMessage)) {
+    no(`Re-run reported the wrong style: ${JSON.stringify(rerunMessage)}`);
+  } else ok('Re-run calls sqTransformHook, restores the input and reports the saved style');
+  delete page.window.sqTransformHook;
+
   // Export: returns a versioned envelope with the current items.
   const exported = quotes.exportData();
   if (!exported || exported.version !== 1 || !Array.isArray(exported.items)) {

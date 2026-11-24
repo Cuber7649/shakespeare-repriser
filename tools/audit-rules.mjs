@@ -6,6 +6,7 @@
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import { loadPage } from './harness.mjs';
+import { PURE_LITERAL } from './engine-proto.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -16,9 +17,11 @@ const DICTIONARIES = [
   'commonWords', 'verbs', 'adjectives', 'nouns',
 ];
 
-// \b ... \b where the body is only word chars, apostrophes, hyphens, spaces.
-const LITERAL = /^\\b[A-Za-z'’-]*(?:[ \t]+[A-Za-z'’-]+)*\\b$/;
-const WORDY = /^[A-Za-z'’-]+(?:[ \t]+[A-Za-z'’-]+)*$/;
+// Both patterns come from the engine's own literal shape so they cannot drift.
+// WORDY is PURE_LITERAL without its \b anchors: the shadowing check needs the
+// bare body after slicing the anchors off the regex source.
+const LITERAL = PURE_LITERAL;
+const WORDY = new RegExp(PURE_LITERAL.source.slice(3, -3));
 
 const seen = new Map(); // literal -> competing replacements, across all pages
 let grandTotal = 0;

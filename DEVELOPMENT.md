@@ -7,12 +7,13 @@ style page directly from disk and it works.
 ## First run
 
 ```bash
-node --version        # 18+; the suite is developed on 24
-npm test              # 31 steps, about 10 seconds
+node --version        # 22+; the CDP harness uses the global WebSocket
+npm test              # 32 steps, about 10 seconds
 ```
 
-`npm test` runs `tools/run-all.mjs`, which lists the steps in order. A green run
-ends with `working tree is ready to push`.
+`npm test` runs `tools/run-all.mjs`, which lists the steps in order and ends with
+`all steps passed`. `working tree is ready to push` comes from
+`node tools/prepush-check.mjs`, which you run after committing.
 
 ## The shape of the repository
 
@@ -24,6 +25,9 @@ ends with `working tree is ready to push`.
 | `tools/options.{js,css,html}`, `savedquotes.*`, `compare.*`, `cardui.js`, `cardpage.js`, `quotecard.js`, `surprise.js`, `card-modal.*` | Shared UI logic, pasted verbatim into all pages. |
 | `tools/paste-shared.mjs` | Pastes those blocks into the six style pages. |
 | `tools/build-dashboard.mjs` | Copies each page's engine into `index.html`. |
+| `tools/styles.mjs` | Canonical style registry (ids, files, entries, labels) used by the generators and tests. |
+| `tools/sharelink.js` | Copy Link button and hash payload; pasted into all seven pages. |
+| `tools/sw-register.js` | Service-worker registration snippet; pasted into all seven pages. |
 
 ## The edit loop
 
@@ -91,28 +95,22 @@ are already in it.
    footer and `data-save` labels. Keep the shared blocks byte-identical.
 2. **Replace the dictionaries.** Change the tables and decorative pools. Keep
    the table names and order so `build-dashboard.mjs` can extract them.
-3. **Register the style** in:
-   - `tools/build-dashboard.mjs` (`STYLES`: id, label, href, entry, icon)
-   - `tools/paste-shared.mjs` (`PAGES`)
-   - `tools/check-readme.mjs`, `tools/readme-examples.mjs`,
-     `tools/readme-features.mjs`
-   - `tools/test-content.mjs`, `tools/test-grammar.mjs`,
-     `tools/test-settings.mjs`, `tools/test-links.mjs`,
-     `tools/test-cardpages.mjs`, `tools/test-savedquotes.mjs`,
-     `tools/test-compare.mjs`
-   - `tools/check-a11y.mjs`, `tools/prepush-check.mjs`,
-     `tools/test-manifest.mjs`, `tools/test-reproducible.mjs`
-   - `tools/browser-journeys.mjs` (the real-browser journey)
-   - `tools/snapshot.mjs` and `tools/corpus.mjs` if you want seed coverage
-   - the style switcher in all seven pages
-4. **Add README rows.** The Styles table and the Examples table are checked
-   against real output; `check-readme.mjs` will tell you when they disagree.
+3. **Register the style** in `tools/styles.mjs`. The generators and most tests
+   derive their arrays and maps from its exports, so this one edit replaces the
+   old list of a dozen registries.
+4. **Add the manual entries** that still cannot be derived:
+   - the switcher links on all seven pages
+   - `CARD_THEMES` in `tools/quotecard.js`
+   - the cache entry in `sw.js`
+   - the Styles and Examples rows in `README.md`
+   - representative inputs in `tools/corpus.mjs` if you want seed coverage
 5. **Run the suite.** `npm test` names every file that still does not know about
-   the new style.
+   the new style; `test-links.mjs` and `test-serviceworker.mjs` gate the
+   switcher and cache entries.
 
-This is deliberately repetitive: zero shared runtime files is the design
-constraint. `grep -ril "norse" tools/` is the quickest way to find every
-registry.
+Most of the old repetition is gone: zero shared runtime files is still the
+design constraint, but the style list now lives in one place. `grep -ril "norse"
+tools/` is still useful for finding anything hand-written that was missed.
 
 ## Edge-case contract
 

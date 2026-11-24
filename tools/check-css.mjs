@@ -37,8 +37,9 @@ for (const file of readdirSync(ROOT).filter((f) => f.endsWith('.html'))) {
   if (live + status < 1) problems.push('no aria-live or role="status" region');
 
   // Every form control must have a real <label for> pointing at a real id. The
-  // transform pages have one textarea; random.html has two selects, so the count
-  // is not fixed -- what matters is that the labels exist and are wired up.
+  // style pages have one textarea and the dashboard has six output cards, so
+  // the count is not fixed -- what matters is that the labels exist and are
+  // wired up.
   const labels = [...html.matchAll(/<label class="card-label" for="([^"]+)"/g)].map((m) => m[1]);
   if (labels.length < 1) problems.push('no <label class="card-label" for=...>');
   for (const target of labels) {

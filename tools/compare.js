@@ -43,7 +43,7 @@ function cmpWords(text) {
 
 // Longest common subsequence over normalised words. Full DP table, walked
 // backwards once at the end; CMP_MAX_WORDS caps the caller so the O(n*m)
-// table stays around a megabyte at worst.
+// table stays under 3 MB at the cap (1201 Uint16Array rows of 1201 cells).
 function cmpLcs(a, b) {
   var n = a.length;
   var m = b.length;
@@ -214,6 +214,18 @@ function cmpEmptyMessage(original, transformed) {
   return '';
 }
 
+// Paints one panel from the current input and output. Shared by the toggle and
+// the observer so both paths show the same empty message and the same diff.
+function cmpPaint(out, panel) {
+  var inputEl = document.getElementById('input');
+  var original = inputEl ? inputEl.value : '';
+  var transformed = out.textContent;
+  var empty = cmpEmptyMessage(original, transformed);
+  panel.innerHTML = empty
+    ? '<p class="cmp-note">' + cmpEscape(empty) + '</p>'
+    : renderCompare(original, transformed);
+}
+
 // One panel per output region, created on first toggle and reused after; the
 // button flips it and tracks aria-expanded. The original is always the shared
 // #input, which is what produced the output on every page.
@@ -230,8 +242,6 @@ function cmpToggle(btn) {
     btn.setAttribute('aria-expanded', 'false');
     return false;
   }
-  var original = inputEl.value;
-  var transformed = out.textContent;
   if (!panel) {
     panel = document.createElement('div');
     panel.id = 'cmp-panel-' + targetId;
@@ -241,10 +251,7 @@ function cmpToggle(btn) {
     if (!out.parentNode) return false;
     out.parentNode.insertBefore(panel, out.nextSibling);
   }
-  var empty = cmpEmptyMessage(original, transformed);
-  panel.innerHTML = empty
-    ? '<p class="cmp-note">' + cmpEscape(empty) + '</p>'
-    : renderCompare(original, transformed);
+  cmpPaint(out, panel);
   panel.hidden = false;
   btn.setAttribute('aria-controls', panel.id);
   btn.setAttribute('aria-expanded', 'true');
@@ -258,6 +265,20 @@ function initCompareUI() {
     (function (btn) {
       btn.setAttribute('aria-expanded', 'false');
       btn.addEventListener('click', function () { cmpToggle(btn); });
+      // Re-render an open panel when its output changes. The panel is a sibling
+      // of the output, never inside it, so painting the panel cannot feed back
+      // into the observer. Guarded so the Node harness (no MutationObserver)
+      // still loads this block.
+      var targetId = btn.getAttribute('data-compare');
+      var out = targetId && document.getElementById ? document.getElementById(targetId) : null;
+      if (out && typeof MutationObserver !== 'undefined') {
+        var observer = new MutationObserver(function () {
+          if (btn.getAttribute('aria-expanded') !== 'true') return;
+          var panel = document.getElementById('cmp-panel-' + targetId);
+          if (panel) cmpPaint(out, panel);
+        });
+        observer.observe(out, { childList: true, characterData: true, subtree: true });
+      }
     })(buttons[i]);
   }
   return buttons.length;

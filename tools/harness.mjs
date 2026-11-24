@@ -116,7 +116,10 @@ export function loadPage(file, entry) {
   }
 
   // const/let are lexically scoped and invisible from outside the script, so
-  // hand them out through an explicit object.
+  // hand them out through an explicit object. NOTE: the object literal takes a
+  // snapshot of each value at export time. Assigning api.someLet afterwards
+  // does NOT update the variable the page's closures read; expose a setter
+  // function in the page instead (see surpriseReset() in surprise.js).
   const shim = `${src}\n;globalThis.__api = { ${names.join(', ')} };`;
 
   const els = new Map();
@@ -171,6 +174,9 @@ export function loadPage(file, entry) {
     // page's own UI code wrote (saved quotes uses both).
     storage: sandbox.localStorage,
     document: sandbox.document,
+    // The page's global object, so tests can install hooks such as
+    // window.sqTransformHook the way the dashboard does.
+    window: sandbox,
 
     /** Run a listener the page itself registered: fire(btn, 'click'). */
     fire(el, type, event) {

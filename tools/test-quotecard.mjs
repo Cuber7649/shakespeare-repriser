@@ -10,6 +10,7 @@ import { dirname, join } from 'node:path';
 import vm from 'node:vm';
 import { loadPage } from './harness.mjs';
 import { CORPUS, SEEDS } from './corpus.mjs';
+import { contrastRatio } from './contrast.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const src = readFileSync(join(ROOT, 'tools', 'quotecard.js'), 'utf8');
@@ -61,7 +62,11 @@ for (const [file, entry] of PAGES) {
       if (hadBusiness) withBusiness++;
 
       const clean = Q.stripStageBusiness(out);
-      if (/\(aside:/i.test(clean) || /\[[^\]]*\]/.test(clean)) residual++;
+      // Inline brackets may be the writer's own text (the corpus includes a
+      // "sign said [beware]" case) and must survive. Authored stage directions
+      // stand alone on their line, so only that form is residual here.
+      if (/\(aside:/i.test(clean)
+        || /(^|\n)[ \t]*\[[^\]]*\][ \t]*(?:\n|$)/.test(clean)) residual++;
       if (!clean) emptied++;
 
       if (clean && !isSubsequence(clean.replace(/\s/g, ''), out.replace(/\s/g, ''))) {
@@ -102,6 +107,9 @@ const KEEP = [
   'Hail how dost thou fare this day',
   'Thou art so blisful to seen my freend',
   'A comma, to trigger the metaphor insert, in the middle.',
+  // The writer's own bracketed aside is speech, not a stage direction: the
+  // transform injects directions on their own line, so this inline one stays.
+  'Hail, good [my dear] friend',
 ];
 for (const text of KEEP) {
   if (Q.stripStageBusiness(text) !== text) fail(`strip altered clean text: ${JSON.stringify(text)}`);
@@ -211,15 +219,6 @@ pass(`skins defined: ${skinIds.join(', ')}`);
 
 // WCAG contrast. Quote ink is display type but held to the 4.5 body-text bar;
 // the muted label/band ink is large text (>=24px), where 3:1 is the standard.
-function srgb(c) { c /= 255; return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4); }
-function lumOf(hex) {
-  const n = parseInt(String(hex).slice(1), 16);
-  return 0.2126 * srgb((n >> 16) & 255) + 0.7152 * srgb((n >> 8) & 255) + 0.0722 * srgb(n & 255);
-}
-function contrastRatio(a, b) {
-  const [l1, l2] = [lumOf(a), lumOf(b)].sort((x, y) => y - x);
-  return (l1 + 0.05) / (l2 + 0.05);
-}
 for (const id of skinIds) {
   const s = Q.CARD_SKINS[id];
   for (const stop of ['from', 'mid', 'to']) {
@@ -230,6 +229,20 @@ for (const id of skinIds) {
   }
 }
 pass('every skin keeps ink >= 4.5:1 and labelInk >= 3:1 against all three background stops');
+
+// The default 'auto' skin uses the style tints rather than a named palette, so
+// loop CARD_THEMES too. Otherwise six of the seven possible card backgrounds
+// would never be contrast-checked at all.
+for (const id of Object.keys(Q.CARD_THEMES)) {
+  const skin = Q.resolveCardSkin(id, 'auto');
+  for (const stop of ['from', 'mid', 'to']) {
+    const ink = contrastRatio(skin.ink, skin[stop]);
+    if (ink < 4.5) fail(`theme ${id}: ink on ${stop} is ${ink.toFixed(2)}:1, need 4.5`);
+    const label = contrastRatio(skin.labelInk, skin[stop]);
+    if (label < 3) fail(`theme ${id}: labelInk on ${stop} is ${label.toFixed(2)}:1, need 3`);
+  }
+}
+pass('every default theme keeps ink >= 4.5:1 and labelInk >= 3:1 against all three stops');
 
 // resolveCardSkin: auto keeps the page style's tints with classic ink; a named
 // skin overrides colours but keeps the style label.
@@ -374,11 +387,11 @@ for (const dpr of [1, 2, 3]) {
       };
     },
   };
-  const expected = Math.min(2, Math.max(1, dpr));
+  const expected = Math.min(Q.CARD_DPR_CAP, Math.max(1, dpr));
   const r = await Q.renderCard('Hail and well met, friend', 'shakespeare');
   if (r.canvas.width !== Q.CARD_W * expected || r.canvas.height !== Q.CARD_H * expected) {
     fail(`dpr ${dpr}: canvas ${r.canvas.width}x${r.canvas.height}, want ${Q.CARD_W * expected}x${Q.CARD_H * expected}`);
-  } else pass(`dpr ${dpr}: canvas is ${r.canvas.width}x${r.canvas.height} (cap ${Q.CARD_DPR_CAP || 2})`);
+  } else pass(`dpr ${dpr}: canvas is ${r.canvas.width}x${r.canvas.height} (cap ${Q.CARD_DPR_CAP})`);
   if (!ctx.calls.fillText.length) fail(`dpr ${dpr}: renderCard drew no text`);
 }
 // And a full option set through renderCard end to end.
