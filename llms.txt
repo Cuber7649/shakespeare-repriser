@@ -50,6 +50,23 @@ variation. `options` accepts `intensity` (`light`, `balanced`, `dramatic`) and
 the booleans `openings`, `metaphors`, `asides`, `invert`; `false` disables one.
 Calling these methods changes the visible input, settings and results.
 
+## Quote card: making an image from the output
+
+Each page can turn the current result into a shareable 1080x1350 PNG. There is
+no separate image-generation endpoint; the card is drawn in the browser from
+the text already in the output. Authored asides and stage directions are
+dropped, but bracketed text written in the input is kept.
+
+1. Produce the text with `Repriser.transform(...)` or by clicking Transform.
+2. Open the card modal by clicking `[data-agent-action="card"]`. On index.html
+   there is one per style, so use `#cardBtn-<style>` to pick one.
+3. The preview is `#cardPreview`. Optional settings live in the modal:
+   `#cardSkin` (`auto`, `parchment`, `midnight`, `verdant`), `#cardBackground`
+   (`gradient`, `flat`, `wash`), `#cardAlign` (`left`, `center`, `right`), and
+   the `#cardOriginal` checkbox to add the original text in a band below.
+4. Click `#cardDownload` to save the PNG, or `#cardClose` to dismiss. A long
+   quote sets `#cardModalWarn` visible; `#cardStatus` announces the result.
+
 ## Stable browser hooks
 
 All seven pages use the same `data-agent-action` attributes, so an agent does
