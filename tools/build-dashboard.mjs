@@ -279,6 +279,7 @@ const out = `<!DOCTYPE html>
 <link rel="apple-touch-icon" href="./icon-180.png">
 <link rel="icon" href="./icon.svg" type="image/svg+xml">
 <link rel="icon" href="./icon-round-192.png" sizes="192x192" type="image/png">
+<link rel="alternate" type="text/plain" href="./llms.txt" title="Agent guide (llms.txt)">
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=UnifrakturMaguntia&display=swap" rel="stylesheet">
 <style>${baseCss}${DASH_CSS}</style>
 </head>
@@ -331,7 +332,7 @@ ${savedQuotesHtml}
 
   <div class="footer">
     <span class="quill-small" aria-hidden="true">&#128396;</span>
-    Crafted with ink &amp; devotion
+    Crafted with ink &amp; devotion &middot; <a href="./llms.txt">Agent guide</a>
     <span class="quill-small" aria-hidden="true">&#128396;</span>
   </div>
 </div>

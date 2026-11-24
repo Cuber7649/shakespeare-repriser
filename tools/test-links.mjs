@@ -27,7 +27,7 @@ const EXPECTED_TARGETS = new Set([
   'icon.svg',
   'icon-180.png', 'icon-192.png', 'icon-512.png',
   'icon-round-192.png', 'icon-round-512.png',
-  'manifest.json',
+  'manifest.json', 'llms.txt',
 ]);
 
 // --- 0. registry agrees with the shipped style-specific tables --------------

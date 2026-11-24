@@ -72,7 +72,12 @@ for (const page of ALL_PAGES) {
   const outputs = page === DASHBOARD ? STYLE_IDS.map((id) => `id="out-${id}"`) : ['id="output"'];
   const missingOut = outputs.filter((id) => !src.includes(id));
   if (missingOut.length) { no(`${page}: missing output id(s) ${missingOut.join(', ')}`); bad++; }
-  if (!bad) ok(`${page}: agent hooks and outputs present`);
+  if (!src.includes('rel="alternate" type="text/plain" href="./llms.txt"')
+    || !src.includes('<a href="./llms.txt">Agent guide</a>')) {
+    no(`${page}: does not point agents at llms.txt`);
+    bad++;
+  }
+  if (!bad) ok(`${page}: agent hooks, outputs and llms.txt discovery present`);
 }
 
 console.log('');
