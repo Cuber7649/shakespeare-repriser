@@ -18,7 +18,8 @@
 //  11. a Copy Link hash restores text, settings and the transform on reload
 //  12. an open Compare panel re-renders after a second transform and Clear
 //  13. Re-run on a style page works and names the style it actually used
-//  14. no JavaScript console errors were raised along the way
+//  14. window.Repriser transforms deterministically on a page and the dashboard
+//  15. no JavaScript console errors were raised along the way
 //
 //   node tools/browser-journeys.mjs
 //
@@ -655,7 +656,49 @@ try {
     fail('Re-run on a style page produced no output');
   } else pass('Re-run works on a style page and reports the page style');
 
-  // --- 14. console errors ---------------------------------------------------
+  // --- 14. window.Repriser, the agent-facing page API ----------------------
+  await goto('shakespeare.html');
+  const pageApi = await evalJs(`(() => {
+    const a = Repriser.transformStyle('shakespeare', 'how are you', 2);
+    const b = Repriser.transformStyle('shakespeare', 'how are you', 2);
+    const one = Repriser.transform('how are you', 2);
+    return {
+      styles: Repriser.styles().length,
+      a, b,
+      keys: Object.keys(one),
+      input: document.getElementById('input').value,
+      seed: document.getElementById('optSeed').value,
+    };
+  })()`);
+  if (pageApi.styles !== 6) fail(`Repriser.styles() returned ${pageApi.styles}, expected 6`);
+  else if (!pageApi.a || pageApi.a !== pageApi.b) {
+    fail(`Repriser was not deterministic with a seed: ${JSON.stringify(pageApi.a)}`);
+  } else if (pageApi.keys.length !== 1 || pageApi.keys[0] !== 'shakespeare') {
+    fail(`Repriser.transform keys wrong: ${JSON.stringify(pageApi.keys)}`);
+  } else if (pageApi.input !== 'how are you' || pageApi.seed !== '2') {
+    fail('Repriser did not set the input and seed controls');
+  } else pass('Repriser API transforms a style page deterministically');
+
+  await goto('index.html');
+  const dashApi = await evalJs(`(() => {
+    const all = Repriser.transformAll('how are you', 2);
+    const one = Repriser.transformStyle('pirate', 'how are you', 2);
+    return {
+      keys: Object.keys(all).sort(),
+      one,
+      saves: document.querySelectorAll('[data-agent-action="save"]').length,
+    };
+  })()`);
+  const wanted = ['chaucer', 'norse', 'pirate', 'shakespeare', 'victorian', 'yoda'];
+  if (JSON.stringify(dashApi.keys) !== JSON.stringify(wanted)) {
+    fail(`Repriser.transformAll keys wrong: ${JSON.stringify(dashApi.keys)}`);
+  } else if (!dashApi.one || !dashApi.one.trim()) {
+    fail('Repriser.transformStyle returned no output on the dashboard');
+  } else if (dashApi.saves !== 6) {
+    fail(`dashboard has ${dashApi.saves} save hooks, expected 6`);
+  } else pass('Repriser API drives all six dashboard styles through stable hooks');
+
+  // --- 15. console errors ---------------------------------------------------
   if (consoleErrors.length) {
     fail(`${consoleErrors.length} console error(s): ${consoleErrors.slice(0, 3).join(' | ')}`);
   } else pass('no JavaScript console errors');

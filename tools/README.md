@@ -7,7 +7,7 @@ Everything that generates or verifies the site. Zero dependencies: plain Node wi
 
 ```bash
 npm run build   # regenerate index.html from the six style pages
-npm test        # run the whole suite (32 steps, ~10 s)
+npm test        # run the whole suite (33 steps, ~10 s)
 ```
 
 `npm install` is never needed — there are no dependencies. Any individual script
@@ -42,6 +42,7 @@ also runs directly, e.g. `node tools/verify-dashboard.mjs`.
 | `test-sharelinks.mjs` | The share-link block pasted into all 7 pages, payload round-trip with text cap, fractional-seed rejection, and the client-only fragment |
 | `test-reproducible.mjs` | `index.html`, `manifest.json` and all five PNG icons rebuild byte-identically; text output is pure LF |
 | `test-links.mjs` | Every local href resolves; all pages share one switcher |
+| `test-agent-surface.mjs` | The `llms.txt` served by Pages, the stable `data-agent-action` hooks in all seven pages, and the `window.Repriser` API block |
 | `check-css.mjs` | Brace balance, one `prefers-reduced-motion` block per file, real `<label for>` wiring |
 | `check-contrast.mjs` | Every text colour in the shared stylesheets and `DASH_CSS` meets WCAG AA against its gradient stops and alpha-blended fills |
 | `contrast.mjs` | Shared WCAG contrast maths (`srgb`, `lumOf`, `contrastRatio`, colour blending) used by `check-contrast.mjs` and `test-quotecard.mjs` |

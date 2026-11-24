@@ -1,6 +1,8 @@
 // Shareable links: encode the current text, style, settings and seed into the
 // URL hash. Fragments are never sent to a server, so the privacy story holds.
 // This is the ninth shared JS block, pasted into all seven standalone pages.
+// It also exposes window.Repriser, the browser API for agents driving a live
+// page; both use the same controls and transform button as a person would.
 
 var SHARE_MAX_TEXT = 1200;
 var SHARE_MAX_HASH = 8000;
@@ -175,3 +177,115 @@ function addShareButton(host, style, id) {
   var data = shareDecode(location.hash);
   if (data) shareApply(data);
 })();
+
+// ---------------------------------------------------------------------------
+// Agent-facing browser API.
+//
+// Browser-driving agents can call window.Repriser from devtools or CDP on any
+// deployed page. It drives the same input, settings and transform button a
+// person uses, so there is no second engine or word list to keep in sync. Only
+// the six style ids are valid; the dashboard exposes all of them at once.
+var REPRISER_AGENT_STYLES = [
+  { id: 'shakespeare', label: 'Shakespeare' },
+  { id: 'pirate', label: 'Pirate' },
+  { id: 'victorian', label: 'Victorian' },
+  { id: 'chaucer', label: 'Chaucer' },
+  { id: 'yoda', label: 'Yoda' },
+  { id: 'norse', label: 'Norse' },
+];
+
+function repAgentPageStyle() {
+  if (typeof location === 'undefined' || !location.pathname) return 'shakespeare';
+  var name = String(location.pathname).split('/').pop().replace(/\.html?$/, '');
+  return name === 'index' ? 'all' : (name || 'shakespeare');
+}
+
+function repAgentSeed(seed) {
+  var value = (seed === undefined || seed === null) ? 1 : seed;
+  if (!/^\d{1,10}$/.test(String(value))) {
+    throw new Error('Repriser: seed must be a whole number from 0 to 9999999999');
+  }
+  return String(value);
+}
+
+function repAgentOptions(options, seed) {
+  var o = options || {};
+  var intensity = o.intensity === 'light' || o.intensity === 'dramatic'
+    ? o.intensity : 'balanced';
+  var el = document.getElementById('optIntensity');
+  if (el) el.value = intensity;
+  var toggles = [
+    ['openings', 'optOpenings'], ['metaphors', 'optMetaphors'],
+    ['asides', 'optAsides'], ['invert', 'optInvert'],
+  ];
+  for (var i = 0; i < toggles.length; i++) {
+    var toggle = document.getElementById(toggles[i][1]);
+    if (toggle) toggle.checked = o[toggles[i][0]] !== false;
+  }
+  var seedEl = document.getElementById('optSeed');
+  if (seedEl) seedEl.value = repAgentSeed(seed);
+}
+
+function repAgentOutputs() {
+  var out = {};
+  var cards = document.querySelectorAll ? document.querySelectorAll('[id^="out-"]') : [];
+  if (cards.length) {
+    for (var i = 0; i < cards.length; i++) out[cards[i].id.slice(4)] = cards[i].textContent;
+  } else {
+    var single = document.getElementById('output');
+    if (single) out[repAgentPageStyle()] = single.textContent;
+  }
+  return out;
+}
+
+function repAgentRun(text, seed, options) {
+  var input = document.getElementById('input');
+  if (!input) throw new Error('Repriser: no input on this page');
+  input.value = String(text == null ? '' : text);
+  if (typeof Event !== 'undefined' && input.dispatchEvent) {
+    input.dispatchEvent(new Event('input', { bubbles: true }));
+  }
+  repAgentOptions(options, seed);
+  var btn = document.querySelector('[data-agent-action="transform"]');
+  if (!btn || typeof btn.click !== 'function') {
+    throw new Error('Repriser: transform button not found');
+  }
+  btn.click();
+  return repAgentOutputs();
+}
+
+var Repriser = {
+  // The six supported style ids and their display labels.
+  styles: function () {
+    return REPRISER_AGENT_STYLES.slice();
+  },
+
+  // Transform on the current page. Always an object keyed by style id: one key
+  // on a style page, six on the dashboard.
+  transform: function (text, seed, options) {
+    return repAgentRun(text, seed, options);
+  },
+
+  // Transform one style. On a style page only its own id is available; on the
+  // dashboard any of the six works, because the transform button fills all six
+  // cards and this returns the requested one.
+  transformStyle: function (id, text, seed, options) {
+    var page = repAgentPageStyle();
+    if (page !== 'all' && id !== page) {
+      throw new Error('Repriser: open ' + id + '.html to transform that style');
+    }
+    var out = repAgentRun(text, seed, options);
+    if (!Object.prototype.hasOwnProperty.call(out, id)) {
+      throw new Error('Repriser: unknown style "' + id + '"');
+    }
+    return out[id];
+  },
+
+  // All six outputs at once. Intended for index.html; on a style page it
+  // returns the one output that page owns.
+  transformAll: function (text, seed, options) {
+    return repAgentRun(text, seed, options);
+  },
+};
+
+if (typeof window !== 'undefined') window.Repriser = Repriser;

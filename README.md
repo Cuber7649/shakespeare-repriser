@@ -89,6 +89,7 @@ cannot be sure. The other five styles rewrite every sentence they can.
   skipped, duplicates are skipped, and malformed files are rejected with a
   message
 - **Installable web app** — `manifest.json` plus generated icons, no backend
+- **Agent-friendly live site** — `llms.txt` describes the pages, a `window.Repriser` object transforms text from page context, and stable `data-agent-action` hooks work on every page
 - **Keyboard shortcut** — press Ctrl+Enter to transform
 - **Copy to clipboard** — supported on local files and HTTPS, with an announced confirmation
 - **Surprise Me!** — one click inserts a random, family-friendly sample sentence into the input and immediately runs the transformation. The same sentence never appears twice in a row.
@@ -154,6 +155,7 @@ shakespeare-repriser/
 ├── icon.svg           # Scalable SVG favicon (generated)
 ├── sw.js              # Offline cache (hand-written; bump CACHE_VERSION on deploy)
 ├── package.json       # build and test commands (no dependencies)
+├── llms.txt           # agent-readable guide to the live site and its page API
 ├── README.md
 ├── AGENTS.md          # contributor/agent guide: architecture invariants and workflow
 ├── DEVELOPMENT.md     # pipeline, settings, adding a style, running one test
@@ -202,7 +204,7 @@ change it:
 
 ```bash
 npm run build   # regenerate index.html from the six style pages
-npm test        # run the whole suite (32 steps, ~10 s)
+npm test        # run the whole suite (33 steps, ~10 s)
 ```
 
 `npm test` includes `paste-shared --check`, which fails the build the moment a

@@ -245,16 +245,16 @@ const cards = STYLES.map((s) => `      <section class="mini">
         </div>
         <div class="out" id="out-${s.id}"></div>
         <div class="output-actions">
-          <button class="btn-copy" data-card="${s.id}">
+          <button class="btn-copy" id="cardBtn-${s.id}" data-agent-action="card" data-card="${s.id}">
             <span aria-hidden="true">&#128204;</span> Make Card
           </button>
-          <button class="btn-copy" data-copy="${s.id}">
+          <button class="btn-copy" id="copyBtn-${s.id}" data-agent-action="copy" data-copy="${s.id}">
             <span aria-hidden="true">&#128203;</span> Copy
           </button>
-          <button class="btn-copy" data-save="${s.label}" data-save-target="out-${s.id}">
+          <button class="btn-copy" id="saveBtn-${s.id}" data-agent-action="save" data-save="${s.label}" data-save-target="out-${s.id}">
             <span aria-hidden="true">&#128190;</span> Save
           </button>
-          <button class="btn-copy" data-compare="out-${s.id}">
+          <button class="btn-copy" id="compareBtn-${s.id}" data-agent-action="compare" data-compare="out-${s.id}">
             <span aria-hidden="true">&#8644;</span> Compare
           </button>
         </div>
@@ -312,13 +312,13 @@ ${navLinks}
 ${optionsHtml}
 
   <div class="btn-row">
-    <button class="btn btn-primary" id="go">
+    <button class="btn btn-primary" id="go" data-agent-action="transform">
       <span class="quill-icon" aria-hidden="true">&#128396;</span> Repraise In All Styles!
     </button>
-    <button class="btn btn-secondary" id="dashSurprise">
+    <button class="btn btn-secondary" id="dashSurprise" data-agent-action="surprise">
       <span aria-hidden="true">&#127922;</span> Surprise Me!
     </button>
-    <button class="btn btn-secondary" id="clear">Clear</button>
+    <button class="btn btn-secondary" id="clear" data-agent-action="clear">Clear</button>
   </div>
 
   <span class="visually-hidden" id="dashStatus" role="status"></span>

@@ -1236,13 +1236,13 @@
   </fieldset>
 
   <div class="btn-row">
-    <button class="btn btn-primary" id="go">
+    <button class="btn btn-primary" id="go" data-agent-action="transform">
       <span class="quill-icon" aria-hidden="true">&#128396;</span> Repraise In All Styles!
     </button>
-    <button class="btn btn-secondary" id="dashSurprise">
+    <button class="btn btn-secondary" id="dashSurprise" data-agent-action="surprise">
       <span aria-hidden="true">&#127922;</span> Surprise Me!
     </button>
-    <button class="btn btn-secondary" id="clear">Clear</button>
+    <button class="btn btn-secondary" id="clear" data-agent-action="clear">Clear</button>
   </div>
 
   <span class="visually-hidden" id="dashStatus" role="status"></span>
@@ -1255,16 +1255,16 @@
         </div>
         <div class="out" id="out-shakespeare"></div>
         <div class="output-actions">
-          <button class="btn-copy" data-card="shakespeare">
+          <button class="btn-copy" id="cardBtn-shakespeare" data-agent-action="card" data-card="shakespeare">
             <span aria-hidden="true">&#128204;</span> Make Card
           </button>
-          <button class="btn-copy" data-copy="shakespeare">
+          <button class="btn-copy" id="copyBtn-shakespeare" data-agent-action="copy" data-copy="shakespeare">
             <span aria-hidden="true">&#128203;</span> Copy
           </button>
-          <button class="btn-copy" data-save="Shakespeare" data-save-target="out-shakespeare">
+          <button class="btn-copy" id="saveBtn-shakespeare" data-agent-action="save" data-save="Shakespeare" data-save-target="out-shakespeare">
             <span aria-hidden="true">&#128190;</span> Save
           </button>
-          <button class="btn-copy" data-compare="out-shakespeare">
+          <button class="btn-copy" id="compareBtn-shakespeare" data-agent-action="compare" data-compare="out-shakespeare">
             <span aria-hidden="true">&#8644;</span> Compare
           </button>
         </div>
@@ -1276,16 +1276,16 @@
         </div>
         <div class="out" id="out-pirate"></div>
         <div class="output-actions">
-          <button class="btn-copy" data-card="pirate">
+          <button class="btn-copy" id="cardBtn-pirate" data-agent-action="card" data-card="pirate">
             <span aria-hidden="true">&#128204;</span> Make Card
           </button>
-          <button class="btn-copy" data-copy="pirate">
+          <button class="btn-copy" id="copyBtn-pirate" data-agent-action="copy" data-copy="pirate">
             <span aria-hidden="true">&#128203;</span> Copy
           </button>
-          <button class="btn-copy" data-save="Pirate" data-save-target="out-pirate">
+          <button class="btn-copy" id="saveBtn-pirate" data-agent-action="save" data-save="Pirate" data-save-target="out-pirate">
             <span aria-hidden="true">&#128190;</span> Save
           </button>
-          <button class="btn-copy" data-compare="out-pirate">
+          <button class="btn-copy" id="compareBtn-pirate" data-agent-action="compare" data-compare="out-pirate">
             <span aria-hidden="true">&#8644;</span> Compare
           </button>
         </div>
@@ -1297,16 +1297,16 @@
         </div>
         <div class="out" id="out-victorian"></div>
         <div class="output-actions">
-          <button class="btn-copy" data-card="victorian">
+          <button class="btn-copy" id="cardBtn-victorian" data-agent-action="card" data-card="victorian">
             <span aria-hidden="true">&#128204;</span> Make Card
           </button>
-          <button class="btn-copy" data-copy="victorian">
+          <button class="btn-copy" id="copyBtn-victorian" data-agent-action="copy" data-copy="victorian">
             <span aria-hidden="true">&#128203;</span> Copy
           </button>
-          <button class="btn-copy" data-save="Victorian" data-save-target="out-victorian">
+          <button class="btn-copy" id="saveBtn-victorian" data-agent-action="save" data-save="Victorian" data-save-target="out-victorian">
             <span aria-hidden="true">&#128190;</span> Save
           </button>
-          <button class="btn-copy" data-compare="out-victorian">
+          <button class="btn-copy" id="compareBtn-victorian" data-agent-action="compare" data-compare="out-victorian">
             <span aria-hidden="true">&#8644;</span> Compare
           </button>
         </div>
@@ -1318,16 +1318,16 @@
         </div>
         <div class="out" id="out-chaucer"></div>
         <div class="output-actions">
-          <button class="btn-copy" data-card="chaucer">
+          <button class="btn-copy" id="cardBtn-chaucer" data-agent-action="card" data-card="chaucer">
             <span aria-hidden="true">&#128204;</span> Make Card
           </button>
-          <button class="btn-copy" data-copy="chaucer">
+          <button class="btn-copy" id="copyBtn-chaucer" data-agent-action="copy" data-copy="chaucer">
             <span aria-hidden="true">&#128203;</span> Copy
           </button>
-          <button class="btn-copy" data-save="Chaucer" data-save-target="out-chaucer">
+          <button class="btn-copy" id="saveBtn-chaucer" data-agent-action="save" data-save="Chaucer" data-save-target="out-chaucer">
             <span aria-hidden="true">&#128190;</span> Save
           </button>
-          <button class="btn-copy" data-compare="out-chaucer">
+          <button class="btn-copy" id="compareBtn-chaucer" data-agent-action="compare" data-compare="out-chaucer">
             <span aria-hidden="true">&#8644;</span> Compare
           </button>
         </div>
@@ -1339,16 +1339,16 @@
         </div>
         <div class="out" id="out-yoda"></div>
         <div class="output-actions">
-          <button class="btn-copy" data-card="yoda">
+          <button class="btn-copy" id="cardBtn-yoda" data-agent-action="card" data-card="yoda">
             <span aria-hidden="true">&#128204;</span> Make Card
           </button>
-          <button class="btn-copy" data-copy="yoda">
+          <button class="btn-copy" id="copyBtn-yoda" data-agent-action="copy" data-copy="yoda">
             <span aria-hidden="true">&#128203;</span> Copy
           </button>
-          <button class="btn-copy" data-save="Yoda" data-save-target="out-yoda">
+          <button class="btn-copy" id="saveBtn-yoda" data-agent-action="save" data-save="Yoda" data-save-target="out-yoda">
             <span aria-hidden="true">&#128190;</span> Save
           </button>
-          <button class="btn-copy" data-compare="out-yoda">
+          <button class="btn-copy" id="compareBtn-yoda" data-agent-action="compare" data-compare="out-yoda">
             <span aria-hidden="true">&#8644;</span> Compare
           </button>
         </div>
@@ -1360,16 +1360,16 @@
         </div>
         <div class="out" id="out-norse"></div>
         <div class="output-actions">
-          <button class="btn-copy" data-card="norse">
+          <button class="btn-copy" id="cardBtn-norse" data-agent-action="card" data-card="norse">
             <span aria-hidden="true">&#128204;</span> Make Card
           </button>
-          <button class="btn-copy" data-copy="norse">
+          <button class="btn-copy" id="copyBtn-norse" data-agent-action="copy" data-copy="norse">
             <span aria-hidden="true">&#128203;</span> Copy
           </button>
-          <button class="btn-copy" data-save="Norse" data-save-target="out-norse">
+          <button class="btn-copy" id="saveBtn-norse" data-agent-action="save" data-save="Norse" data-save-target="out-norse">
             <span aria-hidden="true">&#128190;</span> Save
           </button>
-          <button class="btn-copy" data-compare="out-norse">
+          <button class="btn-copy" id="compareBtn-norse" data-agent-action="compare" data-compare="out-norse">
             <span aria-hidden="true">&#8644;</span> Compare
           </button>
         </div>
@@ -10688,6 +10688,8 @@ if (typeof location !== 'undefined' &&
 // Shareable links: encode the current text, style, settings and seed into the
 // URL hash. Fragments are never sent to a server, so the privacy story holds.
 // This is the ninth shared JS block, pasted into all seven standalone pages.
+// It also exposes window.Repriser, the browser API for agents driving a live
+// page; both use the same controls and transform button as a person would.
 
 var SHARE_MAX_TEXT = 1200;
 var SHARE_MAX_HASH = 8000;
@@ -10862,6 +10864,118 @@ function addShareButton(host, style, id) {
   var data = shareDecode(location.hash);
   if (data) shareApply(data);
 })();
+
+// ---------------------------------------------------------------------------
+// Agent-facing browser API.
+//
+// Browser-driving agents can call window.Repriser from devtools or CDP on any
+// deployed page. It drives the same input, settings and transform button a
+// person uses, so there is no second engine or word list to keep in sync. Only
+// the six style ids are valid; the dashboard exposes all of them at once.
+var REPRISER_AGENT_STYLES = [
+  { id: 'shakespeare', label: 'Shakespeare' },
+  { id: 'pirate', label: 'Pirate' },
+  { id: 'victorian', label: 'Victorian' },
+  { id: 'chaucer', label: 'Chaucer' },
+  { id: 'yoda', label: 'Yoda' },
+  { id: 'norse', label: 'Norse' },
+];
+
+function repAgentPageStyle() {
+  if (typeof location === 'undefined' || !location.pathname) return 'shakespeare';
+  var name = String(location.pathname).split('/').pop().replace(/\.html?$/, '');
+  return name === 'index' ? 'all' : (name || 'shakespeare');
+}
+
+function repAgentSeed(seed) {
+  var value = (seed === undefined || seed === null) ? 1 : seed;
+  if (!/^\d{1,10}$/.test(String(value))) {
+    throw new Error('Repriser: seed must be a whole number from 0 to 9999999999');
+  }
+  return String(value);
+}
+
+function repAgentOptions(options, seed) {
+  var o = options || {};
+  var intensity = o.intensity === 'light' || o.intensity === 'dramatic'
+    ? o.intensity : 'balanced';
+  var el = document.getElementById('optIntensity');
+  if (el) el.value = intensity;
+  var toggles = [
+    ['openings', 'optOpenings'], ['metaphors', 'optMetaphors'],
+    ['asides', 'optAsides'], ['invert', 'optInvert'],
+  ];
+  for (var i = 0; i < toggles.length; i++) {
+    var toggle = document.getElementById(toggles[i][1]);
+    if (toggle) toggle.checked = o[toggles[i][0]] !== false;
+  }
+  var seedEl = document.getElementById('optSeed');
+  if (seedEl) seedEl.value = repAgentSeed(seed);
+}
+
+function repAgentOutputs() {
+  var out = {};
+  var cards = document.querySelectorAll ? document.querySelectorAll('[id^="out-"]') : [];
+  if (cards.length) {
+    for (var i = 0; i < cards.length; i++) out[cards[i].id.slice(4)] = cards[i].textContent;
+  } else {
+    var single = document.getElementById('output');
+    if (single) out[repAgentPageStyle()] = single.textContent;
+  }
+  return out;
+}
+
+function repAgentRun(text, seed, options) {
+  var input = document.getElementById('input');
+  if (!input) throw new Error('Repriser: no input on this page');
+  input.value = String(text == null ? '' : text);
+  if (typeof Event !== 'undefined' && input.dispatchEvent) {
+    input.dispatchEvent(new Event('input', { bubbles: true }));
+  }
+  repAgentOptions(options, seed);
+  var btn = document.querySelector('[data-agent-action="transform"]');
+  if (!btn || typeof btn.click !== 'function') {
+    throw new Error('Repriser: transform button not found');
+  }
+  btn.click();
+  return repAgentOutputs();
+}
+
+var Repriser = {
+  // The six supported style ids and their display labels.
+  styles: function () {
+    return REPRISER_AGENT_STYLES.slice();
+  },
+
+  // Transform on the current page. Always an object keyed by style id: one key
+  // on a style page, six on the dashboard.
+  transform: function (text, seed, options) {
+    return repAgentRun(text, seed, options);
+  },
+
+  // Transform one style. On a style page only its own id is available; on the
+  // dashboard any of the six works, because the transform button fills all six
+  // cards and this returns the requested one.
+  transformStyle: function (id, text, seed, options) {
+    var page = repAgentPageStyle();
+    if (page !== 'all' && id !== page) {
+      throw new Error('Repriser: open ' + id + '.html to transform that style');
+    }
+    var out = repAgentRun(text, seed, options);
+    if (!Object.prototype.hasOwnProperty.call(out, id)) {
+      throw new Error('Repriser: unknown style "' + id + '"');
+    }
+    return out[id];
+  },
+
+  // All six outputs at once. Intended for index.html; on a style page it
+  // returns the one output that page owns.
+  transformAll: function (text, seed, options) {
+    return repAgentRun(text, seed, options);
+  },
+};
+
+if (typeof window !== 'undefined') window.Repriser = Repriser;
 
 
 (function () {

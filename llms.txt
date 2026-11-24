@@ -1,0 +1,70 @@
+# Text Repriser Collection
+
+> Six standalone, client-side web pages that rewrite modern English into
+> literary and historical styles. No backend, no build step for visitors, no
+> dependencies. The live site is static and served by GitHub Pages.
+
+Live site: https://cuber7649.github.io/shakespeare-repriser/
+
+## Pages
+
+- index.html — dashboard: one input, all six styles at once
+- shakespeare.html — Elizabethan English
+- pirate.html — Golden Age of Piracy
+- victorian.html — Victorian English
+- chaucer.html — Middle English
+- yoda.html — Jedi Master speech (conservative word-order inversions)
+- norse.html — Vikings and Norse myth
+
+## Using it from a browser-driving agent
+
+Every page exposes `window.Repriser` in the page context. It drives the same
+input, settings and Transform button a person uses, so there is no second
+engine to drift from the visible app.
+
+```js
+Repriser.styles();
+// [{ id: 'shakespeare', label: 'Shakespeare' }, ... six entries]
+
+Repriser.transformStyle('shakespeare', 'how are you', 2);
+// "How dost thou fare" (possibly with a random aside; see Seed below)
+
+Repriser.transformAll('how are you', 2);
+// { shakespeare: '...', pirate: '...', ... } on index.html
+
+Repriser.transform('how are you', 2, { intensity: 'light', asides: false });
+// object keyed by style id: one key on a style page, six on the dashboard
+```
+
+Signatures:
+
+- `styles()` — array of `{ id, label }`.
+- `transform(text, seed?, options?)` — object keyed by style id.
+- `transformStyle(id, text, seed?, options?)` — one string. On a style page the
+  id must match that page; the dashboard accepts any of the six.
+- `transformAll(text, seed?, options?)` — object with every available output.
+
+`seed` defaults to 1 for reproducibility; pass the same input, seed and options
+to get the same output. Omit the seed only when you want the page's natural
+variation. `options` accepts `intensity` (`light`, `balanced`, `dramatic`) and
+the booleans `openings`, `metaphors`, `asides`, `invert`; `false` disables one.
+Calling these methods changes the visible input, settings and results.
+
+## Stable browser hooks
+
+All seven pages use the same `data-agent-action` attributes, so an agent does
+not need to guess per-style button text:
+
+- `[data-agent-action="transform"]`, `"surprise"`, `"clear"` — one each.
+- `[data-agent-action="copy"]`, `"save"`, `"compare"`, `"card"` — one per
+  output on a style page, six on the dashboard.
+
+Inputs and outputs: `#input`, `#charCount`, `#output` (style pages) or
+`#out-<style>` (dashboard). Status messages use `role="status"` regions.
+
+## Content and licensing
+
+All output is family-friendly: no profanity, slurs or explicit material.
+Free use; commercial use requires crediting github.com/Cuber7649 and linking
+github.com/Cuber7649/shakespeare-repriser. Non-commercial use needs no
+attribution. Provided AS IS. See LICENSE.

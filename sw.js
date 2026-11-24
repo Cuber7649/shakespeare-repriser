@@ -3,7 +3,7 @@
 // Bump CACHE_VERSION on every deploy that changes a cached file, or returning
 // visitors keep the previous version. Old shakespeare-repriser-* caches are
 // removed on activate.
-const CACHE_VERSION = 'shakespeare-repriser-v5';
+const CACHE_VERSION = 'shakespeare-repriser-v6';
 
 const ASSETS = [
   './',
@@ -15,6 +15,7 @@ const ASSETS = [
   './yoda.html',
   './norse.html',
   './manifest.json',
+  './llms.txt',
   './icon.svg',
   './icon-180.png',
   './icon-192.png',

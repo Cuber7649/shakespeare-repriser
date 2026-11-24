@@ -39,6 +39,7 @@ const STEPS = [
   ['test-compare', ['test-compare.mjs']],
   ['test-reproducible', ['test-reproducible.mjs']],
   ['test-links', ['test-links.mjs']],
+  ['test-agent-surface', ['test-agent-surface.mjs']],
   ['verify-dashboard', ['verify-dashboard.mjs']],
   ['smoke-dashboard', ['smoke-dashboard.mjs', '1']],
   ['smoke-dashboard', ['smoke-dashboard.mjs', '2']],

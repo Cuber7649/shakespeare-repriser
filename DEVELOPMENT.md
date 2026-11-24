@@ -8,7 +8,7 @@ style page directly from disk and it works.
 
 ```bash
 node --version        # 22+; the CDP harness uses the global WebSocket
-npm test              # 32 steps, about 10 seconds
+npm test              # 33 steps, about 10 seconds
 ```
 
 `npm test` runs `tools/run-all.mjs`, which lists the steps in order and ends with

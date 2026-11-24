@@ -68,7 +68,7 @@ in `tools/`. Live on GitHub Pages.
 # 1. Edit the source under tools/ (never a pasted copy or a generated file)
 # 2. Repaste shared blocks into all pages + rebuild the dashboard:
 node tools/paste-shared.mjs
-# 3. Run the full suite (32 steps, ~10 s):
+# 3. Run the full suite (33 steps, ~10 s):
 npm test
 # 4. Commit, then:
 node tools/prepush-check.mjs   # MUST run AFTER committing (staleness vs HEAD)
@@ -242,4 +242,5 @@ non-commercial needs no attribution; AS-IS disclaimer. Do not relicense.
 | `tools/engine-proto.mjs` | Frozen old engine for `test-engine.mjs` |
 | `AGENTS.md` | This file — invariants, workflow, judgment calls, history |
 | `README.md` | User-facing docs; its tables are test-checked |
+| `llms.txt` | Agent-readable guide served by GitHub Pages; describes `window.Repriser` and the `data-agent-action` hooks |
 | `LICENSE` | Terms above |
