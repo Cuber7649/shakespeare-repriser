@@ -16,6 +16,10 @@ Live site: https://cuber7649.github.io/shakespeare-repriser/
 - yoda.html — Jedi Master speech (conservative word-order inversions)
 - norse.html — Vikings and Norse myth
 
+Yoda deliberately leaves clauses it cannot parse safely in their original
+order. An unchanged result from `Repriser.transformStyle('yoda', ...)` is
+expected behaviour, not a failed transform.
+
 ## Using it from a browser-driving agent
 
 Every page exposes `window.Repriser` in the page context. It drives the same

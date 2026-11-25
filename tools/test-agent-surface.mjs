@@ -22,6 +22,7 @@ const llms = read('llms.txt');
 for (const needle of [
   'https://cuber7649.github.io/shakespeare-repriser/',
   'window.Repriser', 'data-agent-action', 'Quote card',
+  'Yoda deliberately leaves clauses',
   '#cardDownload', '#cardPreview', '#cardSkin', ...STYLE_IDS,
 ]) {
   llms.includes(needle) ? ok(`llms.txt documents ${needle}`) : no(`llms.txt is missing ${needle}`);
