@@ -184,6 +184,31 @@ for (const file of STYLE_FILES) {
   }
 }
 
+// The divider and footer are dimmed with opacity over the dark body. Compare
+// the blended result, not the declaration: #b8956a at 0.7 is only 3.87:1.
+for (const file of STYLE_FILES) {
+  for (const [name, re] of [['divider', /\.divider\s*\{([^}]*)\}/],
+    ['footer', /\.footer\s*\{([^}]*)\}/]]) {
+    const m = re.exec(read(file));
+    const fgRaw = m && /(?:^|;)\s*color:\s*([^;]+);/m.exec(m[1]);
+    const opRaw = m && /(?:^|;)\s*opacity:\s*([\d.]+);/m.exec(m[1]);
+    if (!fgRaw) {
+      console.log(`FAIL  ${file}: could not read the ${name} colour`);
+      failures++;
+      continue;
+    }
+    const alpha = opRaw ? Number(opRaw[1]) : 1;
+    const fg = blend([...parseColor(fgRaw[1]).slice(0, 3), alpha], parseColor('#1a1209'));
+    const ratio = contrastRatio(fg, parseColor('#1a1209'));
+    if (ratio + 1e-9 < 4.5) {
+      console.log(`FAIL  ${file}: ${name} is ${ratio.toFixed(2)}:1 after opacity, need 4.5`);
+      failures++;
+    } else {
+      console.log(`  ok    ${file}: ${name} is ${ratio.toFixed(2)}:1 after opacity`);
+    }
+  }
+}
+
 // Quick-sample chips are hand-written in each style page and sit on the same
 // dark body with a faint parchment wash.
 for (const file of STYLE_FILES) {

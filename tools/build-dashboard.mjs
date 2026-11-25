@@ -198,6 +198,9 @@ const DASH_CSS = `
   .mini .output-actions .btn-copy {
     flex: 0 0 auto;
     justify-content: center;
+    /* The zero-width label text is still a flex item; keep its gap from
+       pushing the icon off centre. */
+    gap: 0;
     padding: 8px 10px;
     font-size: 0;
   }
@@ -309,7 +312,7 @@ const out = `<!DOCTYPE html>
 ${navLinks}
   </div>
 
-<div class="container">
+<div class="container" role="main">
   <header class="header">
     <span class="quill" aria-hidden="true">&#128396;</span>
     <h1>Text Repriser Collection</h1>

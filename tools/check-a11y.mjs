@@ -37,6 +37,12 @@ for (const file of PAGES) {
   const h1s = html.match(/<h1\b/gi) || [];
   if (h1s.length !== 1) say(`found ${h1s.length} <h1>, expected 1`);
 
+  // One main landmark, either a <main> element or an explicit role on the
+  // container div. Lighthouse flags pages without it.
+  const mains = (html.match(/<main\b/gi) || []).length
+    + (html.match(/\brole="main"/gi) || []).length;
+  if (mains !== 1) say(`found ${mains} main landmark(s), expected 1`);
+
   // 3. every form control has an accessible name: label[for], wrapping
   //    label, or aria-label/aria-labelledby.
   const ids = new Set([...html.matchAll(/\bid="([^"]+)"/g)].map((m) => m[1]));

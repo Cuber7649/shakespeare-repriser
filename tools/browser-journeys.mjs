@@ -754,6 +754,13 @@ try {
       titled: buttons.every((b) => !!b.getAttribute('title')
         && !!b.getAttribute('aria-label')),
       iconOnly: buttons.every((b) => getComputedStyle(b).fontSize === '0px'),
+      centered: buttons.every((b) => {
+        const icon = b.querySelector('span');
+        if (!icon) return false;
+        const box = b.getBoundingClientRect();
+        const glyph = icon.getBoundingClientRect();
+        return Math.abs((glyph.left + glyph.width / 2) - (box.left + box.width / 2)) <= 1;
+      }),
       rows: new Set(buttons.map((b) => Math.round(b.getBoundingClientRect().top))).size,
     };
     document.querySelector('[data-agent-action="clear"]').click();
@@ -762,7 +769,8 @@ try {
   if (dashBar.before !== 'none' || dashBar.after === 'none' || dashBar.cleared !== 'none') {
     fail(`dashboard action bar visibility wrong: ${JSON.stringify(dashBar)}`);
   } else if (dashBar.condensed.count !== 5 || !dashBar.condensed.titled
-    || !dashBar.condensed.iconOnly || dashBar.condensed.rows !== 1) {
+    || !dashBar.condensed.iconOnly || !dashBar.condensed.centered
+    || dashBar.condensed.rows !== 1) {
     fail(`dashboard actions are not one icon-only row: ${JSON.stringify(dashBar.condensed)}`);
   } else pass('dashboard mini action bars follow their output in one icon-only row');
 
