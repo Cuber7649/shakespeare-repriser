@@ -20,7 +20,8 @@
 //  13. Re-run on a style page works and names the style it actually used
 //  14. window.Repriser transforms deterministically on a page and the dashboard
 //  15. action bars stay hidden until their output has text, and hide on Clear
-//  16. no JavaScript console errors were raised along the way
+//  16. quick-sample chips fill the input and transform in one click
+//  17. no JavaScript console errors were raised along the way
 //
 //   node tools/browser-journeys.mjs
 //
@@ -505,12 +506,13 @@ try {
       if (!out.trim()) fail('Enter on the Transform button produced no output');
       else pass('Tab + Enter transformed text without a mouse');
     }
-    // Tab along to Make Card (Surprise Me is next, then Clear, then Make Card).
-    await pressKey('Tab', 'Tab', 9);
-    await pressKey('Tab', 'Tab', 9);
-    await pressKey('Tab', 'Tab', 9);
-    const onCard = await evalJs(
-      `document.activeElement.id === 'makeCardBtn'`);
+    // Tab along to Make Card. Surprise Me, Clear and the quick-sample chips sit
+    // in between, so walk the focus rather than counting fixed presses.
+    let onCard = false;
+    for (let i = 0; i < 12 && !onCard; i++) {
+      await pressKey('Tab', 'Tab', 9);
+      onCard = await evalJs(`document.activeElement.id === 'makeCardBtn'`);
+    }
     if (!onCard) fail('Tab did not reach the Make Card button');
     else {
       await pressKey('Enter', 'Enter', 13);
@@ -760,7 +762,27 @@ try {
     fail(`dashboard actions are not one icon-only row: ${JSON.stringify(dashBar.condensed)}`);
   } else pass('dashboard mini action bars follow their output in one icon-only row');
 
-  // --- 16. console errors ---------------------------------------------------
+  // --- 16. quick-sample chips ----------------------------------------------
+  await goto('shakespeare.html');
+  const chip = await evalJs(`(() => {
+    const btn = document.querySelector('.surprise-sample[data-sample="grocery"]');
+    if (!btn) return { missing: true };
+    btn.click();
+    return {
+      input: document.getElementById('input').value,
+      count: document.getElementById('charCount').textContent,
+      out: document.getElementById('output').textContent,
+      chips: document.querySelectorAll('.surprise-sample').length,
+    };
+  })()`);
+  const grocery = 'We need milk bread eggs apples and coffee';
+  if (chip.missing || chip.chips !== 3) fail(`quick-sample chips missing: ${JSON.stringify(chip)}`);
+  else if (chip.input !== grocery) fail(`quick-sample input wrong: ${JSON.stringify(chip.input)}`);
+  else if (chip.count !== String(grocery.length)) fail(`quick-sample counter wrong: ${chip.count}`);
+  else if (!chip.out.trim()) fail('quick-sample click did not transform');
+  else pass('quick-sample chip fills the input and transforms in one click');
+
+  // --- 17. console errors ---------------------------------------------------
   if (consoleErrors.length) {
     fail(`${consoleErrors.length} console error(s): ${consoleErrors.slice(0, 3).join(' | ')}`);
   } else pass('no JavaScript console errors');

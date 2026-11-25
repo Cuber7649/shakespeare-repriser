@@ -93,7 +93,7 @@ cannot be sure. The other five styles rewrite every sentence they can.
 - **Agent-friendly live site** — `llms.txt` describes the pages, a `window.Repriser` object transforms text from page context, and stable `data-agent-action` hooks work on every page
 - **Keyboard shortcut** — press Ctrl+Enter to transform
 - **Copy to clipboard** — supported on local files and HTTPS, with an announced confirmation
-- **Surprise Me!** — one click inserts a random, family-friendly sample sentence into the input and immediately runs the transformation. The same sentence never appears twice in a row.
+- **Surprise Me!** — one click inserts a random, family-friendly sample sentence into the input and immediately runs the transformation. The same sentence never appears twice in a row. Three quick-sample chips beside it fill in a ready-made scenario and transform it in one click.
 - **Responsive layout** — verified from mobile to desktop viewports
 - **Screen-reader support** — live regions announce results and copy confirmations; every input has a real label
 - **Reduced-motion support** — all decorative animation stops when the OS asks for it

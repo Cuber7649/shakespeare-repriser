@@ -14,4 +14,4 @@
 - [x] **Streamline the Saved Quotes section:** Style the raw browser file input (*Choose file* / *No file chosen*) into a themed button matching *Export* and *Clear all*, or hide the Saved Quotes drawer until the first quote is saved.
 
 ## 4. Micro-UX Polish
-- [ ] **Add quick-sample pills:** Place 2–3 clickable prompt chips next to *"Surprise Me!"* (e.g., *"Tech layoff email"*, *"Breakup text"*, *"Grocery list"*) so first-time visitors can test the tool in one click.
+- [x] **Add quick-sample pills:** Place 2–3 clickable prompt chips next to *"Surprise Me!"* (e.g., *"Tech layoff email"*, *"Breakup text"*, *"Grocery list"*) so first-time visitors can test the tool in one click.

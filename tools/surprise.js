@@ -140,3 +140,57 @@ function surpriseApply(inputEl, charCountEl, transformFn) {
   if (charCountEl) charCountEl.textContent = String(sentence.length);
   transformFn();
 }
+
+// Quick-sample chips: one click fills the input and runs the page's own
+// transform. They are deliberately short, family-friendly scenarios so a
+// first-time visitor can see a result without typing anything.
+const SURPRISE_SAMPLES = [
+  { id: 'layoff', label: 'Tech layoff email',
+    text: 'I am writing to let you know that my position has been eliminated' },
+  { id: 'breakup', label: 'Breakup text',
+    text: 'I think we should end our relationship and go our separate ways' },
+  { id: 'grocery', label: 'Grocery list',
+    text: 'We need milk bread eggs apples and coffee' },
+];
+
+function surpriseSamples() {
+  return SURPRISE_SAMPLES.slice();
+}
+
+function surpriseSampleApply(text) {
+  const inputEl = document.getElementById('input');
+  if (!inputEl) return;
+  inputEl.value = text;
+  const countEl = document.getElementById('charCount');
+  if (countEl) countEl.textContent = String(text.length);
+  if (typeof Event !== 'undefined' && inputEl.dispatchEvent) {
+    inputEl.dispatchEvent(new Event('input', { bubbles: true }));
+  }
+  const btn = document.querySelector('[data-agent-action="transform"]');
+  if (btn && typeof btn.click === 'function') btn.click();
+}
+
+(function initSurpriseSamples() {
+  // The Node harness has no querySelector, so it is skipped there. In a page,
+  // the chips sit immediately after the Surprise Me button in .btn-row.
+  if (typeof document === 'undefined' || typeof document.querySelector !== 'function'
+    || typeof document.createElement !== 'function') return;
+  const row = document.querySelector('.btn-row');
+  const anchor = row && row.querySelector('[data-agent-action="surprise"]');
+  if (!row || !anchor) return;
+  const wrap = document.createElement('span');
+  wrap.className = 'surprise-samples';
+  wrap.setAttribute('role', 'group');
+  wrap.setAttribute('aria-label', 'Quick samples');
+  for (const sample of SURPRISE_SAMPLES) {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'surprise-sample';
+    btn.setAttribute('data-sample', sample.id);
+    btn.setAttribute('title', sample.text);
+    btn.textContent = sample.label;
+    btn.addEventListener('click', () => surpriseSampleApply(sample.text));
+    wrap.appendChild(btn);
+  }
+  row.insertBefore(wrap, anchor.nextSibling);
+})();

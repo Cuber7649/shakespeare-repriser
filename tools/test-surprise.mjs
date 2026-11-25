@@ -43,6 +43,15 @@ for (const file of PAGES) {
 }
 if (!markupBad) ok(`all ${surpriseIds.length} ids present in all ${PAGES.length} files`);
 
+// --- 2b. quick-sample chips ---------------------------------------------------
+section('quick samples');
+for (const label of ['Tech layoff email', 'Breakup text', 'Grocery list']) {
+  js.includes(label) ? ok(`quick sample defined: ${label}`) : no(`missing quick sample: ${label}`);
+}
+js.includes('initSurpriseSamples') && js.includes('data-agent-action="transform"')
+  ? ok('quick-sample chips fill the input and run the page transform')
+  : no('quick-sample wiring is missing from the shared block');
+
 // --- 3. sample selection ------------------------------------------------------
 section('sample selection');
 const page = loadPage(join(ROOT, 'shakespeare.html'), 'shakespearify');

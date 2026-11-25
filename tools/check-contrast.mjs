@@ -149,6 +149,27 @@ for (const file of STYLE_FILES) {
   }
 }
 
+// Quick-sample chips are hand-written in each style page and sit on the same
+// dark body with a faint parchment wash.
+for (const file of STYLE_FILES) {
+  const m = /\.surprise-sample\s*\{([^}]*)\}/.exec(read(file));
+  const bgRaw = m && /(?:^|;)\s*background:\s*([^;]+);/m.exec(m[1]);
+  const fgRaw = m && /(?:^|;)\s*color:\s*([^;]+);/m.exec(m[1]);
+  if (!bgRaw || !fgRaw) {
+    console.log(`FAIL  ${file}: could not read the quick-sample chip colours`);
+    failures++;
+    continue;
+  }
+  const bg = blend(parseColor(bgRaw[1]), parseColor('#1a1209'));
+  const ratio = contrastRatio(fgRaw[1], bg);
+  if (ratio + 1e-9 < 4.5) {
+    console.log(`FAIL  ${file}: quick-sample chip is ${ratio.toFixed(2)}:1, need 4.5`);
+    failures++;
+  } else {
+    console.log(`  ok    ${file}: quick-sample chip is ${ratio.toFixed(2)}:1`);
+  }
+}
+
 if (failures) {
   console.log(`\n${failures} contrast failure(s) across ${checked} text colour rules`);
   process.exitCode = 1;

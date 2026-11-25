@@ -75,6 +75,8 @@ not need to guess per-style button text:
 - `[data-agent-action="transform"]`, `"surprise"`, `"clear"` — one each.
 - `[data-agent-action="copy"]`, `"save"`, `"compare"`, `"card"` — one per
   output on a style page, six on the dashboard.
+- `.surprise-sample[data-sample="layoff|breakup|grocery"]` — quick-sample chips
+  that fill a ready-made scenario and transform it in one click.
 
 Inputs and outputs: `#input`, `#charCount`, `#output` (style pages) or
 `#out-<style>` (dashboard). Status messages use `role="status"` regions.
