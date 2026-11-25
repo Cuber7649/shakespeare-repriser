@@ -27,8 +27,7 @@
 //
 // Skips cleanly (exit 0) when neither Chrome nor Edge is present, so machines
 // without a browser still pass the suite. Set REQUIRE_BROWSER=1 to fail instead
-// — CI uses that so the browser leg cannot silently skip. BROWSER_PATH selects
-// an explicit binary (the CI action's chrome-path output).
+// for a mandatory browser run. BROWSER_PATH selects an explicit binary.
 
 import { spawn } from 'node:child_process';
 import { existsSync, rmSync, readdirSync, statSync, mkdirSync } from 'node:fs';
@@ -156,7 +155,7 @@ async function waitForFile(pred, ms) {
 }
 
 const child = spawn(browserPath, [
-  // Chrome in CI may run as root or with a tiny /dev/shm.
+  // Chrome in a container may run as root or with a tiny /dev/shm.
   ...(process.platform === 'linux'
     ? ['--no-sandbox', '--disable-dev-shm-usage'] : []),
   '--headless=new',

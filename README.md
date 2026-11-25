@@ -167,7 +167,6 @@ shakespeare-repriser/
 ├── ACCESSIBILITY.md   # what is tested, target level and known gaps
 ├── LICENSE            # free use; credit + GitHub link required if commercial
 ├── Screenshot.png
-├── .github/workflows/ # CI: full suite on Node 22 and 24, Linux and Windows
 └── tools/             # build + test tooling (not shipped to the browser)
 ```
 

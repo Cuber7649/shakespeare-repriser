@@ -167,7 +167,7 @@ obvious from a diff and was settled deliberately:
 - `browser-journeys.mjs` — real headless Chrome over CDP (Edge fallback):
   transforms on every page, settings persistence, saved-quotes flow, card export,
   keyboard nav, responsive overflow, console errors. **Skips (exit 0) when no
-  browser is present; `REQUIRE_BROWSER=1` makes it fail instead, as CI does.**
+  browser is present; `REQUIRE_BROWSER=1` makes it fail instead.**
 - `smoke-dashboard.mjs` ×3 — full DOM in a `vm` with a fake canvas at dpr
   1/2/3; exercises the modal via `initCardUI({ themes, render, download })`
   with injected fakes.
