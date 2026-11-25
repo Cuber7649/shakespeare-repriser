@@ -19,7 +19,8 @@
 //  12. an open Compare panel re-renders after a second transform and Clear
 //  13. Re-run on a style page works and names the style it actually used
 //  14. window.Repriser transforms deterministically on a page and the dashboard
-//  15. no JavaScript console errors were raised along the way
+//  15. action bars stay hidden until their output has text, and hide on Clear
+//  16. no JavaScript console errors were raised along the way
 //
 //   node tools/browser-journeys.mjs
 //
@@ -698,7 +699,40 @@ try {
     fail(`dashboard has ${dashApi.saves} save hooks, expected 6`);
   } else pass('Repriser API drives all six dashboard styles through stable hooks');
 
-  // --- 15. console errors ---------------------------------------------------
+  // --- 15. action bars wait for output -------------------------------------
+  await goto('shakespeare.html');
+  const styleBar = await evalJs(`(() => {
+    const bar = document.querySelector('.output-card .output-actions');
+    const before = getComputedStyle(bar).display;
+    const ta = document.getElementById('input');
+    ta.value = 'how are you';
+    ta.dispatchEvent(new Event('input', { bubbles: true }));
+    document.querySelector('[data-agent-action="transform"]').click();
+    const after = getComputedStyle(bar).display;
+    document.querySelector('[data-agent-action="clear"]').click();
+    return { before, after, cleared: getComputedStyle(bar).display };
+  })()`);
+  if (styleBar.before !== 'none' || styleBar.after === 'none' || styleBar.cleared !== 'none') {
+    fail(`style action bar visibility wrong: ${JSON.stringify(styleBar)}`);
+  } else pass('style action bar hides when empty, appears after transform, hides on Clear');
+
+  await goto('index.html');
+  const dashBar = await evalJs(`(() => {
+    const bar = document.querySelector('.mini .output-actions');
+    const before = getComputedStyle(bar).display;
+    const ta = document.getElementById('input');
+    ta.value = 'how are you';
+    ta.dispatchEvent(new Event('input', { bubbles: true }));
+    document.querySelector('[data-agent-action="transform"]').click();
+    const after = getComputedStyle(bar).display;
+    document.querySelector('[data-agent-action="clear"]').click();
+    return { before, after, cleared: getComputedStyle(bar).display };
+  })()`);
+  if (dashBar.before !== 'none' || dashBar.after === 'none' || dashBar.cleared !== 'none') {
+    fail(`dashboard action bar visibility wrong: ${JSON.stringify(dashBar)}`);
+  } else pass('dashboard mini action bars follow their output');
+
+  // --- 16. console errors ---------------------------------------------------
   if (consoleErrors.length) {
     fail(`${consoleErrors.length} console error(s): ${consoleErrors.slice(0, 3).join(' | ')}`);
   } else pass('no JavaScript console errors');

@@ -312,6 +312,10 @@
     padding-top: 12px;
     border-top: 1px solid rgba(196,162,101,0.3);
   }
+  /* No actions until there is something to act on. */
+  .output-card:has(#output:empty) .output-actions {
+    display: none;
+  }
 
   /* Available to assistive tech, not shown on screen. */
   .visually-hidden {

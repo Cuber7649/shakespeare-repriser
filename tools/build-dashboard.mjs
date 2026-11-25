@@ -193,6 +193,10 @@ const DASH_CSS = `
     flex: 1 1 calc(50% - 4px);
     justify-content: center;
   }
+  /* No actions until this card has a result to act on. */
+  .mini:has(.out:empty) .output-actions {
+    display: none;
+  }
   .mini-name {
     font-family: 'Cinzel', serif;
     font-weight: 700;
