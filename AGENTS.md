@@ -237,6 +237,7 @@ non-commercial needs no attribution; AS-IS disclaimer. Do not relicense.
 | ---- | ---- |
 | `shakespeare.html`, `pirate.html`, `victorian.html`, `chaucer.html`, `yoda.html`, `norse.html` | The six style apps (standalone) |
 | `index.html` | Dashboard (generated) |
+| `fonts/` | Bundled woff2 faces and OFL licences; no third-party font CDN |
 | `tools/` | All build + test scripts; shared-block sources; see `tools/README.md` |
 | `tools/corpus.mjs` | Test inputs and `SEEDS` |
 | `tools/engine-proto.mjs` | Frozen old engine for `test-engine.mjs` |

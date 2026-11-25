@@ -149,6 +149,41 @@ for (const file of STYLE_FILES) {
   }
 }
 
+// Inactive navigation tabs sit on a faint parchment wash over the dark body;
+// the old dark-ink-on-cream pair measured only 2.69:1.
+for (const file of STYLE_FILES) {
+  const src = read(file);
+  const nav = /\.style-switcher a\s*\{([^}]*)\}/.exec(src);
+  const navBg = nav && /(?:^|;)\s*background:\s*([^;]+);/m.exec(nav[1]);
+  const navFg = nav && /(?:^|;)\s*color:\s*([^;]+);/m.exec(nav[1]);
+  if (!navBg || !navFg) {
+    console.log(`FAIL  ${file}: could not read inactive navigation colours`);
+    failures++;
+  } else {
+    const ratio = contrastRatio(navFg[1], blend(parseColor(navBg[1]), parseColor('#1a1209')));
+    if (ratio + 1e-9 < 4.5) {
+      console.log(`FAIL  ${file}: inactive navigation is ${ratio.toFixed(2)}:1, need 4.5`);
+      failures++;
+    } else {
+      console.log(`  ok    ${file}: inactive navigation tab is ${ratio.toFixed(2)}:1`);
+    }
+  }
+  const label = /\.card-label\s*\{([^}]*)\}/.exec(src);
+  const labelFg = label && /(?:^|;)\s*color:\s*([^;]+);/m.exec(label[1]);
+  if (!labelFg) {
+    console.log(`FAIL  ${file}: could not read the card label colour`);
+    failures++;
+  } else {
+    const ratio = contrastRatio(labelFg[1], '#e8d9b8');
+    if (ratio + 1e-9 < 4.5) {
+      console.log(`FAIL  ${file}: card label is ${ratio.toFixed(2)}:1, need 4.5`);
+      failures++;
+    } else {
+      console.log(`  ok    ${file}: card label is ${ratio.toFixed(2)}:1`);
+    }
+  }
+}
+
 // Quick-sample chips are hand-written in each style page and sit on the same
 // dark body with a faint parchment wash.
 for (const file of STYLE_FILES) {

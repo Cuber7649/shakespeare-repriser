@@ -154,6 +154,7 @@ shakespeare-repriser/
 ├── icon-round-192.png # Round "any" icons, with transparent corners
 ├── icon-round-512.png
 ├── icon.svg           # Scalable SVG favicon (generated)
+├── fonts/             # Bundled Cinzel, Cormorant Garamond and Unifraktur woff2 + OFL licences
 ├── sw.js              # Offline cache (hand-written; bump CACHE_VERSION on deploy)
 ├── package.json       # build and test commands (no dependencies)
 ├── llms.txt           # agent-readable guide to the live site and its page API
@@ -217,9 +218,8 @@ There are no dependencies — `npm install` is never needed.
 ## Browser Support
 
 Tested in headless Chrome, with Edge as a fallback, on desktop and at mobile
-widths by the automated suite. Firefox and Safari are not covered. An internet
-connection is only needed for the Google Fonts stylesheets; offline, the apps
-fall back to system serif fonts.
+widths by the automated suite. Firefox and Safari are not covered. No internet
+connection is needed: the display fonts ship with the pages.
 
 ## Privacy
 
@@ -229,8 +229,8 @@ browser's `localStorage` under `repriser.savedQuotes` and your transformation
 settings under `repriser.settings`, shared between this site's pages on the
 same origin (the dashboard and all six styles) and never sent anywhere. Share
 links carry their payload in the URL fragment, which browsers never send to a
-server. The only network requests the pages make are for the Google Fonts
-stylesheets.
+server. The pages make no third-party network requests; fonts are bundled with
+the site.
 Clearing site data removes both — use Export first if you want to keep your
 saved quotes.
 

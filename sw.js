@@ -3,7 +3,7 @@
 // Bump CACHE_VERSION on every deploy that changes a cached file, or returning
 // visitors keep the previous version. Old shakespeare-repriser-* caches are
 // removed on activate.
-const CACHE_VERSION = 'shakespeare-repriser-v13';
+const CACHE_VERSION = 'shakespeare-repriser-v15';
 
 const ASSETS = [
   './',
@@ -16,6 +16,10 @@ const ASSETS = [
   './norse.html',
   './manifest.json',
   './llms.txt',
+  './fonts/cinzel-latin.woff2',
+  './fonts/cormorant-garamond-latin.woff2',
+  './fonts/cormorant-garamond-italic-latin.woff2',
+  './fonts/unifrakturmaguntia-latin.woff2',
   './icon.svg',
   './icon-180.png',
   './icon-192.png',
@@ -45,8 +49,8 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('fetch', (event) => {
   const request = event.request;
   if (request.method !== 'GET') return;
-  // Third-party requests (the Google Fonts stylesheets) are left alone:
-  // offline, the pages already fall back to a system serif.
+  // Third-party requests are left alone. The pages make none; fonts, icons and
+  // every page are cached locally, so the site works offline.
   if (new URL(request.url).origin !== self.location.origin) return;
   event.respondWith(
     caches.match(request).then((hit) => hit || fetch(request).then((response) => {

@@ -14,8 +14,36 @@
 <link rel="icon" href="./icon.svg" type="image/svg+xml">
 <link rel="icon" href="./icon-round-192.png" sizes="192x192" type="image/png">
 <link rel="alternate" type="text/plain" href="./llms.txt" title="Agent guide (llms.txt)">
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=UnifrakturMaguntia&display=swap" rel="stylesheet">
 <style>
+  @font-face {
+    font-family: 'Cinzel';
+    font-style: normal;
+    font-weight: 400 900;
+    font-display: swap;
+    src: url('./fonts/cinzel-latin.woff2') format('woff2');
+  }
+  @font-face {
+    font-family: 'Cormorant Garamond';
+    font-style: normal;
+    font-weight: 400 600;
+    font-display: swap;
+    src: url('./fonts/cormorant-garamond-latin.woff2') format('woff2');
+  }
+  @font-face {
+    font-family: 'Cormorant Garamond';
+    font-style: italic;
+    font-weight: 400 600;
+    font-display: swap;
+    src: url('./fonts/cormorant-garamond-italic-latin.woff2') format('woff2');
+  }
+  @font-face {
+    font-family: 'UnifrakturMaguntia';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url('./fonts/unifrakturmaguntia-latin.woff2') format('woff2');
+  }
+
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   body {
@@ -491,8 +519,8 @@
     font-weight: 700;
     letter-spacing: 0.5px;
     border: 2px solid rgba(212,160,86,0.3);
-    background: rgba(255,248,230,0.5);
-    color: #5a3e1b;
+    background: rgba(255,248,230,0.08);
+    color: #d4a056;
     transition: all 0.3s ease;
   }
   .style-switcher a:hover {

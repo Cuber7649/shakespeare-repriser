@@ -26,7 +26,7 @@ or full WCAG audit has been run.
 - Tab reaches the input and the Transform button; Enter transforms
 - the quote-card modal opens by keyboard, traps Tab focus and closes on Escape
 - no horizontal overflow at 360 px and 1280 px
-- the page still transforms with the Google Fonts CDN blocked
+- the page still transforms with all remote requests blocked, using bundled fonts
 
 `tools/check-css.mjs` checks stylesheet balance and the reduced-motion block.
 

@@ -28,6 +28,10 @@ const EXPECTED_TARGETS = new Set([
   'icon-180.png', 'icon-192.png', 'icon-512.png',
   'icon-round-192.png', 'icon-round-512.png',
   'manifest.json', 'llms.txt',
+  'fonts/cinzel-latin.woff2',
+  'fonts/cormorant-garamond-latin.woff2',
+  'fonts/cormorant-garamond-italic-latin.woff2',
+  'fonts/unifrakturmaguntia-latin.woff2',
 ]);
 
 // --- 0. registry agrees with the shipped style-specific tables --------------

@@ -40,7 +40,7 @@ if (sw) {
     : no('old cache versions are not purged');
 
   sw.includes("request.url).origin !== self.location.origin")
-    ? ok('cross-origin requests (Google Fonts) are left alone')
+    ? ok('cross-origin requests are left alone')
     : no('cross-origin requests are not excluded');
 
   const ASSETS = [

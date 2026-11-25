@@ -13,8 +13,8 @@
 //   7. a quote card is generated and downloaded as a PNG
 //   8. the core UI is operable keyboard-only (Tab, Enter, Escape, focus trap)
 //   9. narrow (360px) and wide (1280px) viewports do not overflow sideways
-//  10. with the Google Fonts CDN blocked, the page still transforms and falls
-//      back to a system serif
+//  10. with all remote requests blocked, the page still transforms using its
+//      bundled font files
 //  11. a Copy Link hash restores text, settings and the transform on reload
 //  12. an open Compare panel re-renders after a second transform and Clear
 //  13. Re-run on a style page works and names the style it actually used
@@ -174,7 +174,7 @@ let browser;   // browser-level session (downloads)
 let page;      // page session (everything else)
 
 // Console noise policy: uncaught exceptions and console.error are failures.
-// Network resource errors (the Google Fonts stylesheet when offline) are
+// Network resource errors (remote requests blocked in the offline journey) are
 // counted and reported but do not fail the run — they are environment, not app.
 const consoleErrors = [];
 let networkErrors = 0;
@@ -551,15 +551,18 @@ try {
   }
   await page.send('Emulation.clearDeviceMetricsOverride');
 
-  // --- 10. offline: Google Fonts blocked, app still works -------------------
+  // --- 10. offline: bundled fonts, no remote requests ----------------------
   await page.send('Network.enable');
-  await page.send('Network.setBlockedURLs', {
-    urls: ['*fonts.googleapis.com*', '*fonts.gstatic.com*'],
-  });
+  await page.send('Network.setBlockedURLs', { urls: ['*http*', '*https*'] });
   {
     await goto('shakespeare.html');
-    const family = await evalJs('getComputedStyle(document.body).fontFamily');
-    const fallback = /serif|georgia|garamond|times/i.test(family);
+    const fonts = await evalJs(`(async () => {
+      await document.fonts.ready;
+      return {
+        cinzel: document.fonts.check('16px Cinzel'),
+        cormorant: document.fonts.check('16px "Cormorant Garamond"'),
+      };
+    })()`);
     await evalJs(`(() => {
       const i = document.getElementById('input');
       i.value = 'hello how are you today';
@@ -567,8 +570,9 @@ try {
     })()`);
     const out = await evalJs('document.getElementById("output").textContent');
     if (!out.trim()) fail('offline: transform produced no output');
-    else if (!fallback) fail(`offline: no system serif fallback (font-family: ${family})`);
-    else pass('offline: transform works and falls back to a system serif');
+    else if (!fonts.cinzel || !fonts.cormorant) {
+      fail(`offline: bundled fonts did not load: ${JSON.stringify(fonts)}`);
+    } else pass('offline: transform works with bundled fonts and no remote requests');
   }
   await page.send('Network.setBlockedURLs', { urls: [] });
 
@@ -787,7 +791,7 @@ try {
     fail(`${consoleErrors.length} console error(s): ${consoleErrors.slice(0, 3).join(' | ')}`);
   } else pass('no JavaScript console errors');
   if (networkErrors) {
-    console.log(`      (${networkErrors} network resource error(s) ignored — offline font CDN?)`);
+    console.log(`      (${networkErrors} network resource error(s) ignored — remote requests blocked offline)`);
   }
   if (manifestNoise) {
     console.log(`      (${manifestNoise} file:// manifest CORS error(s) ignored — PWA manifest needs http(s))`);

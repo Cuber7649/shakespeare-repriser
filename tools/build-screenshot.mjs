@@ -151,9 +151,9 @@ try {
     await sleep(125);
   }
 
-  // Webfonts are fetched from Google Fonts over the network, and glyphs render
-  // differently depending on whether they have arrived. Block until both families
-  // are actually usable, so the capture cannot race the font load.
+  // Bundled webfonts are local, but glyphs still render differently before they
+  // are ready. Block until the families are usable, so the capture cannot race
+  // the font load.
   await client.send('Runtime.evaluate', {
     awaitPromise: true,
     returnByValue: true,

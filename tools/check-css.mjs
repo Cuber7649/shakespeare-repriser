@@ -30,6 +30,16 @@ for (const file of readdirSync(ROOT).filter((f) => f.endsWith('.html'))) {
   const rm = (style.match(/@media\s*\(prefers-reduced-motion:\s*reduce\)/g) || []).length;
   if (rm !== 1) problems.push(`prefers-reduced-motion query count = ${rm}, expected 1`);
 
+  // Fonts ship with the site: no third-party font CDN, and all four local
+  // faces must be declared in every standalone page.
+  if (/fonts\.googleapis\.com|fonts\.gstatic\.com/.test(html)) {
+    problems.push('remote font CDN link present');
+  }
+  for (const name of ['cinzel-latin.woff2', 'cormorant-garamond-latin.woff2',
+    'cormorant-garamond-italic-latin.woff2', 'unifrakturmaguntia-latin.woff2']) {
+    if (!style.includes(`./fonts/${name}`)) problems.push(`missing @font-face for ${name}`);
+  }
+
   // The style pages mark the output region live; the dashboard uses a single
   // role="status" region instead, so accept either.
   const live = (html.match(/aria-live="polite"/g) || []).length;
