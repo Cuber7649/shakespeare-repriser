@@ -142,6 +142,34 @@
     outline: 2px solid #d4a056;
     outline-offset: 2px;
   }
+  .options-advanced {
+    margin: 0 0 12px;
+  }
+  .options-advanced summary {
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: #5c4530;
+    cursor: pointer;
+    padding: 2px 0;
+    list-style: none;
+  }
+  .options-advanced summary::-webkit-details-marker {
+    display: none;
+  }
+  .options-advanced summary::before {
+    content: '+ ';
+  }
+  .options-advanced[open] summary::before {
+    content: '\2212  ';
+  }
+  .options-advanced[open] summary {
+    margin-bottom: 10px;
+  }
+  .options-advanced summary:focus-visible {
+    outline: 2px solid #d4a056;
+    outline-offset: 2px;
+  }
   .options-footer {
     display: flex;
     align-items: center;

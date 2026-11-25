@@ -757,6 +757,34 @@
     outline: 2px solid #d4a056;
     outline-offset: 2px;
   }
+  .options-advanced {
+    margin: 0 0 12px;
+  }
+  .options-advanced summary {
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: #5c4530;
+    cursor: pointer;
+    padding: 2px 0;
+    list-style: none;
+  }
+  .options-advanced summary::-webkit-details-marker {
+    display: none;
+  }
+  .options-advanced summary::before {
+    content: '+ ';
+  }
+  .options-advanced[open] summary::before {
+    content: '\2212  ';
+  }
+  .options-advanced[open] summary {
+    margin-bottom: 10px;
+  }
+  .options-advanced summary:focus-visible {
+    outline: 2px solid #d4a056;
+    outline-offset: 2px;
+  }
   .options-footer {
     display: flex;
     align-items: center;
@@ -1040,17 +1068,22 @@
       <input type="range" id="optIntensity" class="options-range" min="0" max="2" step="1" value="1">
       <span class="options-intensity" id="optIntensityValue">Balanced</span>
     </div>
-    <div class="options-row">
-      <label class="options-label" for="optSeed">Seed</label>
-      <input type="text" id="optSeed" class="options-seed" inputmode="numeric" autocomplete="off" placeholder="Random" aria-describedby="optSeedHint">
-      <span class="options-hint" id="optSeedHint">Optional; the same seed replays a run</span>
-    </div>
     <div class="options-checks">
       <label class="options-check"><input type="checkbox" id="optOpenings" checked> Opening phrases</label>
       <label class="options-check"><input type="checkbox" id="optMetaphors" checked> Metaphors and similes</label>
-      <label class="options-check"><input type="checkbox" id="optAsides" checked> Stage directions and asides</label>
-      <label class="options-check"><input type="checkbox" id="optInvert" checked> Sentence inversion</label>
     </div>
+    <details class="options-advanced" id="optAdvanced">
+      <summary>Advanced settings</summary>
+      <div class="options-row">
+        <label class="options-label" for="optSeed">Seed</label>
+        <input type="text" id="optSeed" class="options-seed" inputmode="numeric" autocomplete="off" placeholder="Random" aria-describedby="optSeedHint">
+        <span class="options-hint" id="optSeedHint">Optional; the same seed replays a run</span>
+      </div>
+      <div class="options-checks">
+        <label class="options-check"><input type="checkbox" id="optAsides" checked> Stage directions and asides</label>
+        <label class="options-check"><input type="checkbox" id="optInvert" checked> Sentence inversion</label>
+      </div>
+    </details>
     <div class="options-footer">
       <button type="button" class="btn-copy" id="optResetBtn">Reset settings</button>
       <span class="visually-hidden" id="optStatus" role="status"></span>

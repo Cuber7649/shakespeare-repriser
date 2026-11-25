@@ -335,6 +335,23 @@ try {
     fail('output did not change when openings were disabled at the same seed');
   } else pass('settings persist and the next transform respects them');
 
+  const advanced = await evalJs(`(() => {
+    const box = document.getElementById('optAdvanced');
+    const before = box && box.open;
+    const summary = box && box.querySelector('summary');
+    if (summary) summary.click();
+    return {
+      before, after: box && box.open,
+      controls: ['optSeed', 'optAsides', 'optInvert']
+        .every((id) => !!document.getElementById(id)),
+    };
+  })()`);
+  if (advanced.before !== false || advanced.after !== true) {
+    fail(`Advanced settings did not open from its summary: ${JSON.stringify(advanced)}`);
+  } else if (!advanced.controls) {
+    fail('advanced controls are missing from the page');
+  } else pass('Advanced settings starts collapsed and opens with its controls');
+
   // --- 4. a quote saved on one page is still there on another --------------
   // Chromium shares localStorage across file:// pages in one profile, which is
   // exactly the cross-page behaviour the app documents.

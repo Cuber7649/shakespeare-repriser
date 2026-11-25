@@ -17,7 +17,8 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 
 import { PAGES_WITH_DASHBOARD as PAGES } from './styles.mjs';
 const IDS = ['optionsPanel', 'optIntensity', 'optIntensityValue', 'optSeed',
-  'optOpenings', 'optMetaphors', 'optAsides', 'optInvert', 'optResetBtn', 'optStatus'];
+  'optOpenings', 'optMetaphors', 'optAsides', 'optInvert', 'optResetBtn',
+  'optStatus', 'optAdvanced'];
 
 let failures = 0;
 const ok = (m) => console.log(`  ok    ${m}`);
@@ -54,6 +55,20 @@ for (const file of PAGES) {
   if (missing.length) { no(`${file}: missing id(s) ${missing.join(', ')}`); markupBad++; }
 }
 if (!markupBad) ok(`all ${IDS.length} ids present in all ${PAGES.length} files`);
+
+// Seed, stage directions and inversion sit behind a native disclosure so the
+// primary controls and CTA stay near the input. Intensity and the two regular
+// toggles must remain outside it.
+const advancedStart = html.indexOf('id="optAdvanced"');
+const advancedEnd = html.indexOf('</details>', advancedStart);
+const inAdvanced = (id) => html.indexOf(`id="${id}"`) > advancedStart
+  && html.indexOf(`id="${id}"`) < advancedEnd;
+const outside = ['optIntensity', 'optOpenings', 'optMetaphors']
+  .every((id) => html.indexOf(`id="${id}"`) < advancedStart);
+const inside = ['optSeed', 'optAsides', 'optInvert'].every(inAdvanced);
+advancedStart >= 0 && advancedEnd > advancedStart && outside && inside
+  ? ok('advanced controls are disclosed; intensity and basic toggles stay visible')
+  : no('Advanced settings disclosure does not wrap the expected controls');
 
 // --- 3. defaults reproduce the original (balanced) behaviour -----------------
 section('balanced defaults');

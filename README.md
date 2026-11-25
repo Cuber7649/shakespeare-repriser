@@ -57,7 +57,8 @@ cannot be sure. The other five styles rewrite every sentence they can.
   directions and asides, and sentence inversion, on every page and the
   dashboard. Balanced with everything on matches the original behaviour;
   choices are remembered in your browser and follow you between pages, and a
-  Reset button restores the defaults
+  Reset button restores the defaults. The seed field, stage directions and
+  sentence inversion sit behind an Advanced settings disclosure
 - **Reproducible runs** — an optional Seed field pins the random choices, so
   the same input, settings and seed give the same output; leave it empty for a
   fresh variation on each click

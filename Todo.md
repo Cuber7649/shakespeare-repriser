@@ -3,7 +3,7 @@
 ## 1. Declutter the Initial State
 - [x] **Hide or collapse empty action bars:** Hide the card action buttons (*Make Card, Copy, Save, Compare, Copy Link*) or collapse them into a single subtle toolbar until a transformation runs.
 - [x] **Condense card actions:** Replace the 2x2 + 1 button grid on generated cards with a single horizontal row of icon-only buttons with tooltips to save vertical space.
-- [ ] **Progressive disclosure for settings:** Collapse **Transformation Settings** (Seed, Stage directions, Sentence inversion) behind an *"Advanced Settings"* toggle so the main CTA buttons sit closer to the input box.
+- [x] **Progressive disclosure for settings:** Collapse **Transformation Settings** (Seed, Stage directions, Sentence inversion) behind an *"Advanced Settings"* toggle so the main CTA buttons sit closer to the input box.
 
 ## 2. Fix Color Contrast & Readability
 - [x] **Boost top navigation contrast:** Change the active navigation tab (*All Styles*) from dark text on a brown background to a high-contrast cream pill with dark ink text.
