@@ -4492,6 +4492,8 @@ function addShareButton(host, style, id) {
   btn.className = 'btn-copy';
   btn.id = id;
   btn.setAttribute('data-share', style);
+  btn.setAttribute('title', 'Copy Link');
+  btn.setAttribute('aria-label', 'Copy Link');
   btn.innerHTML = '<span aria-hidden="true">&#128279;</span> Copy Link';
   btn.addEventListener('click', function () { shareLink(btn); });
   var status = host.querySelector ? host.querySelector('#copyStatus') : null;

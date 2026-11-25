@@ -189,9 +189,20 @@ const DASH_CSS = `
     padding-bottom: 8px;
     margin-bottom: 10px;
   }
+  .mini .output-actions {
+    flex-wrap: nowrap;
+    gap: 6px;
+  }
+  /* One horizontal row of icon-only buttons; the label text stays in the
+     accessibility tree and the title attribute supplies the tooltip. */
   .mini .output-actions .btn-copy {
-    flex: 1 1 calc(50% - 4px);
+    flex: 0 0 auto;
     justify-content: center;
+    padding: 8px 10px;
+    font-size: 0;
+  }
+  .mini .output-actions .btn-copy span {
+    font-size: 1rem;
   }
   /* No actions until this card has a result to act on. */
   .mini:has(.out:empty) .output-actions {
@@ -249,16 +260,16 @@ const cards = STYLES.map((s) => `      <section class="mini">
         </div>
         <div class="out" id="out-${s.id}"></div>
         <div class="output-actions">
-          <button class="btn-copy" id="cardBtn-${s.id}" data-agent-action="card" data-card="${s.id}">
+          <button class="btn-copy" id="cardBtn-${s.id}" data-agent-action="card" data-card="${s.id}" title="Make ${s.label} card" aria-label="Make ${s.label} card">
             <span aria-hidden="true">&#128204;</span> Make Card
           </button>
-          <button class="btn-copy" id="copyBtn-${s.id}" data-agent-action="copy" data-copy="${s.id}">
+          <button class="btn-copy" id="copyBtn-${s.id}" data-agent-action="copy" data-copy="${s.id}" title="Copy ${s.label} output" aria-label="Copy ${s.label} output">
             <span aria-hidden="true">&#128203;</span> Copy
           </button>
-          <button class="btn-copy" id="saveBtn-${s.id}" data-agent-action="save" data-save="${s.label}" data-save-target="out-${s.id}">
+          <button class="btn-copy" id="saveBtn-${s.id}" data-agent-action="save" data-save="${s.label}" data-save-target="out-${s.id}" title="Save ${s.label} quote" aria-label="Save ${s.label} quote">
             <span aria-hidden="true">&#128190;</span> Save
           </button>
-          <button class="btn-copy" id="compareBtn-${s.id}" data-agent-action="compare" data-compare="out-${s.id}">
+          <button class="btn-copy" id="compareBtn-${s.id}" data-agent-action="compare" data-compare="out-${s.id}" title="Compare ${s.label} output" aria-label="Compare ${s.label} output">
             <span aria-hidden="true">&#8644;</span> Compare
           </button>
         </div>

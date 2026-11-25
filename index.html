@@ -1013,9 +1013,20 @@
     padding-bottom: 8px;
     margin-bottom: 10px;
   }
+  .mini .output-actions {
+    flex-wrap: nowrap;
+    gap: 6px;
+  }
+  /* One horizontal row of icon-only buttons; the label text stays in the
+     accessibility tree and the title attribute supplies the tooltip. */
   .mini .output-actions .btn-copy {
-    flex: 1 1 calc(50% - 4px);
+    flex: 0 0 auto;
     justify-content: center;
+    padding: 8px 10px;
+    font-size: 0;
+  }
+  .mini .output-actions .btn-copy span {
+    font-size: 1rem;
   }
   /* No actions until this card has a result to act on. */
   .mini:has(.out:empty) .output-actions {
@@ -1265,16 +1276,16 @@
         </div>
         <div class="out" id="out-shakespeare"></div>
         <div class="output-actions">
-          <button class="btn-copy" id="cardBtn-shakespeare" data-agent-action="card" data-card="shakespeare">
+          <button class="btn-copy" id="cardBtn-shakespeare" data-agent-action="card" data-card="shakespeare" title="Make Shakespeare card" aria-label="Make Shakespeare card">
             <span aria-hidden="true">&#128204;</span> Make Card
           </button>
-          <button class="btn-copy" id="copyBtn-shakespeare" data-agent-action="copy" data-copy="shakespeare">
+          <button class="btn-copy" id="copyBtn-shakespeare" data-agent-action="copy" data-copy="shakespeare" title="Copy Shakespeare output" aria-label="Copy Shakespeare output">
             <span aria-hidden="true">&#128203;</span> Copy
           </button>
-          <button class="btn-copy" id="saveBtn-shakespeare" data-agent-action="save" data-save="Shakespeare" data-save-target="out-shakespeare">
+          <button class="btn-copy" id="saveBtn-shakespeare" data-agent-action="save" data-save="Shakespeare" data-save-target="out-shakespeare" title="Save Shakespeare quote" aria-label="Save Shakespeare quote">
             <span aria-hidden="true">&#128190;</span> Save
           </button>
-          <button class="btn-copy" id="compareBtn-shakespeare" data-agent-action="compare" data-compare="out-shakespeare">
+          <button class="btn-copy" id="compareBtn-shakespeare" data-agent-action="compare" data-compare="out-shakespeare" title="Compare Shakespeare output" aria-label="Compare Shakespeare output">
             <span aria-hidden="true">&#8644;</span> Compare
           </button>
         </div>
@@ -1286,16 +1297,16 @@
         </div>
         <div class="out" id="out-pirate"></div>
         <div class="output-actions">
-          <button class="btn-copy" id="cardBtn-pirate" data-agent-action="card" data-card="pirate">
+          <button class="btn-copy" id="cardBtn-pirate" data-agent-action="card" data-card="pirate" title="Make Pirate card" aria-label="Make Pirate card">
             <span aria-hidden="true">&#128204;</span> Make Card
           </button>
-          <button class="btn-copy" id="copyBtn-pirate" data-agent-action="copy" data-copy="pirate">
+          <button class="btn-copy" id="copyBtn-pirate" data-agent-action="copy" data-copy="pirate" title="Copy Pirate output" aria-label="Copy Pirate output">
             <span aria-hidden="true">&#128203;</span> Copy
           </button>
-          <button class="btn-copy" id="saveBtn-pirate" data-agent-action="save" data-save="Pirate" data-save-target="out-pirate">
+          <button class="btn-copy" id="saveBtn-pirate" data-agent-action="save" data-save="Pirate" data-save-target="out-pirate" title="Save Pirate quote" aria-label="Save Pirate quote">
             <span aria-hidden="true">&#128190;</span> Save
           </button>
-          <button class="btn-copy" id="compareBtn-pirate" data-agent-action="compare" data-compare="out-pirate">
+          <button class="btn-copy" id="compareBtn-pirate" data-agent-action="compare" data-compare="out-pirate" title="Compare Pirate output" aria-label="Compare Pirate output">
             <span aria-hidden="true">&#8644;</span> Compare
           </button>
         </div>
@@ -1307,16 +1318,16 @@
         </div>
         <div class="out" id="out-victorian"></div>
         <div class="output-actions">
-          <button class="btn-copy" id="cardBtn-victorian" data-agent-action="card" data-card="victorian">
+          <button class="btn-copy" id="cardBtn-victorian" data-agent-action="card" data-card="victorian" title="Make Victorian card" aria-label="Make Victorian card">
             <span aria-hidden="true">&#128204;</span> Make Card
           </button>
-          <button class="btn-copy" id="copyBtn-victorian" data-agent-action="copy" data-copy="victorian">
+          <button class="btn-copy" id="copyBtn-victorian" data-agent-action="copy" data-copy="victorian" title="Copy Victorian output" aria-label="Copy Victorian output">
             <span aria-hidden="true">&#128203;</span> Copy
           </button>
-          <button class="btn-copy" id="saveBtn-victorian" data-agent-action="save" data-save="Victorian" data-save-target="out-victorian">
+          <button class="btn-copy" id="saveBtn-victorian" data-agent-action="save" data-save="Victorian" data-save-target="out-victorian" title="Save Victorian quote" aria-label="Save Victorian quote">
             <span aria-hidden="true">&#128190;</span> Save
           </button>
-          <button class="btn-copy" id="compareBtn-victorian" data-agent-action="compare" data-compare="out-victorian">
+          <button class="btn-copy" id="compareBtn-victorian" data-agent-action="compare" data-compare="out-victorian" title="Compare Victorian output" aria-label="Compare Victorian output">
             <span aria-hidden="true">&#8644;</span> Compare
           </button>
         </div>
@@ -1328,16 +1339,16 @@
         </div>
         <div class="out" id="out-chaucer"></div>
         <div class="output-actions">
-          <button class="btn-copy" id="cardBtn-chaucer" data-agent-action="card" data-card="chaucer">
+          <button class="btn-copy" id="cardBtn-chaucer" data-agent-action="card" data-card="chaucer" title="Make Chaucer card" aria-label="Make Chaucer card">
             <span aria-hidden="true">&#128204;</span> Make Card
           </button>
-          <button class="btn-copy" id="copyBtn-chaucer" data-agent-action="copy" data-copy="chaucer">
+          <button class="btn-copy" id="copyBtn-chaucer" data-agent-action="copy" data-copy="chaucer" title="Copy Chaucer output" aria-label="Copy Chaucer output">
             <span aria-hidden="true">&#128203;</span> Copy
           </button>
-          <button class="btn-copy" id="saveBtn-chaucer" data-agent-action="save" data-save="Chaucer" data-save-target="out-chaucer">
+          <button class="btn-copy" id="saveBtn-chaucer" data-agent-action="save" data-save="Chaucer" data-save-target="out-chaucer" title="Save Chaucer quote" aria-label="Save Chaucer quote">
             <span aria-hidden="true">&#128190;</span> Save
           </button>
-          <button class="btn-copy" id="compareBtn-chaucer" data-agent-action="compare" data-compare="out-chaucer">
+          <button class="btn-copy" id="compareBtn-chaucer" data-agent-action="compare" data-compare="out-chaucer" title="Compare Chaucer output" aria-label="Compare Chaucer output">
             <span aria-hidden="true">&#8644;</span> Compare
           </button>
         </div>
@@ -1349,16 +1360,16 @@
         </div>
         <div class="out" id="out-yoda"></div>
         <div class="output-actions">
-          <button class="btn-copy" id="cardBtn-yoda" data-agent-action="card" data-card="yoda">
+          <button class="btn-copy" id="cardBtn-yoda" data-agent-action="card" data-card="yoda" title="Make Yoda card" aria-label="Make Yoda card">
             <span aria-hidden="true">&#128204;</span> Make Card
           </button>
-          <button class="btn-copy" id="copyBtn-yoda" data-agent-action="copy" data-copy="yoda">
+          <button class="btn-copy" id="copyBtn-yoda" data-agent-action="copy" data-copy="yoda" title="Copy Yoda output" aria-label="Copy Yoda output">
             <span aria-hidden="true">&#128203;</span> Copy
           </button>
-          <button class="btn-copy" id="saveBtn-yoda" data-agent-action="save" data-save="Yoda" data-save-target="out-yoda">
+          <button class="btn-copy" id="saveBtn-yoda" data-agent-action="save" data-save="Yoda" data-save-target="out-yoda" title="Save Yoda quote" aria-label="Save Yoda quote">
             <span aria-hidden="true">&#128190;</span> Save
           </button>
-          <button class="btn-copy" id="compareBtn-yoda" data-agent-action="compare" data-compare="out-yoda">
+          <button class="btn-copy" id="compareBtn-yoda" data-agent-action="compare" data-compare="out-yoda" title="Compare Yoda output" aria-label="Compare Yoda output">
             <span aria-hidden="true">&#8644;</span> Compare
           </button>
         </div>
@@ -1370,16 +1381,16 @@
         </div>
         <div class="out" id="out-norse"></div>
         <div class="output-actions">
-          <button class="btn-copy" id="cardBtn-norse" data-agent-action="card" data-card="norse">
+          <button class="btn-copy" id="cardBtn-norse" data-agent-action="card" data-card="norse" title="Make Norse card" aria-label="Make Norse card">
             <span aria-hidden="true">&#128204;</span> Make Card
           </button>
-          <button class="btn-copy" id="copyBtn-norse" data-agent-action="copy" data-copy="norse">
+          <button class="btn-copy" id="copyBtn-norse" data-agent-action="copy" data-copy="norse" title="Copy Norse output" aria-label="Copy Norse output">
             <span aria-hidden="true">&#128203;</span> Copy
           </button>
-          <button class="btn-copy" id="saveBtn-norse" data-agent-action="save" data-save="Norse" data-save-target="out-norse">
+          <button class="btn-copy" id="saveBtn-norse" data-agent-action="save" data-save="Norse" data-save-target="out-norse" title="Save Norse quote" aria-label="Save Norse quote">
             <span aria-hidden="true">&#128190;</span> Save
           </button>
-          <button class="btn-copy" id="compareBtn-norse" data-agent-action="compare" data-compare="out-norse">
+          <button class="btn-copy" id="compareBtn-norse" data-agent-action="compare" data-compare="out-norse" title="Compare Norse output" aria-label="Compare Norse output">
             <span aria-hidden="true">&#8644;</span> Compare
           </button>
         </div>
@@ -10848,6 +10859,8 @@ function addShareButton(host, style, id) {
   btn.className = 'btn-copy';
   btn.id = id;
   btn.setAttribute('data-share', style);
+  btn.setAttribute('title', 'Copy Link');
+  btn.setAttribute('aria-label', 'Copy Link');
   btn.innerHTML = '<span aria-hidden="true">&#128279;</span> Copy Link';
   btn.addEventListener('click', function () { shareLink(btn); });
   var status = host.querySelector ? host.querySelector('#copyStatus') : null;

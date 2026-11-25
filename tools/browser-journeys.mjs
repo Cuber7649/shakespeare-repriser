@@ -725,12 +725,23 @@ try {
     ta.dispatchEvent(new Event('input', { bubbles: true }));
     document.querySelector('[data-agent-action="transform"]').click();
     const after = getComputedStyle(bar).display;
+    const buttons = [...bar.querySelectorAll('.btn-copy')];
+    const condensed = {
+      count: buttons.length,
+      titled: buttons.every((b) => !!b.getAttribute('title')
+        && !!b.getAttribute('aria-label')),
+      iconOnly: buttons.every((b) => getComputedStyle(b).fontSize === '0px'),
+      rows: new Set(buttons.map((b) => Math.round(b.getBoundingClientRect().top))).size,
+    };
     document.querySelector('[data-agent-action="clear"]').click();
-    return { before, after, cleared: getComputedStyle(bar).display };
+    return { before, after, cleared: getComputedStyle(bar).display, condensed };
   })()`);
   if (dashBar.before !== 'none' || dashBar.after === 'none' || dashBar.cleared !== 'none') {
     fail(`dashboard action bar visibility wrong: ${JSON.stringify(dashBar)}`);
-  } else pass('dashboard mini action bars follow their output');
+  } else if (dashBar.condensed.count !== 5 || !dashBar.condensed.titled
+    || !dashBar.condensed.iconOnly || dashBar.condensed.rows !== 1) {
+    fail(`dashboard actions are not one icon-only row: ${JSON.stringify(dashBar.condensed)}`);
+  } else pass('dashboard mini action bars follow their output in one icon-only row');
 
   // --- 16. console errors ---------------------------------------------------
   if (consoleErrors.length) {
