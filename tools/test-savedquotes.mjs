@@ -61,6 +61,14 @@ for (const file of PAGES) {
 }
 if (!markupBad) ok(`all ${IDS.length} ids and the section present in all ${PAGES.length} files`);
 
+// The file input is driven by the Import button, never shown as a raw browser
+// "Choose file" control. The hidden attribute makes that true in every browser.
+const hiddenImport = PAGES.filter((f) =>
+  /<input type="file" id="sqImport"[^>]*\bhidden\b[^>]*>/.test(read(f)));
+hiddenImport.length === PAGES.length
+  ? ok(`file input hidden in all ${PAGES.length} files`)
+  : no(`${PAGES.length - hiddenImport.length} page(s) show a raw file input`);
+
 let saveBad = 0;
 for (const file of STYLE_PAGES) {
   if (!read(file).includes('data-save-target="output"')) { no(`${file}: no Save button`); saveBad++; }

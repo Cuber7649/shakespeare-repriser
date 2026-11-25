@@ -10,6 +10,7 @@ import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import { parseColor, blend, contrastRatio } from './contrast.mjs';
+import { STYLE_FILES } from './styles.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const read = (f) => readFileSync(join(ROOT, f), 'utf8');
@@ -123,6 +124,28 @@ for (const file of SOURCES) {
       console.log(`FAIL  ${file}: "${rule.selector}" colour ${rule.decls.color} is ${worst.toFixed(2)}:1, need ${need}`);
       failures++;
     }
+  }
+}
+
+// The active navigation pill is hand-written in each style page (the dashboard
+// inherits it from shakespeare.html). It sits on the dark body with a
+// translucent gold wash; the old dark-on-brown pair measured only 1.41:1.
+for (const file of STYLE_FILES) {
+  const m = /\.style-switcher a\.active\s*\{([^}]*)\}/.exec(read(file));
+  const bgRaw = m && /(?:^|;)\s*background:\s*([^;]+);/m.exec(m[1]);
+  const fgRaw = m && /(?:^|;)\s*color:\s*([^;]+);/m.exec(m[1]);
+  if (!bgRaw || !fgRaw) {
+    console.log(`FAIL  ${file}: could not read the active navigation colours`);
+    failures++;
+    continue;
+  }
+  const bg = blend(parseColor(bgRaw[1]), parseColor('#1a1209'));
+  const ratio = contrastRatio(fgRaw[1], bg);
+  if (ratio + 1e-9 < 4.5) {
+    console.log(`FAIL  ${file}: active navigation is ${ratio.toFixed(2)}:1, need 4.5`);
+    failures++;
+  } else {
+    console.log(`  ok    ${file}: active navigation pill is ${ratio.toFixed(2)}:1`);
   }
 }
 

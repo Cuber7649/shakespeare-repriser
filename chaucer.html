@@ -49,7 +49,7 @@
   /* ====== HEADER ====== */
   .header {
     text-align: center;
-    padding: 40px 20px 30px;
+    padding: 24px 20px 18px;
     position: relative;
   }
 
@@ -479,8 +479,8 @@
     transform: translateY(-1px);
   }
   .style-switcher a.active {
-    background: rgba(212,160,86,0.3);
-    border-color: rgba(212,160,86,0.8);
+    background: #fdf6e3;
+    border-color: #c4a265;
     color: #3a2510;
     box-shadow: 0 0 8px rgba(212,160,86,0.3);
   }
@@ -1101,7 +1101,7 @@
     <input type="text" class="saved-quotes-field saved-quotes-title-field" id="sqTitle" placeholder="Optional title&hellip;" maxlength="60" autocomplete="off">
     <button type="button" class="saved-quotes-action" id="sqExport">Export</button>
     <button type="button" class="saved-quotes-action" id="sqImportBtn">Import</button>
-    <input type="file" id="sqImport" accept="application/json,.json" class="visually-hidden">
+    <input type="file" id="sqImport" accept="application/json,.json" class="visually-hidden" hidden>
     <button type="button" class="saved-quotes-action saved-quotes-action-danger" id="sqClear">Clear all</button>
   </div>
   <p class="saved-quotes-empty" id="savedQuotesEmpty">Nothing saved yet.</p>
